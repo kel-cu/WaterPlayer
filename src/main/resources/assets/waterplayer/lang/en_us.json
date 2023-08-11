@@ -1,0 +1,98 @@
+{
+  "waterplayer.name": "WaterPlayer",
+  "waterplayer.name.config": "WaterPlayer | Configurations",
+  "waterplayer.name.playlist": "WaterPlayer | Playlist",
+
+  "waterplayer.playlist": "Playlist",
+  "waterplayer.playlist.author": "Author",
+  "waterplayer.playlist.title": "Title",
+  "waterplayer.playlist.urls": "URLs",
+
+  "waterplayer.key.pause": "Music pause",
+  "waterplayer.key.volume.up": "Music Volume up",
+  "waterplayer.key.volume.down": "Music Volume down",
+  "waterplayer.key.load": "Load track",
+  "waterplayer.key.skip": "Skip track",
+  "waterplayer.key.reset": "Reset queue",
+  "waterplayer.key.shuffle": "Shuffle queue",
+  "waterplayer.key.repeating": "Repeating track",
+
+  "waterplayer.message.clothConfigNotFound": "§7WaterPlayer§r » Install the §7Cloth Config§r mod to display the config window. =-=",
+  "waterplayer.message.pause": "§7WaterPlayer§r » Track has been paused",
+  "waterplayer.message.play": "§7WaterPlayer§r » Track has been resumed",
+  "waterplayer.message.repeat": "§7WaterPlayer§r » Repeat on",
+  "waterplayer.message.repeat.no": "§7WaterPlayer§r » Repeat off",
+  "waterplayer.message.reset": "§7WaterPlayer§r » The queue was reset.",
+  "waterplayer.message.shuffle": "§7WaterPlayer§r » The queue is shuffled.",
+  "waterplayer.message.skip": "§7WaterPlayer§r » Skipping the track",
+
+  "waterplayer.load": "Music",
+  "waterplayer.load.url": "Track URL",
+  "waterplayer.load.url.copy": "Last Track URL",
+  "waterplayer.load.queue": "Queue",
+
+  "waterplayer.load.add": "§7WaterPlayer§r » Your request was accepted",
+  "waterplayer.load.add.playlist": "§7WaterPlayer§r » The «%playlist_name%» playlist has been added",
+  "waterplayer.load.add.blank": "§7WaterPlayer§r » Request blank",
+
+  "waterplayer.format.author": "«%music_author%»",
+  "waterplayer.format.title": "%music_title%",
+  "waterplayer.format.time": "%music_time% / %music_time_max%",
+  "waterplayer.format.time.queue": "%music_time_max%",
+  "waterplayer.format.live": "(Live)",
+
+  "waterplayer.config": "Configuration",
+  "waterplayer.config.enable_overlay": "Enable overlay",
+  "waterplayer.config.enable_notice": "Enable notice",
+  "waterplayer.config.enable_change_title": "Enable change title",
+  "waterplayer.config.enable_change_title.tooltip": "* in Main Menu",
+
+  "waterplayer.config.localization.title.overlay": "Overlay",
+  "waterplayer.config.localization.overlay": "Music format",
+  "waterplayer.config.localization.overlay.live": "Live format",
+  "waterplayer.config.localization.overlay.pause": "Pause",
+
+  "waterplayer.config.localization.title.title": "Window Title",
+  "waterplayer.config.localization.title": "Music format",
+  "waterplayer.config.localization.title.live": "Live format",
+  "waterplayer.config.localization.title.pause": "Pause",
+
+  "waterplayer.config.localization.title.formats": "Formats",
+  "waterplayer.config.localization.format.author": "Author",
+  "waterplayer.config.localization.format.title": "Title",
+  "waterplayer.config.localization.format.time": "Time",
+  "waterplayer.config.localization.format.live": "Live",
+
+  "waterplayer.secret": "TOP SECRET!",
+  "waterplayer.secret.description": "After changing the data, you will need to reboot!\n§oSorry...§r",
+  "waterplayer.secret.title.tokens": "Tokens",
+  "waterplayer.config.yandex_music_token": "Yandex Music Token",
+  "waterplayer.config.deezer_decryption_key": "Deezer Decryption Key",
+  "waterplayer.config.flowery_tts_voice": "Flowery TTS Voice",
+
+  "waterplayer.secret.title.youtube": "YouTube",
+  "waterplayer.config.youtube_email": "EMail",
+  "waterplayer.config.youtube_password": "Password",
+
+  "waterplayer.secret.title.spotify": "Spotify",
+  "waterplayer.config.spotify_client_id": "Client ID",
+  "waterplayer.config.spotify_client_secret": "Client Secret",
+  "waterplayer.config.spotify_country_code": "Country Code",
+
+  "waterplayer.secret.title.apple_music": "Apple Music",
+  "waterplayer.config.apple_music_media_api_token": "Media API Token",
+  "waterplayer.config.apple_music_country_code": "Country Code",
+
+  "waterplayer.overlay": "&c♫&r %music_author_format% %music_title% %music_time_format% \uD83D\uDD0A %music_volume%%",
+  "waterplayer.overlay.live": "&c⏺&r %music_author_format% %music_title% \uD83D\uDD0A %music_volume%%",
+  "waterplayer.overlay.pause": "&e⏸&r Pause",
+
+  "waterplayer.title": "Minecraft %minecraft_version% - ♫ %music_author_format% %music_title% %music_time_format% \uD83D\uDD0A %music_volume%%",
+  "waterplayer.title.live": "Minecraft %minecraft_version% - ⏺ %music_author_format% %music_title% \uD83D\uDD0A %music_volume%%",
+  "waterplayer.title.pause": "Minecraft %minecraft_version% - ⏸ Пауза",
+
+  "modmenu.descriptionTranslation.waterplayer": "Internet music player built into the client",
+  "modmenu.waterplayer.github": "GitHub",
+  "modmenu.waterplayer.modrinth": "Modrinth",
+  "modmenu.waterplayer.donate": "DonationAlerts"
+}

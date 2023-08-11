@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "ru.kelcuprum.waterplayer.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "TitleManager"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

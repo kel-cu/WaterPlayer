@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "waterplayer",
+  "version": "${version}",
+  "name": "WaterPlayer",
+  "description": "Internet music player built into the client",
+  "authors": ["Im_Kel"],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/waterplayer",
+    "issues": "https://github.com/simply-kel/WaterPlayer/issues",
+    "email": "kel@simplykel.ru"
+  },
+  "license": "MIT",
+  "icon": "assets/waterplayer/logo.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "ru.kelcuprum.waterplayer.Client"
+    ],
+    "modmenu": [
+      "ru.kelcuprum.waterplayer.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "waterplayer.mixin.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.17",
+    "fabric": "*",
+    "cloth-config": "*",
+    "minecraft": [">=1.19"]
+  },
+  "breaks": {
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.waterplayer.github": "https://github.com/simply-kel/WaterPlayer",
+        "modmenu.waterplayer.modrinth": "https://modrinth.com/mod/waterplayer",
+        "modmenu.waterplayer.donate": "https://kelcuprum.ru/r/don"
+      }
+    }
+  }
+}
