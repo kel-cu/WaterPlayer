@@ -31,6 +31,15 @@
     * OGG streams (Opus, Vorbis and FLAC codecs)
     * AAC streams
     * Stream playlists (M3U and PLS)
+### Configuration
+Перейдите в категорию "Секретная информация!", или `./config/WaterPlayer/config.json` для указания токенов
+Все поддерживаемые ссылки и запросы см. [здесь](https://github.com/topi314/LavaSrc#supported-urls-and-queries)
+
+Для получения идентификатора клиента Spotify (ClientId и ClientSecret) перейдите [сюда](https://developer.spotify.com/dashboard/applications)
+
+Для получения api-токена Apple Music перейдите [сюда](https://github.com/topi314/LavaSrc#apple-music)
+
+Получить токен доступа к Яндекс Музыке можно [здесь](https://github.com/topi314/LavaSrc#yandex-music)
 
 </details>
 
