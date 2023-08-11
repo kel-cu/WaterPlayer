@@ -35,7 +35,8 @@
 Перейдите в категорию "Секретная информация!", или `./config/WaterPlayer/config.json` для указания токенов
 Все поддерживаемые ссылки и запросы см. [здесь](https://github.com/topi314/LavaSrc#supported-urls-and-queries)
 
-Для получения идентификатора клиента Spotify (ClientId и ClientSecret) перейдите [сюда](https://developer.spotify.com/dashboard/applications)
+Для получения идентификатора клиента Spotify (ClientId и ClientSecret) перейдите [сюда](https://developer.spotify.com/dashboard/applications)<br>
+*Countries code [here](https://gist.github.com/frankkienl/a594807bf0dcd23fdb1b)
 
 Для получения api-токена Apple Music перейдите [сюда](https://github.com/topi314/LavaSrc#apple-music)
 
