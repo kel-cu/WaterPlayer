@@ -1,14 +1,14 @@
 package ru.kelcuprum.waterplayer.config;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import org.json.JSONObject;
-import ru.kelcuprum.waterplayer.Client;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class UserConfig {
+    public static boolean ENABLE_BOSS_BAR = false;
     public static boolean ENABLE_OVERLAY = true;
     public static boolean ENABLE_NOTICE = true;
     public static boolean ENABLE_CHANGE_TITLE = true;
@@ -17,13 +17,10 @@ public class UserConfig {
     public static String LAST_REQUEST_MUSIC = "";
     // Yandex Music
     public static String YANDEX_MUSIC_TOKEN = "";
-    // YouTube
-//    public static String YOUTUBE_EMAIL = "";
-//    public static String YOUTUBE_PASSWORD = "";
     // Spotify
     public static String SPOTIFY_CLIENT_ID = "";
     public static String SPOTIFY_CLIENT_SECRET = "";
-    public static String SPOTIFY_COUNTRY_CODE = "us";
+    public static String SPOTIFY_COUNTRY_CODE = "US";
     // Apple Music
     public static String APPLE_MUSIC_MEDIA_API_TOKEN = "";
     public static String APPLE_MUSIC_COUNTRY_CODE = "us";
@@ -36,10 +33,11 @@ public class UserConfig {
      * Сохранение конфигурации
      */
     public static void save(){
-        MinecraftClient mc = MinecraftClient.getInstance();
-        final Path configFile = mc.runDirectory.toPath().resolve("config/WaterPlayer/config.json");
+        Minecraft mc = Minecraft.getInstance();
+        final Path configFile = mc.gameDirectory.toPath().resolve("config/WaterPlayer/config.json");
         JSONObject jsonConfig = new JSONObject();
-        jsonConfig.put("ENABLE_OVERLAY", ENABLE_OVERLAY)
+        jsonConfig.put("ENABLE_BOSS_BAR", ENABLE_BOSS_BAR)
+                .put("ENABLE_OVERLAY", ENABLE_OVERLAY)
                 .put("ENABLE_NOTICE", ENABLE_NOTICE)
                 .put("ENABLE_CHANGE_TITLE", ENABLE_CHANGE_TITLE)
                 .put("SELECT_MUSIC_VOLUME", SELECT_MUSIC_VOLUME)
@@ -49,10 +47,6 @@ public class UserConfig {
                 .put("YANDEX_MUSIC_TOKEN", YANDEX_MUSIC_TOKEN)
                 .put("DEEZER_DECRYPTION_KEY", DEEZER_DECRYPTION_KEY)
                 .put("FLOWERY_TTS_VOICE", FLOWERY_TTS_VOICE)
-
-//                .put("YOUTUBE", new JSONObject()
-//                        .put("EMAIL", YOUTUBE_EMAIL)
-//                        .put("PASSWORD", YOUTUBE_PASSWORD))
                 .put("SPOTIFY", new JSONObject()
                         .put("CLIENT_ID", SPOTIFY_CLIENT_ID)
                         .put("CLIENT_SECRET", SPOTIFY_CLIENT_SECRET)
@@ -72,12 +66,13 @@ public class UserConfig {
      * Загрузка файла конфигов
      */
     public static void load(){
-        MinecraftClient mc = MinecraftClient.getInstance();
-        final Path configFile = mc.runDirectory.toPath().resolve("config/WaterPlayer/config.json");
+        Minecraft mc = Minecraft.getInstance();
+        final Path configFile = mc.gameDirectory.toPath().resolve("config/WaterPlayer/config.json");
         try{
             JSONObject jsonConfig = new JSONObject(Files.readString(configFile));
             for (String key : jsonConfig.keySet()) {
                 switch (key.toUpperCase()) {
+                    case "ENABLE_BOSS_BAR" -> ENABLE_BOSS_BAR = jsonConfig.getBoolean(key);
                     case "ENABLE_OVERLAY" -> ENABLE_OVERLAY = jsonConfig.getBoolean(key);
                     case "ENABLE_NOTICE" -> ENABLE_NOTICE = jsonConfig.getBoolean(key);
                     case "ENABLE_CHANGE_TITLE" -> ENABLE_CHANGE_TITLE = jsonConfig.getBoolean(key);
@@ -87,15 +82,6 @@ public class UserConfig {
                     case "YANDEX_MUSIC_TOKEN" -> YANDEX_MUSIC_TOKEN = jsonConfig.getString(key);
                     case "DEEZER_DECRYPTION_KEY" -> DEEZER_DECRYPTION_KEY = jsonConfig.getString(key);
                     case "FLOWERY_TTS_VOICE" -> FLOWERY_TTS_VOICE = jsonConfig.getString(key);
-//                    case "YOUTUBE" -> {
-//                        JSONObject jsonConfigYouTube = jsonConfig.getJSONObject(key);
-//                        for (String keyY : jsonConfigYouTube.keySet()) {
-//                            switch (keyY.toUpperCase()) {
-//                                case "EMAIL" -> YOUTUBE_EMAIL = jsonConfigYouTube.getString(keyY);
-//                                case "PASSWORD" -> YOUTUBE_PASSWORD = jsonConfigYouTube.getString(keyY);
-//                            }
-//                        }
-//                    }
                     case "SPOTIFY" -> {
                         JSONObject jsonConfigSpotify = jsonConfig.getJSONObject(key);
                         for (String keyS : jsonConfigSpotify.keySet()) {

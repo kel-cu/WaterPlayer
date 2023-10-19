@@ -1,6 +1,6 @@
 package ru.kelcuprum.waterplayer.config;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -16,7 +16,7 @@ public class PlaylistObject {
     public PlaylistObject(JSONObject data){
         title = data.isNull("title") ? "Example title" :
                 data.getString("title");
-        author = data.isNull("author") ? MinecraftClient.getInstance().getSession().getUsername() :
+        author = data.isNull("author") ? Minecraft.getInstance().getUser().getName() :
                 data.getString("author");
         urlsJSON = data.isNull("urls") ? new JSONArray().put("https://c418.bandcamp.com/track/strad") :
                 data.getJSONArray("urls");

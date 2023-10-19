@@ -3,10 +3,10 @@ package ru.kelcuprum.waterplayer.screens;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import org.json.JSONObject;
-import ru.kelcuprum.waterplayer.config.Localization;
+import ru.kelcuprum.waterplayer.localization.Localization;
 import ru.kelcuprum.waterplayer.config.PlaylistObject;
 
 import java.io.IOException;
@@ -18,10 +18,10 @@ public class PlaylistScreen {
     private String plName = "its-normal";
     JSONObject jsonPlaylist = new JSONObject();
     public Screen buildScreen(Screen currentScreen, String playlistName) {
-        MinecraftClient CLIENT = MinecraftClient.getInstance();
+        Minecraft CLIENT = Minecraft.getInstance();
         //
         plName = playlistName;
-        final Path configFile = CLIENT.runDirectory.toPath().resolve("config/WaterPlayer/playlists/"+playlistName+".json");
+        final Path configFile = CLIENT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/"+playlistName+".json");
         try {
             jsonPlaylist = new JSONObject(Files.readString(configFile));
         } catch (Exception ex){
@@ -59,8 +59,8 @@ public class PlaylistScreen {
         return builder.build();
     }
     private void save(){
-        MinecraftClient CLIENT = MinecraftClient.getInstance();
-        final Path configFile = CLIENT.runDirectory.toPath().resolve("config/WaterPlayer/playlists/"+plName+".json");
+        Minecraft CLIENT = Minecraft.getInstance();
+        final Path configFile = CLIENT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/"+plName+".json");
         try {
             Files.createDirectories(configFile.getParent());
             Files.writeString(configFile, playlist.toJSON().toString());

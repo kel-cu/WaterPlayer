@@ -1,4 +1,4 @@
-package ru.kelcuprum.waterplayer;
+package ru.kelcuprum.waterplayer.api;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 

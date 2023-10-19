@@ -4,20 +4,21 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import org.json.JSONObject;
-import ru.kelcuprum.waterplayer.Client;
+import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.config.PlaylistObject;
 import ru.kelcuprum.waterplayer.config.UserConfig;
-import ru.kelcuprum.waterplayer.config.Localization;
+import ru.kelcuprum.waterplayer.localization.Localization;
+import ru.kelcuprum.waterplayer.localization.Music;
+import ru.kelcuprum.waterplayer.toasts.ControlToast;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class MusicScreen {
     public static Screen buildScreen (Screen currentScreen) {
-        MinecraftClient CLIENT = MinecraftClient.getInstance();
         UserConfig.load();
         ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(currentScreen)
@@ -39,18 +40,20 @@ public class MusicScreen {
                         UserConfig.LAST_REQUEST_MUSIC)
                 .setDefaultValue(UserConfig.LAST_REQUEST_MUSIC)
                 .build());
-        if(Client.music.getTrackManager().queue.size() != 0){
+        if(!WaterPlayer.music.getTrackManager().queue.isEmpty()){
             category.addEntry(entryBuilder.startTextDescription(Localization.getText("waterplayer.load.queue")).build());
             StringBuilder stringBuilder = new StringBuilder();
-            for(AudioTrack track : Client.music.getTrackManager().queue){
-                stringBuilder.append(Localization.getMusicParseText(track, "%music_author_format% %music_title% %music_time_format_queue%\n"));
+            for(AudioTrack track : WaterPlayer.music.getTrackManager().queue){
+                stringBuilder.append("«").append(Music.getAuthor(track)).append("» ")
+                        .append(Music.getTitle(track)).append(" ")
+                        .append(Localization.getTimestamp(Music.getDuration(track))).append("\n");
             }
             category.addEntry(entryBuilder.startTextDescription(Localization.toText(stringBuilder.toString())).build());
         }
         return builder.build();
     }
     private static void save(){
-        MinecraftClient CLIENT = MinecraftClient.getInstance();
+        Minecraft CLIENT = Minecraft.getInstance();
         UserConfig.save();
         if(!UserConfig.LAST_REQUEST_MUSIC.isBlank()){
             if(UserConfig.LAST_REQUEST_MUSIC.startsWith("playlist:")){
@@ -58,7 +61,7 @@ public class MusicScreen {
                 PlaylistObject playlist;
                 JSONObject jsonPlaylist = new JSONObject();
 
-                final Path configFile = CLIENT.runDirectory.toPath().resolve("config/WaterPlayer/playlists/"+name+".json");
+                final Path configFile = CLIENT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/"+name+".json");
                 try {
                     jsonPlaylist = new JSONObject(Files.readString(configFile));
                 } catch (Exception ex){
@@ -66,16 +69,16 @@ public class MusicScreen {
                 }
                 playlist = new PlaylistObject(jsonPlaylist);
                 for(int i = 0; i<playlist.urls.size(); i++){
-                    Client.music.getTrackSearch().getTracks(playlist.urls.get(i));
+                    WaterPlayer.music.getTrackSearch().getTracks(playlist.urls.get(i));
                 }
-                if(CLIENT.player != null) CLIENT.player.sendMessage(Localization.toText(
+                CLIENT.getToasts().addToast(new ControlToast(Localization.toText(
                         Localization.toString(Localization.getText("waterplayer.load.add.playlist"))
                                 .replace("%playlist_name%", playlist.title)
-                ));
+                ), false));
             } else {
-                Client.music.getTrackSearch().getTracks(UserConfig.LAST_REQUEST_MUSIC);
-                if(CLIENT.player != null) CLIENT.player.sendMessage(Localization.getText("waterplayer.load.add"));
+                WaterPlayer.music.getTrackSearch().getTracks(UserConfig.LAST_REQUEST_MUSIC);
+                CLIENT.getToasts().addToast(new ControlToast(Localization.getText("waterplayer.load.add"), false));
             }
-        }else if(CLIENT.player != null) CLIENT.player.sendMessage(Localization.getText("waterplayer.load.add.blank"));
+        }else if(CLIENT.player != null) CLIENT.getToasts().addToast(new ControlToast(Localization.getText("waterplayer.load.add.blank"), true));
     }
 }

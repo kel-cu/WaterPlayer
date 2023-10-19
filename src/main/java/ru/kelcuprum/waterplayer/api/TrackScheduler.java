@@ -1,16 +1,13 @@
-package ru.kelcuprum.waterplayer;
+package ru.kelcuprum.waterplayer.api;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
-import net.minecraft.advancement.Advancement;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.toast.AdvancementToast;
-import net.minecraft.client.toast.SystemToast;
-import net.minecraft.text.Text;
-import ru.kelcuprum.waterplayer.config.Localization;
+import net.minecraft.client.Minecraft;
+import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.config.UserConfig;
+import ru.kelcuprum.waterplayer.toasts.MusicToast;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -93,12 +90,11 @@ public class TrackScheduler extends AudioEventAdapter
     }
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track){
-        Client.log("Start track: "+track.getInfo().title);
+        WaterPlayer.log("Start track: "+track.getInfo().title);
         if(UserConfig.ENABLE_NOTICE) {
-            Text author = Localization.toText(Localization.getMusicParseText(track, "%music_author_format%", Client.LOG.getName()));
-            Text title = Localization.toText(Localization.getMusicParseText(track, "%music_title_format%", Client.LOG.getName()));
-            MinecraftClient.getInstance().getToastManager().clear();
-            MinecraftClient.getInstance().getToastManager().add(new SystemToast(SystemToast.Type.WORLD_BACKUP, author, title));
+            Minecraft.getInstance().getToasts().clear();
+            Minecraft.getInstance().getToasts().addToast(new MusicToast(track));
+
         }
     }
 

@@ -18,7 +18,7 @@ import com.sedmelluq.discord.lavaplayer.format.AudioDataFormat;
 import com.sedmelluq.discord.lavaplayer.format.AudioDataFormatTools;
 import com.sedmelluq.discord.lavaplayer.format.AudioPlayerInputStream;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import ru.kelcuprum.waterplayer.MusicPlayer;
+import ru.kelcuprum.waterplayer.api.MusicPlayer;
 
 import javax.sound.sampled.*;
 import java.util.Arrays;

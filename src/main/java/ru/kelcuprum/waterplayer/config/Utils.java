@@ -1,8 +1,5 @@
 package ru.kelcuprum.waterplayer.config;
 
-import net.minecraft.client.util.InputUtil;
-import org.lwjgl.glfw.GLFW;
-
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -48,16 +45,5 @@ public class Utils {
         }
         String pref = Utils.fixFormatCodes(from);
         return pref;
-    }
-
-    public static boolean isKeyTriggered(long hndl, InputUtil.Key key) {
-        if (key.getCategory() == InputUtil.Type.MOUSE)
-            return GLFW.glfwGetMouseButton(hndl, key.getCode()) == 1;
-        else return GLFW.glfwGetKey(hndl, key.getCode()) == 1;
-    }
-    public static int isKeyPresed(long hndl, InputUtil.Key key) {
-        if (key.getCategory() == InputUtil.Type.MOUSE)
-            return GLFW.glfwGetMouseButton(hndl, key.getCode());
-        else return GLFW.glfwGetKey(hndl, key.getCode());
     }
 }
