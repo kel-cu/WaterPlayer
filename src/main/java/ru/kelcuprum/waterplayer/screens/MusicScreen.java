@@ -6,6 +6,7 @@ import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import org.apache.logging.log4j.Level;
 import org.json.JSONObject;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.config.PlaylistObject;
@@ -65,7 +66,7 @@ public class MusicScreen {
                 try {
                     jsonPlaylist = new JSONObject(Files.readString(configFile));
                 } catch (Exception ex){
-                    ex.printStackTrace();
+                    WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
                 }
                 playlist = new PlaylistObject(jsonPlaylist);
                 for(int i = 0; i<playlist.urls.size(); i++){

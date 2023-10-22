@@ -11,6 +11,8 @@
   "waterplayer.key.pause": "Music pause",
   "waterplayer.key.volume.up": "Music Volume up",
   "waterplayer.key.volume.down": "Music Volume down",
+  "waterplayer.key.skip.forward": "Music Skip forward",
+  "waterplayer.key.skip.back": "Music Skip back",
   "waterplayer.key.load": "Load track",
   "waterplayer.key.skip": "Skip track",
   "waterplayer.key.reset": "Reset queue",

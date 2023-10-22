@@ -96,11 +96,24 @@ public class WaterPlayer implements ClientModInitializer {
         KeyMapping volumeMusicUpKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 "waterplayer.key.volume.up",
                 InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_RIGHT, // The keycode of the key
+                GLFW.GLFW_KEY_UP, // The keycode of the key
                 "waterplayer.name"
         ));
         KeyMapping volumeMusicDownKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 "waterplayer.key.volume.down",
+                InputConstants.Type.KEYSYM,
+                GLFW.GLFW_KEY_DOWN, // The keycode of the key
+                "waterplayer.name"
+        ));
+
+        KeyMapping skipMusicForwardKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+                "waterplayer.key.skip.forward",
+                InputConstants.Type.KEYSYM,
+                GLFW.GLFW_KEY_RIGHT, // The keycode of the key
+                "waterplayer.name"
+        ));
+        KeyMapping skipMusicBackKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+                "waterplayer.key.skip.back",
                 InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_LEFT, // The keycode of the key
                 "waterplayer.name"
@@ -110,6 +123,20 @@ public class WaterPlayer implements ClientModInitializer {
             UserConfig.load();
 
 //            log("tick");
+            while (skipMusicForwardKey.consumeClick()) {
+                try {
+                    music.getTrackManager().skipBySeconds(5);
+                } catch (Exception e) {
+                    client.getToasts().addToast(new ControlToast(Localization.toText(e.getLocalizedMessage()), true));
+                }
+            }
+            while (skipMusicBackKey.consumeClick()) {
+                try {
+                    music.getTrackManager().skipBySeconds(-5);
+                } catch (Exception e) {
+                    client.getToasts().addToast(new ControlToast(Localization.toText(e.getLocalizedMessage()), true));
+                }
+            }
             while (playOrPause.consumeClick()) {
                 music.getAudioPlayer().setPaused(!music.getAudioPlayer().isPaused());
                 client.getToasts().addToast(new ControlToast(Localization.getText(music.getAudioPlayer().isPaused() ? "waterplayer.message.pause" : "waterplayer.message.play"), false));
@@ -161,7 +188,6 @@ public class WaterPlayer implements ClientModInitializer {
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
             closing = false;
             start();
-
             OverlayHandler hud = new OverlayHandler();
             HudRenderCallback.EVENT.register(hud);
             ClientTickEvents.START_CLIENT_TICK.register(hud);
@@ -170,7 +196,6 @@ public class WaterPlayer implements ClientModInitializer {
             closing = true;
             music.getAudioPlayer().stopTrack();
         });
-
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             dispatcher.register(ClientCommandManager.literal("playlist")
                     .then(
@@ -178,11 +203,8 @@ public class WaterPlayer implements ClientModInitializer {
                                 if (!WaterPlayer.clothConfig) {
                                     context.getSource().getPlayer().sendSystemMessage(Localization.getText(("waterplayer.message.clothConfigNotFound")));
                                 } else {
-                                    final Screen current = Minecraft.getInstance().screen;
-                                    Screen configScreen = new PlaylistScreen().buildScreen(current, getString(context, "name"));
                                     Minecraft client = context.getSource().getClient();
-                                    client.execute(() -> client.setScreen(configScreen));
-//                                    Minecraft.getInstance().setScreen(configScreen);
+                                    client.tell(() -> { client.setScreen(new PlaylistScreen().buildScreen(client.screen, getString(context, "name"))); });
                                 }
                                 return 1;
                             })
