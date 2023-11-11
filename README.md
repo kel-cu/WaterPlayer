@@ -45,7 +45,7 @@
 </details>
 
 ### Работа с плейлистами
-Чтобы создать/редактировать плейлист, нужно прописать команду `/playlist <name>`<br>
+Чтобы создать/редактировать плейлист, нужно прописать команду `/waterplayer playlist <name>`<br>
 ![playlist.png](https://kelcuprum.ru/ass/waterplayer/playlist.png)<br>
 Чтобы его загрузить в очередь, в адрес трека вводим `playlist:name`<br>
 ![load_playlist.png](https://kelcuprum.ru/ass/waterplayer/load_playlist.png)<br>
