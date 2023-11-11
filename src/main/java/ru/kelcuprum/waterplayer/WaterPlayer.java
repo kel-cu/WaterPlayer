@@ -20,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
 import ru.kelcuprum.alinlib.config.Config;
 import ru.kelcuprum.waterplayer.api.MusicPlayer;
+import ru.kelcuprum.waterplayer.command.WaterPlayerCommand;
 import ru.kelcuprum.waterplayer.localization.Localization;
 import ru.kelcuprum.waterplayer.localization.Music;
 import ru.kelcuprum.waterplayer.localization.StarScript;
@@ -110,38 +111,8 @@ public class WaterPlayer implements ClientModInitializer {
                 GLFW.GLFW_KEY_DOWN, // The keycode of the key
                 "waterplayer.name"
         ));
-
-        KeyMapping skipMusicForwardKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
-                "waterplayer.key.skip.forward",
-                InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_RIGHT, // The keycode of the key
-                "waterplayer.name"
-        ));
-        KeyMapping skipMusicBackKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
-                "waterplayer.key.skip.back",
-                InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_LEFT, // The keycode of the key
-                "waterplayer.name"
-        ));
         
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            WaterPlayer.config.load();
-
-//            log("tick");
-            while (skipMusicForwardKey.consumeClick()) {
-                try {
-                    music.getTrackManager().skipBySeconds(5);
-                } catch (Exception e) {
-                    client.getToasts().addToast(new ControlToast(Localization.toText(e.getLocalizedMessage()), true));
-                }
-            }
-            while (skipMusicBackKey.consumeClick()) {
-                try {
-                    music.getTrackManager().skipBySeconds(-5);
-                } catch (Exception e) {
-                    client.getToasts().addToast(new ControlToast(Localization.toText(e.getLocalizedMessage()), true));
-                }
-            }
             while (playOrPause.consumeClick()) {
                 music.getAudioPlayer().setPaused(!music.getAudioPlayer().isPaused());
                 client.getToasts().addToast(new ControlToast(Localization.getText(music.getAudioPlayer().isPaused() ? "waterplayer.message.pause" : "waterplayer.message.play"), false));
@@ -197,21 +168,22 @@ public class WaterPlayer implements ClientModInitializer {
             closing = true;
             music.getAudioPlayer().stopTrack();
         });
-        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
-            dispatcher.register(ClientCommandManager.literal("playlist")
-                    .then(
-                            argument("name", greedyString()).executes(context -> {
-                                if (!WaterPlayer.clothConfig) {
-                                    context.getSource().getPlayer().sendSystemMessage(Localization.getText(("waterplayer.message.clothConfigNotFound")));
-                                } else {
-                                    Minecraft client = context.getSource().getClient();
-                                    client.tell(() -> { client.setScreen(new PlaylistScreen().buildScreen(client.screen, getString(context, "name"))); });
-                                }
-                                return 1;
-                            })
-                    )
-            );
-        });
+//        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
+//            dispatcher.register(ClientCommandManager.literal("playlist")
+//                    .then(
+//                            argument("name", greedyString()).executes(context -> {
+//                                if (!WaterPlayer.clothConfig) {
+//                                    context.getSource().getPlayer().sendSystemMessage(Localization.getText(("waterplayer.message.clothConfigNotFound")));
+//                                } else {
+//                                    Minecraft client = context.getSource().getClient();
+//                                    client.tell(() -> { client.setScreen(new PlaylistScreen().buildScreen(client.screen, getString(context, "name"))); });
+//                                }
+//                                return 1;
+//                            })
+//                    )
+//            );
+//        });
+        ClientCommandRegistrationCallback.EVENT.register(WaterPlayerCommand::register);
     }
 
     // MUSIC

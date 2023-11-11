@@ -3,6 +3,10 @@
   "waterplayer.name.config": "WaterPlayer | Configurations",
   "waterplayer.name.playlist": "WaterPlayer | Playlist",
 
+  "waterplayer.command.playlist.noName": "You did not specify a playlist file name",
+  "waterplayer.command.now_playing.notPlaying": "Nothing's playing",
+  "waterplayer.command.now_playing": "It's playing now:",
+
   "waterplayer.playlist": "Playlist",
   "waterplayer.playlist.author": "Author",
   "waterplayer.playlist.title": "Title",
@@ -28,7 +32,8 @@
   "waterplayer.message.shuffle": "The queue is shuffled.",
   "waterplayer.message.skip": "Skipping the track",
 
-  "waterplayer.load": "Music",
+  "waterplayer.load": "Load music",
+  "waterplayer.load.load": "Load",
   "waterplayer.load.url": "Track URL",
   "waterplayer.load.url.copy": "Last Track URL",
   "waterplayer.load.queue": "Queue",
