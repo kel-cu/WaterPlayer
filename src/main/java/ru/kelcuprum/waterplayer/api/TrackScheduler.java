@@ -6,7 +6,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import net.minecraft.client.Minecraft;
 import ru.kelcuprum.waterplayer.WaterPlayer;
-import ru.kelcuprum.waterplayer.toasts.MusicToast;
+import ru.kelcuprum.waterplayer.gui.toasts.MusicToast;
 
 import java.util.Collections;
 import java.util.LinkedList;

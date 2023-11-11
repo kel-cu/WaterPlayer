@@ -1,11 +1,8 @@
-package ru.kelcuprum.waterplayer.screens.config;
+package ru.kelcuprum.waterplayer.gui.screens.config;
 
-import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.npc.WanderingTrader;
-import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.gui.GUIUtils;
 import ru.kelcuprum.alinlib.gui.components.buttons.BooleanButton;
 import ru.kelcuprum.alinlib.gui.components.buttons.Button;

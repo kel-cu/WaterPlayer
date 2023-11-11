@@ -2,7 +2,6 @@ package ru.kelcuprum.waterplayer;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -24,18 +23,13 @@ import ru.kelcuprum.waterplayer.command.WaterPlayerCommand;
 import ru.kelcuprum.waterplayer.localization.Localization;
 import ru.kelcuprum.waterplayer.localization.Music;
 import ru.kelcuprum.waterplayer.localization.StarScript;
-import ru.kelcuprum.waterplayer.screens.LoadMusicScreen;
-import ru.kelcuprum.waterplayer.screens.OverlayHandler;
-import ru.kelcuprum.waterplayer.screens.PlaylistScreen;
-import ru.kelcuprum.waterplayer.toasts.ControlToast;
+import ru.kelcuprum.waterplayer.gui.screens.LoadMusicScreen;
+import ru.kelcuprum.waterplayer.gui.screens.OverlayHandler;
+import ru.kelcuprum.waterplayer.gui.toasts.ControlToast;
 
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
-
-import static com.mojang.brigadier.arguments.StringArgumentType.getString;
-import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 
 public class WaterPlayer implements ClientModInitializer {
     public static Config config = new Config("config/WaterPlayer/config.json");
@@ -168,21 +162,6 @@ public class WaterPlayer implements ClientModInitializer {
             closing = true;
             music.getAudioPlayer().stopTrack();
         });
-//        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
-//            dispatcher.register(ClientCommandManager.literal("playlist")
-//                    .then(
-//                            argument("name", greedyString()).executes(context -> {
-//                                if (!WaterPlayer.clothConfig) {
-//                                    context.getSource().getPlayer().sendSystemMessage(Localization.getText(("waterplayer.message.clothConfigNotFound")));
-//                                } else {
-//                                    Minecraft client = context.getSource().getClient();
-//                                    client.tell(() -> { client.setScreen(new PlaylistScreen().buildScreen(client.screen, getString(context, "name"))); });
-//                                }
-//                                return 1;
-//                            })
-//                    )
-//            );
-//        });
         ClientCommandRegistrationCallback.EVENT.register(WaterPlayerCommand::register);
     }
 

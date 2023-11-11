@@ -18,7 +18,7 @@
       "ru.kelcuprum.waterplayer.WaterPlayer"
     ],
     "modmenu": [
-      "ru.kelcuprum.waterplayer.screens.ModMenuIntegration"
+      "ru.kelcuprum.waterplayer.gui.screens.ModMenuIntegration"
     ]
   },
   "mixins": [

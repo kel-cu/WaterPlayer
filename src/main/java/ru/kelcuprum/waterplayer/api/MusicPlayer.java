@@ -7,10 +7,10 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import ru.kelcuprum.waterplayer.WaterPlayer;
-import ru.kelcuprum.waterplayer.output.IOutputConsumer;
-import ru.kelcuprum.waterplayer.output.AudioOutput;
-import ru.kelcuprum.waterplayer.search.TrackSearch;
-import ru.kelcuprum.waterplayer.sources.AudioSources;
+import ru.kelcuprum.waterplayer.api.output.IOutputConsumer;
+import ru.kelcuprum.waterplayer.api.output.AudioOutput;
+import ru.kelcuprum.waterplayer.api.search.TrackSearch;
+import ru.kelcuprum.waterplayer.api.sources.AudioSources;
 
 import javax.sound.sampled.DataLine.Info;
 

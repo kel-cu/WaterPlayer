@@ -1,4 +1,4 @@
-package ru.kelcuprum.waterplayer.screens.config;
+package ru.kelcuprum.waterplayer.gui.screens.config;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;

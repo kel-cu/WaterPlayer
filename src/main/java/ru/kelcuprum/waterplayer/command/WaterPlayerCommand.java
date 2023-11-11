@@ -7,10 +7,10 @@ import net.minecraft.commands.CommandBuildContext;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.localization.Localization;
 import ru.kelcuprum.waterplayer.localization.Music;
-import ru.kelcuprum.waterplayer.screens.LoadMusicScreen;
-import ru.kelcuprum.waterplayer.screens.PlaylistScreen;
-import ru.kelcuprum.waterplayer.screens.config.MainConfigsScreen;
-import ru.kelcuprum.waterplayer.toasts.ControlToast;
+import ru.kelcuprum.waterplayer.gui.screens.LoadMusicScreen;
+import ru.kelcuprum.waterplayer.gui.screens.PlaylistScreen;
+import ru.kelcuprum.waterplayer.gui.screens.config.MainConfigsScreen;
+import ru.kelcuprum.waterplayer.gui.toasts.ControlToast;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
