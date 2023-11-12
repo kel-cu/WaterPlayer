@@ -42,11 +42,6 @@ public class WaterPlayer implements ClientModInitializer {
     public static UUID bossBarUUID = UUID.randomUUID();
     private static boolean lastBossBar = true;
     public static boolean closing = true;
-    public static String[] types = {
-            "WaterPlayer",
-            "BossBar",
-            "None"
-    };
 
     @Override
     public void onInitializeClient() {

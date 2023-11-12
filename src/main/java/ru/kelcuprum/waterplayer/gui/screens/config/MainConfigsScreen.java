@@ -104,7 +104,7 @@ public class MainConfigsScreen extends Screen {
 
     public boolean mouseScrolled(double d, double e, double f, double g) {
         this.scrolled = (int)((double)this.scrolled + g * 10.0 * -1.0);
-        int size = 140;
+        int size = 190;
         if (this.scrolled <= 0) {
             this.scrolled = 0;
         } else if (this.scrolled >= size - this.height) {

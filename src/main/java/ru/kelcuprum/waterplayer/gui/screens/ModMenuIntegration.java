@@ -8,9 +8,6 @@ import ru.kelcuprum.waterplayer.gui.screens.config.MainConfigsScreen;
 
 @Environment(EnvType.CLIENT)
 public class ModMenuIntegration implements ModMenuApi {
-
     @Override
-    public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return MainConfigsScreen::new;
-    }
+    public ConfigScreenFactory<?> getModConfigScreenFactory() { return MainConfigsScreen::new; }
 }

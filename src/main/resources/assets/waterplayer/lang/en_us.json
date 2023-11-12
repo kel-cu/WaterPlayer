@@ -6,6 +6,8 @@
   "waterplayer.command.playlist.noName": "You did not specify a playlist file name",
   "waterplayer.command.now_playing.notPlaying": "Nothing's playing",
   "waterplayer.command.now_playing": "It's playing now:",
+  "waterplayer.command.queue.blank": "The queue is empty!",
+  "waterplayer.command.queue": "Current queue:",
 
   "waterplayer.playlist": "Playlist",
   "waterplayer.playlist.author": "Author",

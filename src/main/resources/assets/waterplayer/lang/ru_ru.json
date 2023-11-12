@@ -6,6 +6,8 @@
   "waterplayer.command.playlist.noName": "Вы не указали имя файла плейлиста",
   "waterplayer.command.now_playing.notPlaying": "Ничего не играет",
   "waterplayer.command.now_playing": "Сейчас играет:",
+  "waterplayer.command.queue.blank": "Очередь пуста!",
+  "waterplayer.command.queue": "Текущая очередь:",
 
   "waterplayer.playlist": "Плейлист",
   "waterplayer.playlist.author": "Автор",

@@ -69,7 +69,6 @@ public class OverlayHandler implements HudRenderCallback, ClientTickEvents.Start
         guiGraphics.drawString(this.client.font, text, x, y, 16777215);
     }
     private void drawBackground(GuiGraphics guiGraphics) {
-//        int rgba = new Color(0x75020E15, true).getRGB();
         final float fc = 1.5F * 0.9F + 0.1F;
         final int colorBackground = (int) (255.0F * fc);
 
