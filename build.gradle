@@ -23,7 +23,7 @@ repositories {
     maven { url = "https://maven.topi.wtf/releases" }
     maven { url = "https://maven.meteordev.org/releases" }
     maven {
-        url = "http://192.168.10.32:8080/snapshots"
+        url = "http://192.168.10.33:8080/snapshots"
         allowInsecureProtocol = true
     }
 }

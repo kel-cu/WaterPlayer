@@ -3,11 +3,10 @@ package ru.kelcuprum.waterplayer.gui.screens.config;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import ru.kelcuprum.alinlib.gui.GUIUtils;
+import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.alinlib.gui.components.buttons.Button;
-import ru.kelcuprum.alinlib.gui.components.buttons.ButtonWithColor;
-import ru.kelcuprum.alinlib.gui.components.editbox.SecretStringEditBox;
-import ru.kelcuprum.alinlib.gui.components.editbox.StringEditBox;
+import ru.kelcuprum.alinlib.gui.components.editbox.EditBoxSecretString;
+import ru.kelcuprum.alinlib.gui.components.editbox.EditBoxString;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.localization.Localization;
@@ -27,27 +26,27 @@ public class SecretConfigsScreen extends Screen {
 
     private TextBox tokens;
     private Component tokensText = Localization.getText("waterplayer.secret.title.tokens");
-    private SecretStringEditBox yandexMusic;
+    private EditBoxSecretString yandexMusic;
     private Component yandexMusicText = Localization.getText("waterplayer.config.yandex_music_token");
-    private SecretStringEditBox deezer;
+    private EditBoxSecretString deezer;
     private Component deezerText = Localization.getText("waterplayer.config.deezer_decryption_key");
-    private StringEditBox floweryTTS;
+    private EditBoxString floweryTTS;
     private Component floweryTTSText = Localization.getText("waterplayer.config.flowery_tts_voice");
 
     private TextBox spotify;
     private Component spotifyText = Localization.getText("waterplayer.secret.title.spotify");
-    private SecretStringEditBox spotifyClientID;
+    private EditBoxSecretString spotifyClientID;
     private Component spotifyClientIDText = Localization.getText("waterplayer.config.spotify_client_id");
-    private SecretStringEditBox spotifyClientSecret;
+    private EditBoxSecretString spotifyClientSecret;
     private Component spotifyClientSecretText = Localization.getText("waterplayer.config.spotify_client_secret");
-    private StringEditBox spotifyCountryCode;
+    private EditBoxString spotifyCountryCode;
     private Component spotifyCountryCodeText = Localization.getText("waterplayer.config.spotify_country_code");
 
     private TextBox appleMusic;
     private Component appleMusicText = Localization.getText("waterplayer.secret.title.apple_music");
-    private SecretStringEditBox appleMusicMediaAPIToken;
+    private EditBoxSecretString appleMusicMediaAPIToken;
     private Component appleMusicMediaAPITokenText = Localization.getText("waterplayer.config.apple_music_media_api_token");
-    private StringEditBox appleMusicCountryCode;
+    private EditBoxString appleMusicCountryCode;
     private Component appleMusicCountryCodeText = Localization.getText("waterplayer.config.apple_music_country_code");
     //
     private static final Component EXIT = Localization.getText("waterplayer.screen.exit");
@@ -90,21 +89,21 @@ public class SecretConfigsScreen extends Screen {
         //
         this.tokens = this.addRenderableWidget(new TextBox(140, 40, x, 20, tokensText, true));
 
-        this.yandexMusic = new SecretStringEditBox(140, 65, x, 20, this.yandexMusicText);
+        this.yandexMusic = new EditBoxSecretString(140, 65, x, 20, this.yandexMusicText);
         this.yandexMusic.setContent(WaterPlayer.config.getString("YANDEX_MUSIC_TOKEN", ""));
         this.yandexMusic.setResponse(s->{
             WaterPlayer.config.setString("YANDEX_MUSIC_TOKEN", s);
         });
         this.addRenderableWidget(yandexMusic);
 
-        this.deezer = new SecretStringEditBox(140, 90, x, 20, this.deezerText);
+        this.deezer = new EditBoxSecretString(140, 90, x, 20, this.deezerText);
         this.deezer.setContent(WaterPlayer.config.getString("DEEZER_DECRYPTION_KEY", ""));
         this.deezer.setResponse(s->{
             WaterPlayer.config.setString("DEEZER_DECRYPTION_KEY", s);
         });
         this.addRenderableWidget(deezer);
 
-        this.floweryTTS = new StringEditBox(140, 115, x, 20, this.floweryTTSText);
+        this.floweryTTS = new EditBoxString(140, 115, x, 20, this.floweryTTSText);
         this.floweryTTS.setContent(WaterPlayer.config.getString("FLOWERY_TTS_VOICE", ""));
         this.floweryTTS.setResponse(s->{
             WaterPlayer.config.setString("FLOWERY_TTS_VOICE", s);
@@ -114,21 +113,21 @@ public class SecretConfigsScreen extends Screen {
         //
         this.spotify = this.addRenderableWidget(new TextBox(140, 140, x, 20, spotifyText, true));
 
-        this.spotifyClientID = new SecretStringEditBox(140, 65, x, 20, this.spotifyClientIDText);
+        this.spotifyClientID = new EditBoxSecretString(140, 65, x, 20, this.spotifyClientIDText);
         this.spotifyClientID.setContent(WaterPlayer.config.getString("SPOTIFY_CLIENT_ID", ""));
         this.spotifyClientID.setResponse(s->{
             WaterPlayer.config.setString("SPOTIFY_CLIENT_ID", s);
         });
         this.addRenderableWidget(spotifyClientID);
 
-        this.spotifyClientSecret = new SecretStringEditBox(140, 90, x, 20, this.spotifyClientSecretText);
+        this.spotifyClientSecret = new EditBoxSecretString(140, 90, x, 20, this.spotifyClientSecretText);
         this.spotifyClientSecret.setContent(WaterPlayer.config.getString("SPOTIFY_CLIENT_SECRET", ""));
         this.spotifyClientSecret.setResponse(s->{
             WaterPlayer.config.setString("SPOTIFY_CLIENT_SECRET", s);
         });
         this.addRenderableWidget(spotifyClientSecret);
 
-        this.spotifyCountryCode = new StringEditBox(140, 115, x, 20, this.spotifyCountryCodeText);
+        this.spotifyCountryCode = new EditBoxString(140, 115, x, 20, this.spotifyCountryCodeText);
         this.spotifyCountryCode.setContent(WaterPlayer.config.getString("SPOTIFY_COUNTRY_CODE", "US"));
         this.spotifyCountryCode.setResponse(s->{
             WaterPlayer.config.setString("SPOTIFY_COUNTRY_CODE", s);
@@ -138,14 +137,14 @@ public class SecretConfigsScreen extends Screen {
         //
         this.appleMusic = this.addRenderableWidget(new TextBox(140, 240, x, 20, appleMusicText, true));
 
-        this.appleMusicMediaAPIToken = new SecretStringEditBox(140, 65, x, 20, this.appleMusicMediaAPITokenText);
+        this.appleMusicMediaAPIToken = new EditBoxSecretString(140, 65, x, 20, this.appleMusicMediaAPITokenText);
         this.appleMusicMediaAPIToken.setContent(WaterPlayer.config.getString("APPLE_MUSIC_MEDIA_API_TOKEN", ""));
         this.appleMusicMediaAPIToken.setResponse(s->{
             WaterPlayer.config.setString("APPLE_MUSIC_MEDIA_API_TOKEN", s);
         });
         this.addRenderableWidget(appleMusicMediaAPIToken);
 
-        this.appleMusicCountryCode = new StringEditBox(140, 90, x, 20, this.appleMusicCountryCodeText);
+        this.appleMusicCountryCode = new EditBoxString(140, 90, x, 20, this.appleMusicCountryCodeText);
         this.appleMusicCountryCode.setContent(WaterPlayer.config.getString("APPLE_MUSIC_COUNTRY_CODE", "us"));
         this.appleMusicCountryCode.setResponse(s->{
             WaterPlayer.config.setString("APPLE_MUSIC_COUNTRY_CODE", s);
@@ -166,7 +165,7 @@ public class SecretConfigsScreen extends Screen {
         }));
         this.SecretConfigCategoryButton.setActive(false);
         //
-        this.addRenderableWidget(new ButtonWithColor(10, this.height - 30, 110, 20, EXIT, -1224789711, (OnPress) -> {
+        this.addRenderableWidget(new Button(10, this.height - 30, 110, 20, -1224789711, EXIT, (OnPress) -> {
             WaterPlayer.config.save();
             this.minecraft.setScreen(this.parent);
         }));
@@ -179,7 +178,7 @@ public class SecretConfigsScreen extends Screen {
             this.renderDirtBackground(guiGraphics);
         }
 
-        GUIUtils.renderLeftPanel(guiGraphics, 130, this.height);
+        InterfaceUtils.renderLeftPanel(guiGraphics, 130, this.height);
     }
 
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
@@ -188,13 +187,11 @@ public class SecretConfigsScreen extends Screen {
     }
 
     public boolean mouseScrolled(double d, double e, double f, double g) {
-        this.scrolled = (int)((double)this.scrolled + g * 10.0 * -1.0);
+        int scrolled = (int)((double)this.scrolled + g * 10.0 * -1.0);
         int size = 315;
-        if (this.scrolled <= 0) {
+        if (scrolled <= 0 || size <= this.height) {
             this.scrolled = 0;
-        } else if (this.scrolled >= size - this.height) {
-            this.scrolled = size - this.height;
-        }
+        } else this.scrolled = Math.min(scrolled, size - this.height);
 
         return super.mouseScrolled(d, e, f, g);
     }

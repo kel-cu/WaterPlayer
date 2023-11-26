@@ -6,6 +6,8 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import org.apache.logging.log4j.Level;
 import org.json.JSONObject;
+import ru.kelcuprum.alinlib.gui.components.buttons.Button;
+import ru.kelcuprum.alinlib.gui.components.editbox.flat.FlatEditBoxString;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.config.PlaylistObject;
@@ -29,18 +31,18 @@ public class LoadMusicScreen extends Screen {
     public void init() {
         int size = 100;
         addRenderableWidget(new TextBox(((width/2)-(310/2)), height/2-(25*3), 310, this.font.lineHeight, Localization.getText("waterplayer.load"), true));
-        EditBox request = new EditBox(this.font,((width/2)-(310/2)), height/2-(25*2), 310,  20, Localization.getText("waterplayer.load.url"));
+        FlatEditBoxString request = new FlatEditBoxString(this.font,((width/2)-(310/2)), height/2-(25*2), 310,  20, Localization.getText("waterplayer.load.url"));
         request.setMaxLength(Integer.MAX_VALUE);
         addRenderableWidget(request);
 
-        addRenderableWidget(new ru.kelcuprum.alinlib.gui.components.buttons.ButtonWithColor(((width/2)-(size/2))-size-5, height/2-(20), size,  20, Localization.getText("waterplayer.screen.exit"), 0xB6FF3131, (OnPress) -> {
+        addRenderableWidget(new Button(((width/2)-(size/2))-size-5, height/2-(20), size,  20, 0xB6FF3131, Localization.getText("waterplayer.screen.exit"), (OnPress) -> {
             this.minecraft.setScreen(parent);
         }));
-        addRenderableWidget(new ru.kelcuprum.alinlib.gui.components.buttons.Button(((width/2)-(size/2)), height/2-(20), size,  20, Localization.getText("waterplayer.load.load"), (OnPress) -> {
+        addRenderableWidget(new Button(((width/2)-(size/2)), height/2-(20), size,  20, Localization.getText("waterplayer.load.load"), (OnPress) -> {
             loadMusic(request.getValue());
             this.minecraft.setScreen(parent);
         }));
-        addRenderableWidget(new ru.kelcuprum.alinlib.gui.components.buttons.Button(((width/2)-(size/2))+size+5, height/2-(20), size,  20, Localization.getText("waterplayer.load.url.copy"), (OnPress) -> {
+        addRenderableWidget(new Button(((width/2)-(size/2))+size+5, height/2-(20), size,  20, Localization.getText("waterplayer.load.url.copy"), (OnPress) -> {
             request.setValue(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", ""));
         }));
     }

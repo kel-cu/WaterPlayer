@@ -3,10 +3,9 @@ package ru.kelcuprum.waterplayer.gui.screens.config;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import ru.kelcuprum.alinlib.gui.GUIUtils;
-import ru.kelcuprum.alinlib.gui.components.buttons.BooleanButton;
+import ru.kelcuprum.alinlib.gui.InterfaceUtils;
+import ru.kelcuprum.alinlib.gui.components.buttons.ButtonBoolean;
 import ru.kelcuprum.alinlib.gui.components.buttons.Button;
-import ru.kelcuprum.alinlib.gui.components.buttons.ButtonWithColor;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.localization.Localization;
@@ -23,13 +22,13 @@ public class MainConfigsScreen extends Screen {
     private Button SecretConfigCategoryButton;
     // CATEGORY CONTENT
     private TextBox titleBox;
-    private BooleanButton enableBossBar;
+    private ButtonBoolean enableBossBar;
     private static final Component enableBossBarText = Localization.getText("waterplayer.config.enable_bossbar");
-    private BooleanButton enableOverlay;
+    private ButtonBoolean enableOverlay;
     private static final Component enableOverlayText = Localization.getText("waterplayer.config.enable_overlay");
-    private BooleanButton enableNotice;
+    private ButtonBoolean enableNotice;
     private static final Component enableNoticeText = Localization.getText("waterplayer.config.enable_notice");
-    private BooleanButton enableChangeTitle;
+    private ButtonBoolean enableChangeTitle;
     private static final Component enableChangeTitleText = Localization.getText("waterplayer.config.enable_change_title");
     //
     private static final Component EXIT = Localization.getText("waterplayer.screen.exit");
@@ -59,13 +58,13 @@ public class MainConfigsScreen extends Screen {
         int x = this.width - 150;
         this.titleBox = this.addRenderableWidget(new TextBox(140, 15, x, 9, this.title, true));
         //
-        this.enableBossBar = new BooleanButton(140, 40, x, 20, WaterPlayer.config, "ENABLE_BOSS_BAR", false, enableBossBarText);
+        this.enableBossBar = new ButtonBoolean(140, 40, x, 20, WaterPlayer.config, "ENABLE_BOSS_BAR", false, enableBossBarText);
         this.addRenderableWidget(enableBossBar);
-        this.enableOverlay = new BooleanButton(140, 65, x, 20, WaterPlayer.config, "ENABLE_OVERLAY", false, enableOverlayText);
+        this.enableOverlay = new ButtonBoolean(140, 65, x, 20, WaterPlayer.config, "ENABLE_OVERLAY", false, enableOverlayText);
         this.addRenderableWidget(enableOverlay);
-        this.enableNotice = new BooleanButton(140, 90, x, 20, WaterPlayer.config, "ENABLE_NOTICE", false, enableNoticeText);
+        this.enableNotice = new ButtonBoolean(140, 90, x, 20, WaterPlayer.config, "ENABLE_NOTICE", false, enableNoticeText);
         this.addRenderableWidget(enableNotice);
-        this.enableChangeTitle = new BooleanButton(140, 115, x, 20, WaterPlayer.config, "ENABLE_CHANGE_TITLE", false, enableChangeTitleText);
+        this.enableChangeTitle = new ButtonBoolean(140, 115, x, 20, WaterPlayer.config, "ENABLE_CHANGE_TITLE", false, enableChangeTitleText);
         this.addRenderableWidget(enableChangeTitle);
     }
 
@@ -81,7 +80,7 @@ public class MainConfigsScreen extends Screen {
         }));
         this.MainConfigCategoryButton.setActive(false);
         //
-        this.addRenderableWidget(new ButtonWithColor(10, this.height - 30, 110, 20, EXIT, -1224789711, (OnPress) -> {
+        this.addRenderableWidget(new Button(10, this.height - 30, 110, 20, -1224789711, EXIT, (OnPress) -> {
             WaterPlayer.config.save();
             this.minecraft.setScreen(this.parent);
         }));
@@ -94,7 +93,7 @@ public class MainConfigsScreen extends Screen {
             this.renderDirtBackground(guiGraphics);
         }
 
-        GUIUtils.renderLeftPanel(guiGraphics, 130, this.height);
+        InterfaceUtils.renderLeftPanel(guiGraphics, 130, this.height);
     }
 
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
@@ -103,13 +102,11 @@ public class MainConfigsScreen extends Screen {
     }
 
     public boolean mouseScrolled(double d, double e, double f, double g) {
-        this.scrolled = (int)((double)this.scrolled + g * 10.0 * -1.0);
-        int size = 190;
-        if (this.scrolled <= 0) {
+        int scrolled = (int)((double)this.scrolled + g * 10.0 * -1.0);
+        int size = 140;
+        if (scrolled <= 0 || size <= this.height) {
             this.scrolled = 0;
-        } else if (this.scrolled >= size - this.height) {
-            this.scrolled = size - this.height;
-        }
+        } else this.scrolled = Math.min(scrolled, size - this.height);
 
         return super.mouseScrolled(d, e, f, g);
     }
