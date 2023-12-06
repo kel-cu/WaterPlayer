@@ -7,6 +7,20 @@
 ![GitHub](https://img.shields.io/github/license/simply-kel/WaterPlayer?color=blue&label=License&style=flat-square)
 <br>
 🎶 Встроенный в клиент музыкальный интернет-плеер 🎶
+
+[![alinlib](https://kelcuprum.ru/ass/budge/alinlib/cozy_vector.svg)](/mod/alinlib)
+![fabric](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/fabric_vector.svg)
+![quilt](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/quilt_vector.svg)
+
+[![youtube](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/social/youtube-plural_vector.svg)](https://youtube.com)
+[![twitch](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/social/twitch-plural_vector.svg)](https://twitch.tv)
+[![spotify](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/available/spotify_vector.svg)](https://spotify.com)
+[![yandex music](https://cdn.kelcuprum.ru/budge/yandex-music/yandex-music_vector.svg)](https://music.yandex.ru)
+[![soundcloud](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/available/soundcloud_vector.svg)](https://soundcloud.com)
+[![deezer](https://cdn.kelcuprum.ru/budge/deezer/deezer_vector.svg)](https://deezer.com)
+[![apple music](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/available/app-store_vector.svg)](https://music.apple.com/)
+![web](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/translate/generic-singular_vector.svg)
+
 </div>
 
 <details>
