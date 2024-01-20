@@ -1,57 +1,116 @@
 package ru.kelcuprum.waterplayer.frontend.gui.screens;
 
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
 import org.apache.logging.log4j.Level;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import ru.kelcuprum.alinlib.config.Localization;
+import ru.kelcuprum.alinlib.gui.InterfaceUtils;
+import ru.kelcuprum.alinlib.gui.components.ConfigureScrolWidget;
 import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
-import ru.kelcuprum.alinlib.gui.components.editbox.EditBoxConfigString;
 import ru.kelcuprum.alinlib.gui.components.editbox.base.EditBoxString;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
+import ru.kelcuprum.alinlib.gui.screens.AbstractConfigScreen;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.config.PlaylistObject;
 import ru.kelcuprum.waterplayer.frontend.gui.toasts.ControlToast;
+import ru.kelcuprum.waterplayer.frontend.localization.Music;
+import ru.kelcuprum.waterplayer.frontend.localization.StarScript;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Queue;
 
 public class LoadMusicScreen extends Screen {
     private final Screen parent;
+    private final InterfaceUtils.DesignType designType = InterfaceUtils.DesignType.FLAT;
     public LoadMusicScreen(Screen parent) {
         super(Localization.getText("waterplayer.name"));
         this.parent = parent;
     }
-
-    public void tick() {
-        super.tick();
-    }
     @Override
     public void init() {
-        addRenderableWidget(new TextBox(0, 15, this.width, 9, Localization.getText("waterplayer.load"), true));
-        int x = width/2;
+        initPanel();
+        initList();
+    }
+    public void initPanel(){
+        int x = 5;
         int size = 180;
-        EditBoxString request = new EditBoxString(x-90, 60, size, 20, Localization.getText("waterplayer.load.url"));
+        addRenderableWidget(new TextBox(x, 15, size, 9, Localization.getText("waterplayer.load"), true));
+        EditBoxString request = new EditBoxString(x, 60, size, 20, designType, Localization.getText("waterplayer.load.url"));
         request.setMaxLength(Integer.MAX_VALUE);
         addRenderableWidget(request);
 
-        addRenderableWidget(new Button(x-90, height-80, size, 20, Localization.getText("waterplayer.screen.exit"), (OnPress) -> {
-            this.minecraft.setScreen(parent);
-        }));
-        addRenderableWidget(new Button(x-90, height-55, size, 20, Localization.getText("waterplayer.load.load"), (OnPress) -> {
+        addRenderableWidget(new Button(x, height-80, size, 20, designType, Localization.getText("waterplayer.load.load"), (OnPress) -> {
             loadMusic(request.getValue());
             this.minecraft.setScreen(parent);
         }));
-        addRenderableWidget(new Button(x-90, height-30, size, 20, Localization.getText("waterplayer.load.url.copy"), (OnPress) -> {
+        addRenderableWidget(new Button(x, height-55, size, 20, designType, Localization.getText("waterplayer.load.url.copy"), (OnPress) -> {
             request.setValue(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", ""));
         }));
+        addRenderableWidget(new Button(x, height-30, size, 20, designType, CommonComponents.GUI_CANCEL, (OnPress) -> {
+            this.minecraft.setScreen(parent);
+        }));
+    }
+    private ConfigureScrolWidget scroller;
+    private List<AbstractWidget> widgets = new ArrayList<>();
+    public void initList(){
+        widgets = new ArrayList<>();
+        int x = 195;
+        this.scroller = addRenderableWidget(new ConfigureScrolWidget(this.width - 8, 0, 4, this.height, Component.empty(), scroller -> {
+            scroller.innerHeight = 5;
+            for(AbstractWidget widget : widgets){
+                if(widget.visible){
+                    widget.setY((int) (scroller.innerHeight - scroller.scrollAmount()));
+                    scroller.innerHeight += (widget.getHeight()+5);
+                } else widget.setY(-widget.getHeight());
+            }
+        }));
+        addRenderableWidget(scroller);
+        Queue<AudioTrack> queue = WaterPlayer.music.getTrackManager().queue;
+        widgets.add(new TextBox(x, 5, width-200, 20, Component.translatable(queue.isEmpty() ? "waterplayer.command.queue.blank" : "waterplayer.command.queue"), true));
+        int pos = 1;
+        if(!queue.isEmpty()) {
+            for (AudioTrack track : WaterPlayer.music.getTrackManager().queue) {
+                StringBuilder builder = new StringBuilder();
+                if(Music.isAuthorNull(track)) builder.append(Music.getTitle(track)).append(" ");
+                else builder.append(pos).append(". «").append(Music.getAuthor(track)).append("» ").append(Music.getTitle(track)).append(" ");
+                builder.append(Music.getIsLive(track) ? WaterPlayer.localization.getLocalization("format.live") : StarScript.getTimestamp(Music.getDuration(track)));
+                widgets.add(new TextBox(x, -10, width-200, 10, Component.literal(builder.toString()), false, (s) -> {
+                    if(track.getInfo().uri != null) Util.getPlatform().openUri(track.getInfo().uri);
+                }));
+                pos++;
+            }
+        }
+        addRenderableWidgets(widgets);
+    }
+    protected void addRenderableWidgets(@NotNull List<AbstractWidget> widgets) {
+        Iterator var2 = widgets.iterator();
+
+        while(var2.hasNext()) {
+            AbstractWidget widget = (AbstractWidget)var2.next();
+            this.addRenderableWidget(widget);
+        }
+
     }
 
     public static void loadMusic(String url){
+        if(url.isBlank()){
+            Minecraft.getInstance().getToasts().addToast(new ControlToast(Localization.getText("waterplayer.load.add.blank"), true));
+            return;
+        }
         WaterPlayer.config.setString("LAST_REQUEST_MUSIC", url);
         WaterPlayer.config.save();
-        if(!WaterPlayer.config.getString("LAST_REQUEST_MUSIC", "").isBlank()){
             if(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", "").startsWith("playlist:")){
                 String name = WaterPlayer.config.getString("LAST_REQUEST_MUSIC", "").replace("playlist:", "");
                 PlaylistObject playlist;
@@ -75,22 +134,25 @@ public class LoadMusicScreen extends Screen {
                 WaterPlayer.music.getTrackSearch().getTracks(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", ""));
                 Minecraft.getInstance().getToasts().addToast(new ControlToast(Localization.getText("waterplayer.load.add"), false));
             }
-        }else Minecraft.getInstance().getToasts().addToast(new ControlToast(Localization.getText("waterplayer.load.add.blank"), true));
-
     }
 
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f){
-        if(this.minecraft.level != null){
-            guiGraphics.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
-        } else {
-            renderDirtBackground(guiGraphics);
-        }
+        InterfaceUtils.renderBackground(guiGraphics, minecraft);
+        InterfaceUtils.renderLeftPanel(guiGraphics, 190, height);
+    }
+    @Override
+    public void tick(){
+        if(scroller != null) scroller.onScroll.accept(scroller);
+        super.tick();
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int i, int j, float f) {
-        guiGraphics.drawCenteredString(this.font, this.title, width/2, 25, 0xffffff);
-        super.render(guiGraphics, i, j, f);
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        boolean scr = super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+        if (!scr && scroller != null) {
+            scr = scroller.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+        }
+        return scr;
     }
 }

@@ -18,27 +18,27 @@ public class LocalizationConfigsScreen {
     private static final Component LocalizationConfigCategory = Localization.getText("waterplayer.config.localization");
     private static final Component SecretConfigCategory = Localization.getText("waterplayer.secret");
 
-    private Component titleBossBarText = Localization.getText("waterplayer.config.localization.title.bossbar");
-    private Component bossBarText = Localization.getText("waterplayer.config.localization.bossbar");
-    private Component bossBarWithoutAuthorText = Localization.getText("waterplayer.config.localization.bossbar.withoutAuthor");
-    private Component bossBarLiveText = Localization.getText("waterplayer.config.localization.bossbar.live");
-    private Component bossBarLiveWithoutAuthorText = Localization.getText("waterplayer.config.localization.bossbar.live.withoutAuthor");
-    private Component bossBarPauseText = Localization.getText("waterplayer.config.localization.bossbar.pause");
+    private final Component titleBossBarText = Localization.getText("waterplayer.config.localization.title.bossbar");
+    private final Component bossBarText = Localization.getText("waterplayer.config.localization.bossbar");
+    private final Component bossBarWithoutAuthorText = Localization.getText("waterplayer.config.localization.bossbar.withoutAuthor");
+    private final Component bossBarLiveText = Localization.getText("waterplayer.config.localization.bossbar.live");
+    private final Component bossBarLiveWithoutAuthorText = Localization.getText("waterplayer.config.localization.bossbar.live.withoutAuthor");
+    private final Component bossBarPauseText = Localization.getText("waterplayer.config.localization.bossbar.pause");
 
-    private Component titleOverlayText = Localization.getText("waterplayer.config.localization.title.title");
-    private Component overlayText = Localization.getText("waterplayer.config.localization.title");
-    private Component overlayWithoutAuthorText = Localization.getText("waterplayer.config.localization.title.withoutAuthor");
-    private Component overlayLiveText = Localization.getText("waterplayer.config.localization.title.live");
-    private Component overlayLiveWithoutAuthorText = Localization.getText("waterplayer.config.localization.title.live.withoutAuthor");
-    private Component overlayPauseText = Localization.getText("waterplayer.config.localization.title.pause");
+    private final Component titleOverlayText = Localization.getText("waterplayer.config.localization.title.title");
+    private final Component overlayText = Localization.getText("waterplayer.config.localization.title");
+    private final Component overlayWithoutAuthorText = Localization.getText("waterplayer.config.localization.title.withoutAuthor");
+    private final Component overlayLiveText = Localization.getText("waterplayer.config.localization.title.live");
+    private final Component overlayLiveWithoutAuthorText = Localization.getText("waterplayer.config.localization.title.live.withoutAuthor");
+    private final Component overlayPauseText = Localization.getText("waterplayer.config.localization.title.pause");
 
-    private Component titleFormatsText = Localization.getText("waterplayer.config.localization.title.formats");
-    private Component authorText = Localization.getText("waterplayer.config.localization.format.author");
-    private Component titleText = Localization.getText("waterplayer.config.localization.format.title");
-    private Component timeText = Localization.getText("waterplayer.config.localization.format.time");
-    private Component liveText = Localization.getText("waterplayer.config.localization.format.live");
+    private final Component titleFormatsText = Localization.getText("waterplayer.config.localization.title.formats");
+    private final Component authorText = Localization.getText("waterplayer.config.localization.format.author");
+    private final Component titleText = Localization.getText("waterplayer.config.localization.format.title");
+    private final Component timeText = Localization.getText("waterplayer.config.localization.format.time");
+    private final Component liveText = Localization.getText("waterplayer.config.localization.format.live");
 
-    private InterfaceUtils.DesignType designType = InterfaceUtils.DesignType.FLAT;
+    private final InterfaceUtils.DesignType designType = InterfaceUtils.DesignType.FLAT;
     public Screen build(Screen parent){
         return new ConfigScreenBuilder(parent, Component.translatable("waterplayer.name"), designType)
                 .addPanelWidget(new Button(10, 40, designType, MainConfigCategory, (e) -> {

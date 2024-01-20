@@ -46,9 +46,9 @@ dependencies {
     // Libs
     include(implementation("org.json:json:20231013"))
     // Discord Integratioj
-    include(implementation "com.jagrosh.discordipc:DiscordIPC:0.6.0")
-    include(implementation "com.kohlschutter.junixsocket:junixsocket-common:2.7.0")
-    include(implementation "com.kohlschutter.junixsocket:junixsocket-native-common:2.7.0")
+    include(implementation("com.jagrosh.discordipc:DiscordIPC:0.6.0"))
+    include(implementation("com.kohlschutter.junixsocket:junixsocket-common:2.7.0"))
+    include(implementation("com.kohlschutter.junixsocket:junixsocket-native-common:2.7.0"))
     //
     implementation shade("dev.arbjerg:lavaplayer:2.0.4")
     implementation shade("com.github.topi314.lavasrc:lavasrc:4.0.1")

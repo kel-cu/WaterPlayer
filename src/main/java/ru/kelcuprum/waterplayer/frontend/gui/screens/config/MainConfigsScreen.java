@@ -21,7 +21,7 @@ public class MainConfigsScreen{
     private static final Component enableNoticeText = Localization.getText("waterplayer.config.enable_notice");
     private static final Component enableChangeTitleText = Localization.getText("waterplayer.config.enable_change_title");
 
-    private InterfaceUtils.DesignType designType = InterfaceUtils.DesignType.FLAT;
+    private final InterfaceUtils.DesignType designType = InterfaceUtils.DesignType.FLAT;
     public Screen build(Screen parent) {
         return new ConfigScreenBuilder(parent, Component.translatable("waterplayer.name"), designType)
                 .addPanelWidget(new Button(10, 40, designType, MainConfigCategory, (e) -> {

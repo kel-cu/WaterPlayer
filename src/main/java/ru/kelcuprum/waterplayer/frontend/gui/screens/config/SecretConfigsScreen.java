@@ -18,22 +18,21 @@ public class SecretConfigsScreen {
     private static final Component LocalizationConfigCategory = Localization.getText("waterplayer.config.localization");
     private static final Component SecretConfigCategory = Localization.getText("waterplayer.secret");
 
-    private Component tokensText = Localization.getText("waterplayer.secret.title.tokens");
-    private Component yandexMusicText = Localization.getText("waterplayer.config.yandex_music_token");
-    private Component deezerText = Localization.getText("waterplayer.config.deezer_decryption_key");
-    private Component floweryTTSText = Localization.getText("waterplayer.config.flowery_tts_voice");
+    private final Component tokensText = Localization.getText("waterplayer.secret.title.tokens");
+    private final Component yandexMusicText = Localization.getText("waterplayer.config.yandex_music_token");
+    private final Component deezerText = Localization.getText("waterplayer.config.deezer_decryption_key");
+    private final Component floweryTTSText = Localization.getText("waterplayer.config.flowery_tts_voice");
 
-    private TextBox spotify;
-    private Component spotifyText = Localization.getText("waterplayer.secret.title.spotify");
-    private Component spotifyClientIDText = Localization.getText("waterplayer.config.spotify_client_id");
-    private Component spotifyClientSecretText = Localization.getText("waterplayer.config.spotify_client_secret");
-    private Component spotifyCountryCodeText = Localization.getText("waterplayer.config.spotify_country_code");
+    private final Component spotifyText = Localization.getText("waterplayer.secret.title.spotify");
+    private final Component spotifyClientIDText = Localization.getText("waterplayer.config.spotify_client_id");
+    private final Component spotifyClientSecretText = Localization.getText("waterplayer.config.spotify_client_secret");
+    private final Component spotifyCountryCodeText = Localization.getText("waterplayer.config.spotify_country_code");
 
-    private Component appleMusicText = Localization.getText("waterplayer.secret.title.apple_music");
-    private Component appleMusicMediaAPITokenText = Localization.getText("waterplayer.config.apple_music_media_api_token");
-    private Component appleMusicCountryCodeText = Localization.getText("waterplayer.config.apple_music_country_code");
+    private final Component appleMusicText = Localization.getText("waterplayer.secret.title.apple_music");
+    private final Component appleMusicMediaAPITokenText = Localization.getText("waterplayer.config.apple_music_media_api_token");
+    private final Component appleMusicCountryCodeText = Localization.getText("waterplayer.config.apple_music_country_code");
     //
-    private InterfaceUtils.DesignType designType = InterfaceUtils.DesignType.FLAT;
+    private final InterfaceUtils.DesignType designType = InterfaceUtils.DesignType.FLAT;
     public Screen build(Screen parent) {
         return new ConfigScreenBuilder(parent, Component.translatable("waterplayer.name"), designType)
                 .addPanelWidget(new Button(10, 40, designType, MainConfigCategory, (e) -> {
