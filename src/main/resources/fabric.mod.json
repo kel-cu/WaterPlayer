@@ -8,7 +8,8 @@
   "contact": {
     "homepage": "https://modrinth.com/mod/waterplayer",
     "issues": "https://github.com/simply-kel/WaterPlayer/issues",
-    "email": "kel@simplykel.ru"
+    "sources": "https://github.com/simply-kel/WaterPlayer",
+    "email": "me@kelcuprum.ru"
   },
   "license": "MIT",
   "icon": "assets/waterplayer/logo.png",
@@ -18,7 +19,7 @@
       "ru.kelcuprum.waterplayer.WaterPlayer"
     ],
     "modmenu": [
-      "ru.kelcuprum.waterplayer.gui.screens.ModMenuIntegration"
+      "ru.kelcuprum.waterplayer.frontend.gui.screens.ModMenuIntegration"
     ]
   },
   "mixins": [
@@ -27,17 +28,15 @@
   "depends": {
     "fabricloader": ">=0.14.17",
     "fabric": "*",
+    "alinlib": "*",
     "cloth-config": "*",
     "minecraft": [">=1.20.2"]
-  },
-  "breaks": {
   },
   "custom": {
     "modmenu": {
       "links": {
-        "modmenu.waterplayer.github": "https://github.com/simply-kel/WaterPlayer",
-        "modmenu.waterplayer.modrinth": "https://modrinth.com/mod/waterplayer",
-        "modmenu.waterplayer.donate": "https://kelcuprum.ru/r/don"
+        "modmenu.modrinth": "https://modrinth.com/mod/waterplayer",
+        "modmenu.donate": "https://kelcuprum.ru/r/don"
       }
     }
   }
