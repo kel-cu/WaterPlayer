@@ -25,7 +25,7 @@
   "waterplayer.key.shuffle": "Shuffle queue",
   "waterplayer.key.repeating": "Repeating track",
 
-  "waterplayer.message.clothConfigNotFound": "Install the §7Cloth Config§r mod to display the config window. =-=",
+  "waterplayer.message.clothConfigNotFound": "Install the &7Cloth Config&r mod to display the config window. =-=",
   "waterplayer.message.pause": "Track has been paused",
   "waterplayer.message.play": "Track has been resumed",
   "waterplayer.message.repeat": "Repeat on",
@@ -80,7 +80,7 @@
   "waterplayer.config.localization.format.live": "Live",
 
   "waterplayer.secret": "TOP SECRET!",
-  "waterplayer.secret.description": "After changing the data, you will need to reboot! §oSorry...§r",
+  "waterplayer.secret.description": "After changing the data, you will need to reboot! &oSorry...&r",
   "waterplayer.secret.title.tokens": "Tokens",
   "waterplayer.config.yandex_music_token": "Yandex Music Token",
   "waterplayer.config.deezer_decryption_key": "Deezer Decryption Key",
@@ -94,9 +94,6 @@
   "waterplayer.secret.title.apple_music": "Apple Music",
   "waterplayer.config.apple_music_media_api_token": "Media API Token",
   "waterplayer.config.apple_music_country_code": "Country Code",
-
-  "waterplayer.screen.exit": "Exit",
-
 
   "waterplayer.bossbar": "&c♫&r {format.author} {track.title} {format.time} {player.speaker_icon} {player.volume}%",
   "waterplayer.bossbar.withoutAuthor": "&c♫&r {track.title} {format.time} {player.speaker_icon} {player.volume}%",
@@ -114,8 +111,5 @@
 
   "waterplayer.title.pause": "Minecraft {minecraft.version} - ⏸ Pause",
 
-  "modmenu.descriptionTranslation.waterplayer": "Internet music player built into the client",
-  "modmenu.waterplayer.github": "GitHub",
-  "modmenu.waterplayer.modrinth": "Modrinth",
-  "modmenu.waterplayer.donate": "DonationAlerts"
+  "modmenu.descriptionTranslation.waterplayer": "Internet music player built into the client"
 }

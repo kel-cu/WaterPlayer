@@ -71,8 +71,8 @@ public class WaterPlayerCommand {
                         }))
                 .then(literal("skip")
                         .executes(context -> {
-                            if(!(WaterPlayer.music.getTrackManager().queue.isEmpty() && WaterPlayer.music.getAudioPlayer().getPlayingTrack() == null)) {
-                                WaterPlayer.music.getTrackManager().nextTrack();
+                            if(!(WaterPlayer.player.getTrackManager().queue.isEmpty() && WaterPlayer.player.getAudioPlayer().getPlayingTrack() == null)) {
+                                WaterPlayer.player.getTrackManager().nextTrack();
                                 context.getSource().getClient().getToasts().addToast(new ControlToast(Localization.getText("waterplayer.message.skip"), false));
                             }
                             return 1;
@@ -98,7 +98,7 @@ public class WaterPlayerCommand {
     public static void queue(int size, CommandContext<FabricClientCommandSource> context){
         List<String> list = new ArrayList<>();
         int pos = 0;
-        for(AudioTrack track : WaterPlayer.music.getTrackManager().queue){
+        for(AudioTrack track : WaterPlayer.player.getTrackManager().queue){
             if(pos == size) break;
             StringBuilder builder = new StringBuilder();
             if(Music.isAuthorNull(track)) builder.append(Music.getTitle(track)).append(" ");
@@ -114,7 +114,7 @@ public class WaterPlayerCommand {
                 context.getSource().sendFeedback(Localization.toText(number + ". " + track));
                 if (number != list.size()) number++;
             }
-            context.getSource().sendFeedback(Localization.toText(number + "/" + WaterPlayer.music.getTrackManager().queue.size()));
+            context.getSource().sendFeedback(Localization.toText(number + "/" + WaterPlayer.player.getTrackManager().queue.size()));
         }
     }
 }

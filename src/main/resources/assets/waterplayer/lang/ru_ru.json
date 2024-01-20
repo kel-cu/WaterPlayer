@@ -23,7 +23,7 @@
   "waterplayer.key.shuffle": "Перемешать очередь",
   "waterplayer.key.repeating": "Повтор трека",
 
-  "waterplayer.message.clothConfigNotFound": "Install the §7Cloth Config§r mod to display the config window. =-=",
+  "waterplayer.message.clothConfigNotFound": "Install the &7Cloth Config&r mod to display the config window. =-=",
   "waterplayer.message.pause": "Трек поставлен на паузу",
   "waterplayer.message.play": "Трек снят с паузы",
   "waterplayer.message.repeat": "Повтор ВКЛ.",
@@ -77,7 +77,7 @@
   "waterplayer.config.localization.format.live": "Эфир",
 
   "waterplayer.secret": "TOP SECRET!",
-  "waterplayer.secret.description": "After changing the data, you will need to reboot! §oSorry...§r",
+  "waterplayer.secret.description": "After changing the data, you will need to reboot! &oSorry...&r",
   "waterplayer.secret.title.tokens": "Токены",
   "waterplayer.config.yandex_music_token": "Токен Яндекс.Музыки",
   "waterplayer.config.deezer_decryption_key": "Deezer Decryption Key",
@@ -91,8 +91,6 @@
   "waterplayer.secret.title.apple_music": "Apple Music",
   "waterplayer.config.apple_music_media_api_token": "Media API Token",
   "waterplayer.config.apple_music_country_code": "Код страны",
-
-  "waterplayer.screen.exit": "Выйти",
 
 
   "waterplayer.bossbar": "&c♫&r {format.author} {track.title} {format.time} {player.speaker_icon} {player.volume}%",
@@ -111,8 +109,5 @@
 
   "waterplayer.title.pause": "Minecraft {minecraft.version} - ⏸ Пауза",
 
-  "modmenu.descriptionTranslation.waterplayer": "Музыкальный интернет-плеер встроенный в клиент",
-  "modmenu.waterplayer.github": "GitHub",
-  "modmenu.waterplayer.modrinth": "Modrinth",
-  "modmenu.waterplayer.donate": "DonationAlerts"
+  "modmenu.descriptionTranslation.waterplayer": "Музыкальный интернет-плеер встроенный в клиент"
 }

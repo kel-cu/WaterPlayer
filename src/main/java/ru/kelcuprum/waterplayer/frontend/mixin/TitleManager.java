@@ -13,6 +13,6 @@ public class TitleManager {
     @Inject(at = @At("HEAD"), method = "updateTitle", cancellable = true)
     private void updateTitle(final CallbackInfo callbackInfo) {
         Minecraft client = Minecraft.getInstance();
-        if(WaterPlayer.music != null && WaterPlayer.music.getAudioPlayer().getPlayingTrack() != null && (client.level == null && client.player == null) && WaterPlayer.config.getBoolean("ENABLE_CHANGE_TITLE", true)) callbackInfo.cancel();
+        if(WaterPlayer.player != null && WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null && (client.level == null && client.player == null) && WaterPlayer.config.getBoolean("ENABLE_CHANGE_TITLE", true)) callbackInfo.cancel();
     }
 }

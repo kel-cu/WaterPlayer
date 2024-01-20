@@ -45,7 +45,7 @@ public class WaterPlayer implements ClientModInitializer {
     private static final Timer TIMER = new Timer();
     public static final Logger LOG = LogManager.getLogger("WaterPlayer");
     public static boolean clothConfig = FabricLoader.getInstance().getModContainer("cloth-config").isPresent();
-    public static MusicPlayer music;
+    public static MusicPlayer player;
     public static Localization localization = new Localization("waterplayer", "config/WaterPlayer/lang");
     public static String mixer;
     private static String lastException;
@@ -60,9 +60,9 @@ public class WaterPlayer implements ClientModInitializer {
         config.load();
         StarScript.init();
         localization.setParser((s) -> StarScript.run(StarScript.compile(s)));
-        music = new MusicPlayer();
-        music.startAudioOutput();
-        mixer = music.getMixer();
+        player = new MusicPlayer();
+        player.startAudioOutput();
+        mixer = player.getMixer();
         registerBinds();
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
             closing = false;
@@ -75,7 +75,7 @@ public class WaterPlayer implements ClientModInitializer {
         ClientLifecycleEvents.CLIENT_STOPPING.register(c -> {
             closing = true;
             if(CONNECTED_DISCORD) client.close();
-            music.getAudioPlayer().stopTrack();
+            player.getAudioPlayer().stopTrack();
         });
         ClientCommandRegistrationCallback.EVENT.register(WaterPlayerCommand::register);
     }
@@ -86,7 +86,7 @@ public class WaterPlayer implements ClientModInitializer {
             @Override
             public void run() {
                 if(closing) return;
-                if(WaterPlayer.config.getBoolean("ENABLE_CHANGE_TITLE", true) && WaterPlayer.music != null && music.getAudioPlayer().getPlayingTrack() != null) updateTitle();
+                if(WaterPlayer.config.getBoolean("ENABLE_CHANGE_TITLE", true) && WaterPlayer.player != null && player.getAudioPlayer().getPlayingTrack() != null) updateTitle();
                 if (WaterPlayer.config.getBoolean("ENABLE_BOSS_BAR", false)) updateBossBar();
                 else if (lastBossBar) clearBossBar();
 
@@ -147,43 +147,43 @@ public class WaterPlayer implements ClientModInitializer {
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (playOrPause.consumeClick()) {
-                music.getAudioPlayer().setPaused(!music.getAudioPlayer().isPaused());
-                client.getToasts().addToast(new ControlToast(Localization.getText(music.getAudioPlayer().isPaused() ? "waterplayer.message.pause" : "waterplayer.message.play"), false));
+                player.getAudioPlayer().setPaused(!player.getAudioPlayer().isPaused());
+                client.getToasts().addToast(new ControlToast(Localization.getText(player.getAudioPlayer().isPaused() ? "waterplayer.message.pause" : "waterplayer.message.play"), false));
             }
             while (repeatingKey.consumeClick()) {
-                music.getTrackManager().setRepeating(!music.getTrackManager().isRepeating());
-                client.getToasts().addToast(new ControlToast(Localization.getText(music.getTrackManager().isRepeating() ? "waterplayer.message.repeat" : "waterplayer.message.repeat.no"), false));
+                player.getTrackManager().setRepeating(!player.getTrackManager().isRepeating());
+                client.getToasts().addToast(new ControlToast(Localization.getText(player.getTrackManager().isRepeating() ? "waterplayer.message.repeat" : "waterplayer.message.repeat.no"), false));
             }
             while (resetQueueKey.consumeClick()) {
-                music.getTrackManager().skiping = false;
-                if(!music.getTrackManager().queue.isEmpty()) {
-                    music.getTrackManager().queue.clear();
+                player.getTrackManager().skiping = false;
+                if(!player.getTrackManager().queue.isEmpty()) {
+                    player.getTrackManager().queue.clear();
                     client.getToasts().addToast(new ControlToast(Localization.getText("waterplayer.message.reset"), false));
                 }
             }
             while (shuffleKey.consumeClick()) {
-                if(music.getTrackManager().queue.size() >= 2){
-                    music.getTrackManager().shuffle();
+                if(player.getTrackManager().queue.size() >= 2){
+                    player.getTrackManager().shuffle();
                     client.getToasts().addToast(new ControlToast(Localization.getText("waterplayer.message.shuffle"), false));
                 }
             }
             while (skipTrack.consumeClick()) {
-                if(music.getTrackManager().queue.isEmpty() && music.getAudioPlayer().getPlayingTrack() == null) return;
-                music.getTrackManager().nextTrack();
+                if(player.getTrackManager().queue.isEmpty() && player.getAudioPlayer().getPlayingTrack() == null) return;
+                player.getTrackManager().nextTrack();
                 client.getToasts().addToast(new ControlToast(Localization.getText("waterplayer.message.skip"), false));
             }
             while (volumeMusicUpKey.consumeClick()) {
                 int current = config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue() + config.getNumber("SELECT_MUSIC_VOLUME", 1).intValue();
                 if (current >= 100) current = 100;
                 config.setNumber("CURRENT_MUSIC_VOLUME", current);
-                music.getAudioPlayer().setVolume(current);
+                player.getAudioPlayer().setVolume(current);
                 config.save();
             }
             while (volumeMusicDownKey.consumeClick()) {
                 int current = config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue() - config.getNumber("SELECT_MUSIC_VOLUME", 1).intValue();
                 if (current <= 0) current = 0;
                 config.setNumber("CURRENT_MUSIC_VOLUME", current);
-                music.getAudioPlayer().setVolume(current);
+                player.getAudioPlayer().setVolume(current);
                 config.save();
             }
             while (loadTrack.consumeClick()) {
@@ -200,13 +200,13 @@ public class WaterPlayer implements ClientModInitializer {
         try {
             Minecraft client = Minecraft.getInstance();
             if (client.level != null && client.player != null) {
-                if (WaterPlayer.music.getAudioPlayer().getPlayingTrack() != null) {
-                    boolean isPause = WaterPlayer.music.getAudioPlayer().isPaused();
-                    boolean isStream = WaterPlayer.music.getAudioPlayer().getPlayingTrack().getInfo().isStream;
+                if (WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null) {
+                    boolean isPause = WaterPlayer.player.getAudioPlayer().isPaused();
+                    boolean isStream = WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().isStream;
                     bossBar = new LerpingBossEvent(WaterPlayer.bossBarUUID,
                             Localization.toText(localization.getLocalization(isPause ? "bossbar.pause" : isStream ?
                                     (Music.isAuthorNull() ? "bossbar.live.withoutAuthor" : "bossbar.live") : (Music.isAuthorNull() ? "bossbar.withoutAuthor" : "bossbar"))),
-                            (isPause || isStream) ? 1F : (float) WaterPlayer.music.getAudioPlayer().getPlayingTrack().getPosition() / WaterPlayer.music.getAudioPlayer().getPlayingTrack().getDuration()
+                            (isPause || isStream) ? 1F : (float) WaterPlayer.player.getAudioPlayer().getPlayingTrack().getPosition() / WaterPlayer.player.getAudioPlayer().getPlayingTrack().getDuration()
                             , isPause ? BossEvent.BossBarColor.YELLOW : isStream ? BossEvent.BossBarColor.RED : BossEvent.BossBarColor.GREEN, BossEvent.BossBarOverlay.PROGRESS, false, false, false);
                     playing = true;
                 }
@@ -227,10 +227,10 @@ public class WaterPlayer implements ClientModInitializer {
         try {
             Minecraft client = Minecraft.getInstance();
             if (client.level == null && client.player == null) {
-                if (WaterPlayer.music.getAudioPlayer().getPlayingTrack() != null) {
+                if (WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null) {
                     title = localization.getLocalization(
-                            WaterPlayer.music.getAudioPlayer().isPaused() ? "title.pause"
-                                    : WaterPlayer.music.getAudioPlayer().getPlayingTrack().getInfo().isStream ? (Music.isAuthorNull() ? "title.live.withoutAuthor"
+                            WaterPlayer.player.getAudioPlayer().isPaused() ? "title.pause"
+                                    : WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().isStream ? (Music.isAuthorNull() ? "title.live.withoutAuthor"
                                     : "title.live") : (Music.isAuthorNull() ? "title.withoutAuthor" : "title"));
 
                     client.getWindow().setTitle(title);
@@ -340,17 +340,17 @@ public class WaterPlayer implements ClientModInitializer {
             }
         }
         RichPresence.Builder rich = null;
-        if(WaterPlayer.music.getAudioPlayer().getPlayingTrack() != null && !WaterPlayer.music.getAudioPlayer().isPaused()){
+        if(WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null && !WaterPlayer.player.getAudioPlayer().isPaused()){
             if(lastClearDiscord) lastClearDiscord = false;
-            AudioTrackInfo trackInfo = WaterPlayer.music.getAudioPlayer().getPlayingTrack().getInfo();
-            AudioTrack track = WaterPlayer.music.getAudioPlayer().getPlayingTrack();
+            AudioTrackInfo trackInfo = WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo();
+            AudioTrack track = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
             if(trackInfo.uri.equals(lastTrack)) return;
             else lastTrack = trackInfo.uri;
 
             rich = new RichPresence.Builder()
-                    .setDetails(trackInfo.author)
-                    .setState(trackInfo.title)
+                    .setState(Music.getTitle())
                     .setLargeImage(trackInfo.artworkUrl == null ? "https://cdn.kelcuprum.ru/icons/music.png" : trackInfo.artworkUrl);
+            if(!Music.isAuthorNull()) rich.setDetails(trackInfo.author);
             if(trackInfo.isStream) rich.setStartTimestamp(System.currentTimeMillis()-track.getPosition());
             else rich.setStartTimestamp(System.currentTimeMillis()-track.getPosition())
                     .setEndTimestamp(System.currentTimeMillis()+(track.getDuration()- track.getPosition()));

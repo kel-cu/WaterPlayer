@@ -26,9 +26,9 @@ public class OverlayHandler implements HudRenderCallback, ClientTickEvents.Start
         this.textList.clear();
         isLive = false;
         isPause = true;
-        if (WaterPlayer.music.getAudioPlayer().getPlayingTrack() != null && WaterPlayer.config.getBoolean("ENABLE_OVERLAY", true)) {
-            isLive = WaterPlayer.music.getAudioPlayer().getPlayingTrack().getInfo().isStream;
-            isPause = WaterPlayer.music.getAudioPlayer().isPaused();
+        if (WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null && WaterPlayer.config.getBoolean("ENABLE_OVERLAY", true)) {
+            isLive = WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().isStream;
+            isPause = WaterPlayer.player.getAudioPlayer().isPaused();
             if(!Music.isAuthorNull()) this.textList.add(Localization.toText(Music.getAuthor()));
             this.textList.add(Localization.toText(Music.getTitle()));
             this.textList.add(Localization.toText(WaterPlayer.localization.getParsedText("{player.speaker_icon} {player.volume}% {format.time}")));
@@ -41,7 +41,7 @@ public class OverlayHandler implements HudRenderCallback, ClientTickEvents.Start
     public void onHudRender(GuiGraphics drawContext, float tickDelta) {
         boolean isDebugOverlay = this.client.gui.getDebugOverlay().showDebugScreen();
         if(isDebugOverlay) return;
-        if (WaterPlayer.music.getAudioPlayer().getPlayingTrack() != null  && WaterPlayer.config.getBoolean("ENABLE_OVERLAY", true)) {
+        if (WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null  && WaterPlayer.config.getBoolean("ENABLE_OVERLAY", true)) {
             maxX = 10;
             maxY = 10;
             int l = 0;
@@ -96,7 +96,7 @@ public class OverlayHandler implements HudRenderCallback, ClientTickEvents.Start
         if(!isLive){
             int max = maxX+this.client.font.lineHeight+2;
             double onePercent = max / 100.0;
-            double percentTime = ((double) WaterPlayer.music.getAudioPlayer().getPlayingTrack().getPosition() / WaterPlayer.music.getAudioPlayer().getPlayingTrack().getDuration())*100.0;
+            double percentTime = ((double) WaterPlayer.player.getAudioPlayer().getPlayingTrack().getPosition() / WaterPlayer.player.getAudioPlayer().getPlayingTrack().getDuration())*100.0;
             timelineSize = (int) ((max+4)-(max-(onePercent*percentTime)));
         }
         return timelineSize;

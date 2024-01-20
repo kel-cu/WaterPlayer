@@ -17,7 +17,6 @@ import ru.kelcuprum.alinlib.gui.components.ConfigureScrolWidget;
 import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
 import ru.kelcuprum.alinlib.gui.components.editbox.base.EditBoxString;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
-import ru.kelcuprum.alinlib.gui.screens.AbstractConfigScreen;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.config.PlaylistObject;
 import ru.kelcuprum.waterplayer.frontend.gui.toasts.ControlToast;
@@ -77,11 +76,11 @@ public class LoadMusicScreen extends Screen {
             }
         }));
         addRenderableWidget(scroller);
-        Queue<AudioTrack> queue = WaterPlayer.music.getTrackManager().queue;
+        Queue<AudioTrack> queue = WaterPlayer.player.getTrackManager().queue;
         widgets.add(new TextBox(x, 5, width-200, 20, Component.translatable(queue.isEmpty() ? "waterplayer.command.queue.blank" : "waterplayer.command.queue"), true));
         int pos = 1;
         if(!queue.isEmpty()) {
-            for (AudioTrack track : WaterPlayer.music.getTrackManager().queue) {
+            for (AudioTrack track : WaterPlayer.player.getTrackManager().queue) {
                 StringBuilder builder = new StringBuilder();
                 if(Music.isAuthorNull(track)) builder.append(Music.getTitle(track)).append(" ");
                 else builder.append(pos).append(". «").append(Music.getAuthor(track)).append("» ").append(Music.getTitle(track)).append(" ");
@@ -124,14 +123,14 @@ public class LoadMusicScreen extends Screen {
                 }
                 playlist = new PlaylistObject(jsonPlaylist);
                 for(int i = 0; i<playlist.urls.size(); i++){
-                    WaterPlayer.music.getTrackSearch().getTracks(playlist.urls.get(i));
+                    WaterPlayer.player.getTrackSearch().getTracks(playlist.urls.get(i));
                 }
                 Minecraft.getInstance().getToasts().addToast(new ControlToast(Localization.toText(
                         Localization.toString(Localization.getText("waterplayer.load.add.playlist"))
                                 .replace("%playlist_name%", playlist.title)
                 ), false));
             } else {
-                WaterPlayer.music.getTrackSearch().getTracks(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", ""));
+                WaterPlayer.player.getTrackSearch().getTracks(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", ""));
                 Minecraft.getInstance().getToasts().addToast(new ControlToast(Localization.getText("waterplayer.load.add"), false));
             }
     }
