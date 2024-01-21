@@ -56,12 +56,8 @@ public class WaterPlayerCommand {
                 .then(literal("playlist")
                         .then(
                                 argument("name", greedyString()).executes(context -> {
-                                    if (!WaterPlayer.clothConfig) {
-                                        context.getSource().getPlayer().sendSystemMessage(Localization.getText(("waterplayer.message.clothConfigNotFound")));
-                                    } else {
-                                        Minecraft client = context.getSource().getClient();
-                                        client.tell(() -> { client.setScreen(new PlaylistScreen().buildScreen(client.screen, getString(context, "name"))); });
-                                    }
+                                    Minecraft client = context.getSource().getClient();
+                                    client.tell(() -> { client.setScreen(new PlaylistScreen(client.screen, getString(context, "name"))); });
                                     return 1;
                                 })
                         )

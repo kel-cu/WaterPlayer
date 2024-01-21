@@ -1,75 +1,150 @@
 package ru.kelcuprum.waterplayer.frontend.gui.screens;
 
 import com.google.gson.JsonObject;
-import me.shedaniel.clothconfig2.api.ConfigBuilder;
-import me.shedaniel.clothconfig2.api.ConfigCategory;
-import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.GsonHelper;
 import org.apache.logging.log4j.Level;
+import org.jetbrains.annotations.NotNull;
 import ru.kelcuprum.alinlib.config.Localization;
+import ru.kelcuprum.alinlib.gui.InterfaceUtils;
+import ru.kelcuprum.alinlib.gui.components.ConfigureScrolWidget;
+import ru.kelcuprum.alinlib.gui.components.buttons.ButtonSprite;
+import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
+import ru.kelcuprum.alinlib.gui.components.editbox.base.EditBoxString;
+import ru.kelcuprum.alinlib.gui.components.text.TextBox;
+import ru.kelcuprum.alinlib.gui.screens.ConfigScreenBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.config.PlaylistObject;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-public class PlaylistScreen {
+import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Icons.RESET;
+
+public class PlaylistScreen extends Screen {
     private PlaylistObject playlist;
-    private String plName = "its-normal";
+    private String playlistName = "its-normal";
     JsonObject jsonPlaylist = new JsonObject();
-    public Screen buildScreen(Screen currentScreen, String playlistName) {
-        Minecraft CLIENT = Minecraft.getInstance();
-        //
-        plName = playlistName;
-        final Path configFile = CLIENT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/"+playlistName+".json");
+    private final Screen currentScreen;
+    public PlaylistScreen(Screen currentScreen, String playlistName) {
+        super(Component.translatable("waterplayer.playlist"));
+        this.currentScreen = currentScreen;
+        this.playlistName = playlistName;
+    }
+    private final InterfaceUtils.DesignType designType = InterfaceUtils.DesignType.FLAT;
+
+    @Override
+    protected void init() {
+        final Path configFile = this.minecraft.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/"+ playlistName +".json");
         try {
             jsonPlaylist = GsonHelper.parse(Files.readString(configFile));
         } catch (Exception ex){
             WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
         }
-        //
         playlist = new PlaylistObject(jsonPlaylist);
-        //
-        ConfigBuilder builder = ConfigBuilder.create()
-                .setParentScreen(currentScreen)
-                .setTitle(Localization.getText("waterplayer.name.playlist"))
-                .setTransparentBackground(true)
-                .setSavingRunnable(this::save);
-        ConfigCategory category = builder.getOrCreateCategory(Localization.getText("waterplayer.playlist"));
-        ConfigEntryBuilder entryBuilder = builder.entryBuilder();
-        //
-        category.addEntry(entryBuilder.startStrField(
-                        Localization.getText("waterplayer.playlist.title"),
-                        playlist.title)
-                .setDefaultValue("Example title")
-                .setSaveConsumer(newValue -> playlist.title = newValue)
-                .build());
-        //
-        category.addEntry(entryBuilder.startStrField(
-                        Localization.getText("waterplayer.playlist.author"),
-                        playlist.author)
-                .setDefaultValue("Example author")
-                .setSaveConsumer(newValue -> playlist.author = newValue)
-                .build());
+        initPanel();
+        initContent();
+    }
+    public void initPanel(){
+        int x = 5;
+        int size = 180;
+        addRenderableWidget(new TextBox(x, 15, size, 9, title, true));
 
-        category.addEntry(entryBuilder.startStrList(
-                Localization.getText("waterplayer.playlist.urls"),
-                playlist.urls
-        ).setSaveConsumer(newValue -> playlist.urls = newValue)
-                .build());
-        return builder.build();
+        addRenderableWidget(new EditBoxString(x, 40, size, 20, false, playlist.title, designType, Component.translatable("waterplayer.playlist.title"), (s) -> {
+            playlist.title = s;
+            save();
+        }));
+
+        addRenderableWidget(new EditBoxString(x, 65, size, 20, false, playlist.author, designType, Component.translatable("waterplayer.playlist.author"), (s) -> {
+            playlist.author = s;
+            save();
+        }));
+        addRenderableWidget(new Button(x, height-30, size-25, 20, designType, CommonComponents.GUI_BACK, (s) -> {
+            save();
+            minecraft.setScreen(currentScreen);
+        }));
+        addRenderableWidget(new ButtonSprite(x+size-20, height-30, 20, 20, designType, RESET, Localization.getText("waterplayer.playlist.reload"), (OnPress) -> {
+           save();
+           rebuildWidgets();
+        }));
+    }
+    private ConfigureScrolWidget scroller;
+    private List<AbstractWidget> widgets = new ArrayList<>();
+    public void initContent(){
+        widgets = new ArrayList<>();
+        this.scroller = addRenderableWidget(new ConfigureScrolWidget(this.width - 8, 0, 4, this.height, Component.empty(), scroller -> {
+            scroller.innerHeight = 5;
+            for(AbstractWidget widget : widgets){
+                if(widget.visible){
+                    widget.setY((int) (scroller.innerHeight - scroller.scrollAmount()));
+                    scroller.innerHeight += (widget.getHeight()+5);
+                } else widget.setY(-widget.getHeight());
+            }
+        }));
+        int x = 195;
+        widgets.add(new TextBox(x, 5, width-200, 20, Component.translatable("waterplayer.playlist.urls"), true));
+        int i = 0;
+        for(String url : playlist.urls){
+            int finalI = i;
+            widgets.add(new EditBoxString(x, -20, width-200, 20, false, url, designType, Component.literal(String.format("%s. ", i)), (s) -> {
+                playlist.urls.set(finalI, s);
+                save();
+            }));
+            i++;
+        }
+        widgets.add(new Button(x, -20, width-200, 20, designType, Component.translatable("waterplayer.playlist.add"), (s) -> {
+           playlist.urls.add("https://c418.bandcamp.com/track/strad");
+           save();
+           rebuildWidgets();
+        }));
+        addRenderableWidgets(widgets);
+    }
+    protected void addRenderableWidgets(@NotNull List<AbstractWidget> widgets) {
+        Iterator var2 = widgets.iterator();
+
+        while(var2.hasNext()) {
+            AbstractWidget widget = (AbstractWidget)var2.next();
+            this.addRenderableWidget(widget);
+        }
+
     }
     private void save(){
         Minecraft CLIENT = Minecraft.getInstance();
-        final Path configFile = CLIENT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/"+plName+".json");
+        final Path configFile = CLIENT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/"+ playlistName +".json");
         try {
             Files.createDirectories(configFile.getParent());
             Files.writeString(configFile, playlist.toJSON().toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    @Override
+    public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f){
+        InterfaceUtils.renderBackground(guiGraphics, minecraft);
+        InterfaceUtils.renderLeftPanel(guiGraphics, 190, height);
+    }
+    @Override
+    public void tick(){
+        if(scroller != null) scroller.onScroll.accept(scroller);
+        super.tick();
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        boolean scr = super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+        if (!scr && scroller != null) {
+            scr = scroller.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+        }
+        return scr;
     }
 }

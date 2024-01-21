@@ -15,12 +15,9 @@ public class PlaylistObject {
     public List<String> urls = new ArrayList<String>();;
 
     public PlaylistObject(JsonObject data){
-        title = data.has("title") ? "Example title" :
-                data.get("title").getAsString();
-        author = data.has("author") ? Minecraft.getInstance().getUser().getName() :
-                data.get("author").getAsString();
-        urlsJSON = data.has("urls") ? GsonHelper.parseArray("[\"https://c418.bandcamp.com/track/strad\"]") :
-                data.get("urls").getAsJsonArray();
+        title = data.has("title") ? data.get("title").getAsString() : "Example title";
+        author = data.has("author") ? data.get("author").getAsString() : Minecraft.getInstance().getUser().getName();
+        urlsJSON = data.has("urls") ? data.get("urls").getAsJsonArray() : GsonHelper.parseArray("[\"https://c418.bandcamp.com/track/strad\"]");
         for(int i = 0; i < urlsJSON.size(); i++){
             urls.add(urlsJSON.get(i).getAsString());
         }
@@ -35,7 +32,7 @@ public class PlaylistObject {
     private JsonArray getUrlsJSON(){
         JsonArray array = new JsonArray();
         for(String url : urls){
-            array.add(url);
+            if(!url.isEmpty()) array.add(url);
         }
         return array;
     }

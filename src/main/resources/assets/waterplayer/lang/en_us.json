@@ -10,6 +10,8 @@
   "waterplayer.command.queue": "Current queue:",
 
   "waterplayer.playlist": "Playlist",
+  "waterplayer.playlist.reload": "Reload",
+  "waterplayer.playlist.add": "Add url",
   "waterplayer.playlist.author": "Author",
   "waterplayer.playlist.title": "Title",
   "waterplayer.playlist.urls": "URLs",

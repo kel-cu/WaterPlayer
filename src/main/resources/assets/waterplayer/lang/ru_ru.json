@@ -10,6 +10,8 @@
   "waterplayer.command.queue": "Текущая очередь:",
 
   "waterplayer.playlist": "Плейлист",
+  "waterplayer.playlist.reload": "Перезагрузить",
+  "waterplayer.playlist.add": "Добавить ссылку",
   "waterplayer.playlist.author": "Автор",
   "waterplayer.playlist.title": "Название",
   "waterplayer.playlist.urls": "URLs",
