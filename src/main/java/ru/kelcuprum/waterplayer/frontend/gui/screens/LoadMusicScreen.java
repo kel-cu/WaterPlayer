@@ -1,5 +1,6 @@
 package ru.kelcuprum.waterplayer.frontend.gui.screens;
 
+import com.google.gson.JsonObject;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -8,9 +9,9 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.GsonHelper;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.alinlib.gui.components.ConfigureScrolWidget;
@@ -113,17 +114,17 @@ public class LoadMusicScreen extends Screen {
             if(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", "").startsWith("playlist:")){
                 String name = WaterPlayer.config.getString("LAST_REQUEST_MUSIC", "").replace("playlist:", "");
                 PlaylistObject playlist;
-                JSONObject jsonPlaylist = new JSONObject();
+                JsonObject jsonPlaylist = new JsonObject();
 
                 final Path configFile = Minecraft.getInstance().gameDirectory.toPath().resolve("config/WaterPlayer/playlists/"+name+".json");
                 try {
-                    jsonPlaylist = new JSONObject(Files.readString(configFile));
+                    jsonPlaylist = GsonHelper.parse(Files.readString(configFile));
                 } catch (Exception ex){
                     WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
                 }
                 playlist = new PlaylistObject(jsonPlaylist);
-                for(int i = 0; i<playlist.urls.size(); i++){
-                    WaterPlayer.player.getTrackSearch().getTracks(playlist.urls.get(i));
+                for(int i = 0; i<playlist.urlsJSON.size(); i++){
+                    WaterPlayer.player.getTrackSearch().getTracks(playlist.urlsJSON.get(i).getAsString());
                 }
                 Minecraft.getInstance().getToasts().addToast(new ControlToast(Localization.toText(
                         Localization.toString(Localization.getText("waterplayer.load.add.playlist"))

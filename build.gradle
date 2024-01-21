@@ -43,9 +43,7 @@ dependencies {
     modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-    // Libs
-    include(implementation("org.json:json:20231013"))
-    // Discord Integratioj
+    // Discord Integration
     include(implementation("com.jagrosh.discordipc:DiscordIPC:0.6.0"))
     include(implementation("com.kohlschutter.junixsocket:junixsocket-common:2.7.0"))
     include(implementation("com.kohlschutter.junixsocket:junixsocket-native-common:2.7.0"))

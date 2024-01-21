@@ -1,12 +1,13 @@
 package ru.kelcuprum.waterplayer.frontend.gui.screens;
 
+import com.google.gson.JsonObject;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.util.GsonHelper;
 import org.apache.logging.log4j.Level;
-import org.json.JSONObject;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.config.PlaylistObject;
@@ -18,14 +19,14 @@ import java.nio.file.Path;
 public class PlaylistScreen {
     private PlaylistObject playlist;
     private String plName = "its-normal";
-    JSONObject jsonPlaylist = new JSONObject();
+    JsonObject jsonPlaylist = new JsonObject();
     public Screen buildScreen(Screen currentScreen, String playlistName) {
         Minecraft CLIENT = Minecraft.getInstance();
         //
         plName = playlistName;
         final Path configFile = CLIENT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/"+playlistName+".json");
         try {
-            jsonPlaylist = new JSONObject(Files.readString(configFile));
+            jsonPlaylist = GsonHelper.parse(Files.readString(configFile));
         } catch (Exception ex){
             WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
         }
@@ -53,9 +54,10 @@ public class PlaylistScreen {
                 .setDefaultValue("Example author")
                 .setSaveConsumer(newValue -> playlist.author = newValue)
                 .build());
+
         category.addEntry(entryBuilder.startStrList(
                 Localization.getText("waterplayer.playlist.urls"),
-                        playlist.urls
+                playlist.urls
         ).setSaveConsumer(newValue -> playlist.urls = newValue)
                 .build());
         return builder.build();

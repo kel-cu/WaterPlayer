@@ -1,8 +1,9 @@
 package ru.kelcuprum.waterplayer.backend.config;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import net.minecraft.util.GsonHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,25 +11,32 @@ import java.util.List;
 public class PlaylistObject {
     public String title;
     public String author;
-    public JSONArray urlsJSON;
+    public JsonArray urlsJSON;
     public List<String> urls = new ArrayList<String>();;
 
-    public PlaylistObject(JSONObject data){
-        title = data.isNull("title") ? "Example title" :
-                data.getString("title");
-        author = data.isNull("author") ? Minecraft.getInstance().getUser().getName() :
-                data.getString("author");
-        urlsJSON = data.isNull("urls") ? new JSONArray().put("https://c418.bandcamp.com/track/strad") :
-                data.getJSONArray("urls");
-        for(int i = 0; i < urlsJSON.length(); i++){
-            urls.add(urlsJSON.getString(i));
+    public PlaylistObject(JsonObject data){
+        title = data.has("title") ? "Example title" :
+                data.get("title").getAsString();
+        author = data.has("author") ? Minecraft.getInstance().getUser().getName() :
+                data.get("author").getAsString();
+        urlsJSON = data.has("urls") ? GsonHelper.parseArray("[\"https://c418.bandcamp.com/track/strad\"]") :
+                data.get("urls").getAsJsonArray();
+        for(int i = 0; i < urlsJSON.size(); i++){
+            urls.add(urlsJSON.get(i).getAsString());
         }
     }
-    public JSONObject toJSON(){
-        JSONObject data = new JSONObject();
-        data.put("title", title)
-                .put("author", author)
-                .put("urls", urls);
+    public JsonObject toJSON(){
+        JsonObject data = new JsonObject();
+        data.addProperty("title", title);
+        data.addProperty("author", author);
+        data.add("urls", getUrlsJSON());
         return data;
+    }
+    private JsonArray getUrlsJSON(){
+        JsonArray array = new JsonArray();
+        for(String url : urls){
+            array.add(url);
+        }
+        return array;
     }
 }
