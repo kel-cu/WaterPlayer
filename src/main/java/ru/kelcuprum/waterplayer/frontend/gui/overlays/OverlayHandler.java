@@ -1,4 +1,4 @@
-package ru.kelcuprum.waterplayer.frontend.gui.screens;
+package ru.kelcuprum.waterplayer.frontend.gui.overlays;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
+import org.apache.logging.log4j.Level;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
@@ -26,12 +27,16 @@ public class OverlayHandler implements HudRenderCallback, ClientTickEvents.Start
         this.textList.clear();
         isLive = false;
         isPause = true;
-        if (WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null && WaterPlayer.config.getBoolean("ENABLE_OVERLAY", true)) {
-            isLive = WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().isStream;
-            isPause = WaterPlayer.player.getAudioPlayer().isPaused();
-            if(!Music.isAuthorNull()) this.textList.add(Localization.toText(Music.getAuthor()));
-            this.textList.add(Localization.toText(Music.getTitle()));
-            this.textList.add(Localization.toText(WaterPlayer.localization.getParsedText("{player.speaker_icon} {player.volume}% {format.time}")));
+        try {
+            if (WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null && WaterPlayer.config.getBoolean("ENABLE_OVERLAY", true)) {
+                isLive = WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().isStream;
+                isPause = WaterPlayer.player.getAudioPlayer().isPaused();
+                if (!Music.isAuthorNull()) this.textList.add(Localization.toText(Music.getAuthor()));
+                this.textList.add(Localization.toText(Music.getTitle()));
+                this.textList.add(Localization.toText(WaterPlayer.localization.getParsedText("{player.speaker_icon} {player.volume}% {format.time}")));
+            }
+        } catch (Exception ex){
+            WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
         }
 
     }
@@ -93,12 +98,17 @@ public class OverlayHandler implements HudRenderCallback, ClientTickEvents.Start
 
     private int getTimelineSize() {
         int timelineSize = maxX+this.client.font.lineHeight+6;
-        if(!isLive){
-            int max = maxX+this.client.font.lineHeight+2;
-            double onePercent = max / 100.0;
-            double percentTime = ((double) WaterPlayer.player.getAudioPlayer().getPlayingTrack().getPosition() / WaterPlayer.player.getAudioPlayer().getPlayingTrack().getDuration())*100.0;
-            timelineSize = (int) ((max+4)-(max-(onePercent*percentTime)));
+        try {
+            if(!isLive){
+                int max = maxX+this.client.font.lineHeight+2;
+                double onePercent = max / 100.0;
+                double percentTime = ((double) WaterPlayer.player.getAudioPlayer().getPlayingTrack().getPosition() / WaterPlayer.player.getAudioPlayer().getPlayingTrack().getDuration())*100.0;
+                timelineSize = (int) ((max+4)-(max-(onePercent*percentTime)));
+            }
+        } catch (Exception ex){
+            WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
         }
+
         return timelineSize;
     }
 }

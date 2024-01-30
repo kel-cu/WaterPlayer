@@ -155,4 +155,8 @@ public class LoadMusicScreen extends Screen {
         }
         return scr;
     }
+    public void onClose() {
+        assert this.minecraft != null;
+        this.minecraft.setScreen(parent);
+    }
 }

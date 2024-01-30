@@ -1,32 +1,39 @@
 package ru.kelcuprum.waterplayer.frontend.gui.screens.config;
 
+import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.GsonHelper;
+import org.apache.logging.log4j.Level;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
-import ru.kelcuprum.alinlib.gui.components.buttons.ButtonConfigBoolean;
 import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
+import ru.kelcuprum.alinlib.gui.components.editbox.EditBoxConfigString;
+import ru.kelcuprum.alinlib.gui.components.text.CategoryBox;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.alinlib.gui.screens.ConfigScreenBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
+import ru.kelcuprum.waterplayer.backend.config.PlaylistObject;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.CreatePlaylistScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.LoadMusicScreen;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.PlaylistScreen;
 
-public class MainConfigsScreen{
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Objects;
+
+public class PlaylistsScreen {
     private static final Component MainConfigCategory = Localization.getText("waterplayer.config");
     private static final Component LocalizationConfigCategory = Localization.getText("waterplayer.config.localization");
     private static final Component SecretConfigCategory = Localization.getText("waterplayer.secret");
     private static final Component PlaylistsCategory = Localization.getText("waterplayer.playlists");
     private static final Component PlayCategory = Localization.getText("waterplayer.play");
-    // CATEGORY CONTENT
-    private static final Component enableBossBarText = Localization.getText("waterplayer.config.enable_bossbar");
-    private static final Component enableOverlayText = Localization.getText("waterplayer.config.enable_overlay");
-    private static final Component enableNoticeText = Localization.getText("waterplayer.config.enable_notice");
-    private static final Component enableChangeTitleText = Localization.getText("waterplayer.config.enable_change_title");
-
+    //
     private final InterfaceUtils.DesignType designType = InterfaceUtils.DesignType.FLAT;
     public Screen build(Screen parent) {
-        return new ConfigScreenBuilder(parent, Component.translatable("waterplayer.name"), designType)
+        ConfigScreenBuilder builder = new ConfigScreenBuilder(parent, Component.translatable("waterplayer.name"), designType)
                 .addPanelWidget(new Button(10, 40, designType, MainConfigCategory, (e) -> {
                     Minecraft.getInstance().setScreen(new MainConfigsScreen().build(parent));
                 }))
@@ -43,12 +50,27 @@ public class MainConfigsScreen{
                     Minecraft.getInstance().setScreen(new LoadMusicScreen(this.build(parent)));
                 }))
                 ///
-                .addWidget(new TextBox(140, 5, MainConfigCategory, true))
-                .addWidget(new ButtonConfigBoolean(140, 30, designType, WaterPlayer.config, "ENABLE_BOSS_BAR", false, enableBossBarText))
-                .addWidget(new ButtonConfigBoolean(140, 55, designType, WaterPlayer.config, "ENABLE_OVERLAY", false, enableOverlayText))
-                .addWidget(new ButtonConfigBoolean(140, 80, designType, WaterPlayer.config, "ENABLE_NOTICE", false, enableNoticeText))
-                .addWidget(new ButtonConfigBoolean(140, 105, designType, WaterPlayer.config, "ENABLE_CHANGE_TITLE", false, enableChangeTitleText))
-                .addWidget(new ButtonConfigBoolean(140, 130, designType, WaterPlayer.config, "ENABLE_DISCORD_RPC", false, Component.translatable("waterplayer.config.enable_discord_rpc")))
-                .build();
+                .addWidget(new TextBox(140, 5, PlaylistsCategory, true));
+        File playlists = Minecraft.getInstance().gameDirectory.toPath().resolve("config/WaterPlayer/playlists").toFile();
+        if(playlists.exists() && playlists.isDirectory()){
+            for(File playlist : Objects.requireNonNull(playlists.listFiles())){
+                if(playlist.isFile() && playlist.getName().endsWith(".json")){
+                    try {
+                        JsonObject jsonPlaylist = GsonHelper.parse(Files.readString(playlist.toPath()));
+                        PlaylistObject playlistObject = new PlaylistObject(jsonPlaylist);
+                        String fileName = playlist.getName().replace(".json", "");
+                        builder.addWidget(new Button(140, -20, designType, Component.literal(String.format("%s by %s (%s)", playlistObject.title, playlistObject.author, fileName)), (s) ->{
+                            Minecraft.getInstance().setScreen(new PlaylistScreen(new PlaylistsScreen().build(parent), fileName));
+                        }));
+                    } catch (Exception e){
+                        WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);
+                    }
+                }
+            }
+        }
+        builder.addWidget(new Button(140, -20, designType, Component.translatable("waterplayer.playlist.create"), (s) -> {
+            Minecraft.getInstance().setScreen(new CreatePlaylistScreen(new PlaylistsScreen().build(parent)));
+        }));
+        return builder.build();
     }
 }

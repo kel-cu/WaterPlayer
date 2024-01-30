@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -18,7 +17,6 @@ import ru.kelcuprum.alinlib.gui.components.buttons.ButtonSprite;
 import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
 import ru.kelcuprum.alinlib.gui.components.editbox.base.EditBoxString;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
-import ru.kelcuprum.alinlib.gui.screens.ConfigScreenBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.config.PlaylistObject;
 
@@ -35,10 +33,10 @@ public class PlaylistScreen extends Screen {
     private PlaylistObject playlist;
     private String playlistName = "its-normal";
     JsonObject jsonPlaylist = new JsonObject();
-    private final Screen currentScreen;
-    public PlaylistScreen(Screen currentScreen, String playlistName) {
+    private final Screen parent;
+    public PlaylistScreen(Screen parent, String playlistName) {
         super(Component.translatable("waterplayer.playlist"));
-        this.currentScreen = currentScreen;
+        this.parent = parent;
         this.playlistName = playlistName;
     }
     private final InterfaceUtils.DesignType designType = InterfaceUtils.DesignType.FLAT;
@@ -71,8 +69,9 @@ public class PlaylistScreen extends Screen {
         }));
         addRenderableWidget(new Button(x, height-30, size-25, 20, designType, CommonComponents.GUI_BACK, (s) -> {
             save();
-            minecraft.setScreen(currentScreen);
+            minecraft.setScreen(parent);
         }));
+        addRenderableWidget(new TextBox(x, 90, size, 20, Component.literal(String.format("For play: playlist:%s", playlistName)), true));
         addRenderableWidget(new ButtonSprite(x+size-20, height-30, 20, 20, designType, RESET, Localization.getText("waterplayer.playlist.reload"), (OnPress) -> {
            save();
            rebuildWidgets();
@@ -146,5 +145,9 @@ public class PlaylistScreen extends Screen {
             scr = scroller.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
         }
         return scr;
+    }
+    public void onClose() {
+        assert this.minecraft != null;
+        this.minecraft.setScreen(parent);
     }
 }

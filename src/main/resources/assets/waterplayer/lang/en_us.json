@@ -10,6 +10,8 @@
   "waterplayer.command.queue": "Current queue:",
 
   "waterplayer.playlist": "Playlist",
+  "waterplayer.playlist.create": "Create playlist",
+  "waterplayer.playlist.create.filename": "File name:",
   "waterplayer.playlist.reload": "Reload",
   "waterplayer.playlist.add": "Add url",
   "waterplayer.playlist.author": "Author",
@@ -52,13 +54,15 @@
   "waterplayer.format.live": "(Live)",
 
   "waterplayer.config": "Configuration",
+  "waterplayer.playlists": "Playlists",
+  "waterplayer.play": "Add tracks",
   "waterplayer.config.enable_bossbar": "Enable Boss Bar",
   "waterplayer.config.enable_overlay": "Enable overlay",
-
   "waterplayer.config.overlay_types": "Type overlay",
   "waterplayer.config.enable_notice": "Enable notice",
   "waterplayer.config.enable_change_title": "Enable change title",
   "waterplayer.config.enable_change_title.tooltip": "* in Main Menu",
+  "waterplayer.config.enable_discord_rpc": "Enable Discord Integration",
 
   "waterplayer.config.localization": "Localization",
   "waterplayer.config.localization.title.bossbar": "Boss Bar",

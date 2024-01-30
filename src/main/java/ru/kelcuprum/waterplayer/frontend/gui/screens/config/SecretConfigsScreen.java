@@ -12,11 +12,14 @@ import ru.kelcuprum.alinlib.gui.components.text.CategoryBox;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.alinlib.gui.screens.ConfigScreenBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.LoadMusicScreen;
 
 public class SecretConfigsScreen {
     private static final Component MainConfigCategory = Localization.getText("waterplayer.config");
     private static final Component LocalizationConfigCategory = Localization.getText("waterplayer.config.localization");
     private static final Component SecretConfigCategory = Localization.getText("waterplayer.secret");
+    private static final Component PlaylistsCategory = Localization.getText("waterplayer.playlists");
+    private static final Component PlayCategory = Localization.getText("waterplayer.play");
 
     private final Component tokensText = Localization.getText("waterplayer.secret.title.tokens");
     private final Component yandexMusicText = Localization.getText("waterplayer.config.yandex_music_token");
@@ -43,6 +46,12 @@ public class SecretConfigsScreen {
                 }))
                 .addPanelWidget(new Button(10, 90, designType, SecretConfigCategory, (e) -> {
                     Minecraft.getInstance().setScreen(new SecretConfigsScreen().build(parent));
+                }))
+                .addPanelWidget(new Button(10, 115, designType, PlaylistsCategory, (e) -> {
+                    Minecraft.getInstance().setScreen(new PlaylistsScreen().build(parent));
+                }))
+                .addPanelWidget(new Button(10, 140, designType, PlayCategory, (e) -> {
+                    Minecraft.getInstance().setScreen(new LoadMusicScreen(this.build(parent)));
                 }))
                 ///
                 .addWidget(new TextBox(140, 5, SecretConfigCategory, true))

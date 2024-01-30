@@ -15,7 +15,6 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.LerpingBossEvent;
@@ -32,7 +31,7 @@ import ru.kelcuprum.waterplayer.backend.command.WaterPlayerCommand;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
 import ru.kelcuprum.waterplayer.frontend.localization.StarScript;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.LoadMusicScreen;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.OverlayHandler;
+import ru.kelcuprum.waterplayer.frontend.gui.overlays.OverlayHandler;
 import ru.kelcuprum.waterplayer.frontend.gui.toasts.ControlToast;
 
 import java.util.Timer;
@@ -44,7 +43,6 @@ public class WaterPlayer implements ClientModInitializer {
     public static IPCClient client = new IPCClient(1197963953695903794L);
     private static final Timer TIMER = new Timer();
     public static final Logger LOG = LogManager.getLogger("WaterPlayer");
-    public static boolean clothConfig = FabricLoader.getInstance().getModContainer("cloth-config").isPresent();
     public static MusicPlayer player;
     public static Localization localization = new Localization("waterplayer", "config/WaterPlayer/lang");
     public static String mixer;
@@ -56,7 +54,6 @@ public class WaterPlayer implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         log("Hello, world! UwU");
-        config.load();
         config.load();
         StarScript.init();
         localization.setParser((s) -> StarScript.run(StarScript.compile(s)));

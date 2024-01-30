@@ -10,6 +10,8 @@
   "waterplayer.command.queue": "Текущая очередь:",
 
   "waterplayer.playlist": "Плейлист",
+  "waterplayer.playlist.create": "Создать плейлист",
+  "waterplayer.playlist.create.filename": "Название файла:",
   "waterplayer.playlist.reload": "Перезагрузить",
   "waterplayer.playlist.add": "Добавить ссылку",
   "waterplayer.playlist.author": "Автор",
@@ -50,12 +52,15 @@
   "waterplayer.format.live": "(Эфир)",
 
   "waterplayer.config": "Конфигурация",
+  "waterplayer.playlists": "Плейлисты",
+  "waterplayer.play": "Добавить трек",
   "waterplayer.config.enable_bossbar": "Включить Босс бар",
   "waterplayer.config.enable_overlay": "Включить оверлей",
 
   "waterplayer.config.enable_notice": "Включить уведомления",
   "waterplayer.config.enable_change_title": "Включить изменения заголовка",
   "waterplayer.config.enable_change_title.tooltip": "* в главном меню",
+  "waterplayer.config.enable_discord_rpc": "Включить интеграцию Discord",
 
   "waterplayer.config.localization": "Локализация",
   "waterplayer.config.localization.title.bossbar": "Босс бар",
