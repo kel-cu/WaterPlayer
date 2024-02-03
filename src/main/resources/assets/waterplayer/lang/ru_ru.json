@@ -42,7 +42,7 @@
   "waterplayer.load.url.copy": "Посл. запрос",
   "waterplayer.load.queue": "Очередь",
 
-  "waterplayer.load.add": "Ваш запрос принят",
+  "waterplayer.load.add": "Ваш запрос отправлен",
   "waterplayer.load.add.playlist": "Плейлист «%playlist_name%» был добавлен",
   "waterplayer.load.add.blank": "Пустой запрос",
 

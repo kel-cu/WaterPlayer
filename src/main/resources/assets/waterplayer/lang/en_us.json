@@ -44,7 +44,7 @@
   "waterplayer.load.url.copy": "Last Track URL",
   "waterplayer.load.queue": "Queue",
 
-  "waterplayer.load.add": "Your request was accepted",
+  "waterplayer.load.add": "Your request has been sent",
   "waterplayer.load.add.playlist": "The «%playlist_name%» playlist has been added",
   "waterplayer.load.add.blank": "Request blank",
 
