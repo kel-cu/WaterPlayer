@@ -18,21 +18,23 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.LerpingBossEvent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBossEventPacket;
 import net.minecraft.world.BossEvent;
+import net.minecraft.world.item.Items;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
 import ru.kelcuprum.alinlib.config.Config;
 import ru.kelcuprum.alinlib.config.Localization;
+import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
 import ru.kelcuprum.waterplayer.backend.MusicPlayer;
 import ru.kelcuprum.waterplayer.backend.command.WaterPlayerCommand;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
 import ru.kelcuprum.waterplayer.frontend.localization.StarScript;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.LoadMusicScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.overlays.OverlayHandler;
-import ru.kelcuprum.waterplayer.frontend.gui.toasts.ControlToast;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -48,6 +50,7 @@ public class WaterPlayer implements ClientModInitializer {
     public static String mixer;
     private static String lastException;
     public static UUID bossBarUUID = UUID.randomUUID();
+    public static ToastBuilder toast = new ToastBuilder().setIcon(Items.MUSIC_DISC_STRAD).setTitle(Component.translatable("waterplayer.name"));
     private static boolean lastBossBar = false;
     public static boolean closing = true;
 
@@ -145,29 +148,34 @@ public class WaterPlayer implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (playOrPause.consumeClick()) {
                 player.getAudioPlayer().setPaused(!player.getAudioPlayer().isPaused());
-                client.getToasts().addToast(new ControlToast(Localization.getText(player.getAudioPlayer().isPaused() ? "waterplayer.message.pause" : "waterplayer.message.play"), false));
+                toast.setMessage(Localization.getText(player.getAudioPlayer().isPaused() ? "waterplayer.message.pause" : "waterplayer.message.play"))
+                        .show(client.getToasts());
             }
             while (repeatingKey.consumeClick()) {
                 player.getTrackManager().setRepeating(!player.getTrackManager().isRepeating());
-                client.getToasts().addToast(new ControlToast(Localization.getText(player.getTrackManager().isRepeating() ? "waterplayer.message.repeat" : "waterplayer.message.repeat.no"), false));
+                toast.setMessage(Localization.getText(player.getTrackManager().isRepeating() ? "waterplayer.message.repeat" : "waterplayer.message.repeat.no"))
+                        .show(client.getToasts());
             }
             while (resetQueueKey.consumeClick()) {
                 player.getTrackManager().skiping = false;
                 if(!player.getTrackManager().queue.isEmpty()) {
                     player.getTrackManager().queue.clear();
-                    client.getToasts().addToast(new ControlToast(Localization.getText("waterplayer.message.reset"), false));
+                    toast.setMessage(Localization.getText("waterplayer.message.reset"))
+                            .show(client.getToasts());
                 }
             }
             while (shuffleKey.consumeClick()) {
                 if(player.getTrackManager().queue.size() >= 2){
                     player.getTrackManager().shuffle();
-                    client.getToasts().addToast(new ControlToast(Localization.getText("waterplayer.message.shuffle"), false));
+                    toast.setMessage(Localization.getText("waterplayer.message.shuffle"))
+                            .show(client.getToasts());
                 }
             }
             while (skipTrack.consumeClick()) {
                 if(player.getTrackManager().queue.isEmpty() && player.getAudioPlayer().getPlayingTrack() == null) return;
                 player.getTrackManager().nextTrack();
-                client.getToasts().addToast(new ControlToast(Localization.getText("waterplayer.message.skip"), false));
+                toast.setMessage(Localization.getText("waterplayer.message.skip"))
+                        .show(client.getToasts());
             }
             while (volumeMusicUpKey.consumeClick()) {
                 int current = config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue() + config.getNumber("SELECT_MUSIC_VOLUME", 1).intValue();

@@ -12,7 +12,6 @@ import ru.kelcuprum.waterplayer.frontend.localization.Music;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.LoadMusicScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.PlaylistScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.config.MainConfigsScreen;
-import ru.kelcuprum.waterplayer.frontend.gui.toasts.ControlToast;
 import ru.kelcuprum.waterplayer.frontend.localization.StarScript;
 
 import java.util.ArrayList;
@@ -69,7 +68,7 @@ public class WaterPlayerCommand {
                         .executes(context -> {
                             if(!(WaterPlayer.player.getTrackManager().queue.isEmpty() && WaterPlayer.player.getAudioPlayer().getPlayingTrack() == null)) {
                                 WaterPlayer.player.getTrackManager().nextTrack();
-                                context.getSource().getClient().getToasts().addToast(new ControlToast(Localization.getText("waterplayer.message.skip"), false));
+                                WaterPlayer.toast.setMessage(Localization.getText("waterplayer.message.skip")).show(context.getSource().getClient().getToasts());
                             }
                             return 1;
                         }))

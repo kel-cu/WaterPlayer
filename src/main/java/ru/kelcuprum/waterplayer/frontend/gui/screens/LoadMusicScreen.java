@@ -20,7 +20,6 @@ import ru.kelcuprum.alinlib.gui.components.editbox.base.EditBoxString;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.config.PlaylistObject;
-import ru.kelcuprum.waterplayer.frontend.gui.toasts.ControlToast;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
 import ru.kelcuprum.waterplayer.frontend.localization.StarScript;
 
@@ -106,7 +105,7 @@ public class LoadMusicScreen extends Screen {
 
     public static void loadMusic(String url){
         if(url.isBlank()){
-            Minecraft.getInstance().getToasts().addToast(new ControlToast(Localization.getText("waterplayer.load.add.blank"), true));
+            WaterPlayer.toast.setMessage(Localization.getText("waterplayer.load.add.blank")).show(Minecraft.getInstance().getToasts());
             return;
         }
         WaterPlayer.config.setString("LAST_REQUEST_MUSIC", url);
@@ -126,13 +125,13 @@ public class LoadMusicScreen extends Screen {
                 for(int i = 0; i<playlist.urlsJSON.size(); i++){
                     WaterPlayer.player.getTrackSearch().getTracks(playlist.urlsJSON.get(i).getAsString());
                 }
-                Minecraft.getInstance().getToasts().addToast(new ControlToast(Localization.toText(
+                WaterPlayer.toast.setMessage(Localization.toText(
                         Localization.toString(Localization.getText("waterplayer.load.add.playlist"))
                                 .replace("%playlist_name%", playlist.title)
-                ), false));
+                )).show(Minecraft.getInstance().getToasts());
             } else {
                 WaterPlayer.player.getTrackSearch().getTracks(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", ""));
-                Minecraft.getInstance().getToasts().addToast(new ControlToast(Localization.getText("waterplayer.load.add"), false));
+                WaterPlayer.toast.setMessage(Localization.getText("waterplayer.load.add")).show(Minecraft.getInstance().getToasts());
             }
     }
 
