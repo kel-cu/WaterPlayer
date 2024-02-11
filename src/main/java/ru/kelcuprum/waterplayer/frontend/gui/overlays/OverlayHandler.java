@@ -5,110 +5,82 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import org.apache.logging.log4j.Level;
-import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
 
-import java.awt.*;
 import java.util.List;
 
+import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Colors.*;
+
 public class OverlayHandler implements HudRenderCallback, ClientTickEvents.StartTick {
-    private final List<Component> textList = new ObjectArrayList<>();
+    private final List<Component> texts = new ObjectArrayList<>();
 
     private final Minecraft client = Minecraft.getInstance();
     private boolean isLive = false;
     private boolean isPause = true;
+    double v = 0;
 
     @Override
     public void onStartTick(Minecraft client) {
-        this.textList.clear();
+        this.texts.clear();
         isLive = false;
         isPause = true;
         try {
             if (WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null && WaterPlayer.config.getBoolean("ENABLE_OVERLAY", true)) {
                 isLive = WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().isStream;
                 isPause = WaterPlayer.player.getAudioPlayer().isPaused();
-                if (!Music.isAuthorNull()) this.textList.add(Localization.toText(Music.getAuthor()));
-                this.textList.add(Localization.toText(Music.getTitle()));
-                this.textList.add(Localization.toText(WaterPlayer.localization.getParsedText("{player.speaker_icon} {player.volume}% {format.time}")));
+                v = isLive ? 1.0 : (double) WaterPlayer.player.getAudioPlayer().getPlayingTrack().getPosition() / WaterPlayer.player.getAudioPlayer().getPlayingTrack().getDuration();
+                if(!Music.isAuthorNull()) texts.add(Component.literal(Music.getAuthor()));
+                texts.add(Component.literal(Music.getTitle()));
+                texts.add(Component.literal(WaterPlayer.localization.getParsedText("{player.speaker_icon} {player.volume}% {format.time}")));
             }
         } catch (Exception ex){
             WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
         }
 
     }
-    private int maxX = 10;
-    private int maxY = 10;
     @Override
-    public void onHudRender(GuiGraphics drawContext, float tickDelta) {
-        boolean isDebugOverlay = this.client.gui.getDebugOverlay().showDebugScreen();
-        if(isDebugOverlay) return;
-        if (WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null  && WaterPlayer.config.getBoolean("ENABLE_OVERLAY", true)) {
-            maxX = 10;
-            maxY = 10;
-            int l = 0;
-            int k = 0;
-            int x;
-            int y;
-            for (Component text : this.textList) {
-                y = 10 + (l*this.client.font.lineHeight);
-                if(maxY < y) maxY = y;
-                int width = this.client.font.width(Localization.toString(text));
-                if(maxX < (width)) maxX = width;
-                l++;
+    public void onHudRender(GuiGraphics guiGraphics, float tickDelta) {
+        int pos = WaterPlayer.config.getNumber("OVERLAY.POSITION", 0).intValue();
+        if(!texts.isEmpty()){
+            int l = pos == 0 || pos == 1 ? 0 : texts.size()-1;
+            int f = client.font.lineHeight+3;
+            int my = f*texts.size();
+            int mx = 0;
+            for(Component text : texts){
+                mx = Math.max(mx, client.font.width(text));
             }
-            drawBackground(drawContext);
-            for (Component text : this.textList) {
-                x = 10;
-                y = 10 + (k*this.client.font.lineHeight);
-                this.drawString(drawContext, text, x, y);
-                k++;
-            }
+            boolean left = pos == 0 || pos == 2;
+            boolean top  = pos == 0 || pos == 1;
+            if(!top) my+=3;
+            int i = left ? (mx + 10) : -(mx + 10);
+            int i1 = top ? (my + 5) : -(my + 5);
+            guiGraphics.fill(
+                    left ? 5 : guiGraphics.guiWidth() - 5, top ? 5 : guiGraphics.guiHeight() - 5,
+                    (left ? 5 : guiGraphics.guiWidth() - 5) + i, (top ? 5 : guiGraphics.guiHeight() - 5) + i1,
+                    0x7f000000
+            );
+            int state = isPause ? CLOWNFISH : isLive ? GROUPIE : SEADRIVE;
+            guiGraphics.fill(
+                    left ? 5 : guiGraphics.guiWidth() - 5, (top ? 5 + i1 : guiGraphics.guiHeight() - 5)+1,
+                    (left ? 5 : guiGraphics.guiWidth() - 5) + i, (top ? 5 + i1 : guiGraphics.guiHeight() - 5)+3,
+                    state-0x7f000000
+            );
+
+            guiGraphics.fill(
+                    left ? 5 : guiGraphics.guiWidth() - 15 - mx, (top ? 5 + i1 : guiGraphics.guiHeight() - 5)+1,
+                    (int) ((left ? 5 : guiGraphics.guiWidth() - 15 - mx) + (left ? i*v : (i*-1)*v)), (top ? 5 + i1 : guiGraphics.guiHeight() - 5)+3,
+                    state-0x7f000000
+            );
+
+            for(Component text : texts){
+                int x = left ? 10 : guiGraphics.guiWidth() - 10 - mx;
+                int y = top ? 10+(l*f) : guiGraphics.guiHeight() - 10 - client.font.lineHeight - (l*f);
+                guiGraphics.drawString(client.font, text, x, y, -1);
+                if(top) l++; else l--;
+            };
         }
-    }
-
-    private void drawString(GuiGraphics guiGraphics, Component text, int x, int y) {
-        guiGraphics.drawString(this.client.font, text, x, y, 16777215);
-    }
-    private void drawBackground(GuiGraphics guiGraphics) {
-        final float fc = 1.5F * 0.9F + 0.1F;
-        final int colorBackground = (int) (255.0F * fc);
-
-        // old - 0x7602131E
-        // - - - - - - - - - -
-        // red - 0xB6861919
-        // green - 0xB6197C40
-        // yellow - 0xB6C29D25
-        int rgbaTime = new Color(isPause ? 0xB6C29D25 : isLive ? 0xB6861919 : 0xB6197C40, true).getRGB();
-
-        // red - 0xB6FF3131
-        // green - 0xB631FF83
-        // yellow - 0xB6FFCF31
-        int rgbaTimeLine = new Color(isPause ? 0xB6FFCF31 : isLive ? 0xB6FF3131 : 0xB631FF83, true).getRGB();
-
-        guiGraphics.fill(RenderType.guiOverlay(), 4, 4, maxX+(this.client.font.lineHeight)+6, maxY+(this.client.font.lineHeight)+4, colorBackground / 2 << 24);
-
-        // Timeline
-        guiGraphics.fill(RenderType.guiOverlay(), 4, maxY+(this.client.font.lineHeight)+4+1, maxX+(this.client.font.lineHeight)+6, maxY+(this.client.font.lineHeight)+4+2, rgbaTime);
-        guiGraphics.fill(RenderType.guiOverlay(), 4, maxY+(this.client.font.lineHeight)+4+1, getTimelineSize(), maxY+(this.client.font.lineHeight)+4+2, rgbaTimeLine);
-    }
-
-    private int getTimelineSize() {
-        int timelineSize = maxX+this.client.font.lineHeight+6;
-        try {
-            if(!isLive){
-                int max = maxX+this.client.font.lineHeight+2;
-                double onePercent = max / 100.0;
-                double percentTime = ((double) WaterPlayer.player.getAudioPlayer().getPlayingTrack().getPosition() / WaterPlayer.player.getAudioPlayer().getPlayingTrack().getDuration())*100.0;
-                timelineSize = (int) ((max+4)-(max-(onePercent*percentTime)));
-            }
-        } catch (Exception ex){
-            WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
-        }
-
-        return timelineSize;
     }
 }

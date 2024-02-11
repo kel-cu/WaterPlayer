@@ -50,7 +50,6 @@ public class WaterPlayer implements ClientModInitializer {
     public static String mixer;
     private static String lastException;
     public static UUID bossBarUUID = UUID.randomUUID();
-    public static ToastBuilder toast = new ToastBuilder().setIcon(Items.MUSIC_DISC_STRAD).setTitle(Component.translatable("waterplayer.name"));
     private static boolean lastBossBar = false;
     public static boolean closing = true;
 
@@ -94,6 +93,9 @@ public class WaterPlayer implements ClientModInitializer {
                 else if (lastDiscord) clearDiscord();
             }
         }, 250, 250);
+    }
+    public static ToastBuilder getToast(){
+        return new ToastBuilder().setIcon(Items.MUSIC_DISC_STRAD).setTitle(Component.translatable("waterplayer.name"));
     }
     public static void registerBinds(){
         KeyMapping loadTrack = KeyBindingHelper.registerKeyBinding(new KeyMapping(
@@ -148,33 +150,33 @@ public class WaterPlayer implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (playOrPause.consumeClick()) {
                 player.getAudioPlayer().setPaused(!player.getAudioPlayer().isPaused());
-                toast.setMessage(Localization.getText(player.getAudioPlayer().isPaused() ? "waterplayer.message.pause" : "waterplayer.message.play"))
+                getToast().setMessage(Localization.getText(player.getAudioPlayer().isPaused() ? "waterplayer.message.pause" : "waterplayer.message.play"))
                         .show(client.getToasts());
             }
             while (repeatingKey.consumeClick()) {
                 player.getTrackManager().setRepeating(!player.getTrackManager().isRepeating());
-                toast.setMessage(Localization.getText(player.getTrackManager().isRepeating() ? "waterplayer.message.repeat" : "waterplayer.message.repeat.no"))
+                getToast().setMessage(Localization.getText(player.getTrackManager().isRepeating() ? "waterplayer.message.repeat" : "waterplayer.message.repeat.no"))
                         .show(client.getToasts());
             }
             while (resetQueueKey.consumeClick()) {
                 player.getTrackManager().skiping = false;
                 if(!player.getTrackManager().queue.isEmpty()) {
                     player.getTrackManager().queue.clear();
-                    toast.setMessage(Localization.getText("waterplayer.message.reset"))
+                    getToast().setMessage(Localization.getText("waterplayer.message.reset"))
                             .show(client.getToasts());
                 }
             }
             while (shuffleKey.consumeClick()) {
                 if(player.getTrackManager().queue.size() >= 2){
                     player.getTrackManager().shuffle();
-                    toast.setMessage(Localization.getText("waterplayer.message.shuffle"))
+                    getToast().setMessage(Localization.getText("waterplayer.message.shuffle"))
                             .show(client.getToasts());
                 }
             }
             while (skipTrack.consumeClick()) {
                 if(player.getTrackManager().queue.isEmpty() && player.getAudioPlayer().getPlayingTrack() == null) return;
                 player.getTrackManager().nextTrack();
-                toast.setMessage(Localization.getText("waterplayer.message.skip"))
+                getToast().setMessage(Localization.getText("waterplayer.message.skip"))
                         .show(client.getToasts());
             }
             while (volumeMusicUpKey.consumeClick()) {

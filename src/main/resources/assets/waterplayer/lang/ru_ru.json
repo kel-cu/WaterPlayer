@@ -56,6 +56,11 @@
   "waterplayer.play": "Добавить трек",
   "waterplayer.config.enable_bossbar": "Включить Босс бар",
   "waterplayer.config.enable_overlay": "Включить оверлей",
+  "waterplayer.config.overlay.position": "Позиция оверлей",
+  "waterplayer.config.overlay.position.top_left": "Сверху слева",
+  "waterplayer.config.overlay.position.top_right": "Сверху справа",
+  "waterplayer.config.overlay.position.bottom_left": "Снизу слева",
+  "waterplayer.config.overlay.position.bottom_right": "Снизу справа",
 
   "waterplayer.config.enable_notice": "Включить уведомления",
   "waterplayer.config.enable_change_title": "Включить изменения заголовка",

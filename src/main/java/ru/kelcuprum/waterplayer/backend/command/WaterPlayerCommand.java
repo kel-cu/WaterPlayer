@@ -68,7 +68,7 @@ public class WaterPlayerCommand {
                         .executes(context -> {
                             if(!(WaterPlayer.player.getTrackManager().queue.isEmpty() && WaterPlayer.player.getAudioPlayer().getPlayingTrack() == null)) {
                                 WaterPlayer.player.getTrackManager().nextTrack();
-                                WaterPlayer.toast.setMessage(Localization.getText("waterplayer.message.skip")).show(context.getSource().getClient().getToasts());
+                                WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.message.skip")).show(context.getSource().getClient().getToasts());
                             }
                             return 1;
                         }))
