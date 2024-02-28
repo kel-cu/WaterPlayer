@@ -48,7 +48,7 @@ dependencies {
     implementation shade("dev.arbjerg:lavaplayer:2.0.4")
     implementation shade("com.github.topi314.lavasrc:lavasrc:4.0.1")
     implementation shade("com.github.topi314.lavasrc:lavasrc-protocol:4.0.1")
-    modImplementation("ru.kelcuprum.alinlib:AlinLib:${project.alinlib}");
+    modImplementation("ru.kelcuprum.alinlib:AlinLib-fabric:${project.alinlib}");
     include(implementation("meteordevelopment:starscript:0.2.2"))
 
     compileOnly 'org.projectlombok:lombok:1.18.26'

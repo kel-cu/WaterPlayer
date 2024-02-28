@@ -8,6 +8,7 @@ import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.alinlib.gui.components.buttons.ButtonConfigBoolean;
 import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
 import ru.kelcuprum.alinlib.gui.components.selector.SelectorIntegerButton;
+import ru.kelcuprum.alinlib.gui.components.text.CategoryBox;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.alinlib.gui.screens.ConfigScreenBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
@@ -58,6 +59,14 @@ public class MainConfigsScreen{
                 .addWidget(new ButtonConfigBoolean(140, 105, designType, WaterPlayer.config, "ENABLE_NOTICE", false, enableNoticeText))
                 .addWidget(new ButtonConfigBoolean(140, 130, designType, WaterPlayer.config, "ENABLE_CHANGE_TITLE", false, enableChangeTitleText))
                 .addWidget(new ButtonConfigBoolean(140, 155, designType, WaterPlayer.config, "ENABLE_DISCORD_RPC", false, Component.translatable("waterplayer.config.enable_discord_rpc")))
+                .addWidget(new CategoryBox(140, 180, Component.translatable("waterplayer.config.services"))
+                    .addValue(new ButtonConfigBoolean(140, 205, WaterPlayer.config, "ENABLE_YOUTUBE", true, Component.translatable("waterplayer.config.services.youtube")))
+                    .addValue(new ButtonConfigBoolean(140, 230, WaterPlayer.config, "ENABLE_SOUNDCLOUD", true, Component.translatable("waterplayer.config.services.soundcloud")))
+                    .addValue(new ButtonConfigBoolean(140, 255, WaterPlayer.config, "ENABLE_BANDCAMP", true, Component.translatable("waterplayer.config.services.bandcamp")))
+                    .addValue(new ButtonConfigBoolean(140, 280, WaterPlayer.config, "ENABLE_VIMEO", true, Component.translatable("waterplayer.config.services.vimeo")))
+                    .addValue(new ButtonConfigBoolean(140, 305, WaterPlayer.config, "ENABLE_TWITCH", false, Component.translatable("waterplayer.config.services.twitch")))
+                    .addValue(new ButtonConfigBoolean(140, 330, WaterPlayer.config, "ENABLE_BEAM", true, Component.translatable("waterplayer.config.services.beam")))
+                    )
                 .build();
     }
 }

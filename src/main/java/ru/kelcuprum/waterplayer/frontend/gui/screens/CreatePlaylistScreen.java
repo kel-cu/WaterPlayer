@@ -7,7 +7,6 @@ import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
 import ru.kelcuprum.alinlib.gui.components.editbox.base.EditBoxString;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.config.PlaylistsScreen;
 
 public class CreatePlaylistScreen extends Screen {
     private final Screen parent;

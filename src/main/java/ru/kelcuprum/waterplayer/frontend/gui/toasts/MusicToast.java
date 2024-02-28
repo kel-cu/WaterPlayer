@@ -54,7 +54,7 @@ public class MusicToast implements Toast {
 
         Font font = toastComponent.getMinecraft().font;
         Component author = Music.isAuthorNull(track) ? Component.translatable("waterplayer.name") : Component.literal(Music.getAuthor(track));
-        List<FormattedCharSequence> list = font.split(Component.literal(Music.getTitle(track)), 125);
+        List<FormattedCharSequence> list = font.split(Component.literal(Music.getTitle(track)), maxTitleWidth());
         int i = 16777215;
         if (list.size() == 1) {
             guiGraphics.drawString(font, author, 30, 7, i, false);

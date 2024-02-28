@@ -14,13 +14,11 @@ import meteordevelopment.starscript.value.ValueMap;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.Level;
-import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 
 public class StarScript {
     public static Starscript ss = new Starscript();
 
-    private static final StringBuilder SB = new StringBuilder();
     static Minecraft mc = Minecraft.getInstance();
 
     public static void init() {
