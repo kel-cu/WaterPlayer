@@ -1,4 +1,7 @@
 .gradle
+.idea
+.vscode
+run
 **/build/
 !src/**/build/
 
