@@ -6,7 +6,6 @@ import java.util.List;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.Toast;
@@ -18,6 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
+import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
 
 @Environment(EnvType.CLIENT)
@@ -29,10 +29,10 @@ public class MusicToast implements Toast {
     }
 
     public int widthAuthor(){
-        return Minecraft.getInstance().font.width(track.getInfo().author);
+        return WaterPlayer.MINECRAFT.font.width(track.getInfo().author);
     }
     public int widthTitle(){
-        return Minecraft.getInstance().font.width(track.getInfo().title);
+        return WaterPlayer.MINECRAFT.font.width(track.getInfo().title);
     }
     public int maxTitleWidth(){
         if(widthTitle()/2 <= 125 && widthAuthor() <= 125) return 125;
@@ -52,7 +52,7 @@ public class MusicToast implements Toast {
         guiGraphics.fill(0, 0, width(), height() - 1, colorBackground / 2 << 24);
         guiGraphics.fill(0, height() - 1, width(), height(), track.getInfo().isStream ? InterfaceUtils.Colors.GROUPIE : InterfaceUtils.Colors.SEADRIVE);
 
-        Font font = toastComponent.getMinecraft().font;
+        Font font = WaterPlayer.MINECRAFT.font;
         Component author = Music.isAuthorNull(track) ? Component.translatable("waterplayer.name") : Component.literal(Music.getAuthor(track));
         List<FormattedCharSequence> list = font.split(Component.literal(Music.getTitle(track)), maxTitleWidth());
         int i = 16777215;

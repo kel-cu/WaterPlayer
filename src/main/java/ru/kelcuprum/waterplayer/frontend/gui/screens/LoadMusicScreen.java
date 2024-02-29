@@ -3,7 +3,6 @@ package ru.kelcuprum.waterplayer.frontend.gui.screens;
 import com.google.gson.JsonObject;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
@@ -106,7 +105,7 @@ public class LoadMusicScreen extends Screen {
 
     public static void loadMusic(String url){
         if(url.isBlank()){
-            WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add.blank")).show(Minecraft.getInstance().getToasts());
+            WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add.blank")).show(WaterPlayer.MINECRAFT.getToasts());
             return;
         }
         WaterPlayer.config.setString("LAST_REQUEST_MUSIC", url);
@@ -116,7 +115,7 @@ public class LoadMusicScreen extends Screen {
                 PlaylistObject playlist;
                 JsonObject jsonPlaylist = new JsonObject();
 
-                final Path configFile = Minecraft.getInstance().gameDirectory.toPath().resolve("config/WaterPlayer/playlists/"+name+".json");
+                final Path configFile = WaterPlayer.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/"+name+".json");
                 try {
                     jsonPlaylist = GsonHelper.parse(Files.readString(configFile));
                 } catch (Exception ex){
@@ -129,10 +128,10 @@ public class LoadMusicScreen extends Screen {
                 WaterPlayer.getToast().setMessage(Localization.toText(
                         Localization.toString(Localization.getText("waterplayer.load.add.playlist"))
                                 .replace("%playlist_name%", playlist.title)
-                )).show(Minecraft.getInstance().getToasts());
+                )).show(WaterPlayer.MINECRAFT.getToasts());
             } else {
                 WaterPlayer.player.getTrackSearch().getTracks(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", ""));
-                WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add")).show(Minecraft.getInstance().getToasts());
+                WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add")).show(WaterPlayer.MINECRAFT.getToasts());
             }
     }
 

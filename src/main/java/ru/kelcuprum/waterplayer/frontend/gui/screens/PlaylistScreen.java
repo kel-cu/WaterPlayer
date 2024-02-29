@@ -108,6 +108,7 @@ public class PlaylistScreen extends Screen {
         }));
         addRenderableWidgets(widgets);
     }
+    @SuppressWarnings("rawtypes")
     protected void addRenderableWidgets(@NotNull List<AbstractWidget> widgets) {
         Iterator var2 = widgets.iterator();
 

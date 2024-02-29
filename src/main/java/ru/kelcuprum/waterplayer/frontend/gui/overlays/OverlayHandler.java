@@ -17,7 +17,6 @@ import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Colors.*;
 public class OverlayHandler implements HudRenderCallback, ClientTickEvents.StartTick {
     private final List<Component> texts = new ObjectArrayList<>();
 
-    private final Minecraft client = Minecraft.getInstance();
     private boolean isLive = false;
     private boolean isPause = true;
     double v = 0;
@@ -46,11 +45,11 @@ public class OverlayHandler implements HudRenderCallback, ClientTickEvents.Start
         int pos = WaterPlayer.config.getNumber("OVERLAY.POSITION", 0).intValue();
         if(!texts.isEmpty()){
             int l = pos == 0 || pos == 1 ? 0 : texts.size()-1;
-            int f = client.font.lineHeight+3;
+            int f = WaterPlayer.MINECRAFT.font.lineHeight+3;
             int my = f*texts.size();
             int mx = 0;
             for(Component text : texts){
-                mx = Math.max(mx, client.font.width(text));
+                mx = Math.max(mx, WaterPlayer.MINECRAFT.font.width(text));
             }
             boolean left = pos == 0 || pos == 2;
             boolean top  = pos == 0 || pos == 1;
@@ -77,8 +76,8 @@ public class OverlayHandler implements HudRenderCallback, ClientTickEvents.Start
 
             for(Component text : texts){
                 int x = left ? 10 : guiGraphics.guiWidth() - 10 - mx;
-                int y = top ? 10+(l*f) : guiGraphics.guiHeight() - 10 - client.font.lineHeight - (l*f);
-                guiGraphics.drawString(client.font, text, x, y, -1);
+                int y = top ? 10+(l*f) : guiGraphics.guiHeight() - 10 - WaterPlayer.MINECRAFT.font.lineHeight - (l*f);
+                guiGraphics.drawString(WaterPlayer.MINECRAFT.font, text, x, y, -1);
                 if(top) l++; else l--;
             };
         }

@@ -1,7 +1,6 @@
 package ru.kelcuprum.waterplayer.frontend.gui.screens.config;
 
 import com.google.gson.JsonObject;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.GsonHelper;
@@ -32,23 +31,23 @@ public class PlaylistsScreen {
     public Screen build(Screen parent) {
         ConfigScreenBuilder builder = new ConfigScreenBuilder(parent, Component.translatable("waterplayer.name"), designType)
                 .addPanelWidget(new Button(10, 40, designType, MainConfigCategory, (e) -> {
-                    Minecraft.getInstance().setScreen(new MainConfigsScreen().build(parent));
+                    WaterPlayer.MINECRAFT.setScreen(new MainConfigsScreen().build(parent));
                 }))
                 .addPanelWidget(new Button(10, 65, designType, LocalizationConfigCategory, (e) -> {
-                    Minecraft.getInstance().setScreen(new LocalizationConfigsScreen().build(parent));
+                    WaterPlayer.MINECRAFT.setScreen(new LocalizationConfigsScreen().build(parent));
                 }))
                 .addPanelWidget(new Button(10, 90, designType, SecretConfigCategory, (e) -> {
-                    Minecraft.getInstance().setScreen(new SecretConfigsScreen().build(parent));
+                    WaterPlayer.MINECRAFT.setScreen(new SecretConfigsScreen().build(parent));
                 }))
                 .addPanelWidget(new Button(10, 115, designType, PlaylistsCategory, (e) -> {
-                    Minecraft.getInstance().setScreen(new PlaylistsScreen().build(parent));
+                    WaterPlayer.MINECRAFT.setScreen(new PlaylistsScreen().build(parent));
                 }))
                 .addPanelWidget(new Button(10, 140, designType, PlayCategory, (e) -> {
-                    Minecraft.getInstance().setScreen(new LoadMusicScreen(this.build(parent)));
+                    WaterPlayer.MINECRAFT.setScreen(new LoadMusicScreen(this.build(parent)));
                 }))
                 ///
                 .addWidget(new TextBox(140, 5, PlaylistsCategory, true));
-        File playlists = Minecraft.getInstance().gameDirectory.toPath().resolve("config/WaterPlayer/playlists").toFile();
+        File playlists = WaterPlayer.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists").toFile();
         if(playlists.exists() && playlists.isDirectory()){
             for(File playlist : Objects.requireNonNull(playlists.listFiles())){
                 if(playlist.isFile() && playlist.getName().endsWith(".json")){
@@ -57,7 +56,7 @@ public class PlaylistsScreen {
                         PlaylistObject playlistObject = new PlaylistObject(jsonPlaylist);
                         String fileName = playlist.getName().replace(".json", "");
                         builder.addWidget(new Button(140, -20, designType, Component.literal(String.format("%s by %s (%s)", playlistObject.title, playlistObject.author, fileName)), (s) ->{
-                            Minecraft.getInstance().setScreen(new PlaylistScreen(new PlaylistsScreen().build(parent), fileName));
+                            WaterPlayer.MINECRAFT.setScreen(new PlaylistScreen(new PlaylistsScreen().build(parent), fileName));
                         }));
                     } catch (Exception e){
                         WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);
@@ -66,7 +65,7 @@ public class PlaylistsScreen {
             }
         }
         builder.addWidget(new Button(140, -20, designType, Component.translatable("waterplayer.playlist.create"), (s) -> {
-            Minecraft.getInstance().setScreen(new CreatePlaylistScreen(new PlaylistsScreen().build(parent)));
+            WaterPlayer.MINECRAFT.setScreen(new CreatePlaylistScreen(new PlaylistsScreen().build(parent)));
         }));
         return builder.build();
     }

@@ -50,6 +50,7 @@ public class WaterPlayer implements ClientModInitializer {
     public static String mixer;
     private static String lastException;
     public static UUID bossBarUUID = UUID.randomUUID();
+    public static Minecraft MINECRAFT = Minecraft.getInstance();
     private static boolean lastBossBar = false;
     public static boolean closing = true;
 
