@@ -67,6 +67,14 @@
   "waterplayer.config.enable_change_title.tooltip": "* в главном меню",
   "waterplayer.config.enable_discord_rpc": "Включить интеграцию Discord",
 
+  "waterplayer.config.services": "Сервисы",
+  "waterplayer.config.services.youtube": "YouTube",
+  "waterplayer.config.services.soundcloud": "SoundCloud",
+  "waterplayer.config.services.bandcamp": "Bandcamp",
+  "waterplayer.config.services.vimeo": "Vimeo",
+  "waterplayer.config.services.twitch": "Twitch",
+  "waterplayer.config.services.beam": "Beam",
+
   "waterplayer.config.localization": "Локализация",
   "waterplayer.config.localization.title.bossbar": "Босс бар",
   "waterplayer.config.localization.bossbar": "Формат музыки",

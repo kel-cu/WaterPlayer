@@ -6,6 +6,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.FormattedCharSequence;
+
 import org.apache.logging.log4j.Level;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
@@ -15,7 +17,7 @@ import java.util.List;
 import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Colors.*;
 
 public class OverlayHandler implements HudRenderCallback, ClientTickEvents.StartTick {
-    private final List<Component> texts = new ObjectArrayList<>();
+    private final List<FormattedCharSequence> texts = new ObjectArrayList<>();
 
     private boolean isLive = false;
     private boolean isPause = true;
@@ -31,9 +33,16 @@ public class OverlayHandler implements HudRenderCallback, ClientTickEvents.Start
                 isLive = WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().isStream;
                 isPause = WaterPlayer.player.getAudioPlayer().isPaused();
                 v = isLive ? 1.0 : (double) WaterPlayer.player.getAudioPlayer().getPlayingTrack().getPosition() / WaterPlayer.player.getAudioPlayer().getPlayingTrack().getDuration();
-                if(!Music.isAuthorNull()) texts.add(Component.literal(Music.getAuthor()));
-                texts.add(Component.literal(Music.getTitle()));
-                texts.add(Component.literal(WaterPlayer.localization.getParsedText("{player.speaker_icon} {player.volume}% {format.time}")));
+                //-=-=-=-
+                Component author = Component.literal(Music.getAuthor());
+                Component title = Component.literal(Music.getTitle());
+                Component state = Component.literal(WaterPlayer.localization.getParsedText("{player.speaker_icon} {player.volume}% {format.time}"));
+                int pos = WaterPlayer.config.getNumber("OVERLAY.POSITION", 0).intValue();
+                int maxWidth = Math.max(WaterPlayer.MINECRAFT.font.width(state), pos == 0 || pos == 1 ? client.getWindow().getGuiScaledWidth()/2 : (client.getWindow().getGuiScaledWidth()-280)/2);
+                //-=-=-=-
+                if(!Music.isAuthorNull()) texts.addAll(WaterPlayer.MINECRAFT.font.split(author, maxWidth));
+                texts.addAll(WaterPlayer.MINECRAFT.font.split(title, maxWidth));
+                texts.addAll(WaterPlayer.MINECRAFT.font.split(state, maxWidth));
             }
         } catch (Exception ex){
             WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
@@ -48,7 +57,7 @@ public class OverlayHandler implements HudRenderCallback, ClientTickEvents.Start
             int f = WaterPlayer.MINECRAFT.font.lineHeight+3;
             int my = f*texts.size();
             int mx = 0;
-            for(Component text : texts){
+            for(FormattedCharSequence text : texts){
                 mx = Math.max(mx, WaterPlayer.MINECRAFT.font.width(text));
             }
             boolean left = pos == 0 || pos == 2;
@@ -74,7 +83,7 @@ public class OverlayHandler implements HudRenderCallback, ClientTickEvents.Start
                     state-0x7f000000
             );
 
-            for(Component text : texts){
+            for(FormattedCharSequence text : texts){
                 int x = left ? 10 : guiGraphics.guiWidth() - 10 - mx;
                 int y = top ? 10+(l*f) : guiGraphics.guiHeight() - 10 - WaterPlayer.MINECRAFT.font.lineHeight - (l*f);
                 guiGraphics.drawString(WaterPlayer.MINECRAFT.font, text, x, y, -1);
