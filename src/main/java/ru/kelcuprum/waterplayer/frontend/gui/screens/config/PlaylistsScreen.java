@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Level;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
-import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.alinlib.gui.screens.ConfigScreenBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
@@ -46,18 +45,18 @@ public class PlaylistsScreen {
                         JsonObject jsonPlaylist = GsonHelper.parse(Files.readString(playlist.toPath()));
                         PlaylistObject playlistObject = new PlaylistObject(jsonPlaylist);
                         String fileName = playlist.getName().replace(".json", "");
-                        builder.addWidget(new Button(140, -20, designType, Component.literal(String.format("%s by %s (%s)", playlistObject.title, playlistObject.author, fileName)), (s) ->{
+                        builder.addWidget(new ButtonBuilder(Component.literal(String.format("%s by %s (%s)", playlistObject.title, playlistObject.author, fileName)), (s) ->{
                             WaterPlayer.MINECRAFT.setScreen(new PlaylistScreen(new PlaylistsScreen().build(parent), fileName));
-                        }));
+                        }).build());
                     } catch (Exception e){
                         WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);
                     }
                 }
             }
         }
-        builder.addWidget(new Button(140, -20, designType, Component.translatable("waterplayer.playlist.create"), (s) -> {
+        builder.addWidget(new ButtonBuilder(Component.translatable("waterplayer.playlist.create"), (s) -> {
             WaterPlayer.MINECRAFT.setScreen(new CreatePlaylistScreen(new PlaylistsScreen().build(parent)));
-        }));
+        }).build());
         return builder.build();
     }
 }

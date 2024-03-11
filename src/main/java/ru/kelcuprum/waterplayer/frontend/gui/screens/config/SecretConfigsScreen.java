@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
+import ru.kelcuprum.alinlib.gui.components.builder.editbox.EditBoxBuilder;
 import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
 import ru.kelcuprum.alinlib.gui.components.editbox.EditBoxConfigString;
 import ru.kelcuprum.alinlib.gui.components.text.CategoryBox;
@@ -44,20 +45,20 @@ public class SecretConfigsScreen {
                 .addPanelWidget(new ButtonBuilder(PlayCategory, (e) -> WaterPlayer.MINECRAFT.setScreen(new LoadMusicScreen(this.build(parent)))).build())
                 //
                 ///
-                .addWidget(new TextBox(140, 5, SecretConfigCategory, true))
-                .addWidget(new CategoryBox(140, 30, tokensText)
-                        .addValue(new EditBoxConfigString(140, 55, true, designType, WaterPlayer.config, "YANDEX_MUSIC_TOKEN", "", yandexMusicText))
-                        .addValue(new EditBoxConfigString(140, 80, true, designType, WaterPlayer.config, "DEEZER_DECRYPTION_KEY", "", deezerText))
-                        .addValue(new EditBoxConfigString(140, 105, false, designType, WaterPlayer.config, "FLOWERY_TTS_VOICE", "", floweryTTSText))
+                .addWidget(new TextBox(SecretConfigCategory, true))
+                .addWidget(new CategoryBox(tokensText)
+                        .addValue(new EditBoxBuilder(yandexMusicText).setValue("").setConfig(WaterPlayer.config, "YANDEX_MUSIC_TOKEN").build())
+                        .addValue(new EditBoxBuilder(deezerText).setValue("").setConfig(WaterPlayer.config, "DEEZER_DECRYPTION_KEY").build())
+                        .addValue(new EditBoxBuilder(floweryTTSText).setValue("").setConfig(WaterPlayer.config, "FLOWERY_TTS_VOICE").build())
                 )
-                .addWidget(new CategoryBox(140, 130, spotifyText)
-                        .addValue(new EditBoxConfigString(140, 55, true, designType, WaterPlayer.config, "SPOTIFY_CLIENT_ID", "", spotifyClientIDText))
-                        .addValue(new EditBoxConfigString(140, 180, true, designType, WaterPlayer.config, "SPOTIFY_CLIENT_SECRET", "", spotifyClientSecretText))
-                        .addValue(new EditBoxConfigString(140, 205, true, designType, WaterPlayer.config, "SPOTIFY_COUNTRY_CODE", "US", spotifyCountryCodeText))
+                .addWidget(new CategoryBox(spotifyText)
+                        .addValue(new EditBoxBuilder(spotifyClientIDText).setValue("").setConfig(WaterPlayer.config, "SPOTIFY_CLIENT_ID").build())
+                        .addValue(new EditBoxBuilder(spotifyClientSecretText).setValue("").setConfig(WaterPlayer.config, "SPOTIFY_CLIENT_SECRET").build())
+                        .addValue(new EditBoxBuilder(spotifyCountryCodeText).setValue("US").setConfig(WaterPlayer.config, "SPOTIFY_COUNTRY_CODE").build())
                 )
-                .addWidget(new CategoryBox(140, 230, appleMusicText)
-                        .addValue(new EditBoxConfigString(140, 255, true, designType, WaterPlayer.config, "APPLE_MUSIC_MEDIA_API_TOKEN", "", appleMusicMediaAPITokenText))
-                        .addValue(new EditBoxConfigString(140, 280, true, designType, WaterPlayer.config, "APPLE_MUSIC_COUNTRY_CODE", "us", appleMusicCountryCodeText))
+                .addWidget(new CategoryBox(appleMusicText)
+                        .addValue(new EditBoxBuilder(appleMusicMediaAPITokenText).setValue("").setConfig(WaterPlayer.config, "APPLE_MUSIC_MEDIA_API_TOKEN").build())
+                        .addValue(new EditBoxBuilder(appleMusicCountryCodeText).setValue("US").setConfig(WaterPlayer.config, "APPLE_MUSIC_COUNTRY_CODE").build())
                 )
                 .build();
     }
