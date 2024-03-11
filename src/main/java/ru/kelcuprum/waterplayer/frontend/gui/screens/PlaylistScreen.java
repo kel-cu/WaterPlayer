@@ -130,7 +130,7 @@ public class PlaylistScreen extends Screen {
     }
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f){
-        InterfaceUtils.renderBackground(guiGraphics, minecraft);
+        super.renderBackground(guiGraphics, i, j, f);
         InterfaceUtils.renderLeftPanel(guiGraphics, 190, height);
     }
     @Override

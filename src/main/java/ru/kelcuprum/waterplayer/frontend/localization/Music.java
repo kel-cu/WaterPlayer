@@ -28,7 +28,6 @@ public class Music {
     public static boolean isTitleNull() {return isTitleNull(WaterPlayer.player.getAudioPlayer().getPlayingTrack());}
     //
     public static String getTitle(AudioTrack info){
-
         String[] fileArgs = info.getInfo().uri.split("/");
         if(fileArgs.length == 1) fileArgs = info.getInfo().uri.split("\\\\");
         String file = fileArgs[fileArgs.length-1];

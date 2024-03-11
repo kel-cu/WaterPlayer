@@ -22,11 +22,8 @@
       "ru.kelcuprum.waterplayer.frontend.gui.screens.ModMenuIntegration"
     ]
   },
-  "mixins": [
-    "waterplayer.mixin.json"
-  ],
   "depends": {
-    "fabricloader": ">=0.14.17",
+    "fabricloader": "*",
     "fabric": "*",
     "alinlib": "*",
     "minecraft": [">=1.20.2"]

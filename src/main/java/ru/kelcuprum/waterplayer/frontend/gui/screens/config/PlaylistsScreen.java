@@ -7,6 +7,7 @@ import net.minecraft.util.GsonHelper;
 import org.apache.logging.log4j.Level;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
+import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
 import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.alinlib.gui.screens.ConfigScreenBuilder;
@@ -30,22 +31,12 @@ public class PlaylistsScreen {
     private final InterfaceUtils.DesignType designType = InterfaceUtils.DesignType.FLAT;
     public Screen build(Screen parent) {
         ConfigScreenBuilder builder = new ConfigScreenBuilder(parent, Component.translatable("waterplayer.name"), designType)
-                .addPanelWidget(new Button(10, 40, designType, MainConfigCategory, (e) -> {
-                    WaterPlayer.MINECRAFT.setScreen(new MainConfigsScreen().build(parent));
-                }))
-                .addPanelWidget(new Button(10, 65, designType, LocalizationConfigCategory, (e) -> {
-                    WaterPlayer.MINECRAFT.setScreen(new LocalizationConfigsScreen().build(parent));
-                }))
-                .addPanelWidget(new Button(10, 90, designType, SecretConfigCategory, (e) -> {
-                    WaterPlayer.MINECRAFT.setScreen(new SecretConfigsScreen().build(parent));
-                }))
-                .addPanelWidget(new Button(10, 115, designType, PlaylistsCategory, (e) -> {
-                    WaterPlayer.MINECRAFT.setScreen(new PlaylistsScreen().build(parent));
-                }))
-                .addPanelWidget(new Button(10, 140, designType, PlayCategory, (e) -> {
-                    WaterPlayer.MINECRAFT.setScreen(new LoadMusicScreen(this.build(parent)));
-                }))
-                ///
+                .addPanelWidget(new ButtonBuilder(MainConfigCategory, (e) -> WaterPlayer.MINECRAFT.setScreen(new MainConfigsScreen().build(parent))).build())
+                .addPanelWidget(new ButtonBuilder(LocalizationConfigCategory, (e) -> WaterPlayer.MINECRAFT.setScreen(new LocalizationConfigsScreen().build(parent))).build())
+                .addPanelWidget(new ButtonBuilder(SecretConfigCategory, (e) -> WaterPlayer.MINECRAFT.setScreen(new SecretConfigsScreen().build(parent))).build())
+                .addPanelWidget(new ButtonBuilder(PlaylistsCategory, (e) -> WaterPlayer.MINECRAFT.setScreen(new PlaylistsScreen().build(parent))).build())
+                .addPanelWidget(new ButtonBuilder(PlayCategory, (e) -> WaterPlayer.MINECRAFT.setScreen(new LoadMusicScreen(this.build(parent)))).build())
+                //
                 .addWidget(new TextBox(140, 5, PlaylistsCategory, true));
         File playlists = WaterPlayer.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists").toFile();
         if(playlists.exists() && playlists.isDirectory()){

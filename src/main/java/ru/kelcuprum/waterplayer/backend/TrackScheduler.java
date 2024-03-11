@@ -33,19 +33,6 @@ public class TrackScheduler extends AudioEventAdapter
         this.queue = new LinkedList<>();
     }
     /**
-     *
-     */
-    public void skipBySeconds(long seconds) throws Exception {
-        if(player.getPlayingTrack() == null){
-            throw new Exception("Playing track is null!");
-        }
-        if(player.getPlayingTrack().getPosition() + seconds > player.getPlayingTrack().getDuration()){
-            nextTrack();
-            return;
-        }
-        player.getPlayingTrack().setPosition(player.getPlayingTrack().getPosition() + (seconds*1000));
-    }
-    /**
      * Add the next track to queue or play right away if nothing is in the queue.
      *
      * @param track The track to play or add to queue.

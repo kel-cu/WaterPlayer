@@ -80,9 +80,10 @@ public class LoadMusicScreen extends Screen {
         int pos = 1;
         if(!queue.isEmpty()) {
             for (AudioTrack track : WaterPlayer.player.getTrackManager().queue) {
-                StringBuilder builder = new StringBuilder();
-                if(Music.isAuthorNull(track)) builder.append(Music.getTitle(track)).append(" ");
-                else builder.append(pos).append(". «").append(Music.getAuthor(track)).append("» ").append(Music.getTitle(track)).append(" ");
+                StringBuilder builder = new StringBuilder().append(pos).append(". ");
+                if(!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
+                ///builder.append(Music.getTitle(track)).append(" ");
+                builder.append(Music.getTitle(track)).append(" ");
                 builder.append(Music.getIsLive(track) ? WaterPlayer.localization.getLocalization("format.live") : StarScript.getTimestamp(Music.getDuration(track)));
                 widgets.add(new TextBox(x, -10, width-200, 10, Component.literal(builder.toString()), false, (s) -> {
                     if(track.getInfo().uri != null) Util.getPlatform().openUri(track.getInfo().uri);
@@ -137,7 +138,7 @@ public class LoadMusicScreen extends Screen {
 
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f){
-        InterfaceUtils.renderBackground(guiGraphics, minecraft);
+        super.renderBackground(guiGraphics, i, j, f);
         InterfaceUtils.renderLeftPanel(guiGraphics, 190, height);
     }
     @Override

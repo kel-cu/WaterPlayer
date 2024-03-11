@@ -11,12 +11,14 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastComponent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
+import ru.kelcuprum.alinlib.gui.toast.AlinaToast;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
 
@@ -75,16 +77,16 @@ public class MusicToast implements Toast {
                 }
             }
         }
-        guiGraphics.renderFakeItem(getYonKaGorMoment(track).getDefaultInstance(), 8, 8);
-
+        if(Music.getAuthor(track).equals("YonKaGor")) guiGraphics.renderFakeItem(getYonKaGorMoment(track).getDefaultInstance(), 8, 8);
+        else guiGraphics.blit(new ResourceLocation("waterplayer", "textures/music.png"), 8, 8, 0.0F, 0.0F, 16, 16, 16, 16);
         return (double) l >= 10000 * toastComponent.getNotificationDisplayTimeMultiplier() ? Visibility.HIDE : Visibility.SHOW;
     }
 
     protected Item getYonKaGorMoment(AudioTrack track) {
-        if (!Music.getAuthor().equals("YonKaGor")) return Items.MUSIC_DISC_STRAD;
+        if (!Music.getAuthor(track).equals("YonKaGor")) return Items.MUSIC_DISC_STRAD;
         return switch (Music.getTitle(track)) {
             case "I Forgot That You Exist", "I Forgot That You Exist. ¯\\_(ツ)_/¯" -> Items.MUSIC_DISC_WAIT;
-            case "Top 10 Things to Do Before You Die", "[TW] Top 10 Things To Do Before You Die (Censored)" -> Items.LIGHT;
+            case "Top 10 Things to Do Before You Die", "Top 10 Things To Do Before You Die", "[TW] Top 10 Things To Do Before You Die (Censored)" -> Items.LIGHT;
             case "Trash Talkin'", "kennyoung & YonKaGor - Trash Talkin'" -> Items.MUSIC_DISC_OTHERSIDE;
             case "Fallacy" -> Items.MUSIC_DISC_PIGSTEP;
             case "You're Just Like Pop Music" -> Items.MUSIC_DISC_MELLOHI;

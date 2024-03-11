@@ -42,17 +42,12 @@ import java.util.UUID;
 
 public class WaterPlayer implements ClientModInitializer {
     public static Config config = new Config("config/WaterPlayer/config.json");
-    public static IPCClient client = new IPCClient(1197963953695903794L);
     private static final Timer TIMER = new Timer();
     public static final Logger LOG = LogManager.getLogger("WaterPlayer");
     public static MusicPlayer player;
     public static Localization localization = new Localization("waterplayer", "config/WaterPlayer/lang");
     public static String mixer;
-    private static String lastException;
-    public static UUID bossBarUUID = UUID.randomUUID();
     public static Minecraft MINECRAFT = Minecraft.getInstance();
-    private static boolean lastBossBar = false;
-    public static boolean closing = true;
 
     @Override
     public void onInitializeClient() {
@@ -65,36 +60,16 @@ public class WaterPlayer implements ClientModInitializer {
         mixer = player.getMixer();
         registerBinds();
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
-            closing = false;
-            start();
             OverlayHandler hud = new OverlayHandler();
             HudRenderCallback.EVENT.register(hud);
             ClientTickEvents.START_CLIENT_TICK.register(hud);
-            registerApplications();
         });
         ClientLifecycleEvents.CLIENT_STOPPING.register(c -> {
-            closing = true;
-            if(CONNECTED_DISCORD) client.close();
             player.getAudioPlayer().stopTrack();
         });
         ClientCommandRegistrationCallback.EVENT.register(WaterPlayerCommand::register);
     }
 
-    // MUSIC
-    public static void start() {
-        TIMER.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                if(closing) return;
-                if(WaterPlayer.config.getBoolean("ENABLE_CHANGE_TITLE", true) && WaterPlayer.player != null && player.getAudioPlayer().getPlayingTrack() != null) updateTitle();
-                if (WaterPlayer.config.getBoolean("ENABLE_BOSS_BAR", false)) updateBossBar();
-                else if (lastBossBar) clearBossBar();
-
-                if (WaterPlayer.config.getBoolean("ENABLE_DISCORD_RPC", false)) updateDiscordPresence();
-                else if (lastDiscord) clearDiscord();
-            }
-        }, 250, 250);
-    }
     public static ToastBuilder getToast(){
         return new ToastBuilder().setIcon(Items.MUSIC_DISC_STRAD).setTitle(Component.translatable("waterplayer.name"));
     }
@@ -199,177 +174,6 @@ public class WaterPlayer implements ClientModInitializer {
             }
         });
     }
-    // Minecraft
-    public static LerpingBossEvent bossBar;
-    public static void updateBossBar() {
-        if(closing) return;
-        if (!lastBossBar) lastBossBar = true;
-        boolean playing = false;
-        try {
-            Minecraft client = Minecraft.getInstance();
-            if (client.level != null && client.player != null) {
-                if (WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null) {
-                    boolean isPause = WaterPlayer.player.getAudioPlayer().isPaused();
-                    boolean isStream = WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().isStream;
-                    bossBar = new LerpingBossEvent(WaterPlayer.bossBarUUID,
-                            Localization.toText(localization.getLocalization(isPause ? "bossbar.pause" : isStream ?
-                                    (Music.isAuthorNull() ? "bossbar.live.withoutAuthor" : "bossbar.live") : (Music.isAuthorNull() ? "bossbar.withoutAuthor" : "bossbar"))),
-                            (isPause || isStream) ? 1F : (float) WaterPlayer.player.getAudioPlayer().getPlayingTrack().getPosition() / WaterPlayer.player.getAudioPlayer().getPlayingTrack().getDuration()
-                            , isPause ? BossEvent.BossBarColor.YELLOW : isStream ? BossEvent.BossBarColor.RED : BossEvent.BossBarColor.GREEN, BossEvent.BossBarOverlay.PROGRESS, false, false, false);
-                    playing = true;
-                }
-                if(playing) client.gui.getBossOverlay().update(ClientboundBossEventPacket.createAddPacket(bossBar));
-                else client.gui.getBossOverlay().update(ClientboundBossEventPacket.createRemovePacket(bossBarUUID));
-            }
-            if (lastException != null) lastException = null;
-        } catch (Exception ex) {
-            if (lastException == null || !lastException.equals(ex.getMessage())) {
-                ex.printStackTrace();
-                lastException = ex.getMessage();
-            }
-        }
-    }
-    public static void updateTitle() {
-        if(closing) return;
-        String title;
-        try {
-            Minecraft client = Minecraft.getInstance();
-            if (client.level == null && client.player == null) {
-                if (WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null) {
-                    title = localization.getLocalization(
-                            WaterPlayer.player.getAudioPlayer().isPaused() ? "title.pause"
-                                    : WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().isStream ? (Music.isAuthorNull() ? "title.live.withoutAuthor"
-                                    : "title.live") : (Music.isAuthorNull() ? "title.withoutAuthor" : "title"));
-
-                    client.getWindow().setTitle(title);
-                }
-            }
-            if (lastException != null) lastException = null;
-        } catch (Exception ex) {
-            if (lastException == null || !lastException.equals(ex.getMessage())) {
-                ex.printStackTrace();
-                lastException = ex.getMessage();
-            }
-        }
-    }
-
-    public static void clearBossBar() {
-        try {
-            if (lastBossBar) lastBossBar = false;
-            Minecraft client = Minecraft.getInstance();
-            if (client.level != null && client.player != null) {
-                client.gui.getBossOverlay().update(ClientboundBossEventPacket.createRemovePacket(bossBarUUID));
-            }
-            if (lastException != null) lastException = null;
-        } catch (Exception ex) {
-            if (lastException == null || !lastException.equals(ex.getMessage())) {
-                ex.printStackTrace();
-                lastException = ex.getMessage();
-            }
-        }
-    }
-    // Discord
-    private static boolean lastDiscord = false;
-    public static User USER;
-    public static boolean CONNECTED_DISCORD = false;
-    public static String lastTrack = "";
-    public static boolean lastClearDiscord = false;
-    private void registerApplications(){
-        setupListener();
-    }
-    public static void setupListener(){
-        client.setListener(new IPCListener(){
-            @Override
-            public void onPacketSent(IPCClient ipcClient, Packet packet) {
-
-            }
-
-            @Override
-            public void onPacketReceived(IPCClient ipcClient, Packet packet) {
-
-            }
-
-            @Override
-            public void onActivityJoin(IPCClient ipcClient, String s) {
-
-            }
-
-            @Override
-            public void onActivitySpectate(IPCClient ipcClient, String s) {
-
-            }
-
-            @Override
-            public void onActivityJoinRequest(IPCClient ipcClient, String s, User user) {
-
-            }
-
-            @Override
-            public void onReady(IPCClient client)
-            {
-                log("The mod has been connected to Discord", Level.DEBUG);
-                USER = client.getCurrentUser();
-                CONNECTED_DISCORD = true;
-            }
-
-            @Override
-            public void onClose(IPCClient ipcClient, JsonObject jsonObject) {
-                CONNECTED_DISCORD = false;
-            }
-
-            @Override
-            public void onDisconnect(IPCClient ipcClient, Throwable throwable) {
-                log("The mod has been pulled from Discord", Level.DEBUG);
-                log(String.format("Reason: %s", throwable.getLocalizedMessage()), Level.DEBUG);
-                CONNECTED_DISCORD = false;
-            }
-        });
-    }
-    public static void clearDiscord() {
-        try {
-            if (lastDiscord) lastDiscord = false;
-            client.sendRichPresence(null);
-            client.close();
-            if (lastException != null) lastException = null;
-        } catch (Exception ex) {
-            if (lastException == null || !lastException.equals(ex.getMessage())) {
-                ex.printStackTrace();
-                lastException = ex.getMessage();
-            }
-        }
-    }
-    public static void updateDiscordPresence(){
-        if(!lastDiscord){
-            try {
-                client.connect();
-                lastDiscord = true;
-            } catch (Exception ex){
-                log(ex.getLocalizedMessage(), Level.ERROR);
-            }
-        }
-        RichPresence.Builder rich = null;
-        if(WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null && !WaterPlayer.player.getAudioPlayer().isPaused()){
-            if(lastClearDiscord) lastClearDiscord = false;
-            AudioTrackInfo trackInfo = WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo();
-            AudioTrack track = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
-            if(trackInfo.uri.equals(lastTrack)) return;
-            else lastTrack = trackInfo.uri;
-
-            rich = new RichPresence.Builder()
-                    .setState(Music.getTitle())
-                    .setLargeImage(trackInfo.artworkUrl == null ? "https://cdn.kelcuprum.ru/icons/music.png" : trackInfo.artworkUrl);
-            if(!Music.isAuthorNull()) rich.setDetails(trackInfo.author);
-            if(trackInfo.isStream) rich.setStartTimestamp(System.currentTimeMillis()-track.getPosition());
-            else rich.setStartTimestamp(System.currentTimeMillis()-track.getPosition())
-                    .setEndTimestamp(System.currentTimeMillis()+(track.getDuration()- track.getPosition()));
-            if(CONNECTED_DISCORD) client.sendRichPresence(rich.build());
-        } else if(!lastClearDiscord){
-            lastClearDiscord = true;
-            lastTrack = "";
-            if(CONNECTED_DISCORD) client.sendRichPresence(null);
-        }
-    }
-
     // Logger
     public static void log(String message){log(message, Level.INFO);}
     public static void log(String message, Level level){
