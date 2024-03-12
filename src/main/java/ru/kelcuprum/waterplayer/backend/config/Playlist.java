@@ -2,8 +2,8 @@ package ru.kelcuprum.waterplayer.backend.config;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.GsonHelper;
+import ru.kelcuprum.waterplayer.WaterPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ public class Playlist {
 
     public Playlist(JsonObject data){
         title = data.has("title") ? data.get("title").getAsString() : "Example title";
-        author = data.has("author") ? data.get("author").getAsString() : Minecraft.getInstance().getUser().getName();
+        author = data.has("author") ? data.get("author").getAsString() : WaterPlayer.MINECRAFT.getUser().getName();
         urlsJSON = data.has("urls") ? data.get("urls").getAsJsonArray() : GsonHelper.parseArray("[\"https://c418.bandcamp.com/track/strad\"]");
         for(int i = 0; i < urlsJSON.size(); i++){
             urls.add(urlsJSON.get(i).getAsString());
