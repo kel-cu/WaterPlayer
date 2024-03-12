@@ -12,7 +12,7 @@ public class Playlist {
     public String title;
     public String author;
     public JsonArray urlsJSON;
-    public List<String> urls = new ArrayList<String>();;
+    public List<String> urls = new ArrayList<>();
 
     public Playlist(JsonObject data){
         title = data.has("title") ? data.get("title").getAsString() : "Example title";
