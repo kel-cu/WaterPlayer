@@ -1,14 +1,6 @@
 package ru.kelcuprum.waterplayer;
 
-import com.google.gson.JsonObject;
-import com.jagrosh.discordipc.IPCClient;
-import com.jagrosh.discordipc.IPCListener;
-import com.jagrosh.discordipc.entities.Packet;
-import com.jagrosh.discordipc.entities.RichPresence;
-import com.jagrosh.discordipc.entities.User;
 import com.mojang.blaze3d.platform.InputConstants;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
@@ -17,10 +9,7 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundBossEventPacket;
-import net.minecraft.world.BossEvent;
 import net.minecraft.world.item.Items;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -31,22 +20,15 @@ import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
 import ru.kelcuprum.waterplayer.backend.MusicPlayer;
 import ru.kelcuprum.waterplayer.backend.command.WaterPlayerCommand;
-import ru.kelcuprum.waterplayer.frontend.localization.Music;
 import ru.kelcuprum.waterplayer.frontend.localization.StarScript;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.LoadMusicScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.overlays.OverlayHandler;
 
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.UUID;
-
 public class WaterPlayer implements ClientModInitializer {
     public static Config config = new Config("config/WaterPlayer/config.json");
-    private static final Timer TIMER = new Timer();
     public static final Logger LOG = LogManager.getLogger("WaterPlayer");
     public static MusicPlayer player;
     public static Localization localization = new Localization("waterplayer", "config/WaterPlayer/lang");
-    public static String mixer;
     public static Minecraft MINECRAFT = Minecraft.getInstance();
 
     @Override
@@ -56,10 +38,9 @@ public class WaterPlayer implements ClientModInitializer {
         StarScript.init();
         localization.setParser((s) -> StarScript.run(StarScript.compile(s)));
         player = new MusicPlayer();
-        player.startAudioOutput();
-        mixer = player.getMixer();
         registerBinds();
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
+            player.startAudioOutput();
             OverlayHandler hud = new OverlayHandler();
             HudRenderCallback.EVENT.register(hud);
             ClientTickEvents.START_CLIENT_TICK.register(hud);

@@ -40,10 +40,6 @@ dependencies {
     // Fabric API, ModMenu, Cloth Config
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation "maven.modrinth:modmenu:${project.modmenu_version}"
-    // Discord Integration
-    include(implementation("com.jagrosh.discordipc:DiscordIPC:0.6.0"))
-    include(implementation("com.kohlschutter.junixsocket:junixsocket-common:2.7.0"))
-    include(implementation("com.kohlschutter.junixsocket:junixsocket-native-common:2.7.0"))
     //
     implementation shade("dev.arbjerg:lavaplayer:${project.lavaplayer}")
     implementation shade("com.github.topi314.lavasrc:lavasrc:4.0.1")

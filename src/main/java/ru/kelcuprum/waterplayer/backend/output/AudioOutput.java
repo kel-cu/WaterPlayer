@@ -63,9 +63,9 @@ public class AudioOutput extends Thread {
                 if (!player.isPaused()) {
                     if ((chunkSize = stream.read(buffer)) >= 0) {
                         souceLine.write(buffer, 0, chunkSize);
-                        if (musicPlayer.getOutputConsumer() != null) {
-                            musicPlayer.getOutputConsumer().accept(Arrays.copyOf(buffer, buffer.length), chunkSize);
-                        }
+//                        if (musicPlayer.getOutputConsumer() != null) {
+//                            musicPlayer.getOutputConsumer().accept(Arrays.copyOf(buffer, buffer.length), chunkSize);
+//                        }
                     } else {
                         throw new IllegalStateException("Audiostream ended. This should not happen.");
                     }
@@ -91,15 +91,6 @@ public class AudioOutput extends Thread {
                 oldMixer.close();
             }
         }
-    }
-
-    public String getMixer() {
-        if (mixer == null) return null;
-        return mixer.getMixerInfo().getName();
-    }
-
-    public DataLine.Info getSpeakerInfo() {
-        return speakerInfo;
     }
 
     private boolean createLine() {
