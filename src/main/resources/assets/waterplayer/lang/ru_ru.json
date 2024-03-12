@@ -1,7 +1,5 @@
 {
   "waterplayer.name": "WaterPlayer",
-  "waterplayer.name.config": "WaterPlayer | Конфигурация",
-  "waterplayer.name.playlist": "WaterPlayer | Плейлист",
 
   "waterplayer.command.playlist.noName": "Вы не указали имя файла плейлиста",
   "waterplayer.command.now_playing.notPlaying": "Ничего не играет",
@@ -27,7 +25,6 @@
   "waterplayer.key.shuffle": "Перемешать очередь",
   "waterplayer.key.repeating": "Повтор трека",
 
-  "waterplayer.message.clothConfigNotFound": "Install the &7Cloth Config&r mod to display the config window. =-=",
   "waterplayer.message.pause": "Трек поставлен на паузу",
   "waterplayer.message.play": "Трек снят с паузы",
   "waterplayer.message.repeat": "Повтор ВКЛ.",

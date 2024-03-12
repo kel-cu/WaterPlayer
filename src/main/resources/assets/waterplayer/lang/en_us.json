@@ -1,7 +1,5 @@
 {
   "waterplayer.name": "WaterPlayer",
-  "waterplayer.name.config": "WaterPlayer | Configurations",
-  "waterplayer.name.playlist": "WaterPlayer | Playlist",
 
   "waterplayer.command.playlist.noName": "You did not specify a playlist file name",
   "waterplayer.command.now_playing.notPlaying": "Nothing's playing",
@@ -29,7 +27,6 @@
   "waterplayer.key.shuffle": "Shuffle queue",
   "waterplayer.key.repeating": "Repeating track",
 
-  "waterplayer.message.clothConfigNotFound": "Install the &7Cloth Config&r mod to display the config window. =-=",
   "waterplayer.message.pause": "Track has been paused",
   "waterplayer.message.play": "Track has been resumed",
   "waterplayer.message.repeat": "Repeat on",
