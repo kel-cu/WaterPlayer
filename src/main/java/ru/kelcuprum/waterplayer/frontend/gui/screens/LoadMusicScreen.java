@@ -109,7 +109,7 @@ public class LoadMusicScreen extends Screen {
         if (isFirstLoadMusic) WaterPlayer.config.setString("LAST_REQUEST_MUSIC", url);
         File folder = new File(url);
         if (url.startsWith("playlist:")) {
-            String name = WaterPlayer.config.getString("LAST_REQUEST_MUSIC", "").replace("playlist:", "");
+            String name = url.replace("playlist:", "");
             Playlist playlist;
             JsonObject jsonPlaylist = new JsonObject();
 
@@ -139,7 +139,7 @@ public class LoadMusicScreen extends Screen {
                 WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);
             }
         } else {
-            WaterPlayer.player.getTracks(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", ""));
+            WaterPlayer.player.getTracks(url);
             if (isFirstLoadMusic)
                 WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add")).show(WaterPlayer.MINECRAFT.getToasts());
         }
