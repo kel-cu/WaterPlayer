@@ -76,7 +76,7 @@ public class StarScript {
             return ss.run(script, sb);
         }
         catch (StarscriptError error) {
-            error.printStackTrace();
+            WaterPlayer.log(error.getLocalizedMessage(), Level.ERROR);
             return null;
         }
     }
@@ -85,9 +85,6 @@ public class StarScript {
         return section != null ? section.toString() : "oops...";
     }
 
-    public static Section runSection(Script script) {
-        return runSection(script, new StringBuilder());
-    }
     public static String run(Script script) {
         try {
             return run(script, new StringBuilder());

@@ -18,14 +18,13 @@ import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
 import ru.kelcuprum.alinlib.gui.components.editbox.base.EditBoxString;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.waterplayer.WaterPlayer;
-import ru.kelcuprum.waterplayer.backend.config.PlaylistObject;
+import ru.kelcuprum.waterplayer.backend.config.Playlist;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
 import ru.kelcuprum.waterplayer.frontend.localization.StarScript;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
 
@@ -51,14 +50,10 @@ public class LoadMusicScreen extends Screen {
 
         addRenderableWidget(new Button(x, height-80, size, 20, designType, Localization.getText("waterplayer.load.load"), (OnPress) -> {
             loadMusic(request.getValue());
-            this.minecraft.setScreen(parent);
+            onClose();
         }));
-        addRenderableWidget(new Button(x, height-55, size, 20, designType, Localization.getText("waterplayer.load.url.copy"), (OnPress) -> {
-            request.setValue(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", ""));
-        }));
-        addRenderableWidget(new Button(x, height-30, size, 20, designType, CommonComponents.GUI_CANCEL, (OnPress) -> {
-            this.minecraft.setScreen(parent);
-        }));
+        addRenderableWidget(new Button(x, height-55, size, 20, designType, Localization.getText("waterplayer.load.url.copy"), (OnPress) -> request.setValue(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", ""))));
+        addRenderableWidget(new Button(x, height-30, size, 20, designType, CommonComponents.GUI_CANCEL, (OnPress) -> onClose()));
     }
     private ConfigureScrolWidget scroller;
     private List<AbstractWidget> widgets = new ArrayList<>();
@@ -82,7 +77,6 @@ public class LoadMusicScreen extends Screen {
             for (AudioTrack track : WaterPlayer.player.getTrackManager().queue) {
                 StringBuilder builder = new StringBuilder().append(pos).append(". ");
                 if(!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
-                ///builder.append(Music.getTitle(track)).append(" ");
                 builder.append(Music.getTitle(track)).append(" ");
                 builder.append(Music.getIsLive(track) ? WaterPlayer.localization.getLocalization("format.live") : StarScript.getTimestamp(Music.getDuration(track)));
                 widgets.add(new TextBox(x, -10, width-200, 10, Component.literal(builder.toString()), false, (s) -> {
@@ -93,12 +87,8 @@ public class LoadMusicScreen extends Screen {
         }
         addRenderableWidgets(widgets);
     }
-    @SuppressWarnings("rawtypes")
     protected void addRenderableWidgets(@NotNull List<AbstractWidget> widgets) {
-        Iterator var2 = widgets.iterator();
-
-        while(var2.hasNext()) {
-            AbstractWidget widget = (AbstractWidget)var2.next();
+        for (AbstractWidget widget : widgets) {
             this.addRenderableWidget(widget);
         }
 
@@ -113,7 +103,7 @@ public class LoadMusicScreen extends Screen {
         WaterPlayer.config.save();
             if(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", "").startsWith("playlist:")){
                 String name = WaterPlayer.config.getString("LAST_REQUEST_MUSIC", "").replace("playlist:", "");
-                PlaylistObject playlist;
+                Playlist playlist;
                 JsonObject jsonPlaylist = new JsonObject();
 
                 final Path configFile = WaterPlayer.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/"+name+".json");
@@ -122,7 +112,7 @@ public class LoadMusicScreen extends Screen {
                 } catch (Exception ex){
                     WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
                 }
-                playlist = new PlaylistObject(jsonPlaylist);
+                playlist = new Playlist(jsonPlaylist);
                 for(int i = 0; i<playlist.urlsJSON.size(); i++){
                     WaterPlayer.player.getTrackSearch().getTracks(playlist.urlsJSON.get(i).getAsString());
                 }

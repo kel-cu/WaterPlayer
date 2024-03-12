@@ -22,12 +22,8 @@ public class CreatePlaylistScreen extends Screen {
         int y = height/2;
 
         addRenderableWidget(new TextBox(x-150, 20, 300, 20, title, true));
-        addRenderableWidget(new EditBoxString(x-150, y-10, 300, 20, false, "", InterfaceUtils.DesignType.FLAT, Component.translatable("waterplayer.playlist.create.filename"), (s) -> {
-            fileName = s;
-        }));
-        addRenderableWidget(new Button(x-150, y+15, 145, 20, InterfaceUtils.DesignType.FLAT, CommonComponents.GUI_CANCEL, (S) -> {
-            onClose();
-        }));
+        addRenderableWidget(new EditBoxString(x-150, y-10, 300, 20, false, "", InterfaceUtils.DesignType.FLAT, Component.translatable("waterplayer.playlist.create.filename"), (s) -> fileName = s));
+        addRenderableWidget(new Button(x-150, y+15, 145, 20, InterfaceUtils.DesignType.FLAT, CommonComponents.GUI_CANCEL, (S) -> onClose()));
         addRenderableWidget(new Button(x+5, y+15, 145, 20, InterfaceUtils.DesignType.FLAT, CommonComponents.GUI_CONTINUE, (s) -> {
             assert this.minecraft != null;
             this.minecraft.setScreen(new PlaylistScreen(parent, fileName));

@@ -18,20 +18,19 @@ import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
 import ru.kelcuprum.alinlib.gui.components.editbox.base.EditBoxString;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.waterplayer.WaterPlayer;
-import ru.kelcuprum.waterplayer.backend.config.PlaylistObject;
+import ru.kelcuprum.waterplayer.backend.config.Playlist;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Icons.RESET;
 
 public class PlaylistScreen extends Screen {
-    private PlaylistObject playlist;
-    private String playlistName = "its-normal";
+    private Playlist playlist;
+    private final String playlistName;
     JsonObject jsonPlaylist = new JsonObject();
     private final Screen parent;
     public PlaylistScreen(Screen parent, String playlistName) {
@@ -43,13 +42,14 @@ public class PlaylistScreen extends Screen {
 
     @Override
     protected void init() {
+        assert this.minecraft != null;
         final Path configFile = this.minecraft.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/"+ playlistName +".json");
         try {
             jsonPlaylist = GsonHelper.parse(Files.readString(configFile));
         } catch (Exception ex){
             WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
         }
-        playlist = new PlaylistObject(jsonPlaylist);
+        playlist = new Playlist(jsonPlaylist);
         initPanel();
         initContent();
     }
@@ -67,10 +67,7 @@ public class PlaylistScreen extends Screen {
             playlist.author = s;
             save();
         }));
-        addRenderableWidget(new Button(x, height-30, size-25, 20, designType, CommonComponents.GUI_BACK, (s) -> {
-            save();
-            minecraft.setScreen(parent);
-        }));
+        addRenderableWidget(new Button(x, height-30, size-25, 20, designType, CommonComponents.GUI_BACK, (s) -> onClose()));
         addRenderableWidget(new TextBox(x, 90, size, 20, Component.literal(String.format("For play: playlist:%s", playlistName)), true));
         addRenderableWidget(new ButtonSprite(x+size-20, height-30, 20, 20, designType, RESET, Localization.getText("waterplayer.playlist.reload"), (OnPress) -> {
            save();
@@ -108,12 +105,9 @@ public class PlaylistScreen extends Screen {
         }));
         addRenderableWidgets(widgets);
     }
-    @SuppressWarnings("rawtypes")
     protected void addRenderableWidgets(@NotNull List<AbstractWidget> widgets) {
-        Iterator var2 = widgets.iterator();
 
-        while(var2.hasNext()) {
-            AbstractWidget widget = (AbstractWidget)var2.next();
+        for (AbstractWidget widget : widgets) {
             this.addRenderableWidget(widget);
         }
 
@@ -125,7 +119,7 @@ public class PlaylistScreen extends Screen {
             Files.createDirectories(configFile.getParent());
             Files.writeString(configFile, playlist.toJSON().toString());
         } catch (IOException e) {
-            e.printStackTrace();
+            WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);
         }
     }
     @Override
@@ -148,6 +142,7 @@ public class PlaylistScreen extends Screen {
         return scr;
     }
     public void onClose() {
+        save();
         assert this.minecraft != null;
         this.minecraft.setScreen(parent);
     }

@@ -25,7 +25,6 @@ public class Music {
     public static boolean isTitleNull(AudioTrack info){
         return trackIsNull(info) || info.getInfo().title.equals("Unknown title");
     }
-    public static boolean isTitleNull() {return isTitleNull(WaterPlayer.player.getAudioPlayer().getPlayingTrack());}
     //
     public static String getTitle(AudioTrack info){
         String[] fileArgs = info.getInfo().uri.split("/");
@@ -53,6 +52,6 @@ public class Music {
     public static long getDuration() {return getDuration(WaterPlayer.player.getAudioPlayer().getPlayingTrack());}
     //
     public static boolean getIsLive(){return getIsLive(WaterPlayer.player.getAudioPlayer().getPlayingTrack());}
-    public static boolean getIsLive(AudioTrack track){return trackIsNull(track) ? false : WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().isStream;}
+    public static boolean getIsLive(AudioTrack track){return !trackIsNull(track) && WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().isStream;}
 
 }

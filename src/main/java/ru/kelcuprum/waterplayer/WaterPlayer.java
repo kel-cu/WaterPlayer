@@ -45,9 +45,7 @@ public class WaterPlayer implements ClientModInitializer {
             HudRenderCallback.EVENT.register(hud);
             ClientTickEvents.START_CLIENT_TICK.register(hud);
         });
-        ClientLifecycleEvents.CLIENT_STOPPING.register(c -> {
-            player.getAudioPlayer().stopTrack();
-        });
+        ClientLifecycleEvents.CLIENT_STOPPING.register(c -> player.getAudioPlayer().stopTrack());
         ClientCommandRegistrationCallback.EVENT.register(WaterPlayerCommand::register);
     }
 

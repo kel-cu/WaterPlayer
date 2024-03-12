@@ -18,10 +18,11 @@ import com.sedmelluq.discord.lavaplayer.format.AudioDataFormat;
 import com.sedmelluq.discord.lavaplayer.format.AudioDataFormatTools;
 import com.sedmelluq.discord.lavaplayer.format.AudioPlayerInputStream;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import org.apache.logging.log4j.Level;
+import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.MusicPlayer;
 
 import javax.sound.sampled.*;
-import java.util.Arrays;
 
 public class AudioOutput extends Thread {
 
@@ -63,9 +64,6 @@ public class AudioOutput extends Thread {
                 if (!player.isPaused()) {
                     if ((chunkSize = stream.read(buffer)) >= 0) {
                         souceLine.write(buffer, 0, chunkSize);
-//                        if (musicPlayer.getOutputConsumer() != null) {
-//                            musicPlayer.getOutputConsumer().accept(Arrays.copyOf(buffer, buffer.length), chunkSize);
-//                        }
                     } else {
                         throw new IllegalStateException("Audiostream ended. This should not happen.");
                     }
@@ -75,7 +73,7 @@ public class AudioOutput extends Thread {
                 }
             }
         } catch (final Exception ex) {
-            ex.printStackTrace();
+            WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
         }
     }
 

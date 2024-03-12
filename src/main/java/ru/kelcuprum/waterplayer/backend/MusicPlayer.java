@@ -44,10 +44,6 @@ public class MusicPlayer {
         AudioSources.registerSources(audioPlayerManager);
     }
 
-    public AudioPlayerManager getAudioPlayerManager() {
-        return audioPlayerManager;
-    }
-
     public AudioDataFormat getAudioDataFormat() {
         return audioDataFormat;
     }

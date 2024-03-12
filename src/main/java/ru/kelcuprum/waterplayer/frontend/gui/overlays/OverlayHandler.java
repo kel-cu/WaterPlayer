@@ -88,7 +88,7 @@ public class OverlayHandler implements HudRenderCallback, ClientTickEvents.Start
                 int y = top ? 10+(l*f) : guiGraphics.guiHeight() - 10 - WaterPlayer.MINECRAFT.font.lineHeight - (l*f);
                 guiGraphics.drawString(WaterPlayer.MINECRAFT.font, text, x, y, -1);
                 if(top) l++; else l--;
-            };
+            }
         }
     }
 }

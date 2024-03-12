@@ -26,7 +26,7 @@ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.lit
 public class WaterPlayerCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandBuildContext registryAccess) {
         dispatcher.register(literal("waterplayer")
-                .then(literal("load")
+                .then(literal("play")
                         .then(
                                 argument("url", greedyString()).executes(context -> {
                                     LoadMusicScreen.loadMusic(getString(context, "url"));
@@ -56,7 +56,7 @@ public class WaterPlayerCommand {
                         .then(
                                 argument("name", greedyString()).executes(context -> {
                                     Minecraft client = context.getSource().getClient();
-                                    client.tell(() -> { client.setScreen(new PlaylistScreen(client.screen, getString(context, "name"))); });
+                                    client.tell(() -> client.setScreen(new PlaylistScreen(client.screen, getString(context, "name"))));
                                     return 1;
                                 })
                         )
