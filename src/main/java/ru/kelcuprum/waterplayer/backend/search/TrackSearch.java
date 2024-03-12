@@ -25,8 +25,7 @@ public class TrackSearch {
 
 	public void getTracks(String url)
 	{
-		final String trackUrl = url;
-		audioPlayerManager.loadItemOrdered(musicManagers, trackUrl, new AudioLoadResultHandler()
+		audioPlayerManager.loadItemOrdered(musicManagers, url, new AudioLoadResultHandler()
 		{
 			@Override
 			public void trackLoaded(AudioTrack track)
@@ -38,15 +37,16 @@ public class TrackSearch {
 			@Override
 			public void playlistLoaded(AudioPlaylist playlist)
 			{
-				WaterPlayer.log("Add playlist: "+playlist.getName());
 				List<AudioTrack> tracks = playlist.getTracks();
 				tracks.forEach(musicManagers.scheduler::queue);
+				WaterPlayer.log("Add playlist: "+playlist.getName()+", tracks count: "+playlist.getTracks().size()
+				);
 			}
 
 			@Override
 			public void noMatches()
 			{
-				WaterPlayer.log("Nothing found by " + trackUrl, Level.ERROR);
+				WaterPlayer.log("Nothing found by " + url, Level.ERROR);
 			}
 
 			@Override

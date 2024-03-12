@@ -78,9 +78,8 @@ public class TrackScheduler extends AudioEventAdapter
     public void onTrackStart(AudioPlayer player, AudioTrack track){
         WaterPlayer.log("Start track: "+track.getInfo().title);
         if(WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) {
-            Minecraft.getInstance().getToasts().clear();
-            Minecraft.getInstance().getToasts().addToast(new MusicToast(track));
-
+            WaterPlayer.MINECRAFT.getToasts().clear();
+            WaterPlayer.MINECRAFT.getToasts().addToast(new MusicToast(track));
         }
     }
 

@@ -29,7 +29,7 @@ public class WaterPlayerCommand {
                 .then(literal("play")
                         .then(
                                 argument("url", greedyString()).executes(context -> {
-                                    LoadMusicScreen.loadMusic(getString(context, "url"));
+                                    LoadMusicScreen.loadMusic(getString(context, "url"), true);
                                     return 1;
                                 })
                         )
