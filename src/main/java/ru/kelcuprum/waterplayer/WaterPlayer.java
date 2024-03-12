@@ -109,28 +109,28 @@ public class WaterPlayer implements ClientModInitializer {
                         .show(client.getToasts());
             }
             while (repeatingKey.consumeClick()) {
-                player.getTrackManager().setRepeating(!player.getTrackManager().isRepeating());
-                getToast().setMessage(Localization.getText(player.getTrackManager().isRepeating() ? "waterplayer.message.repeat" : "waterplayer.message.repeat.no"))
+                player.getTrackScheduler().setRepeating(!player.getTrackScheduler().isRepeating());
+                getToast().setMessage(Localization.getText(player.getTrackScheduler().isRepeating() ? "waterplayer.message.repeat" : "waterplayer.message.repeat.no"))
                         .show(client.getToasts());
             }
             while (resetQueueKey.consumeClick()) {
-                player.getTrackManager().skiping = false;
-                if(!player.getTrackManager().queue.isEmpty()) {
-                    player.getTrackManager().queue.clear();
+                player.getTrackScheduler().skiping = false;
+                if(!player.getTrackScheduler().queue.isEmpty()) {
+                    player.getTrackScheduler().queue.clear();
                     getToast().setMessage(Localization.getText("waterplayer.message.reset"))
                             .show(client.getToasts());
                 }
             }
             while (shuffleKey.consumeClick()) {
-                if(player.getTrackManager().queue.size() >= 2){
-                    player.getTrackManager().shuffle();
+                if(player.getTrackScheduler().queue.size() >= 2){
+                    player.getTrackScheduler().shuffle();
                     getToast().setMessage(Localization.getText("waterplayer.message.shuffle"))
                             .show(client.getToasts());
                 }
             }
             while (skipTrack.consumeClick()) {
-                if(player.getTrackManager().queue.isEmpty() && player.getAudioPlayer().getPlayingTrack() == null) return;
-                player.getTrackManager().nextTrack();
+                if(player.getTrackScheduler().queue.isEmpty() && player.getAudioPlayer().getPlayingTrack() == null) return;
+                player.getTrackScheduler().nextTrack();
                 getToast().setMessage(Localization.getText("waterplayer.message.skip"))
                         .show(client.getToasts());
             }

@@ -8,10 +8,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandBuildContext;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.waterplayer.WaterPlayer;
-import ru.kelcuprum.waterplayer.frontend.localization.Music;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.LoadMusicScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.PlaylistScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.config.MainConfigsScreen;
+import ru.kelcuprum.waterplayer.frontend.localization.Music;
 import ru.kelcuprum.waterplayer.frontend.localization.StarScript;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class WaterPlayerCommand {
                 )
                 .then(literal("now-playing")
                         .executes(context -> {
-                            if(Music.trackIsNull()){
+                            if (Music.trackIsNull()) {
                                 context.getSource().sendFeedback(Localization.getText("waterplayer.command.now_playing.notPlaying"));
                             } else {
                                 context.getSource().sendFeedback(Localization.getText("waterplayer.command.now_playing"));
@@ -66,8 +66,8 @@ public class WaterPlayerCommand {
                         }))
                 .then(literal("skip")
                         .executes(context -> {
-                            if(!(WaterPlayer.player.getTrackManager().queue.isEmpty() && WaterPlayer.player.getAudioPlayer().getPlayingTrack() == null)) {
-                                WaterPlayer.player.getTrackManager().nextTrack();
+                            if (!(WaterPlayer.player.getTrackScheduler().queue.isEmpty() && WaterPlayer.player.getAudioPlayer().getPlayingTrack() == null)) {
+                                WaterPlayer.player.getTrackScheduler().nextTrack();
                                 WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.message.skip")).show(context.getSource().getClient().getToasts());
                             }
                             return 1;
@@ -90,26 +90,28 @@ public class WaterPlayerCommand {
                 })
         );
     }
-    public static void queue(int size, CommandContext<FabricClientCommandSource> context){
+
+    public static void queue(int size, CommandContext<FabricClientCommandSource> context) {
         List<String> list = new ArrayList<>();
         int pos = 0;
-        for(AudioTrack track : WaterPlayer.player.getTrackManager().queue){
-            if(pos == size) break;
+        for (AudioTrack track : WaterPlayer.player.getTrackScheduler().queue) {
+            if (pos == size) break;
             StringBuilder builder = new StringBuilder();
-            if(Music.isAuthorNull(track)) builder.append(Music.getTitle(track)).append(" ");
-            else builder.append("«").append(Music.getAuthor(track)).append("» ").append(Music.getTitle(track)).append(" ");
+            if (Music.isAuthorNull(track)) builder.append(Music.getTitle(track)).append(" ");
+            else
+                builder.append("«").append(Music.getAuthor(track)).append("» ").append(Music.getTitle(track)).append(" ");
             builder.append(Music.getIsLive(track) ? WaterPlayer.localization.getLocalization("format.live") : StarScript.getTimestamp(Music.getDuration(track)));
             list.add(builder.toString());
             pos++;
         }
         context.getSource().sendFeedback(Localization.getText(list.isEmpty() ? "waterplayer.command.queue.blank" : "waterplayer.command.queue"));
-        if(!list.isEmpty()) {
+        if (!list.isEmpty()) {
             int number = 1;
             for (String track : list) {
                 context.getSource().sendFeedback(Localization.toText(number + ". " + track));
                 if (number != list.size()) number++;
             }
-            context.getSource().sendFeedback(Localization.toText(number + "/" + WaterPlayer.player.getTrackManager().queue.size()));
+            context.getSource().sendFeedback(Localization.toText(number + "/" + WaterPlayer.player.getTrackScheduler().queue.size()));
         }
     }
 }

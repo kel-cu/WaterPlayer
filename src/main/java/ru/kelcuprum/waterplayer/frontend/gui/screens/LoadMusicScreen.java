@@ -76,11 +76,11 @@ public class LoadMusicScreen extends Screen {
             }
         }));
         addRenderableWidget(scroller);
-        Queue<AudioTrack> queue = WaterPlayer.player.getTrackManager().queue;
+        Queue<AudioTrack> queue = WaterPlayer.player.getTrackScheduler().queue;
         widgets.add(new TextBox(x, 5, width - 200, 20, Component.translatable(queue.isEmpty() ? "waterplayer.command.queue.blank" : "waterplayer.command.queue"), true));
         int pos = 1;
         if (!queue.isEmpty()) {
-            for (AudioTrack track : WaterPlayer.player.getTrackManager().queue) {
+            for (AudioTrack track : WaterPlayer.player.getTrackScheduler().queue) {
                 StringBuilder builder = new StringBuilder().append(pos).append(". ");
                 if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
                 builder.append(Music.getTitle(track)).append(" ");
@@ -132,14 +132,14 @@ public class LoadMusicScreen extends Screen {
                 File[] list = folder.listFiles();
                 assert list != null;
                 for (File file : list) {
-                    if (file.isFile()) WaterPlayer.player.getTrackSearch().getTracks(file.getPath());
+                    if (file.isFile()) WaterPlayer.player.getTracks(file.getPath());
                 }
                 if(isFirstLoadMusic) WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add.files")).show(WaterPlayer.MINECRAFT.getToasts());
             } catch (Exception e) {
                 WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);
             }
         } else {
-            WaterPlayer.player.getTrackSearch().getTracks(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", ""));
+            WaterPlayer.player.getTracks(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", ""));
             if (isFirstLoadMusic)
                 WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add")).show(WaterPlayer.MINECRAFT.getToasts());
         }
