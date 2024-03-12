@@ -11,7 +11,7 @@ import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.alinlib.gui.screens.ConfigScreenBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
-import ru.kelcuprum.waterplayer.backend.config.Playlist;
+import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.CreatePlaylistScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.LoadMusicScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.PlaylistScreen;

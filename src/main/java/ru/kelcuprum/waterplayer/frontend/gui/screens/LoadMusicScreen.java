@@ -18,7 +18,7 @@ import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
 import ru.kelcuprum.alinlib.gui.components.editbox.base.EditBoxString;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.waterplayer.WaterPlayer;
-import ru.kelcuprum.waterplayer.backend.config.Playlist;
+import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
 import ru.kelcuprum.waterplayer.frontend.localization.StarScript;
 
@@ -131,6 +131,7 @@ public class LoadMusicScreen extends Screen {
             try {
                 File[] list = folder.listFiles();
                 assert list != null;
+
                 for (File file : list) {
                     if (file.isFile()) WaterPlayer.player.getTracks(file.getPath());
                 }

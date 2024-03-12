@@ -44,10 +44,9 @@
 
   "waterplayer.load.add": "Ваш запрос отправлен",
   "waterplayer.load.add.playlist": "Плейлист «%playlist_name%» был добавлен",
+  "waterplayer.load.add.files": "Файлы были добавлены",
   "waterplayer.load.add.blank": "Пустой запрос",
 
-  "waterplayer.format.author": "«{track.author}»",
-  "waterplayer.format.title": "{track.title}",
   "waterplayer.format.time": "{track.time.position} / {track.time.duration}",
   "waterplayer.format.live": "(Эфир)",
 
@@ -76,23 +75,8 @@
   "waterplayer.config.services.beam": "Beam",
 
   "waterplayer.config.localization": "Локализация",
-  "waterplayer.config.localization.title.bossbar": "Босс бар",
-  "waterplayer.config.localization.bossbar": "Формат музыки",
-  "waterplayer.config.localization.bossbar.withoutAuthor": "Формат музыки (без автора*)",
-  "waterplayer.config.localization.bossbar.live": "Формат эфира",
-  "waterplayer.config.localization.bossbar.live.withoutAuthor": "Формат эфира (без автора*)",
-  "waterplayer.config.localization.bossbar.pause": "Пауза",
-
-  "waterplayer.config.localization.title.title": "Заголовок окна",
-  "waterplayer.config.localization.title": "Формат музыки",
-  "waterplayer.config.localization.title.withoutAuthor": "Формат музыки (без автора*)",
-  "waterplayer.config.localization.title.live": "Формат эфира",
-  "waterplayer.config.localization.title.live.withoutAuthor": "Формат эфира (без автора*)",
-  "waterplayer.config.localization.title.pause": "Пауза",
 
   "waterplayer.config.localization.title.formats": "Форматы",
-  "waterplayer.config.localization.format.author": "Автор",
-  "waterplayer.config.localization.format.title": "Название",
   "waterplayer.config.localization.format.time": "Время",
   "waterplayer.config.localization.format.live": "Эфир",
 
@@ -111,23 +95,6 @@
   "waterplayer.secret.title.apple_music": "Apple Music",
   "waterplayer.config.apple_music_media_api_token": "Media API Token",
   "waterplayer.config.apple_music_country_code": "Код страны",
-
-
-  "waterplayer.bossbar": "&c♫&r {format.author} {track.title} {format.time} {player.speaker_icon} {player.volume}%",
-  "waterplayer.bossbar.withoutAuthor": "&c♫&r {track.title} {format.time} {player.speaker_icon} {player.volume}%",
-
-  "waterplayer.bossbar.live": "&c⏺&r {format.author} {track.title} {player.speaker_icon} {player.volume}%",
-  "waterplayer.bossbar.live.withoutAuthor": "&c⏺&r {track.title} {player.speaker_icon} {player.volume}%",
-
-  "waterplayer.bossbar.pause": "&e⏸&r Пауза",
-
-  "waterplayer.title": "Minecraft {minecraft.version} - ♫ {format.author} {track.title} {format.time} {player.speaker_icon} {player.volume}%",
-  "waterplayer.title.withoutAuthor": "Minecraft {minecraft.version} - ♫ {track.title} {format.time} {player.speaker_icon} {player.volume}%",
-
-  "waterplayer.title.live": "Minecraft {minecraft.version} - ⏺ {format.author} {track.title} {player.speaker_icon} {player.volume}%",
-  "waterplayer.title.live.withoutAuthor": "Minecraft {minecraft.version} - ⏺ {track.title} {player.speaker_icon} {player.volume}%",
-
-  "waterplayer.title.pause": "Minecraft {minecraft.version} - ⏸ Пауза",
 
   "modmenu.descriptionTranslation.waterplayer": "Музыкальный интернет-плеер встроенный в клиент"
 }

@@ -18,7 +18,7 @@ import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
 import ru.kelcuprum.alinlib.gui.components.editbox.base.EditBoxString;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.waterplayer.WaterPlayer;
-import ru.kelcuprum.waterplayer.backend.config.Playlist;
+import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 
 import java.io.IOException;
 import java.nio.file.Files;

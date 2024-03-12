@@ -46,10 +46,9 @@
 
   "waterplayer.load.add": "Your request has been sent",
   "waterplayer.load.add.playlist": "The «%playlist_name%» playlist has been added",
+  "waterplayer.load.add.files": "The files have been added",
   "waterplayer.load.add.blank": "Request blank",
 
-  "waterplayer.format.author": "«{track.author}»",
-  "waterplayer.format.title": "{track.title}",
   "waterplayer.format.time": "{track.time.position} / {track.time.duration}",
   "waterplayer.format.live": "(Live)",
 
@@ -78,23 +77,8 @@
   "waterplayer.config.services.beam": "Beam",
 
   "waterplayer.config.localization": "Localization",
-  "waterplayer.config.localization.title.bossbar": "Boss Bar",
-  "waterplayer.config.localization.bossbar": "Music format",
-  "waterplayer.config.localization.bossbar.withoutAuthor": "Music format (without Author*)",
-  "waterplayer.config.localization.bossbar.live": "Live format",
-  "waterplayer.config.localization.bossbar.live.withoutAuthor": "Live format (without Author*)",
-  "waterplayer.config.localization.bossbar.pause": "Pause",
-
-  "waterplayer.config.localization.title.title": "Window Title",
-  "waterplayer.config.localization.title": "Music format",
-  "waterplayer.config.localization.title.withoutAuthor": "Music format (without Author*)",
-  "waterplayer.config.localization.title.live": "Live format",
-  "waterplayer.config.localization.title.live.withoutAuthor": "Live format (without Author*)",
-  "waterplayer.config.localization.title.pause": "Pause",
 
   "waterplayer.config.localization.title.formats": "Formats",
-  "waterplayer.config.localization.format.author": "Author",
-  "waterplayer.config.localization.format.title": "Title",
   "waterplayer.config.localization.format.time": "Time",
   "waterplayer.config.localization.format.live": "Live",
 
@@ -113,22 +97,6 @@
   "waterplayer.secret.title.apple_music": "Apple Music",
   "waterplayer.config.apple_music_media_api_token": "Media API Token",
   "waterplayer.config.apple_music_country_code": "Country Code",
-
-  "waterplayer.bossbar": "&c♫&r {format.author} {track.title} {format.time} {player.speaker_icon} {player.volume}%",
-  "waterplayer.bossbar.withoutAuthor": "&c♫&r {track.title} {format.time} {player.speaker_icon} {player.volume}%",
-
-  "waterplayer.bossbar.live": "&c⏺&r {format.author} {track.title} {player.speaker_icon} {player.volume}%",
-  "waterplayer.bossbar.live.withoutAuthor": "&c⏺&r {track.title} {player.speaker_icon} {player.volume}%",
-
-  "waterplayer.bossbar.pause": "&e⏸&r Pause",
-
-  "waterplayer.title": "Minecraft {minecraft.version} - ♫ {format.author} {track.title} {format.time} {player.speaker_icon} {player.volume}%",
-  "waterplayer.title.withoutAuthor": "Minecraft {minecraft.version} - ♫ {track.title} {format.time} {player.speaker_icon} {player.volume}%",
-
-  "waterplayer.title.live": "Minecraft {minecraft.version} - ⏺ {format.author} {track.title} {player.speaker_icon} {player.volume}%",
-  "waterplayer.title.live.withoutAuthor": "Minecraft {minecraft.version} - ⏺ {track.title} {player.speaker_icon} {player.volume}%",
-
-  "waterplayer.title.pause": "Minecraft {minecraft.version} - ⏸ Pause",
 
   "modmenu.descriptionTranslation.waterplayer": "Internet music player built into the client"
 }

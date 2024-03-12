@@ -1,4 +1,4 @@
-package ru.kelcuprum.waterplayer.backend.config;
+package ru.kelcuprum.waterplayer.backend.playlist;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

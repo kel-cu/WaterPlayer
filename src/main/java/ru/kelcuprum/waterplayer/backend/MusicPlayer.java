@@ -40,6 +40,8 @@ public class MusicPlayer {
     private final TrackScheduler trackScheduler;
     private final MusicManager musicManager;
 
+    public final LocalAudioSourceManager localAudioSourceManager = new LocalAudioSourceManager();
+
     public MusicPlayer() {
         audioPlayerManager = new DefaultAudioPlayerManager();
         audioDataFormat = new Pcm16AudioDataFormat(2, 48000, 960, true);
@@ -49,10 +51,7 @@ public class MusicPlayer {
         trackScheduler = new TrackScheduler(audioPlayer);
         musicManager = new MusicManager(audioPlayer, trackScheduler);
         audioPlayer.setVolume(WaterPlayer.config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue());
-        setup();
-    }
 
-    private void setup() {
         audioPlayerManager.setFrameBufferDuration(1000);
         audioPlayerManager.setPlayerCleanupThreshold(Long.MAX_VALUE);
 
@@ -95,7 +94,7 @@ public class MusicPlayer {
         if (config.getBoolean("ENABLE_BEAM", true))
             audioPlayerManager.registerSourceManager(new BeamAudioSourceManager());
         audioPlayerManager.registerSourceManager(new HttpAudioSourceManager());
-        audioPlayerManager.registerSourceManager(new LocalAudioSourceManager());
+        audioPlayerManager.registerSourceManager(localAudioSourceManager);
     }
 
     //
