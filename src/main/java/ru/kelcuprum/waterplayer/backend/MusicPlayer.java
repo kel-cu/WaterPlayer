@@ -70,9 +70,6 @@ public class MusicPlayer {
     }
 
     private void registerSources() {
-        if (!audioPlayerManager.getSourceManagers().isEmpty()) {
-            audioPlayerManager.getSourceManagers().clear();
-        }
         Config config = WaterPlayer.config;
         if (!config.getString("YANDEX_MUSIC_TOKEN", "").isBlank())
             audioPlayerManager.registerSourceManager(new YandexMusicSourceManager(config.getString("YANDEX_MUSIC_TOKEN", "")));
