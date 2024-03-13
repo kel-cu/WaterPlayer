@@ -5,6 +5,7 @@ import com.github.topi314.lavasrc.deezer.DeezerAudioSourceManager;
 import com.github.topi314.lavasrc.flowerytts.FloweryTTSSourceManager;
 import com.github.topi314.lavasrc.spotify.SpotifySourceManager;
 import com.github.topi314.lavasrc.yandexmusic.YandexMusicSourceManager;
+import com.google.gson.JsonObject;
 import com.sedmelluq.discord.lavaplayer.format.AudioDataFormat;
 import com.sedmelluq.discord.lavaplayer.format.Pcm16AudioDataFormat;
 import com.sedmelluq.discord.lavaplayer.player.AudioConfiguration.ResamplingQuality;
@@ -23,11 +24,17 @@ import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.minecraft.util.GsonHelper;
 import org.apache.logging.log4j.Level;
 import ru.kelcuprum.alinlib.config.Config;
+import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.output.AudioOutput;
+import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 public class MusicPlayer {
@@ -98,7 +105,52 @@ public class MusicPlayer {
     }
 
     //
-    public void getTracks(String url) {
+    public void loadMusic(String url, boolean isFirstLoadMusic) {
+        if (url.isBlank()) {
+            if (isFirstLoadMusic)
+                WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add.blank")).show(WaterPlayer.MINECRAFT.getToasts());
+            return;
+        }
+        if (isFirstLoadMusic) WaterPlayer.config.setString("LAST_REQUEST_MUSIC", url);
+        File folder = new File(url);
+        if (url.startsWith("playlist:")) {
+            String name = url.replace("playlist:", "");
+            Playlist playlist;
+            JsonObject jsonPlaylist = new JsonObject();
+
+            final Path configFile = WaterPlayer.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/" + name + ".json");
+            try {
+                jsonPlaylist = GsonHelper.parse(Files.readString(configFile));
+            } catch (Exception ex) {
+                WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
+            }
+            playlist = new Playlist(jsonPlaylist);
+            for (int i = 0; i < playlist.urlsJSON.size(); i++) {
+                loadMusic(playlist.urlsJSON.get(i).getAsString(), false);
+            }
+            if (isFirstLoadMusic) WaterPlayer.getToast().setMessage(Localization.toText(
+                    Localization.toString(Localization.getText("waterplayer.load.add.playlist"))
+                            .replace("%playlist_name%", playlist.title)
+            )).show(WaterPlayer.MINECRAFT.getToasts());
+        } else if (folder.exists() && folder.isDirectory()) {
+            try {
+                File[] list = folder.listFiles();
+                assert list != null;
+
+                for (File file : list) {
+                    if (file.isFile()) getTracks(file.getPath());
+                }
+                if(isFirstLoadMusic) WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add.files")).show(WaterPlayer.MINECRAFT.getToasts());
+            } catch (Exception e) {
+                WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);
+            }
+        } else {
+            getTracks(url);
+            if (isFirstLoadMusic)
+                WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add")).show(WaterPlayer.MINECRAFT.getToasts());
+        }
+    }
+    private void getTracks(String url) {
         audioPlayerManager.loadItemOrdered(musicManager, url, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {

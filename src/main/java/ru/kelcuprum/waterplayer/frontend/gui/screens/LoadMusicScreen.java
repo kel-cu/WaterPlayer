@@ -53,7 +53,7 @@ public class LoadMusicScreen extends Screen {
         addRenderableWidget(request);
 
         addRenderableWidget(new Button(x, height - 80, size, 20, designType, Localization.getText("waterplayer.load.load"), (OnPress) -> {
-            loadMusic(request.getValue(), true);
+            WaterPlayer.player.loadMusic(request.getValue(), true);
             onClose();
         }));
         addRenderableWidget(new Button(x, height - 55, size, 20, designType, Localization.getText("waterplayer.load.url.copy"), (OnPress) -> request.setValue(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", ""))));
@@ -97,52 +97,6 @@ public class LoadMusicScreen extends Screen {
     protected void addRenderableWidgets(@NotNull List<AbstractWidget> widgets) {
         for (AbstractWidget widget : widgets) {
             this.addRenderableWidget(widget);
-        }
-    }
-
-    public static void loadMusic(String url, boolean isFirstLoadMusic) {
-        if (url.isBlank()) {
-            if (isFirstLoadMusic)
-                WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add.blank")).show(WaterPlayer.MINECRAFT.getToasts());
-            return;
-        }
-        if (isFirstLoadMusic) WaterPlayer.config.setString("LAST_REQUEST_MUSIC", url);
-        File folder = new File(url);
-        if (url.startsWith("playlist:")) {
-            String name = url.replace("playlist:", "");
-            Playlist playlist;
-            JsonObject jsonPlaylist = new JsonObject();
-
-            final Path configFile = WaterPlayer.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/" + name + ".json");
-            try {
-                jsonPlaylist = GsonHelper.parse(Files.readString(configFile));
-            } catch (Exception ex) {
-                WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
-            }
-            playlist = new Playlist(jsonPlaylist);
-            for (int i = 0; i < playlist.urlsJSON.size(); i++) {
-                loadMusic(playlist.urlsJSON.get(i).getAsString(), false);
-            }
-            if (isFirstLoadMusic) WaterPlayer.getToast().setMessage(Localization.toText(
-                    Localization.toString(Localization.getText("waterplayer.load.add.playlist"))
-                            .replace("%playlist_name%", playlist.title)
-            )).show(WaterPlayer.MINECRAFT.getToasts());
-        } else if (folder.exists() && folder.isDirectory()) {
-            try {
-                File[] list = folder.listFiles();
-                assert list != null;
-
-                for (File file : list) {
-                    if (file.isFile()) WaterPlayer.player.getTracks(file.getPath());
-                }
-                if(isFirstLoadMusic) WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add.files")).show(WaterPlayer.MINECRAFT.getToasts());
-            } catch (Exception e) {
-                WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);
-            }
-        } else {
-            WaterPlayer.player.getTracks(url);
-            if (isFirstLoadMusic)
-                WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add")).show(WaterPlayer.MINECRAFT.getToasts());
         }
     }
 
