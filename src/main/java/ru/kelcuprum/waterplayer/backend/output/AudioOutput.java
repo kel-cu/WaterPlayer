@@ -32,7 +32,7 @@ public class AudioOutput extends Thread {
     private final DataLine.Info speakerInfo;
 
     private Mixer mixer;
-    private SourceDataLine souceLine;
+    private SourceDataLine sourceLine;
 
     public AudioOutput(MusicPlayer musicPlayer) {
         super("Audio Player");
@@ -46,15 +46,15 @@ public class AudioOutput extends Thread {
     public void run() {
         try {
             final AudioPlayer player = musicPlayer.getAudioPlayer();
-            final AudioDataFormat dataformat = musicPlayer.getAudioDataFormat();
+            final AudioDataFormat dataFormat = musicPlayer.getAudioDataFormat();
 
-            final AudioInputStream stream = AudioPlayerInputStream.createStream(player, dataformat, dataformat.frameDuration(), false);
+            final AudioInputStream stream = AudioPlayerInputStream.createStream(player, dataFormat, dataFormat.frameDuration(), false);
 
-            final byte[] buffer = new byte[dataformat.chunkSampleCount * dataformat.channelCount * 2];
-            final long frameDuration = dataformat.frameDuration();
+            final byte[] buffer = new byte[dataFormat.chunkSampleCount * dataFormat.channelCount * 2];
+            final long frameDuration = dataFormat.frameDuration();
             int chunkSize;
             while (true) {
-                if (souceLine == null || !souceLine.isOpen()) {
+                if (sourceLine == null || !sourceLine.isOpen()) {
                     closeLine();
                     if (!createLine()) {
                         sleep(500);
@@ -63,12 +63,12 @@ public class AudioOutput extends Thread {
                 }
                 if (!player.isPaused()) {
                     if ((chunkSize = stream.read(buffer)) >= 0) {
-                        souceLine.write(buffer, 0, chunkSize);
+                        sourceLine.write(buffer, 0, chunkSize);
                     } else {
                         throw new IllegalStateException("Audiostream ended. This should not happen.");
                     }
                 } else {
-                    souceLine.drain();
+                    sourceLine.drain();
                     sleep(frameDuration);
                 }
             }
@@ -98,7 +98,7 @@ public class AudioOutput extends Thread {
                 final AudioDataFormat dataFormat = musicPlayer.getAudioDataFormat();
                 line.open(format, dataFormat.chunkSampleCount * dataFormat.channelCount * 2 * 5);
                 line.start();
-                souceLine = line;
+                sourceLine = line;
                 return true;
             } catch (final LineUnavailableException ignored) {
             }
@@ -107,10 +107,10 @@ public class AudioOutput extends Thread {
     }
 
     private void closeLine() {
-        if (souceLine != null) {
-            souceLine.flush();
-            souceLine.stop();
-            souceLine.close();
+        if (sourceLine != null) {
+            sourceLine.flush();
+            sourceLine.stop();
+            sourceLine.close();
         }
     }
 
