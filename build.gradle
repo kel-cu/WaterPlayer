@@ -42,7 +42,7 @@ dependencies {
     modImplementation "maven.modrinth:modmenu:${project.modmenu_version}"
     //
     implementation shade("dev.arbjerg:lavaplayer:${project.lavaplayer}")
-    implementation shade("com.github.topi314.lavasrc:lavasrc:4.0.1")
+    implementation shade("com.github.topi314.lavasrc:lavasrc:32b7986")
     implementation shade("com.github.topi314.lavasrc:lavasrc-protocol:4.0.1")
     modImplementation("ru.kelcuprum.alinlib:AlinLib-fabric:${project.alinlib}")
     include(implementation("meteordevelopment:starscript:0.2.2"))
