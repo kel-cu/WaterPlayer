@@ -126,7 +126,7 @@ public class MusicPlayer {
                 loadMusic(playlist.urlsJSON.get(i).getAsString(), false);
             }
             if (isFirstLoadMusic) WaterPlayer.getToast().setMessage(Localization.toText(
-                    Localization.toString(Localization.getText("waterplayer.load.add.playlist"))
+                    Localization.getStringText("waterplayer.load.add.playlist")
                             .replace("%playlist_name%", playlist.title)
             )).show(WaterPlayer.MINECRAFT.getToasts());
         } else if (folder.exists() && folder.isDirectory()) {
