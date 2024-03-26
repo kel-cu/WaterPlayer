@@ -4,8 +4,14 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import org.apache.logging.log4j.Level;
+import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
-import ru.kelcuprum.waterplayer.frontend.gui.toasts.MusicToast;
+import ru.kelcuprum.waterplayer.frontend.localization.Music;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -72,8 +78,17 @@ public class TrackScheduler extends AudioEventAdapter {
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
         WaterPlayer.log("Start track: " + track.getInfo().title);
         if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) {
-            WaterPlayer.MINECRAFT.getToasts().clear();
-            WaterPlayer.MINECRAFT.getToasts().addToast(new MusicToast(track));
+            try {
+                WaterPlayer.MINECRAFT.getToasts().clear();
+            } catch (Exception e){
+                WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);
+            }
+//            WaterPlayer.MINECRAFT.getToasts().addToast(new MusicToast(track));
+            ToastBuilder toast = WaterPlayer.getToast().setTitle(Music.isAuthorNull(track) ? Component.translatable("waterplayer.name") : Component.literal(Music.getAuthor(track)))
+                    .setMessage(Component.literal(Music.getTitle(track)));
+            if(Music.getAuthor(track).equals("YonKaGor")) toast.setIcon(getYonKaGorMoment(track));
+            else toast.setIcon(new ResourceLocation("waterplayer", "textures/music.png"));
+            toast.show(WaterPlayer.MINECRAFT.getToasts());
         }
     }
 
@@ -87,5 +102,27 @@ public class TrackScheduler extends AudioEventAdapter {
 
     public void shuffle() {
         Collections.shuffle((List<?>) queue);
+    }
+
+    protected Item getYonKaGorMoment(AudioTrack track) {
+        if (!Music.getAuthor(track).equals("YonKaGor")) return Items.MUSIC_DISC_STRAD;
+        return switch (Music.getTitle(track)) {
+            case "I Forgot That You Exist", "I Forgot That You Exist. ¯\\_(ツ)_/¯" -> Items.MUSIC_DISC_WAIT;
+            case "Top 10 Things to Do Before You Die", "Top 10 Things To Do Before You Die", "[TW] Top 10 Things To Do Before You Die (Censored)" -> Items.LIGHT;
+            case "Trash Talkin'", "kennyoung & YonKaGor - Trash Talkin'" -> Items.MUSIC_DISC_OTHERSIDE;
+            case "Fallacy" -> Items.MUSIC_DISC_PIGSTEP;
+            case "You're Just Like Pop Music" -> Items.MUSIC_DISC_MELLOHI;
+            case "Dandelion", "Dandelion \uD83C\uDF3C (Full Song)" -> Items.DANDELION;
+            case "Mr. Sunfish", "Good Morning, Mr. Sunfish!", "Fish ! (Original)" -> Items.TROPICAL_FISH;
+            case "You'll Be Gone" -> Items.MUSIC_DISC_MALL;
+            case "It's Normal", "It's Normal [TW]" -> Items.MUSIC_DISC_11;
+            case "Circus Hop", "Circus Hop [TW]" -> Items.MUSIC_DISC_CHIRP;
+            case "Paper Alibis", "Paper Alibis (Full Song)" -> Items.PAPER;
+            case "Silly Plans" -> Items.LIGHT_BLUE_BED;
+            case "Silly Plans ~ Revisit" -> Items.FILLED_MAP;
+            case "Another Mistake" -> Items.BARRIER;
+            case "Artificial Abandonment", "(Original Song) Artificial Abandonment" -> Items.MOSSY_COBBLESTONE;
+            default -> Items.MUSIC_DISC_STRAD;
+        };
     }
 }
