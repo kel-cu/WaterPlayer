@@ -1,11 +1,7 @@
 package ru.kelcuprum.waterplayer.frontend.gui.components;
 
-import com.sedmelluq.discord.lavaplayer.container.wav.WavAudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
@@ -18,13 +14,24 @@ import ru.kelcuprum.waterplayer.frontend.gui.TexturesHelper;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
 import ru.kelcuprum.waterplayer.frontend.localization.StarScript;
 
+import static ru.kelcuprum.waterplayer.frontend.gui.components.TrackButton.confirmLinkNow;
+
 public class CurrentTrackButton extends Button {
+    protected Screen screen;
     public CurrentTrackButton(int x, int y, int width, Screen screen) {
         super(x, y, width, 40, InterfaceUtils.DesignType.FLAT, Component.empty(), null);
+        this.screen = screen;
+    }
+    @Override
+    public void onPress(){
+        if(WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null){
+            confirmLinkNow(screen, WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().uri);
+        }
     }
     @Override
     public void renderText(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         if(WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null){
+            this.active = true;
             AudioTrack track = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
             ResourceLocation icon = track.getInfo().artworkUrl != null ? TexturesHelper.getTexture(track.getInfo().artworkUrl, (track.getSourceManager().getSourceName()+"_"+track.getInfo().identifier)) : new ResourceLocation("waterplayer", "textures/no_icon.png");
             guiGraphics.blit(icon, getX()+2, getY()+2, 0.0F, 0.0F, 36, 36, 36, 36);
@@ -38,18 +45,9 @@ public class CurrentTrackButton extends Button {
             }
             guiGraphics.drawString(AlinLib.MINECRAFT.font, track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") :  StarScript.getTimestamp(Music.getPosition(track)) + " / " + StarScript.getTimestamp(Music.getDuration(track)), getX()+45, getY()+30-AlinLib.MINECRAFT.font.lineHeight, -1);
         } else {
+            this.active = false;
             guiGraphics.drawCenteredString(AlinLib.MINECRAFT.font, Component.translatable("waterplayer.command.now_playing.notPlaying"), getX()+(getWidth()/2),  getY()+20-(AlinLib.MINECRAFT.font.lineHeight/2), -1);
         }
 
-    }
-    public static void confirmLinkNow(Screen screen, String string) {
-        Minecraft minecraft = Minecraft.getInstance();
-        minecraft.setScreen(new ConfirmLinkScreen((bl) -> {
-            if (bl) {
-                Util.getPlatform().openUri(string);
-            }
-
-            minecraft.setScreen(screen);
-        }, string, true));
     }
 }
