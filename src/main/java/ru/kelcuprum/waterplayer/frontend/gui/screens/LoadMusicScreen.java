@@ -1,6 +1,7 @@
 package ru.kelcuprum.waterplayer.frontend.gui.screens;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
@@ -18,6 +19,9 @@ import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.gui.components.CurrentTrackButton;
 import ru.kelcuprum.waterplayer.frontend.gui.components.TrackButton;
+import ru.kelcuprum.waterplayer.frontend.localization.Music;
+import ru.kelcuprum.waterplayer.frontend.localization.StarScript;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
@@ -117,11 +121,16 @@ public class LoadMusicScreen extends Screen {
         int pos = 1;
         if (!queue.isEmpty()) {
             for (AudioTrack track : WaterPlayer.player.getTrackScheduler().queue) {
-
-//                widgets.add(new TextBox(x, -10, width - 200, 10, Component.literal(builder.toString()), false, (s) -> {
-//                    if (track.getInfo().uri != null) Util.getPlatform().openUri(track.getInfo().uri);
-//                }));
-                widgets.add(new TrackButton(x, -40, width - 200, track, this));
+                if(WaterPlayer.config.getBoolean("SCREEN.QUEUE_COVER_SHOW", false)){
+                    widgets.add(new TrackButton(x, -40, width - 200, track, this));
+                } else {
+                    StringBuilder builder = new StringBuilder();
+                    if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
+                    builder.append(Music.getTitle(track)).append(" ").append(StarScript.getTimestamp(Music.getDuration(track)));
+                    widgets.add(new TextBox(x, -10, width - 200, 10, Component.literal(builder.toString()), false, (s) -> {
+                        if (track.getInfo().uri != null) TrackButton.confirmLinkNow(this, track.getInfo().uri);
+                    }));
+                }
                 pos++;
             }
         }

@@ -23,6 +23,7 @@ public class MainConfigsScreen {
     private static final Component enableOverlayText = Localization.getText("waterplayer.config.enable_overlay");
     private static final Component overlayPositionText = Localization.getText("waterplayer.config.overlay.position");
     private static final Component enableNoticeText = Localization.getText("waterplayer.config.enable_notice");
+    private static final Component screenQueueCoverShow = Localization.getText("waterplayer.config.screem.queue_cover_show");
 
     private final InterfaceUtils.DesignType designType = InterfaceUtils.DesignType.FLAT;
 
@@ -44,6 +45,7 @@ public class MainConfigsScreen {
                 .addWidget(new ButtonBooleanBuilder(enableOverlayText, false).setConfig(WaterPlayer.config, "ENABLE_OVERLAY").build())
                 .addWidget(new SelectorBuilder(overlayPositionText).setList(type).setConfig(WaterPlayer.config, "OVERLAY.POSITION").setValue(0).build())
                 .addWidget(new ButtonBooleanBuilder(enableNoticeText, false).setConfig(WaterPlayer.config, "ENABLE_NOTICE").build())
+                .addWidget(new ButtonBooleanBuilder(screenQueueCoverShow, false).setConfig(WaterPlayer.config, "SCREEN.QUEUE_COVER_SHOW").build())
                 .addWidget(new CategoryBox(Component.translatable("waterplayer.config.services"))
                         .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.services.youtube"), true).setConfig(WaterPlayer.config, "ENABLE_YOUTUBE").build())
                         .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.services.soundcloud"), true).setConfig(WaterPlayer.config, "ENABLE_SOUNDCLOUD").build())

@@ -53,6 +53,7 @@
   "waterplayer.config.enable_bossbar": "Включить Босс бар",
   "waterplayer.config.enable_overlay": "Включить оверлей",
   "waterplayer.config.overlay.position": "Позиция оверлей",
+  "waterplayer.config.screem.queue_cover_show": "Показывать миниатюры треков в очереди (Может вызывать пролаги)",
   "waterplayer.config.overlay.position.top_left": "Сверху слева",
   "waterplayer.config.overlay.position.top_right": "Сверху справа",
   "waterplayer.config.overlay.position.bottom_left": "Снизу слева",

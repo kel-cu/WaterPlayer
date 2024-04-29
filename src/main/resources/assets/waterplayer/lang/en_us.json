@@ -55,6 +55,7 @@
   "waterplayer.config.enable_bossbar": "Enable Boss Bar",
   "waterplayer.config.enable_overlay": "Enable overlay",
   "waterplayer.config.overlay.position": "Overlay position",
+  "waterplayer.config.screem.queue_cover_show": "Show thumbnails of tracks in queue (May cause prolag)",
   "waterplayer.config.overlay.position.top_left": "Top left",
   "waterplayer.config.overlay.position.top_right": "Top right",
   "waterplayer.config.overlay.position.bottom_left": "Bottom left",
