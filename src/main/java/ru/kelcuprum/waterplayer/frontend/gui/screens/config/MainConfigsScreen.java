@@ -42,9 +42,9 @@ public class MainConfigsScreen {
                 .addPanelWidget(new ButtonBuilder(PlayCategory, (e) -> WaterPlayer.MINECRAFT.setScreen(new LoadMusicScreen(this.build(parent)))).build())
                 //
                 .addWidget(new TextBox(MainConfigCategory, true))
-                .addWidget(new ButtonBooleanBuilder(enableOverlayText, false).setConfig(WaterPlayer.config, "ENABLE_OVERLAY").build())
+                .addWidget(new ButtonBooleanBuilder(enableOverlayText, true).setConfig(WaterPlayer.config, "ENABLE_OVERLAY").build())
                 .addWidget(new SelectorBuilder(overlayPositionText).setList(type).setConfig(WaterPlayer.config, "OVERLAY.POSITION").setValue(0).build())
-                .addWidget(new ButtonBooleanBuilder(enableNoticeText, false).setConfig(WaterPlayer.config, "ENABLE_NOTICE").build())
+                .addWidget(new ButtonBooleanBuilder(enableNoticeText, true).setConfig(WaterPlayer.config, "ENABLE_NOTICE").build())
                 .addWidget(new ButtonBooleanBuilder(screenQueueCoverShow, false).setConfig(WaterPlayer.config, "SCREEN.QUEUE_COVER_SHOW").build())
                 .addWidget(new CategoryBox(Component.translatable("waterplayer.config.services"))
                         .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.services.youtube"), true).setConfig(WaterPlayer.config, "ENABLE_YOUTUBE").build())

@@ -25,6 +25,10 @@ public class TexturesHelper {
 //            URL imageURL = new URL(url);
 //            InputStream imageStream = imageURL.openStream();
             BufferedImage bufferedImage = ImageIO.read(new URL(url));
+            if(bufferedImage.getWidth() > bufferedImage.getHeight()){
+                int x = (bufferedImage.getWidth()-bufferedImage.getHeight())/2;
+                bufferedImage = bufferedImage.getSubimage(x, 0, bufferedImage.getHeight(), bufferedImage.getHeight());
+            }
             BufferedImage scaleImage = toBufferedImage(bufferedImage.getScaledInstance(128, 128, 2));
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             ImageIO.write(scaleImage, "png", byteArrayOutputStream);
