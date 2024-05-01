@@ -60,18 +60,15 @@
 
 ### Работа с плейлистами
 Чтобы создать/редактировать плейлист, нужно прописать команду `/waterplayer playlist <name>`<br>
-![playlist.png](https://kelcuprum.ru/ass/waterplayer/playlist.png)<br>
+![https://cdn.modrinth.com/data/wDF3M2aD/images/e4522b8e1ff20bc2618e4f00d3b6434f9248d986.png](https://cdn.modrinth.com/data/wDF3M2aD/images/e4522b8e1ff20bc2618e4f00d3b6434f9248d986.png)<br>
 Чтобы его загрузить в очередь, в адрес трека вводим `playlist:name`<br>
-![load_playlist.png](https://kelcuprum.ru/ass/waterplayer/load_playlist.png)<br>
 
 ### Скриншоты
-#### Оверлей & Уведомление
-![overlay_and_notice.png](https://kelcuprum.ru/ass/waterplayer/overlay_and_notice.png)
-#### Пауза
-![pause.png](https://kelcuprum.ru/ass/waterplayer/pause.png)
+#### Оверлей
+![https://cdn.modrinth.com/data/wDF3M2aD/images/878c4bb40cdfd1320a56885225ccb16adefc9291.png](https://cdn.modrinth.com/data/wDF3M2aD/images/878c4bb40cdfd1320a56885225ccb16adefc9291.png)
+#### Пауза & Уведомление
+![https://cdn.modrinth.com/data/wDF3M2aD/images/25ae5a1e45adc49210e6d0c9ca57c9ed4b2558d0.png](https://cdn.modrinth.com/data/wDF3M2aD/images/25ae5a1e45adc49210e6d0c9ca57c9ed4b2558d0.png)
 #### Загрузка & Очередь
-![queue_and_load.png](https://kelcuprum.ru/ass/waterplayer/queue_and_load.png)
-#### Заголовок окна
-![windowtitle.png](https://kelcuprum.ru/ass/waterplayer/windowtitle.png)
+![https://cdn.modrinth.com/data/wDF3M2aD/images/927841b1d334d7a604efdeb40e427c8fe587de9a.png](https://cdn.modrinth.com/data/wDF3M2aD/images/927841b1d334d7a604efdeb40e427c8fe587de9a.png)
 #### Конфигурация
-![config.png](https://kelcuprum.ru/ass/waterplayer/config.png)
+![https://cdn.modrinth.com/data/wDF3M2aD/images/db4d0d2cfa02406b67693df1e48531f16eb0d925.png](https://cdn.modrinth.com/data/wDF3M2aD/images/db4d0d2cfa02406b67693df1e48531f16eb0d925.png)
