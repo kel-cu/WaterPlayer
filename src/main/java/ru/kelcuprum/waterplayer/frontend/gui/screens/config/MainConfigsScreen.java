@@ -22,6 +22,9 @@ public class MainConfigsScreen {
     // CATEGORY CONTENT
     private static final Component enableOverlayText = Localization.getText("waterplayer.config.enable_overlay");
     private static final Component overlayPositionText = Localization.getText("waterplayer.config.overlay.position");
+    private static final Component enableMenuOverlayText = Localization.getText("waterplayer.config.enable_menu_overlay");
+    private static final Component menuOverlayPositionText = Localization.getText("waterplayer.config.menu_overlay.position");
+    private static final Component overlayCaverText = Localization.getText("waterplayer.config.overlay.enable_caver");
     private static final Component enableNoticeText = Localization.getText("waterplayer.config.enable_notice");
     private static final Component screenQueueCoverShow = Localization.getText("waterplayer.config.screem.queue_cover_show");
 
@@ -43,7 +46,10 @@ public class MainConfigsScreen {
                 //
                 .addWidget(new TextBox(MainConfigCategory, true))
                 .addWidget(new ButtonBooleanBuilder(enableOverlayText, true).setConfig(WaterPlayer.config, "ENABLE_OVERLAY").build())
+                .addWidget(new ButtonBooleanBuilder(enableMenuOverlayText, true).setConfig(WaterPlayer.config, "ENABLE_MENU_OVERLAY").build())
                 .addWidget(new SelectorBuilder(overlayPositionText).setList(type).setConfig(WaterPlayer.config, "OVERLAY.POSITION").setValue(0).build())
+                .addWidget(new SelectorBuilder(menuOverlayPositionText).setList(type).setConfig(WaterPlayer.config, "MENU_OVERLAY.POSITION").setValue(0).build())
+                .addWidget(new ButtonBooleanBuilder(overlayCaverText, true).setConfig(WaterPlayer.config, "OVERLAY.ENABLE_CAVER").build())
                 .addWidget(new ButtonBooleanBuilder(enableNoticeText, true).setConfig(WaterPlayer.config, "ENABLE_NOTICE").build())
                 .addWidget(new ButtonBooleanBuilder(screenQueueCoverShow, false).setConfig(WaterPlayer.config, "SCREEN.QUEUE_COVER_SHOW").build())
                 .addWidget(new CategoryBox(Component.translatable("waterplayer.config.services"))

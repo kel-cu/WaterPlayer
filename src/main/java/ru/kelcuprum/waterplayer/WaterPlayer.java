@@ -9,12 +9,15 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
+import ru.kelcuprum.alinlib.AlinLib;
+import ru.kelcuprum.alinlib.api.events.client.ScreenEvents;
 import ru.kelcuprum.alinlib.config.Config;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
@@ -34,7 +37,6 @@ public class WaterPlayer implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         log("Hello, world! UwU");
-        config.load();
         StarScript.init();
         localization.setParser((s) -> StarScript.run(StarScript.compile(s)));
         player = new MusicPlayer();
@@ -42,6 +44,7 @@ public class WaterPlayer implements ClientModInitializer {
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
             player.startAudioOutput();
             OverlayHandler hud = new OverlayHandler();
+            ScreenEvents.SCREEN_RENDER.register(hud);
             HudRenderCallback.EVENT.register(hud);
             ClientTickEvents.START_CLIENT_TICK.register(hud);
         });
@@ -49,10 +52,11 @@ public class WaterPlayer implements ClientModInitializer {
         ClientCommandRegistrationCallback.EVENT.register(WaterPlayerCommand::register);
     }
 
-    public static ToastBuilder getToast(){
+    public static ToastBuilder getToast() {
         return new ToastBuilder().setIcon(Items.MUSIC_DISC_STRAD).setTitle(Component.translatable("waterplayer.name"));
     }
-    public static void registerBinds(){
+
+    public static void registerBinds() {
         KeyMapping loadTrack = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 "waterplayer.key.load",
                 InputConstants.Type.KEYSYM,
@@ -101,61 +105,76 @@ public class WaterPlayer implements ClientModInitializer {
                 GLFW.GLFW_KEY_DOWN, // The keycode of the key
                 "waterplayer.name"
         ));
-
+//        ScreenEvents.KEY_PRESS.register((screen, keyCode, scanCode, modifiers, cir) -> {
+//            if (screen instanceof TitleScreen) {
+//                KeyMapping.click(InputConstants.getKey(keyCode, scanCode));
+//            }
+//        });
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            while (playOrPause.consumeClick()) {
+            int keyCode = 0, scanCode = 0;
+            while (isKeyPress(playOrPause, keyCode, scanCode)) {
                 player.getAudioPlayer().setPaused(!player.getAudioPlayer().isPaused());
                 getToast().setMessage(Localization.getText(player.getAudioPlayer().isPaused() ? "waterplayer.message.pause" : "waterplayer.message.play"))
-                        .show(client.getToasts());
+                        .show(AlinLib.MINECRAFT.getToasts());
             }
-            while (repeatingKey.consumeClick()) {
+            while (isKeyPress(repeatingKey, keyCode, scanCode)) {
                 player.getTrackScheduler().setRepeating(!player.getTrackScheduler().isRepeating());
                 getToast().setMessage(Localization.getText(player.getTrackScheduler().isRepeating() ? "waterplayer.message.repeat" : "waterplayer.message.repeat.no"))
-                        .show(client.getToasts());
+                        .show(AlinLib.MINECRAFT.getToasts());
             }
-            while (resetQueueKey.consumeClick()) {
+            while (isKeyPress(resetQueueKey, keyCode, scanCode)) {
                 player.getTrackScheduler().skiping = false;
-                if(!player.getTrackScheduler().queue.isEmpty()) {
+                if (!player.getTrackScheduler().queue.isEmpty()) {
                     player.getTrackScheduler().queue.clear();
                     getToast().setMessage(Localization.getText("waterplayer.message.reset"))
-                            .show(client.getToasts());
+                            .show(AlinLib.MINECRAFT.getToasts());
                 }
             }
-            while (shuffleKey.consumeClick()) {
-                if(player.getTrackScheduler().queue.size() >= 2){
+            while (isKeyPress(shuffleKey, keyCode, scanCode)) {
+                if (player.getTrackScheduler().queue.size() >= 2) {
                     player.getTrackScheduler().shuffle();
                     getToast().setMessage(Localization.getText("waterplayer.message.shuffle"))
-                            .show(client.getToasts());
+                            .show(AlinLib.MINECRAFT.getToasts());
                 }
             }
-            while (skipTrack.consumeClick()) {
-                if(player.getTrackScheduler().queue.isEmpty() && player.getAudioPlayer().getPlayingTrack() == null) return;
+            while (isKeyPress(skipTrack, keyCode, scanCode)) {
+                if (player.getTrackScheduler().queue.isEmpty() && player.getAudioPlayer().getPlayingTrack() == null)
+                    return;
                 player.getTrackScheduler().nextTrack();
                 getToast().setMessage(Localization.getText("waterplayer.message.skip"))
-                        .show(client.getToasts());
+                        .show(AlinLib.MINECRAFT.getToasts());
             }
-            while (volumeMusicUpKey.consumeClick()) {
+            while (isKeyPress(volumeMusicUpKey, keyCode, scanCode)) {
                 int current = config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue() + config.getNumber("SELECT_MUSIC_VOLUME", 1).intValue();
                 if (current >= 100) current = 100;
                 config.setNumber("CURRENT_MUSIC_VOLUME", current);
                 player.getAudioPlayer().setVolume(current);
                 config.save();
             }
-            while (volumeMusicDownKey.consumeClick()) {
+            while (isKeyPress(volumeMusicDownKey, keyCode, scanCode)) {
                 int current = config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue() - config.getNumber("SELECT_MUSIC_VOLUME", 1).intValue();
                 if (current <= 0) current = 0;
                 config.setNumber("CURRENT_MUSIC_VOLUME", current);
                 player.getAudioPlayer().setVolume(current);
                 config.save();
             }
-            while (loadTrack.consumeClick()) {
-                client.setScreen(new LoadMusicScreen(client.screen));
+            while (isKeyPress(loadTrack, keyCode, scanCode)) {
+                AlinLib.MINECRAFT.setScreen(new LoadMusicScreen(AlinLib.MINECRAFT.screen));
             }
         });
     }
+
+    public static boolean isKeyPress(KeyMapping mapping, int keyCode, int scanCode) {
+//        mapping.click(new InputConstants.Key())
+        return mapping.consumeClick();
+    }
+
     // Logger
-    public static void log(String message){log(message, Level.INFO);}
-    public static void log(String message, Level level){
+    public static void log(String message) {
+        log(message, Level.INFO);
+    }
+
+    public static void log(String message, Level level) {
         LOG.log(level, "[" + LOG.getName() + "] " + message);
     }
 }
