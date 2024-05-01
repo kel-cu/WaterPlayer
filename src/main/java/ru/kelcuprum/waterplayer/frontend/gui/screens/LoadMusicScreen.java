@@ -150,13 +150,16 @@ public class LoadMusicScreen extends Screen {
     }
 
     int lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.size();
-
+    long lastCheck = System.currentTimeMillis();
     @Override
     public void tick() {
         if (scroller != null) scroller.onScroll.accept(scroller);
         if (lastCountQueue != WaterPlayer.player.getTrackScheduler().queue.size()) {
-            this.lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.size();
-            rebuildWidgets();
+            if(System.currentTimeMillis()-lastCheck >= 1500) {
+                lastCheck = System.currentTimeMillis();
+                this.lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.size();
+                rebuildWidgets();
+            }
         }
         super.tick();
     }
