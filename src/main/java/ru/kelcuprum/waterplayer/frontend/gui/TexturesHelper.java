@@ -11,7 +11,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 
@@ -22,8 +21,6 @@ public class TexturesHelper {
         if(resourceLocationMap.containsKey(id)) return resourceLocationMap.get(id);
         NativeImage image;
         try {
-//            URL imageURL = new URL(url);
-//            InputStream imageStream = imageURL.openStream();
             BufferedImage bufferedImage = ImageIO.read(new URL(url));
             if(bufferedImage.getWidth() > bufferedImage.getHeight()){
                 int x = (bufferedImage.getWidth()-bufferedImage.getHeight())/2;
