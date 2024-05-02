@@ -35,6 +35,7 @@
 
   "waterplayer.load": "Загрузить музыку",
   "waterplayer.load.load": "Загрузить",
+  "waterplayer.load.volume": "Громкость",
   "waterplayer.load.url": "Ссылка на музыку",
   "waterplayer.load.url.copy": "Посл. запрос",
   "waterplayer.load.queue": "Очередь",

@@ -37,6 +37,7 @@
 
   "waterplayer.load": "Load music",
   "waterplayer.load.load": "Load",
+  "waterplayer.load.volume": "Volume",
   "waterplayer.load.url": "Track URL",
   "waterplayer.load.url.copy": "Last Track URL",
   "waterplayer.load.queue": "Queue",

@@ -1,18 +1,19 @@
 package ru.kelcuprum.waterplayer.frontend.gui.screens;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.NotNull;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.alinlib.gui.components.ConfigureScrolWidget;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonSpriteBuilder;
+import ru.kelcuprum.alinlib.gui.components.builder.slider.SliderIntegerBuilder;
 import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
 import ru.kelcuprum.alinlib.gui.components.editbox.base.EditBoxString;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
@@ -54,7 +55,13 @@ public class LoadMusicScreen extends Screen {
                 .setPosition(x, 60)
                 .setDesignType(designType).build());
         addRenderableWidget(new Button(x, 85, size, 20, designType, Localization.getText("waterplayer.load.load"), (OnPress) -> WaterPlayer.player.loadMusic(request.getValue(), true)));
-
+        addRenderableWidget(new SliderIntegerBuilder(Component.translatable("waterplayer.load.volume"), (onPress) -> {
+            WaterPlayer.config.setNumber("CURRENT_MUSIC_VOLUME", onPress);
+            WaterPlayer.player.getAudioPlayer().setVolume(onPress);
+        }).setMax(100).setMin(0).setDefaultValue(WaterPlayer.config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue())
+                .setPosition(x, 110)
+                .setSize(size, 20)
+                .build());
         //
         addRenderableWidget(new ButtonSpriteBuilder(new ResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"), (s) -> {
             WaterPlayer.player.getAudioPlayer().setPaused(!WaterPlayer.player.getAudioPlayer().isPaused());
@@ -85,16 +92,11 @@ public class LoadMusicScreen extends Screen {
                 .setPosition(x+50, height - 30)
                 .setDesignType(designType).build());
 
-        addRenderableWidget(new ButtonSpriteBuilder(new ResourceLocation("waterplayer", "textures/player/reset_queue.png"), (s) -> {
-            WaterPlayer.player.getTrackScheduler().queue.clear();
-        })
+        addRenderableWidget(new ButtonSpriteBuilder(new ResourceLocation("waterplayer", "textures/player/reset_queue.png"), (s) -> WaterPlayer.player.getTrackScheduler().queue.clear())
                 .setSize(20, 20)
                 .setTextureSize(20, 20)
                 .setPosition(x + 75, height - 30)
                 .setDesignType(designType).build());
-        //
-//        addRenderableWidget(new Button(x, height - 55, size, 20, designType, Localization.getText("waterplayer.key.shuffle"), (OnPress) -> {
-//        }));
         addRenderableWidget(new Button(x+100, height - 30, size-100, 20, designType, CommonComponents.GUI_CANCEL, (OnPress) -> onClose()));
     }
 
@@ -118,21 +120,24 @@ public class LoadMusicScreen extends Screen {
         widgets.add(new TextBox(x, -20, width - 200, 20, Component.translatable("waterplayer.command.now_playing"), true));
         widgets.add(new CurrentTrackButton(x, -40, width - 200, this));
         widgets.add(new TextBox(x, -20, width - 200, 20, Component.translatable(queue.isEmpty() ? "waterplayer.command.queue.blank" : "waterplayer.command.queue"), true));
-        int pos = 1;
-        if (!queue.isEmpty()) {
-            for (AudioTrack track : WaterPlayer.player.getTrackScheduler().queue) {
-                if(WaterPlayer.config.getBoolean("SCREEN.QUEUE_COVER_SHOW", false)){
-                    widgets.add(new TrackButton(x, -40, width - 200, track, this));
-                } else {
-                    StringBuilder builder = new StringBuilder();
-                    if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
-                    builder.append(Music.getTitle(track)).append(" ").append(StarScript.getTimestamp(Music.getDuration(track)));
-                    widgets.add(new TextBox(x, -10, width - 200, 10, Component.literal(builder.toString()), false, (s) -> {
-                        if (track.getInfo().uri != null) TrackButton.confirmLinkNow(this, track.getInfo().uri);
-                    }));
+        try {
+            if (!queue.isEmpty()) {
+                for (AudioTrack track : WaterPlayer.player.getTrackScheduler().queue) {
+                    if (WaterPlayer.config.getBoolean("SCREEN.QUEUE_COVER_SHOW", false)) {
+                        widgets.add(new TrackButton(x, -40, width - 200, track, this));
+                    } else {
+                        StringBuilder builder = new StringBuilder();
+                        if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
+                        builder.append(Music.getTitle(track)).append(" ").append(StarScript.getTimestamp(Music.getDuration(track)));
+                        widgets.add(new TextBox(x, -10, width - 200, 10, Component.literal(builder.toString()), false, (s) -> {
+                            if (track.getInfo().uri != null) TrackButton.confirmLinkNow(this, track.getInfo().uri);
+                        }));
+                    }
                 }
-                pos++;
             }
+        } catch (Exception ex){
+            lastCountQueue = 0;
+            WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
         }
         addRenderableWidgets(widgets);
     }
