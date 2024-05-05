@@ -31,6 +31,8 @@ public class StarScript {
         ss.set("player", new ValueMap()
                 .set("volume", () -> Value.number(Music.getVolume()))
                 .set("speaker_icon", () -> Value.string(Music.getSpeakerVolume()))
+                .set("repeat_icon", () -> Value.string(Music.getRepeatState()))
+                .set("pause_icon", () -> Value.string(Music.getPauseState()))
         );
         ss.set("format", new ValueMap()
                 .set("time", () -> Value.string(Music.getIsLive() ? WaterPlayer.localization.getLocalization("format.live", true)

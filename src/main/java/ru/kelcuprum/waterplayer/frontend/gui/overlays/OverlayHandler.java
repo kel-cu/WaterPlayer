@@ -47,10 +47,10 @@ public class OverlayHandler implements HudRenderCallback, ClientTickEvents.Start
                 //-=-=-=-
                 Component author = Component.literal(Music.getAuthor());
                 Component title = Component.literal(Music.getTitle());
-                Component state = Component.literal(WaterPlayer.localization.getParsedText("{player.speaker_icon} {player.volume}% {format.time}"));
+                Component state = Component.literal(WaterPlayer.localization.getParsedText("{player.speaker_icon} {player.volume}% {format.time}{player.repeat_icon}"));
                 int pos = WaterPlayer.config.getNumber("OVERLAY.POSITION", 0).intValue();
                 int pos1 = WaterPlayer.config.getNumber("OVERLAY.POSITION", 0).intValue();
-                int maxWidth = Math.max(WaterPlayer.MINECRAFT.font.width(state), (bottom ? (pos == 0 || pos == 1) : (pos1 == 0 || pos1 == 1)) ? AlinLib.MINECRAFT.getWindow().getGuiScaledWidth() / 2 : (AlinLib.MINECRAFT.getWindow().getGuiScaledWidth() - 280) / 2);
+                int maxWidth = Math.max(WaterPlayer.MINECRAFT.font.width(state), (bottom ? (pos == 0 || pos == 1) : (pos1 == 0 || pos1 == 1)) ? AlinLib.MINECRAFT.getWindow().getGuiScaledWidth() / 2 : ((AlinLib.MINECRAFT.getWindow().getGuiScaledWidth() - 280) / 2)-(WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().artworkUrl != null ? ( WaterPlayer.MINECRAFT.font.lineHeight + 3)*3 : 0));
                 //-=-=-=-
                 if (!Music.isAuthorNull()) texts.addAll(WaterPlayer.MINECRAFT.font.split(author, maxWidth));
                 texts.addAll(WaterPlayer.MINECRAFT.font.split(title, maxWidth));

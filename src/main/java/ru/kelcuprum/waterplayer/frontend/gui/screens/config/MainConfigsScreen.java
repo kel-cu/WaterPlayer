@@ -51,7 +51,7 @@ public class MainConfigsScreen {
                 .addWidget(new SelectorBuilder(menuOverlayPositionText).setList(type).setConfig(WaterPlayer.config, "MENU_OVERLAY.POSITION").setValue(0).build())
                 .addWidget(new ButtonBooleanBuilder(overlayCaverText, true).setConfig(WaterPlayer.config, "OVERLAY.ENABLE_CAVER").build())
                 .addWidget(new ButtonBooleanBuilder(enableNoticeText, true).setConfig(WaterPlayer.config, "ENABLE_NOTICE").build())
-                .addWidget(new ButtonBooleanBuilder(screenQueueCoverShow, false).setConfig(WaterPlayer.config, "SCREEN.QUEUE_COVER_SHOW").build())
+                .addWidget(new ButtonBooleanBuilder(screenQueueCoverShow, true).setConfig(WaterPlayer.config, "SCREEN.QUEUE_COVER_SHOW").build())
                 .addWidget(new CategoryBox(Component.translatable("waterplayer.config.services"))
                         .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.services.youtube"), true).setConfig(WaterPlayer.config, "ENABLE_YOUTUBE").build())
                         .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.services.soundcloud"), true).setConfig(WaterPlayer.config, "ENABLE_SOUNDCLOUD").build())

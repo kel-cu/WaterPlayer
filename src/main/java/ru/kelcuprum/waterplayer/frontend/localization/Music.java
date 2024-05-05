@@ -40,6 +40,12 @@ public class Music {
     public static String getSpeakerVolume(){
         return (getVolume() <= 0) ? "🔇" : (getVolume() <= 1) ? "🔈" : (getVolume() <= 70) ? "🔉" :  "🔊";
     }
+    public static String getRepeatState(){
+        return WaterPlayer.player.getTrackScheduler().isRepeating() ? " 🔂" : "";
+    }
+    public static String getPauseState(){
+        return WaterPlayer.player.getAudioPlayer().isPaused() ? "⏸" : "▶";
+    }
     //
     public static long getPosition(AudioTrack track){
         return trackIsNull() ? 0 : track.getPosition();

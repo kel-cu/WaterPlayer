@@ -107,7 +107,7 @@ remapJar {
 components.java.withVariantsFromConfiguration(configurations.shadowRuntimeElements) { skip() }
 
 jar {
-    from("LICENSE") {
+    from("LICENSE.md") {
         rename { "${it}_${project.archivesBaseName}"}
     }
 }

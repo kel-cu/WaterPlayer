@@ -123,7 +123,7 @@ public class LoadMusicScreen extends Screen {
         try {
             if (!queue.isEmpty()) {
                 for (AudioTrack track : WaterPlayer.player.getTrackScheduler().queue) {
-                    if (WaterPlayer.config.getBoolean("SCREEN.QUEUE_COVER_SHOW", false)) {
+                    if (WaterPlayer.config.getBoolean("SCREEN.QUEUE_COVER_SHOW", true)) {
                         widgets.add(new TrackButton(x, -40, width - 200, track, this));
                     } else {
                         StringBuilder builder = new StringBuilder();
