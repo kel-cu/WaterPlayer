@@ -11,6 +11,8 @@
   "waterplayer.playlist.create": "Create playlist",
   "waterplayer.playlist.create.filename": "File name:",
   "waterplayer.playlist.reload": "Reload",
+  "waterplayer.playlist.play": "Play playlist",
+  "waterplayer.playlist.remove": "Remove playlist",
   "waterplayer.playlist.add": "Add url",
   "waterplayer.playlist.author": "Author",
   "waterplayer.playlist.title": "Title",

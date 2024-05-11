@@ -11,6 +11,8 @@
   "waterplayer.playlist.create": "Создать плейлист",
   "waterplayer.playlist.create.filename": "Название файла:",
   "waterplayer.playlist.reload": "Перезагрузить",
+  "waterplayer.playlist.play": "Загрузить плейлист",
+  "waterplayer.playlist.remove": "Удалить плейлист",
   "waterplayer.playlist.add": "Добавить ссылку",
   "waterplayer.playlist.author": "Автор",
   "waterplayer.playlist.title": "Название",
