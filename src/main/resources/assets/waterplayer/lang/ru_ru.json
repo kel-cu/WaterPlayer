@@ -66,6 +66,8 @@
   "waterplayer.config.overlay.position.bottom_right": "Снизу справа",
 
   "waterplayer.config.enable_notice": "Включить уведомления",
+  "waterplayer.config.enable_notice.start_track": "Включить уведомления о начале нового трека",
+  "waterplayer.config.enable_notice.start_track.clear": "Очистить уведомления после старта нового трека",
   "waterplayer.config.enable_change_title": "Включить изменения заголовка",
   "waterplayer.config.enable_change_title.tooltip": "* в главном меню",
   "waterplayer.config.enable_discord_rpc": "Включить интеграцию Discord",

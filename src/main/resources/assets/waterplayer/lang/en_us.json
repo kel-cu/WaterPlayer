@@ -68,6 +68,8 @@
   "waterplayer.config.overlay.position.bottom_right": "Bottom right",
   "waterplayer.config.overlay_types": "Type overlay",
   "waterplayer.config.enable_notice": "Enable notice",
+  "waterplayer.config.enable_notice.start_track": "Enable notifications when a new track is started",
+  "waterplayer.config.enable_notice.start_track.clear": "Clear notices after start new track",
   "waterplayer.config.enable_change_title": "Enable change title",
   "waterplayer.config.enable_change_title.tooltip": "* in Main Menu",
   "waterplayer.config.enable_discord_rpc": "Enable Discord Integration",

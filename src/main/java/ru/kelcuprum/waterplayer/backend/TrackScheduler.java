@@ -77,16 +77,12 @@ public class TrackScheduler extends AudioEventAdapter {
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
         WaterPlayer.log("Start track: " + track.getInfo().title);
-        if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) {
-            try {
-                if(WaterPlayer.MINECRAFT.getToasts().visible.size() == 5) WaterPlayer.MINECRAFT.getToasts().clear();
-            } catch (Exception e){
-                WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);
-            }
-//            WaterPlayer.MINECRAFT.getToasts().addToast(new MusicToast(track));
+        if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true) && WaterPlayer.config.getBoolean("ENABLE_NOTICE.START_TRACK", true)) {
+            if (WaterPlayer.config.getBoolean("ENABLE_NOTICE.START_TRACK.CLEAR", false))
+                WaterPlayer.MINECRAFT.getToasts().clear();
             ToastBuilder toast = WaterPlayer.getToast().setTitle(Music.isAuthorNull(track) ? Component.translatable("waterplayer.name") : Component.literal(Music.getAuthor(track)))
                     .setMessage(Component.literal(Music.getTitle(track)));
-            if(Music.getAuthor(track).equals("YonKaGor")) toast.setIcon(getYonKaGorMoment(track));
+            if (Music.getAuthor(track).equals("YonKaGor")) toast.setIcon(getYonKaGorMoment(track));
             else toast.setIcon(new ResourceLocation("waterplayer", "textures/music.png"));
             toast.show(WaterPlayer.MINECRAFT.getToasts());
         }
@@ -108,7 +104,8 @@ public class TrackScheduler extends AudioEventAdapter {
         if (!Music.getAuthor(track).equals("YonKaGor")) return Items.MUSIC_DISC_STRAD;
         return switch (Music.getTitle(track)) {
             case "I Forgot That You Exist", "I Forgot That You Exist. ¯\\_(ツ)_/¯" -> Items.MUSIC_DISC_WAIT;
-            case "Top 10 Things to Do Before You Die", "Top 10 Things To Do Before You Die", "[TW] Top 10 Things To Do Before You Die (Censored)" -> Items.LIGHT;
+            case "Top 10 Things to Do Before You Die", "Top 10 Things To Do Before You Die",
+                 "[TW] Top 10 Things To Do Before You Die (Censored)" -> Items.LIGHT;
             case "Trash Talkin'", "kennyoung & YonKaGor - Trash Talkin'" -> Items.MUSIC_DISC_OTHERSIDE;
             case "Fallacy" -> Items.MUSIC_DISC_PIGSTEP;
             case "You're Just Like Pop Music" -> Items.MUSIC_DISC_MELLOHI;
