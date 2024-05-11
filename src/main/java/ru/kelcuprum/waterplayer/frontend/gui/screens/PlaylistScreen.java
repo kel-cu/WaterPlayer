@@ -26,6 +26,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Icons.REMOVE;
 import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Icons.RESET;
 
 public class PlaylistScreen extends Screen {
@@ -39,13 +40,14 @@ public class PlaylistScreen extends Screen {
         this.playlistName = playlistName;
     }
     private final InterfaceUtils.DesignType designType = InterfaceUtils.DesignType.FLAT;
-
+    Path playlistFile;
+    boolean isDeleted = false;
     @Override
     protected void init() {
         assert this.minecraft != null;
-        final Path configFile = this.minecraft.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/"+ playlistName +".json");
+        playlistFile = this.minecraft.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/"+ playlistName +".json");
         try {
-            jsonPlaylist = GsonHelper.parse(Files.readString(configFile));
+            jsonPlaylist = GsonHelper.parse(Files.readString(playlistFile));
         } catch (Exception ex){
             WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
         }
@@ -67,8 +69,13 @@ public class PlaylistScreen extends Screen {
             playlist.author = s;
             save();
         }));
-        addRenderableWidget(new Button(x, height-30, size-25, 20, designType, CommonComponents.GUI_BACK, (s) -> onClose()));
         addRenderableWidget(new TextBox(x, 90, size, 20, Component.literal(String.format("For play: playlist:%s", playlistName)), true));
+        addRenderableWidget(new Button(x, height-30, size-50, 20, designType, CommonComponents.GUI_BACK, (s) -> onClose()));
+        addRenderableWidget(new ButtonSprite(x+size-45, height-30, 20, 20, designType, REMOVE, Localization.getText("waterplayer.playlist.remove"), (OnPress) -> {
+            isDeleted = true;
+            playlistFile.toFile().delete();
+            onClose();
+        }));
         addRenderableWidget(new ButtonSprite(x+size-20, height-30, 20, 20, designType, RESET, Localization.getText("waterplayer.playlist.reload"), (OnPress) -> {
            save();
            rebuildWidgets();
@@ -142,7 +149,7 @@ public class PlaylistScreen extends Screen {
         return scr;
     }
     public void onClose() {
-        save();
+        if(!isDeleted) save();
         assert this.minecraft != null;
         this.minecraft.setScreen(parent);
     }
