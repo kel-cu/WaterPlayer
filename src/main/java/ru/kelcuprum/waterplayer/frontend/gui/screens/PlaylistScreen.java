@@ -7,6 +7,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.NotNull;
@@ -70,8 +71,13 @@ public class PlaylistScreen extends Screen {
             save();
         }));
         addRenderableWidget(new TextBox(x, 90, size, 20, Component.literal(String.format("For play: playlist:%s", playlistName)), true));
-        addRenderableWidget(new Button(x, height-30, size-50, 20, designType, CommonComponents.GUI_BACK, (s) -> onClose()));
-        addRenderableWidget(new ButtonSprite(x+size-45, height-30, 20, 20, designType, REMOVE, Localization.getText("waterplayer.playlist.remove"), (OnPress) -> {
+        addRenderableWidget(new Button(x, height-30, size-75, 20, designType, CommonComponents.GUI_BACK, (s) -> onClose()));
+        addRenderableWidget(new ButtonSprite(x+size-70, height-30, 20, 20, designType, new ResourceLocation("waterplayer", "textures/player/play.png"), Localization.getText("waterplayer.playlist.play"), (OnPress) -> {
+            save();
+            WaterPlayer.player.loadMusic(String.format("playlist:%s", playlistName), true);
+            onClose();
+        }));
+        addRenderableWidget(new ButtonSprite(x+size-45, height-30, 20, 20, designType, new ResourceLocation("waterplayer", "textures/player/reset_queue.png"), Localization.getText("waterplayer.playlist.remove"), (OnPress) -> {
             isDeleted = true;
             playlistFile.toFile().delete();
             onClose();
