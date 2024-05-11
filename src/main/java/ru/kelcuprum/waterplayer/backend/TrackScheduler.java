@@ -79,7 +79,7 @@ public class TrackScheduler extends AudioEventAdapter {
         WaterPlayer.log("Start track: " + track.getInfo().title);
         if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) {
             try {
-                WaterPlayer.MINECRAFT.getToasts().clear();
+                if(WaterPlayer.MINECRAFT.getToasts().visible.size() == 5) WaterPlayer.MINECRAFT.getToasts().clear();
             } catch (Exception e){
                 WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);
             }
