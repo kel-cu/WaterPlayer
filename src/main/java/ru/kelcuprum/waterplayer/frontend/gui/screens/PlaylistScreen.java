@@ -70,7 +70,7 @@ public class PlaylistScreen extends Screen {
             playlist.author = s;
             save();
         }));
-        addRenderableWidget(new TextBox(x, 90, size, 20, Component.literal(String.format("For play: playlist:%s", playlistName)), true));
+        addRenderableWidget(new TextBox(x, 90, size, 20, Localization.toText(String.format(WaterPlayer.localization.getLocalization("playlist.description"), playlistName)), true));
         addRenderableWidget(new Button(x, height-30, size-75, 20, designType, CommonComponents.GUI_BACK, (s) -> onClose()));
         addRenderableWidget(new ButtonSprite(x+size-70, height-30, 20, 20, designType, new ResourceLocation("waterplayer", "textures/player/play.png"), Localization.getText("waterplayer.playlist.play"), (OnPress) -> {
             save();
