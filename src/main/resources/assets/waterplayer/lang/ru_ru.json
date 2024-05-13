@@ -36,6 +36,7 @@
   "waterplayer.message.skip": "Трек пропущен",
 
   "waterplayer.load": "Загрузить музыку",
+  "waterplayer.load.current_track": "Текущий трек:",
   "waterplayer.load.load": "Загрузить",
   "waterplayer.load.volume": "Громкость",
   "waterplayer.load.url": "Ссылка на музыку",
@@ -87,7 +88,7 @@
   "waterplayer.config.localization.format.live": "Эфир",
 
   "waterplayer.secret": "TOP SECRET!",
-  "waterplayer.secret.description": "After changing the data, you will need to reboot! &oSorry...&r",
+  "waterplayer.secret.description": "После изменения данных вам нужно будет перезагрузиться! Извините...",
   "waterplayer.secret.title.tokens": "Токены",
   "waterplayer.config.yandex_music_token": "Токен Яндекс.Музыки",
   "waterplayer.config.deezer_decryption_key": "Deezer Decryption Key",

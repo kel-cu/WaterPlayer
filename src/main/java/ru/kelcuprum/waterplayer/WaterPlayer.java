@@ -105,35 +105,30 @@ public class WaterPlayer implements ClientModInitializer {
                 GLFW.GLFW_KEY_DOWN, // The keycode of the key
                 "waterplayer.name"
         ));
-//        ScreenEvents.KEY_PRESS.register((screen, keyCode, scanCode, modifiers, cir) -> {
-//            if (screen instanceof TitleScreen) {
-//                KeyMapping.click(InputConstants.getKey(keyCode, scanCode));
-//            }
-//        });
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             int keyCode = 0, scanCode = 0;
             while (isKeyPress(playOrPause, keyCode, scanCode)) {
                 player.getAudioPlayer().setPaused(!player.getAudioPlayer().isPaused());
-                getToast().setMessage(Localization.getText(player.getAudioPlayer().isPaused() ? "waterplayer.message.pause" : "waterplayer.message.play"))
+                if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) getToast().setMessage(Localization.getText(player.getAudioPlayer().isPaused() ? "waterplayer.message.pause" : "waterplayer.message.play"))
                         .show(AlinLib.MINECRAFT.getToasts());
             }
             while (isKeyPress(repeatingKey, keyCode, scanCode)) {
                 player.getTrackScheduler().setRepeating(!player.getTrackScheduler().isRepeating());
-                getToast().setMessage(Localization.getText(player.getTrackScheduler().isRepeating() ? "waterplayer.message.repeat" : "waterplayer.message.repeat.no"))
+                if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) getToast().setMessage(Localization.getText(player.getTrackScheduler().isRepeating() ? "waterplayer.message.repeat" : "waterplayer.message.repeat.no"))
                         .show(AlinLib.MINECRAFT.getToasts());
             }
             while (isKeyPress(resetQueueKey, keyCode, scanCode)) {
                 player.getTrackScheduler().skiping = false;
                 if (!player.getTrackScheduler().queue.isEmpty()) {
                     player.getTrackScheduler().queue.clear();
-                    getToast().setMessage(Localization.getText("waterplayer.message.reset"))
+                    if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) getToast().setMessage(Localization.getText("waterplayer.message.reset"))
                             .show(AlinLib.MINECRAFT.getToasts());
                 }
             }
             while (isKeyPress(shuffleKey, keyCode, scanCode)) {
                 if (player.getTrackScheduler().queue.size() >= 2) {
                     player.getTrackScheduler().shuffle();
-                    getToast().setMessage(Localization.getText("waterplayer.message.shuffle"))
+                    if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) getToast().setMessage(Localization.getText("waterplayer.message.shuffle"))
                             .show(AlinLib.MINECRAFT.getToasts());
                 }
             }
@@ -141,7 +136,7 @@ public class WaterPlayer implements ClientModInitializer {
                 if (player.getTrackScheduler().queue.isEmpty() && player.getAudioPlayer().getPlayingTrack() == null)
                     return;
                 player.getTrackScheduler().nextTrack();
-                getToast().setMessage(Localization.getText("waterplayer.message.skip"))
+                if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) getToast().setMessage(Localization.getText("waterplayer.message.skip"))
                         .show(AlinLib.MINECRAFT.getToasts());
             }
             while (isKeyPress(volumeMusicUpKey, keyCode, scanCode)) {
@@ -165,7 +160,6 @@ public class WaterPlayer implements ClientModInitializer {
     }
 
     public static boolean isKeyPress(KeyMapping mapping, int keyCode, int scanCode) {
-//        mapping.click(new InputConstants.Key())
         return mapping.consumeClick();
     }
 
