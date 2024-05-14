@@ -69,7 +69,7 @@
   "waterplayer.config.overlay.position.bottom_left": "Bottom left",
   "waterplayer.config.overlay.position.bottom_right": "Bottom right",
   "waterplayer.config.overlay_types": "Overlay type",
-  "waterplayer.config.enable_notice": "Track changing notice",
+  "waterplayer.config.enable_notice": "Track control notices",
   "waterplayer.config.enable_notice.start_track": "Track title notice",
   "waterplayer.config.enable_notice.start_track.clear": "Clear notices after starting a new track",
   "waterplayer.config.enable_change_title": "Enable change title",

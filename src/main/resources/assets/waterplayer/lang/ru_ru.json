@@ -67,7 +67,7 @@
   "waterplayer.config.overlay.position.bottom_left": "Снизу слева",
   "waterplayer.config.overlay.position.bottom_right": "Снизу справа",
 
-  "waterplayer.config.enable_notice": "Уведомления смены трека",
+  "waterplayer.config.enable_notice": "Уведомления контроля трека",
   "waterplayer.config.enable_notice.start_track": "Уведомления названия трека",
   "waterplayer.config.enable_notice.start_track.clear": "Очистить уведомления после старта нового трека",
   "waterplayer.config.enable_change_title": "Включить изменения заголовка",
