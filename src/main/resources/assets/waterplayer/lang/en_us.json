@@ -1,10 +1,10 @@
 {
   "waterplayer.name": "WaterPlayer",
 
-  "waterplayer.command.playlist.noName": "You didn't specify a playlist file name.",
-  "waterplayer.command.now_playing.notPlaying": "Nothing's playing.",
+  "waterplayer.command.playlist.noName": "You didn't specify a playlist name.",
+  "waterplayer.command.now_playing.notPlaying": "Nothing's playing",
   "waterplayer.command.now_playing": "Current Track:",
-  "waterplayer.command.queue.blank": "The queue is empty!",
+  "waterplayer.command.queue.blank": "Queue is empty!",
   "waterplayer.command.queue": "Current queue:",
 
   "waterplayer.playlist": "Playlist",
@@ -14,7 +14,7 @@
   "waterplayer.playlist.play": "Play playlist",
   "waterplayer.playlist.description": "Play: playlist:%s",
   "waterplayer.playlist.remove": "Remove playlist",
-  "waterplayer.playlist.add": "Add url",
+  "waterplayer.playlist.add": "Add URL",
   "waterplayer.playlist.author": "Author",
   "waterplayer.playlist.title": "Title",
   "waterplayer.playlist.urls": "URLs",
@@ -30,13 +30,13 @@
   "waterplayer.key.shuffle": "Shuffle queue",
   "waterplayer.key.repeating": "Repeat",
 
-  "waterplayer.message.pause": "Track has been paused.",
-  "waterplayer.message.play": "Track has been resumed.",
+  "waterplayer.message.pause": "Track paused",
+  "waterplayer.message.play": "Track resumed",
   "waterplayer.message.repeat": "Repeat ON",
   "waterplayer.message.repeat.no": "Repeat OFF",
-  "waterplayer.message.reset": "The queue was reset.",
-  "waterplayer.message.shuffle": "The queue was shuffled.",
-  "waterplayer.message.skip": "The track was skipped.",
+  "waterplayer.message.reset": "Queue has been reset",
+  "waterplayer.message.shuffle": "Queue shuffled",
+  "waterplayer.message.skip": "Track skipped",
 
   "waterplayer.load": "Load music",
   "waterplayer.load.current_track": "Current track:",
@@ -46,9 +46,9 @@
   "waterplayer.load.url.copy": "Last Track URL",
   "waterplayer.load.queue": "Queue",
 
-  "waterplayer.load.add": "Your request has been sent.",
-  "waterplayer.load.add.playlist": "The «%playlist_name%» playlist has been added.",
-  "waterplayer.load.add.files": "The files have been added.",
+  "waterplayer.load.add": "Your request has been sent",
+  "waterplayer.load.add.playlist": "The «%playlist_name%» playlist has been added to the queue",
+  "waterplayer.load.add.files": "The files have been added",
   "waterplayer.load.add.blank": "Empty request!",
 
   "waterplayer.format.time": "{track.time.position} / {track.time.duration}",
@@ -62,7 +62,7 @@
   "waterplayer.config.overlay.position": "In-game overlay position",
   "waterplayer.config.enable_menu_overlay": "Main menu overlay",
   "waterplayer.config.menu_overlay.position": "Main menu overlay position",
-  "waterplayer.config.overlay.enable_caver": "Thumbnails in the overlay",
+  "waterplayer.config.overlay.enable_caver": "Track thumbnails in the overlay",
   "waterplayer.config.screem.queue_cover_show": "Show track thumbnails in the queue",
   "waterplayer.config.overlay.position.top_left": "Top left",
   "waterplayer.config.overlay.position.top_right": "Top right",
@@ -106,5 +106,5 @@
   "waterplayer.config.apple_music_media_api_token": "Media API Token",
   "waterplayer.config.apple_music_country_code": "Country Code",
 
-  "modmenu.descriptionTranslation.waterplayer": "Internet music player built into the client"
+  "modmenu.descriptionTranslation.waterplayer": "Internet music player built into the client."
 }

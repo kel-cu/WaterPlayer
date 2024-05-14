@@ -1,8 +1,8 @@
 {
   "waterplayer.name": "WaterPlayer",
 
-  "waterplayer.command.playlist.noName": "Вы не указали имя файла плейлиста.",
-  "waterplayer.command.now_playing.notPlaying": "Ничего не играет.",
+  "waterplayer.command.playlist.noName": "Вы не указали название плейлиста",
+  "waterplayer.command.now_playing.notPlaying": "Ничего не играет",
   "waterplayer.command.now_playing": "Текущий трек:",
   "waterplayer.command.queue.blank": "Очередь пуста!",
   "waterplayer.command.queue": "Текущая очередь:",
@@ -28,13 +28,13 @@
   "waterplayer.key.shuffle": "Перемешать очередь",
   "waterplayer.key.repeating": "Повтор",
 
-  "waterplayer.message.pause": "Трек поставлен на паузу.",
-  "waterplayer.message.play": "Трек снят с паузы.",
+  "waterplayer.message.pause": "Трек приостановлен",
+  "waterplayer.message.play": "Трек возобновлен",
   "waterplayer.message.repeat": "Повтор ВКЛ",
   "waterplayer.message.repeat.no": "Повтор ВЫКЛ",
-  "waterplayer.message.reset": "Очередь сброшена.",
-  "waterplayer.message.shuffle": "Очередь была перемешана.",
-  "waterplayer.message.skip": "Трек пропущен.",
+  "waterplayer.message.reset": "Очередь сброшена",
+  "waterplayer.message.shuffle": "Очередь перемешана",
+  "waterplayer.message.skip": "Трек пропущен",
 
   "waterplayer.load": "Загрузить музыку",
   "waterplayer.load.current_track": "Текущий трек:",
@@ -44,9 +44,9 @@
   "waterplayer.load.url.copy": "Посл. запрос",
   "waterplayer.load.queue": "Очередь",
 
-  "waterplayer.load.add": "Ваш запрос отправлен.",
-  "waterplayer.load.add.playlist": "Плейлист «%playlist_name%» был добавлен.",
-  "waterplayer.load.add.files": "Файлы были добавлены.",
+  "waterplayer.load.add": "Ваш запрос отправлен",
+  "waterplayer.load.add.playlist": "Плейлист «%playlist_name%» был добавлен в очередь",
+  "waterplayer.load.add.files": "Файлы были добавлены в очередь",
   "waterplayer.load.add.blank": "Пустой запрос!",
 
   "waterplayer.format.time": "{track.time.position} / {track.time.duration}",
@@ -60,15 +60,15 @@
   "waterplayer.config.overlay.position": "Позиция внутриигрового оверлея",
   "waterplayer.config.enable_menu_overlay": "Оверлей в главном меню",
   "waterplayer.config.menu_overlay.position": "Позиция оверлея в главном меню",
-  "waterplayer.config.overlay.enable_caver": "Миниатюры в оверлее",
+  "waterplayer.config.overlay.enable_caver": "Миниатюры треков в оверлее",
   "waterplayer.config.screem.queue_cover_show": "Миниатюры треков в очереди",
   "waterplayer.config.overlay.position.top_left": "Сверху слева",
   "waterplayer.config.overlay.position.top_right": "Сверху справа",
   "waterplayer.config.overlay.position.bottom_left": "Снизу слева",
   "waterplayer.config.overlay.position.bottom_right": "Снизу справа",
 
-  "waterplayer.config.enable_notice": "Уведомление смены трека",
-  "waterplayer.config.enable_notice.start_track": "Уведомление о названии трека",
+  "waterplayer.config.enable_notice": "Уведомления смены трека",
+  "waterplayer.config.enable_notice.start_track": "Уведомления названия трека",
   "waterplayer.config.enable_notice.start_track.clear": "Очистить уведомления после старта нового трека",
   "waterplayer.config.enable_change_title": "Включить изменения заголовка",
   "waterplayer.config.enable_change_title.tooltip": "* в главном меню",
@@ -89,7 +89,7 @@
   "waterplayer.config.localization.format.live": "Эфир",
 
   "waterplayer.secret": "TOP SECRET!",
-  "waterplayer.secret.description": "После смены данных нужно будет перезапустить игру! Извините...",
+  "waterplayer.secret.description": "После смены данных необходимо перезапустить игру! Извините...",
   "waterplayer.secret.title.tokens": "Токены",
   "waterplayer.config.yandex_music_token": "Токен Яндекс.Музыки",
   "waterplayer.config.deezer_decryption_key": "Deezer Decryption Key",
@@ -104,5 +104,5 @@
   "waterplayer.config.apple_music_media_api_token": "Media API Token",
   "waterplayer.config.apple_music_country_code": "Код страны",
 
-  "modmenu.descriptionTranslation.waterplayer": "Встроенный в клиент музыкальный интернет-плеер"
+  "modmenu.descriptionTranslation.waterplayer": "Встроенный в клиент музыкальный интернет-плеер."
 }
