@@ -12,7 +12,7 @@
   "waterplayer.playlist.create.filename": "Название плейлиста:",
   "waterplayer.playlist.reload": "Перезагрузить",
   "waterplayer.playlist.play": "Загрузить плейлист",
-  "waterplayer.playlist.description": "Для запуска: playlist:%s",
+  "waterplayer.playlist.description": "Запуск: playlist:%s",
   "waterplayer.playlist.remove": "Удалить плейлист",
   "waterplayer.playlist.add": "Добавить ссылку",
   "waterplayer.playlist.author": "Автор",
@@ -36,7 +36,7 @@
   "waterplayer.message.shuffle": "Очередь перемешана",
   "waterplayer.message.skip": "Трек пропущен",
 
-  "waterplayer.load": "Загрузить музыку",
+  "waterplayer.load": "Загрузить треки",
   "waterplayer.load.current_track": "Текущий трек:",
   "waterplayer.load.load": "Загрузить",
   "waterplayer.load.volume": "Громкость",
@@ -54,7 +54,7 @@
 
   "waterplayer.config": "Конфигурация",
   "waterplayer.playlists": "Плейлисты",
-  "waterplayer.play": "Добавить трек",
+  "waterplayer.play": "Добавить треки",
   "waterplayer.config.enable_bossbar": "Включить Босс бар",
   "waterplayer.config.enable_overlay": "Внутриигровой оверлей",
   "waterplayer.config.overlay.position": "Позиция внутриигрового оверлея",
