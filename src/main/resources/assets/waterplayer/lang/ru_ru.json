@@ -55,7 +55,6 @@
   "waterplayer.config": "Конфигурация",
   "waterplayer.playlists": "Плейлисты",
   "waterplayer.play": "Добавить треки",
-  "waterplayer.config.enable_bossbar": "Включить Босс бар",
   "waterplayer.config.enable_overlay": "Внутриигровой оверлей",
   "waterplayer.config.overlay.position": "Позиция внутриигрового оверлея",
   "waterplayer.config.enable_menu_overlay": "Оверлей в главном меню",

@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.alinlib.gui.components.ConfigureScrolWidget;
+import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonSpriteBuilder;
 import ru.kelcuprum.alinlib.gui.components.builder.slider.SliderIntegerBuilder;
 import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
@@ -63,13 +64,20 @@ public class LoadMusicScreen extends Screen {
                 .setSize(size, 20)
                 .build());
         //
-        addRenderableWidget(new ButtonSpriteBuilder(new ResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"), (s) -> {
+        addRenderableWidget(new ButtonBuilder(Component.literal(WaterPlayer.player.getAudioPlayer().isPaused() ? "⏸" : "▶"), (s) -> {
             WaterPlayer.player.getAudioPlayer().setPaused(!WaterPlayer.player.getAudioPlayer().isPaused());
-            rebuildWidgets();
+            s.setMessage(Component.literal(WaterPlayer.player.getAudioPlayer().isPaused() ? "⏸" : "▶"));
         })
                 .setSize(20, 20)
-                .setTextureSize(20, 20)
                 .setPosition(x, height - 30)
+                .setDesignType(designType).build());
+        addRenderableWidget(new ButtonBuilder(Component.literal(WaterPlayer.player.getTrackScheduler().isRepeating() ? "🔂" : "❌"), (s) -> {
+            WaterPlayer.player.getTrackScheduler().setRepeating(!WaterPlayer.player.getTrackScheduler().isRepeating());
+            s.setMessage(Component.literal(WaterPlayer.player.getTrackScheduler().isRepeating() ? "🔂" : "❌"));
+//            rebuildWidgets();
+        })
+                .setSize(20, 20)
+                .setPosition(x+100, height - 30)
                 .setDesignType(designType).build());
 
         addRenderableWidget(new ButtonSpriteBuilder(new ResourceLocation("waterplayer", "textures/player/skip.png"), (s) -> {
@@ -97,7 +105,7 @@ public class LoadMusicScreen extends Screen {
                 .setTextureSize(20, 20)
                 .setPosition(x + 75, height - 30)
                 .setDesignType(designType).build());
-        addRenderableWidget(new Button(x+100, height - 30, size-100, 20, designType, CommonComponents.GUI_CANCEL, (OnPress) -> onClose()));
+        addRenderableWidget(new Button(x+125, height - 30, size-125, 20, designType, CommonComponents.GUI_CANCEL, (OnPress) -> onClose()));
     }
 
     private ConfigureScrolWidget scroller;

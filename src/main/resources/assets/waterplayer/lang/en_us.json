@@ -57,7 +57,6 @@
   "waterplayer.config": "Configuration",
   "waterplayer.playlists": "Playlists",
   "waterplayer.play": "Add Tracks",
-  "waterplayer.config.enable_bossbar": "Enable Boss Bar",
   "waterplayer.config.enable_overlay": "In-game Overlay",
   "waterplayer.config.overlay.position": "In-game Overlay Position",
   "waterplayer.config.enable_menu_overlay": "Main Menu Overlay",
