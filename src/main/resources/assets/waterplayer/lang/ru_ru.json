@@ -69,9 +69,6 @@
   "waterplayer.config.enable_notice": "Уведомления контроля трека",
   "waterplayer.config.enable_notice.start_track": "Уведомления названия трека",
   "waterplayer.config.enable_notice.start_track.clear": "Очистить уведомления после старта нового трека",
-  "waterplayer.config.enable_change_title": "Включить изменения заголовка",
-  "waterplayer.config.enable_change_title.tooltip": "* в главном меню",
-  "waterplayer.config.enable_discord_rpc": "Включить интеграцию Discord",
 
   "waterplayer.config.services": "Сервисы",
   "waterplayer.config.services.youtube": "YouTube",
