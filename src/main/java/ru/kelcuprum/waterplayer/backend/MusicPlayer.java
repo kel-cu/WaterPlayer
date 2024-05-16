@@ -156,20 +156,20 @@ public class MusicPlayer {
             @Override
             public void trackLoaded(AudioTrack track) {
                 musicManager.scheduler.queue(track);
-                WaterPlayer.log("Add track: " + track.getInfo().title);
+                WaterPlayer.log("Adding Track: " + track.getInfo().title);
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
                 List<AudioTrack> tracks = playlist.getTracks();
                 tracks.forEach(musicManager.scheduler::queue);
-                WaterPlayer.log("Add playlist: " + playlist.getName() + ", tracks count: " + playlist.getTracks().size()
+                WaterPlayer.log("Adding Playlist: " + playlist.getName() + ". Tracks Count: " + playlist.getTracks().size()
                 );
             }
 
             @Override
             public void noMatches() {
-                WaterPlayer.log("Nothing found by " + url, Level.ERROR);
+                WaterPlayer.log("Nothing Found by " + url, Level.ERROR);
             }
 
             @Override

@@ -2,14 +2,14 @@
   "waterplayer.name": "WaterPlayer",
 
   "waterplayer.command.playlist.noName": "You didn't specify a playlist name",
-  "waterplayer.command.now_playing.notPlaying": "Nothing's Playing",
+  "waterplayer.command.now_playing.notPlaying": "Nothing's Playing.",
   "waterplayer.command.now_playing": "Current Track:",
   "waterplayer.command.queue.blank": "Queue is Empty!",
   "waterplayer.command.queue": "Current Queue:",
 
   "waterplayer.playlist": "Playlist",
   "waterplayer.playlist.create": "Create Playlist",
-  "waterplayer.playlist.create.filename": "Playlist Name:",
+  "waterplayer.playlist.create.filename": "Playlist ID:",
   "waterplayer.playlist.reload": "Reload",
   "waterplayer.playlist.play": "Play Playlist",
   "waterplayer.playlist.description": "Play: playlist:%s",
