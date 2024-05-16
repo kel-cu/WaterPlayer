@@ -163,7 +163,7 @@ public class MusicPlayer {
             public void playlistLoaded(AudioPlaylist playlist) {
                 List<AudioTrack> tracks = playlist.getTracks();
                 tracks.forEach(musicManager.scheduler::queue);
-                WaterPlayer.log("Adding Playlist: " + playlist.getName() + ". Tracks Count: " + playlist.getTracks().size()
+                WaterPlayer.log("Adding Playlist: " + playlist.getName() + ", Tracks Count: " + playlist.getTracks().size()
                 );
             }
 
