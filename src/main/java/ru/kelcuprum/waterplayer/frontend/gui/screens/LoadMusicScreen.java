@@ -76,7 +76,7 @@ public class LoadMusicScreen extends Screen {
         addRenderableWidget(new ButtonSpriteBuilder(new ResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getTrackScheduler().isRepeating() ? "repeat" : "non_repeat") + ".png"), (s) -> {
             WaterPlayer.player.getTrackScheduler().setRepeating(!WaterPlayer.player.getTrackScheduler().isRepeating());
             s.setIcon(new ResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getTrackScheduler().isRepeating() ? "repeat" : "non_repeat") + ".png"));
-//            rebuildWidgets();
+//            rebuildWidgetsList();
         })
                 .setSize(20, 20)
                 .setTextureSize(20, 20)
@@ -95,7 +95,7 @@ public class LoadMusicScreen extends Screen {
         addRenderableWidget(new ButtonSpriteBuilder(new ResourceLocation("waterplayer", "textures/player/shuffle.png"), (s) -> {
             if (!WaterPlayer.player.getTrackScheduler().queue.isEmpty()) {
                 WaterPlayer.player.getTrackScheduler().shuffle();
-                rebuildWidgets();
+                rebuildWidgetsList();
             }
         })
                 .setSize(20, 20)
@@ -158,7 +158,12 @@ public class LoadMusicScreen extends Screen {
             this.addRenderableWidget(widget);
         }
     }
-
+    protected void rebuildWidgetsList(){
+        for(AbstractWidget widget : widgets){
+            removeWidget(widget);
+        };
+        initList();
+    }
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f) {
         super.renderBackground(guiGraphics, i, j, f);
@@ -174,7 +179,7 @@ public class LoadMusicScreen extends Screen {
             if(System.currentTimeMillis()-lastCheck >= 1500) {
                 lastCheck = System.currentTimeMillis();
                 this.lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.size();
-                rebuildWidgets();
+                rebuildWidgetsList();
             }
         }
         super.tick();
