@@ -15,6 +15,7 @@ import ru.kelcuprum.alinlib.gui.components.ConfigureScrolWidget;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonSpriteBuilder;
 import ru.kelcuprum.alinlib.gui.components.builder.slider.SliderIntegerBuilder;
+import ru.kelcuprum.alinlib.gui.components.buttons.ButtonSprite;
 import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
 import ru.kelcuprum.alinlib.gui.components.editbox.base.EditBoxString;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
@@ -64,19 +65,21 @@ public class LoadMusicScreen extends Screen {
                 .setSize(size, 20)
                 .build());
         //
-        addRenderableWidget(new ButtonBuilder(Component.literal(WaterPlayer.player.getAudioPlayer().isPaused() ? "⏸" : "▶"), (s) -> {
+        addRenderableWidget(new ButtonSpriteBuilder(new ResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"),(s) -> {
             WaterPlayer.player.getAudioPlayer().setPaused(!WaterPlayer.player.getAudioPlayer().isPaused());
-            s.setMessage(Component.literal(WaterPlayer.player.getAudioPlayer().isPaused() ? "⏸" : "▶"));
+            s.setIcon(new ResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"));
         })
                 .setSize(20, 20)
+                .setTextureSize(20, 20)
                 .setPosition(x, height - 30)
                 .setDesignType(designType).build());
-        addRenderableWidget(new ButtonBuilder(Component.literal(WaterPlayer.player.getTrackScheduler().isRepeating() ? "🔂" : "❌"), (s) -> {
+        addRenderableWidget(new ButtonSpriteBuilder(new ResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getTrackScheduler().isRepeating() ? "repeat" : "non_repeat") + ".png"), (s) -> {
             WaterPlayer.player.getTrackScheduler().setRepeating(!WaterPlayer.player.getTrackScheduler().isRepeating());
-            s.setMessage(Component.literal(WaterPlayer.player.getTrackScheduler().isRepeating() ? "🔂" : "❌"));
+            s.setIcon(new ResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getTrackScheduler().isRepeating() ? "repeat" : "non_repeat") + ".png"));
 //            rebuildWidgets();
         })
                 .setSize(20, 20)
+                .setTextureSize(20, 20)
                 .setPosition(x+100, height - 30)
                 .setDesignType(designType).build());
 
