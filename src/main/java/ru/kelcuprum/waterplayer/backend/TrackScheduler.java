@@ -23,7 +23,6 @@ import java.util.Queue;
  */
 public class TrackScheduler extends AudioEventAdapter {
     public boolean skiping = false;
-    private boolean repeating = false;
     final AudioPlayer player;
     public final Queue<AudioTrack> queue;
     public AudioTrack lastTrack;
@@ -58,6 +57,7 @@ public class TrackScheduler extends AudioEventAdapter {
     public void nextTrack() {
         // Start the next track, regardless of if something is already playing or not. In case queue was empty, we are
         // giving null to startTrack, which is a valid argument and will simply stop the player.
+        if(getRepeatStatus() == 2) queue(player.getPlayingTrack().makeClone());
         player.startTrack(queue.poll(), false);
         if(player.getPlayingTrack() != null) WaterPlayer.log("Starting Track: " + Music.getTitle(player.getPlayingTrack()));
     }
@@ -67,7 +67,7 @@ public class TrackScheduler extends AudioEventAdapter {
         this.lastTrack = track;
         // Only start the next track if the end reason is suitable for it (FINISHED or LOAD_FAILED)
         if (endReason.mayStartNext) {
-            if (repeating)
+            if (getRepeatStatus() == 1)
                 player.startTrack(lastTrack.makeClone(), false);
             else
                 nextTrack();
@@ -87,13 +87,20 @@ public class TrackScheduler extends AudioEventAdapter {
             toast.show(WaterPlayer.MINECRAFT.getToasts());
         }
     }
-
-    public boolean isRepeating() {
-        return repeating;
+    public int getRepeatStatus() {
+        return repeatStatus;
     }
 
-    public void setRepeating(boolean repeating) {
-        this.repeating = repeating;
+    public int repeatStatus = 0;
+    public int changeRepeatStatus(){
+        if(repeatStatus+1>2) repeatStatus = 0;
+        else repeatStatus = repeatStatus+1;
+        return repeatStatus;
+    };
+    public void setRepeatStatus(int i){
+        if(i>2) i = 0;
+        else if(i<0) i =2;
+        repeatStatus = i;
     }
 
     public void shuffle() {

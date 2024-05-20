@@ -73,9 +73,9 @@ public class LoadMusicScreen extends Screen {
                 .setTextureSize(20, 20)
                 .setPosition(x, height - 30)
                 .setDesignType(designType).build());
-        addRenderableWidget(new ButtonSpriteBuilder(new ResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getTrackScheduler().isRepeating() ? "repeat" : "non_repeat") + ".png"), (s) -> {
-            WaterPlayer.player.getTrackScheduler().setRepeating(!WaterPlayer.player.getTrackScheduler().isRepeating());
-            s.setIcon(new ResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getTrackScheduler().isRepeating() ? "repeat" : "non_repeat") + ".png"));
+        addRenderableWidget(new ButtonSpriteBuilder(new ResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getTrackScheduler().getRepeatStatus() == 0 ? "non_repeat" : WaterPlayer.player.getTrackScheduler().getRepeatStatus() == 1 ?  "one_repeat" : "repeat") + ".png"), (s) -> {
+            int rps = WaterPlayer.player.getTrackScheduler().changeRepeatStatus();
+            s.setIcon(new ResourceLocation("waterplayer", "textures/player/" + (rps == 0 ? "non_repeat" : rps == 1 ? "one_repeat" : "repeat" ) + ".png"));
 //            rebuildWidgetsList();
         })
                 .setSize(20, 20)

@@ -113,9 +113,9 @@ public class WaterPlayer implements ClientModInitializer {
                         .show(AlinLib.MINECRAFT.getToasts());
             }
             while (isKeyPress(repeatingKey, keyCode, scanCode)) {
-                player.getTrackScheduler().setRepeating(!player.getTrackScheduler().isRepeating());
-                if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) getToast().setMessage(Localization.getText(player.getTrackScheduler().isRepeating() ? "waterplayer.message.repeat" : "waterplayer.message.repeat.no"))
-                        .show(AlinLib.MINECRAFT.getToasts());
+                player.getTrackScheduler().changeRepeatStatus();
+//                if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) getToast().setMessage(Localization.getText(player.getTrackScheduler().isRepeating() ? "waterplayer.message.repeat" : "waterplayer.message.repeat.no"))
+//                        .show(AlinLib.MINECRAFT.getToasts());
             }
             while (isKeyPress(resetQueueKey, keyCode, scanCode)) {
                 player.getTrackScheduler().skiping = false;
