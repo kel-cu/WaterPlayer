@@ -126,7 +126,7 @@ public class LoadMusicScreen extends Screen {
                 } else widget.setY(-widget.getHeight());
             }
         }));
-        addRenderableWidget(scroller);
+
         Queue<AudioTrack> queue = WaterPlayer.player.getTrackScheduler().queue;
         widgets.add(new TextBox(x, -20, width - 200, 20, Component.translatable("waterplayer.load.current_track"), true));
         widgets.add(new CurrentTrackButton(x, -42, width - 200, this));
@@ -159,6 +159,8 @@ public class LoadMusicScreen extends Screen {
         }
     }
     protected void rebuildWidgetsList(){
+        removeWidget(scroller);
+        scroller = null;
         for(AbstractWidget widget : widgets){
             removeWidget(widget);
         };
@@ -171,6 +173,7 @@ public class LoadMusicScreen extends Screen {
     }
 
     int lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.size();
+    AudioTrack lastTrack = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
     long lastCheck = System.currentTimeMillis();
     @Override
     public void tick() {
@@ -179,6 +182,12 @@ public class LoadMusicScreen extends Screen {
             if(System.currentTimeMillis()-lastCheck >= 1500) {
                 lastCheck = System.currentTimeMillis();
                 this.lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.size();
+                rebuildWidgetsList();
+            }
+        } else if(lastTrack != WaterPlayer.player.getAudioPlayer().getPlayingTrack()){
+            if(System.currentTimeMillis()-lastCheck >= 1500) {
+                lastCheck = System.currentTimeMillis();
+                this.lastTrack = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
                 rebuildWidgetsList();
             }
         }
