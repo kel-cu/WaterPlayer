@@ -58,7 +58,7 @@ public class WaterPlayer implements ClientModInitializer {
     public static void registerBinds() {
         KeyMapping loadTrack = KeyBindingHelper.registerKeyMapping(
                 "waterplayer.key.load",
-                GLFW.GLFW_KEY_L, // The keycode of the key
+                GLFW.GLFW_KEY_ENTER, // The keycode of the key
                 "waterplayer.name"
         );
         KeyMapping playOrPause = KeyBindingHelper.registerKeyMapping(
@@ -68,22 +68,22 @@ public class WaterPlayer implements ClientModInitializer {
         );
         KeyMapping skipTrack = KeyBindingHelper.registerKeyMapping(
                 "waterplayer.key.skip",
-                GLFW.GLFW_MOUSE_BUTTON_5, // The keycode of the key
+                GLFW.GLFW_KEY_X, // The keycode of the key
                 "waterplayer.name"
         );
         KeyMapping resetQueueKey = KeyBindingHelper.registerKeyMapping(
                 "waterplayer.key.reset",
-                GLFW.GLFW_KEY_KP_1, // The keycode of the key
+                GLFW.GLFW_KEY_DELETE, // The keycode of the key
                 "waterplayer.name"
         );
         KeyMapping shuffleKey = KeyBindingHelper.registerKeyMapping(
                 "waterplayer.key.shuffle",
-                GLFW.GLFW_KEY_Z, // The keycode of the key
+                GLFW.GLFW_KEY_PAGE_DOWN, // The keycode of the key
                 "waterplayer.name"
         );
         KeyMapping repeatingKey = KeyBindingHelper.registerKeyMapping(
                 "waterplayer.key.repeating",
-                GLFW.GLFW_KEY_KP_2, // The keycode of the key
+                GLFW.GLFW_KEY_PAGE_UP, // The keycode of the key
                 "waterplayer.name"
         );
         KeyMapping volumeMusicUpKey = KeyBindingHelper.registerKeyMapping(
