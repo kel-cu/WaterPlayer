@@ -5,7 +5,7 @@
   "name": "WaterPlayer",
   "description": "Internet music player built into the client.",
   "authors": ["Im_Kel"],
-  "contributors": ["ImGRUI [#14, #15]"],
+  "contributors": ["ImGRUI [#14, #15]", "Calvineries [#16]"],
   "contact": {
     "homepage": "https://modrinth.com/mod/waterplayer",
     "issues": "https://github.com/simply-kel/WaterPlayer/issues",
