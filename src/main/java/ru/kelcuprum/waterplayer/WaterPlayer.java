@@ -5,11 +5,9 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
 import org.apache.logging.log4j.Level;
@@ -18,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.api.events.client.ScreenEvents;
+import ru.kelcuprum.alinlib.api.keybinding.KeyBindingHelper;
 import ru.kelcuprum.alinlib.config.Config;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
@@ -57,67 +56,58 @@ public class WaterPlayer implements ClientModInitializer {
     }
 
     public static void registerBinds() {
-        KeyMapping loadTrack = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        KeyMapping loadTrack = KeyBindingHelper.registerKeyMapping(
                 "waterplayer.key.load",
-                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_L, // The keycode of the key
                 "waterplayer.name"
-        ));
-        KeyMapping playOrPause = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        );
+        KeyMapping playOrPause = KeyBindingHelper.registerKeyMapping(
                 "waterplayer.key.pause",
-                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_P, // The keycode of the key
                 "waterplayer.name"
-        ));
-        KeyMapping skipTrack = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        );
+        KeyMapping skipTrack = KeyBindingHelper.registerKeyMapping(
                 "waterplayer.key.skip",
-                InputConstants.Type.MOUSE,
                 GLFW.GLFW_MOUSE_BUTTON_5, // The keycode of the key
                 "waterplayer.name"
-        ));
-        KeyMapping resetQueueKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        );
+        KeyMapping resetQueueKey = KeyBindingHelper.registerKeyMapping(
                 "waterplayer.key.reset",
-                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_KP_1, // The keycode of the key
                 "waterplayer.name"
-        ));
-        KeyMapping shuffleKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        );
+        KeyMapping shuffleKey = KeyBindingHelper.registerKeyMapping(
                 "waterplayer.key.shuffle",
-                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_Z, // The keycode of the key
                 "waterplayer.name"
-        ));
-        KeyMapping repeatingKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        );
+        KeyMapping repeatingKey = KeyBindingHelper.registerKeyMapping(
                 "waterplayer.key.repeating",
-                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_KP_2, // The keycode of the key
                 "waterplayer.name"
-        ));
-        KeyMapping volumeMusicUpKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        );
+        KeyMapping volumeMusicUpKey = KeyBindingHelper.registerKeyMapping(
                 "waterplayer.key.volume.up",
-                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_UP, // The keycode of the key
                 "waterplayer.name"
-        ));
-        KeyMapping volumeMusicDownKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        );
+        KeyMapping volumeMusicDownKey = KeyBindingHelper.registerKeyMapping(
                 "waterplayer.key.volume.down",
-                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_DOWN, // The keycode of the key
                 "waterplayer.name"
-        ));
+        );
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            int keyCode = 0, scanCode = 0;
-            while (isKeyPress(playOrPause, keyCode, scanCode)) {
+            while (playOrPause.consumeClick()) {
                 player.getAudioPlayer().setPaused(!player.getAudioPlayer().isPaused());
                 if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) getToast().setMessage(Localization.getText(player.getAudioPlayer().isPaused() ? "waterplayer.message.pause" : "waterplayer.message.play"))
                         .show(AlinLib.MINECRAFT.getToasts());
             }
-            while (isKeyPress(repeatingKey, keyCode, scanCode)) {
+            while (repeatingKey.consumeClick()) {
                 player.getTrackScheduler().changeRepeatStatus();
 //                if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) getToast().setMessage(Localization.getText(player.getTrackScheduler().isRepeating() ? "waterplayer.message.repeat" : "waterplayer.message.repeat.no"))
 //                        .show(AlinLib.MINECRAFT.getToasts());
             }
-            while (isKeyPress(resetQueueKey, keyCode, scanCode)) {
+            while (resetQueueKey.consumeClick()) {
                 player.getTrackScheduler().skiping = false;
                 if (!player.getTrackScheduler().queue.isEmpty()) {
                     player.getTrackScheduler().queue.clear();
@@ -125,42 +115,38 @@ public class WaterPlayer implements ClientModInitializer {
                             .show(AlinLib.MINECRAFT.getToasts());
                 }
             }
-            while (isKeyPress(shuffleKey, keyCode, scanCode)) {
+            while (shuffleKey.consumeClick()) {
                 if (player.getTrackScheduler().queue.size() >= 2) {
                     player.getTrackScheduler().shuffle();
                     if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) getToast().setMessage(Localization.getText("waterplayer.message.shuffle"))
                             .show(AlinLib.MINECRAFT.getToasts());
                 }
             }
-            while (isKeyPress(skipTrack, keyCode, scanCode)) {
+            while (skipTrack.consumeClick()) {
                 if (player.getTrackScheduler().queue.isEmpty() && player.getAudioPlayer().getPlayingTrack() == null)
                     return;
                 player.getTrackScheduler().nextTrack();
                 if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) getToast().setMessage(Localization.getText("waterplayer.message.skip"))
                         .show(AlinLib.MINECRAFT.getToasts());
             }
-            while (isKeyPress(volumeMusicUpKey, keyCode, scanCode)) {
+            while (volumeMusicUpKey.consumeClick()) {
                 int current = config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue() + config.getNumber("SELECT_MUSIC_VOLUME", 1).intValue();
                 if (current >= 100) current = 100;
                 config.setNumber("CURRENT_MUSIC_VOLUME", current);
                 player.getAudioPlayer().setVolume(current);
                 config.save();
             }
-            while (isKeyPress(volumeMusicDownKey, keyCode, scanCode)) {
+            while (volumeMusicDownKey.consumeClick()) {
                 int current = config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue() - config.getNumber("SELECT_MUSIC_VOLUME", 1).intValue();
                 if (current <= 0) current = 0;
                 config.setNumber("CURRENT_MUSIC_VOLUME", current);
                 player.getAudioPlayer().setVolume(current);
                 config.save();
             }
-            while (isKeyPress(loadTrack, keyCode, scanCode)) {
+            while (loadTrack.consumeClick()) {
                 AlinLib.MINECRAFT.setScreen(new LoadMusicScreen(AlinLib.MINECRAFT.screen));
             }
         });
-    }
-
-    public static boolean isKeyPress(KeyMapping mapping, int keyCode, int scanCode) {
-        return mapping.consumeClick();
     }
 
     // Logger
