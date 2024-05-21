@@ -30,7 +30,8 @@
 
   "waterplayer.message.pause": "Piste en pause",
   "waterplayer.message.play": "Piste reprise",
-  "waterplayer.message.repeat": "Répétition activée",
+  "waterplayer.message.repeat": "Répétition de la file d'attente",
+  "waterplayer.message.repeat.one": "Répétition de la piste sur",
   "waterplayer.message.repeat.no": "Répétition désactivée",
   "waterplayer.message.reset": "La file d'attente a été réinitialisée",
   "waterplayer.message.shuffle": "La file d'attente a été mélangée",

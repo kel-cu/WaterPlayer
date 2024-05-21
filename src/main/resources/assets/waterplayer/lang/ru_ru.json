@@ -30,8 +30,9 @@
 
   "waterplayer.message.pause": "Трек приостановлен",
   "waterplayer.message.play": "Трек возобновлен",
-  "waterplayer.message.repeat": "Повтор ВКЛ",
-  "waterplayer.message.repeat.no": "Повтор ВЫКЛ",
+  "waterplayer.message.repeat": "Повтор очереди вкл",
+  "waterplayer.message.repeat.one": "Повтор трека вкл",
+  "waterplayer.message.repeat.no": "Повтор выкл",
   "waterplayer.message.reset": "Очередь сброшена",
   "waterplayer.message.shuffle": "Очередь перемешана",
   "waterplayer.message.skip": "Трек пропущен",

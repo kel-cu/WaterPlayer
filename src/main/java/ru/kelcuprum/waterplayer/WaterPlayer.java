@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -38,8 +39,8 @@ public class WaterPlayer implements ClientModInitializer {
         StarScript.init();
         localization.setParser((s) -> StarScript.run(StarScript.compile(s)));
         player = new MusicPlayer();
+        registerBinds();
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
-            registerBinds();
             player.startAudioOutput();
             OverlayHandler hud = new OverlayHandler();
             ScreenEvents.SCREEN_RENDER.register(hud);
@@ -103,8 +104,9 @@ public class WaterPlayer implements ClientModInitializer {
             }
             while (repeatingKey.consumeClick()) {
                 player.getTrackScheduler().changeRepeatStatus();
-//                if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) getToast().setMessage(Localization.getText(player.getTrackScheduler().isRepeating() ? "waterplayer.message.repeat" : "waterplayer.message.repeat.no"))
-//                        .show(AlinLib.MINECRAFT.getToasts());
+                if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) getToast().setIcon(new ResourceLocation("waterplayer", "textures/player/" + (player.getTrackScheduler().getRepeatStatus() == 0 ? "non_repeat" : player.getTrackScheduler().getRepeatStatus() == 1 ? "one_repeat" : "repeat" ) + ".png"))
+                        .setMessage(Localization.getText(player.getTrackScheduler().getRepeatStatus() == 0 ? "waterplayer.message.repeat.no" : player.getTrackScheduler().getRepeatStatus() == 1 ? "waterplayer.message.repeat.one" : "waterplayer.message.repeat" ))
+                        .show(AlinLib.MINECRAFT.getToasts());
             }
             while (resetQueueKey.consumeClick()) {
                 player.getTrackScheduler().skiping = false;

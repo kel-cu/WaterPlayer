@@ -30,8 +30,9 @@
 
   "waterplayer.message.pause": "Track paused",
   "waterplayer.message.play": "Track resumed",
-  "waterplayer.message.repeat": "Repeat ON",
-  "waterplayer.message.repeat.no": "Repeat OFF",
+  "waterplayer.message.repeat": "Queue repeat on",
+  "waterplayer.message.repeat.one": "Track repeat on",
+  "waterplayer.message.repeat.no": "Repeat off",
   "waterplayer.message.reset": "Queue has been reset",
   "waterplayer.message.shuffle": "Queue shuffled",
   "waterplayer.message.skip": "Track skipped",
