@@ -1,10 +1,10 @@
 package ru.kelcuprum.waterplayer;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -16,7 +16,6 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.api.events.client.ScreenEvents;
-import ru.kelcuprum.alinlib.api.keybinding.KeyBindingHelper;
 import ru.kelcuprum.alinlib.config.Config;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
@@ -39,8 +38,8 @@ public class WaterPlayer implements ClientModInitializer {
         StarScript.init();
         localization.setParser((s) -> StarScript.run(StarScript.compile(s)));
         player = new MusicPlayer();
-        registerBinds();
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
+            registerBinds();
             player.startAudioOutput();
             OverlayHandler hud = new OverlayHandler();
             ScreenEvents.SCREEN_RENDER.register(hud);
@@ -56,46 +55,46 @@ public class WaterPlayer implements ClientModInitializer {
     }
 
     public static void registerBinds() {
-        KeyMapping loadTrack = KeyBindingHelper.registerKeyMapping(
+        KeyMapping loadTrack = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 "waterplayer.key.load",
                 GLFW.GLFW_KEY_ENTER, // The keycode of the key
                 "waterplayer.name"
-        );
-        KeyMapping playOrPause = KeyBindingHelper.registerKeyMapping(
+        ));
+        KeyMapping playOrPause = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 "waterplayer.key.pause",
                 GLFW.GLFW_KEY_P, // The keycode of the key
                 "waterplayer.name"
-        );
-        KeyMapping skipTrack = KeyBindingHelper.registerKeyMapping(
+        ));
+        KeyMapping skipTrack = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 "waterplayer.key.skip",
                 GLFW.GLFW_KEY_X, // The keycode of the key
                 "waterplayer.name"
-        );
-        KeyMapping resetQueueKey = KeyBindingHelper.registerKeyMapping(
+        ));
+        KeyMapping resetQueueKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 "waterplayer.key.reset",
                 GLFW.GLFW_KEY_DELETE, // The keycode of the key
                 "waterplayer.name"
-        );
-        KeyMapping shuffleKey = KeyBindingHelper.registerKeyMapping(
+        ));
+        KeyMapping shuffleKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 "waterplayer.key.shuffle",
                 GLFW.GLFW_KEY_PAGE_DOWN, // The keycode of the key
                 "waterplayer.name"
-        );
-        KeyMapping repeatingKey = KeyBindingHelper.registerKeyMapping(
+        ));
+        KeyMapping repeatingKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 "waterplayer.key.repeating",
                 GLFW.GLFW_KEY_PAGE_UP, // The keycode of the key
                 "waterplayer.name"
-        );
-        KeyMapping volumeMusicUpKey = KeyBindingHelper.registerKeyMapping(
+        ));
+        KeyMapping volumeMusicUpKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 "waterplayer.key.volume.up",
                 GLFW.GLFW_KEY_UP, // The keycode of the key
                 "waterplayer.name"
-        );
-        KeyMapping volumeMusicDownKey = KeyBindingHelper.registerKeyMapping(
+        ));
+        KeyMapping volumeMusicDownKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 "waterplayer.key.volume.down",
                 GLFW.GLFW_KEY_DOWN, // The keycode of the key
                 "waterplayer.name"
-        );
+        ));
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (playOrPause.consumeClick()) {
                 player.getAudioPlayer().setPaused(!player.getAudioPlayer().isPaused());
