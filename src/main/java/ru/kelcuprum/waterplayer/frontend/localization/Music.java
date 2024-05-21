@@ -41,7 +41,7 @@ public class Music {
         return (getVolume() <= 0) ? "🔇" : (getVolume() <= 1) ? "🔈" : (getVolume() <= 70) ? "🔉" :  "🔊";
     }
     public static String getRepeatState(){
-        return WaterPlayer.player.getTrackScheduler().getRepeatStatus() == 0 ? "" : WaterPlayer.player.getTrackScheduler().getRepeatStatus() == 1 ? " 🔂" : " 🔁";
+        return WaterPlayer.player.getTrackScheduler().getRepeatStatus() == 0 ? "" : WaterPlayer.player.getTrackScheduler().getRepeatStatus() == 1 ? " 🔁" : " 🔂";
     }
     public static String getPauseState(){
         return WaterPlayer.player.getAudioPlayer().isPaused() ? "⏸" : "▶";
