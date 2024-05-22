@@ -160,7 +160,7 @@ public class LoadMusicScreen extends Screen {
         scroller = null;
         for(AbstractWidget widget : widgets){
             removeWidget(widget);
-        };
+        }
         initList();
     }
     @Override
