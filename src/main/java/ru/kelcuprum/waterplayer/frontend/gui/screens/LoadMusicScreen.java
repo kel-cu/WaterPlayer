@@ -12,10 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.alinlib.gui.components.ConfigureScrolWidget;
-import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonSpriteBuilder;
 import ru.kelcuprum.alinlib.gui.components.builder.slider.SliderIntegerBuilder;
-import ru.kelcuprum.alinlib.gui.components.buttons.ButtonSprite;
 import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
 import ru.kelcuprum.alinlib.gui.components.editbox.base.EditBoxString;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
@@ -73,10 +71,9 @@ public class LoadMusicScreen extends Screen {
                 .setTextureSize(20, 20)
                 .setPosition(x, height - 30)
                 .setDesignType(designType).build());
-        addRenderableWidget(new ButtonSpriteBuilder(new ResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getTrackScheduler().getRepeatStatus() == 0 ? "non_repeat" : WaterPlayer.player.getTrackScheduler().getRepeatStatus() == 1 ?  "one_repeat" : "repeat") + ".png"), (s) -> {
-            int rps = WaterPlayer.player.getTrackScheduler().changeRepeatStatus();
-            s.setIcon(new ResourceLocation("waterplayer", "textures/player/" + (rps == 0 ? "non_repeat" : rps == 1 ? "one_repeat" : "repeat" ) + ".png"));
-//            rebuildWidgetsList();
+        addRenderableWidget(new ButtonSpriteBuilder(WaterPlayer.player.getTrackScheduler().getRepeatIcon(), (s) -> {
+            WaterPlayer.player.getTrackScheduler().changeRepeatStatus();
+            s.setIcon(WaterPlayer.player.getTrackScheduler().getRepeatIcon());
         })
                 .setSize(20, 20)
                 .setTextureSize(20, 20)
