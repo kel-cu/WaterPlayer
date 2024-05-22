@@ -25,17 +25,19 @@ public class TrackButton extends Button {
     }
     @Override
     public void renderText(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-        ResourceLocation icon = track.getInfo().artworkUrl != null ? TexturesHelper.getTexture(track.getInfo().artworkUrl, (track.getSourceManager().getSourceName()+"_"+track.getInfo().identifier)) : new ResourceLocation("waterplayer", "textures/no_icon.png");
-        guiGraphics.blit(icon, getX()+2, getY()+2, 0.0F, 0.0F, 36, 36, 36, 36);
-        StringBuilder builder = new StringBuilder();
-        if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
-        builder.append(Music.getTitle(track));
-        if(getWidth()-50 < AlinLib.MINECRAFT.font.width(builder.toString())){
-            guiGraphics.drawString(AlinLib.MINECRAFT.font, AlinLib.MINECRAFT.font.substrByWidth(FormattedText.of(builder.toString()), getWidth() - 50 - AlinLib.MINECRAFT.font.width("...")).getString()+"...", getX()+45, getY()+8, -1);
-        } else {
-            guiGraphics.drawString(AlinLib.MINECRAFT.font, builder.toString(), getX()+45, getY()+8, -1);
+        if (getY() < guiGraphics.guiHeight() && !(getY() <=-getHeight()) ) {
+            ResourceLocation icon = track.getInfo().artworkUrl != null ? TexturesHelper.getTexture(track.getInfo().artworkUrl, (track.getSourceManager().getSourceName() + "_" + track.getInfo().identifier)) : new ResourceLocation("waterplayer", "textures/no_icon.png");
+            guiGraphics.blit(icon, getX() + 2, getY() + 2, 0.0F, 0.0F, 36, 36, 36, 36);
+            StringBuilder builder = new StringBuilder();
+            if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
+            builder.append(Music.getTitle(track));
+            if (getWidth() - 50 < AlinLib.MINECRAFT.font.width(builder.toString())) {
+                guiGraphics.drawString(AlinLib.MINECRAFT.font, AlinLib.MINECRAFT.font.substrByWidth(FormattedText.of(builder.toString()), getWidth() - 50 - AlinLib.MINECRAFT.font.width("...")).getString() + "...", getX() + 45, getY() + 8, -1);
+            } else {
+                guiGraphics.drawString(AlinLib.MINECRAFT.font, builder.toString(), getX() + 45, getY() + 8, -1);
+            }
+            guiGraphics.drawString(AlinLib.MINECRAFT.font, track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : StarScript.getTimestamp(Music.getDuration(track)), getX() + 45, getY() + 30 - AlinLib.MINECRAFT.font.lineHeight, -1);
         }
-        guiGraphics.drawString(AlinLib.MINECRAFT.font, track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : StarScript.getTimestamp(Music.getDuration(track)), getX()+45, getY()+30-AlinLib.MINECRAFT.font.lineHeight, -1);
     }
     public static void confirmLinkNow(Screen screen, String string) {
         Minecraft minecraft = Minecraft.getInstance();
