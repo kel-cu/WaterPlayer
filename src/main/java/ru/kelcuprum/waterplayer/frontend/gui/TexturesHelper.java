@@ -12,20 +12,21 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
+import java.io.File;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.HashMap;
 
 public class TexturesHelper {
     public static HashMap<String, ResourceLocation> resourceLocationMap = new HashMap<>();
     public static HashMap<String, Boolean> urls = new HashMap<>();
     public static HashMap<String, DynamicTexture> urlsTextures = new HashMap<>();
+
     public static ResourceLocation getTexture(String url, String id) {
-        id = id.toLowerCase().replace(" ", "_").replace("/", "_").replace(":", "_");
-        if(resourceLocationMap.containsKey(id)) return resourceLocationMap.get(id);
+        id = formatUrls(id.toLowerCase());
+        if (resourceLocationMap.containsKey(id)) return resourceLocationMap.get(id);
         else {
-            if(!urls.getOrDefault(id, false)) {
+            if (!urls.getOrDefault(id, false)) {
                 urls.put(id, true);
                 String finalId = id;
                 new Thread(() -> registerTexture(url, finalId, new ResourceLocation("waterplayer", finalId))).start();
@@ -33,14 +34,18 @@ public class TexturesHelper {
             return new ResourceLocation("waterplayer", "textures/no_icon.png");
         }
     }
+
     @Async.Execute
-    public static void registerTexture(String url, String id, ResourceLocation textureId){
+    public static void registerTexture(String url, String id, ResourceLocation textureId) {
         DynamicTexture texture;
         if(urlsTextures.containsKey(url)) texture = urlsTextures.get(url);
         else {
             NativeImage image;
+            WaterPlayer.log("Register texture by url: " + url + ", ID: " + id);
+            File textureFile = getTextureFile(id);
+            boolean isFileExists = textureFile.exists();
             try {
-                BufferedImage bufferedImage = ImageIO.read(new URL(url));
+                BufferedImage bufferedImage = isFileExists ? ImageIO.read(getTextureFile(id)) : ImageIO.read(new URL(url));
                 if (bufferedImage.getWidth() > bufferedImage.getHeight()) {
                     int x = (bufferedImage.getWidth() - bufferedImage.getHeight()) / 2;
                     bufferedImage = bufferedImage.getSubimage(x, 0, bufferedImage.getHeight(), bufferedImage.getHeight());
@@ -50,6 +55,10 @@ public class TexturesHelper {
                 ImageIO.write(scaleImage, "png", byteArrayOutputStream);
                 byte[] bytesOfImage = byteArrayOutputStream.toByteArray();
                 image = NativeImage.read(bytesOfImage);
+                if(!isFileExists){
+                    Files.createDirectories(textureFile.toPath().getParent());
+                    Files.write(textureFile.toPath(), image.asByteArray());
+                }
             } catch (Exception e) {
                 WaterPlayer.log("Error loading image from URL: " + url + " - " + e.getMessage());
                 e.printStackTrace();
@@ -62,10 +71,17 @@ public class TexturesHelper {
         textureManager.register(textureId, texture);
         resourceLocationMap.put(id, textureId);
     }
-    public static BufferedImage toBufferedImage(Image img)
-    {
-        if (img instanceof BufferedImage)
-        {
+
+    public static File getTextureFile(String url) {
+        return new File("config/waterplayer/textures/" + url + ".png");
+    }
+
+    public static String formatUrls(String url) {
+        return url.replace(" ", "_").replace("/", "_").replace(":", "_");
+    }
+
+    public static BufferedImage toBufferedImage(Image img) {
+        if (img instanceof BufferedImage) {
             return (BufferedImage) img;
         }
         // Create a buffered image with transparency
