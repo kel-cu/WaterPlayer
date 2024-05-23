@@ -19,24 +19,34 @@ import ru.kelcuprum.waterplayer.frontend.localization.StarScript;
 
 public class TrackButton extends Button {
     protected AudioTrack track;
-    public TrackButton(int x, int y, int width, AudioTrack track, Screen screen) {
-        super(x, y, width, 40, InterfaceUtils.DesignType.FLAT, Component.empty(), (s) -> confirmLinkNow(screen, track.getInfo().uri));
+    private boolean isShort = false;
+    public TrackButton(int x, int y, int width, AudioTrack track, Screen screen, boolean isShort) {
+        super(x, y, width, isShort ? 20 : 40, InterfaceUtils.DesignType.FLAT, Component.empty(), (s) -> confirmLinkNow(screen, track.getInfo().uri));
+        StringBuilder builder = new StringBuilder();
+        if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
+        builder.append(Music.getTitle(track)).append(" ").append(StarScript.getTimestamp(Music.getDuration(track)));
+        setMessage(Component.literal(builder.toString()));
+        this.isShort = isShort;
         this.track = track;
     }
     @Override
     public void renderText(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         if (getY() < guiGraphics.guiHeight() && !(getY() <=-getHeight()) ) {
-            ResourceLocation icon = track.getInfo().artworkUrl != null ? TexturesHelper.getTexture(track.getInfo().artworkUrl, (track.getSourceManager().getSourceName() + "_" + track.getInfo().identifier)) : new ResourceLocation("waterplayer", "textures/no_icon.png");
-            guiGraphics.blit(icon, getX() + 2, getY() + 2, 0.0F, 0.0F, 36, 36, 36, 36);
-            StringBuilder builder = new StringBuilder();
-            if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
-            builder.append(Music.getTitle(track));
-            if (getWidth() - 50 < AlinLib.MINECRAFT.font.width(builder.toString())) {
-                guiGraphics.drawString(AlinLib.MINECRAFT.font, AlinLib.MINECRAFT.font.substrByWidth(FormattedText.of(builder.toString()), getWidth() - 50 - AlinLib.MINECRAFT.font.width("...")).getString() + "...", getX() + 45, getY() + 8, -1);
+            if (isShort) {
+                super.renderText(guiGraphics, mouseX, mouseY, partialTicks);
             } else {
-                guiGraphics.drawString(AlinLib.MINECRAFT.font, builder.toString(), getX() + 45, getY() + 8, -1);
+                ResourceLocation icon = track.getInfo().artworkUrl != null ? TexturesHelper.getTexture(track.getInfo().artworkUrl, (track.getSourceManager().getSourceName() + "_" + track.getInfo().identifier)) : new ResourceLocation("waterplayer", "textures/no_icon.png");
+                guiGraphics.blit(icon, getX() + 2, getY() + 2, 0.0F, 0.0F, 36, 36, 36, 36);
+                StringBuilder builder = new StringBuilder();
+                if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
+                builder.append(Music.getTitle(track));
+                if (getWidth() - 50 < AlinLib.MINECRAFT.font.width(builder.toString())) {
+                    guiGraphics.drawString(AlinLib.MINECRAFT.font, AlinLib.MINECRAFT.font.substrByWidth(FormattedText.of(builder.toString()), getWidth() - 50 - AlinLib.MINECRAFT.font.width("...")).getString() + "...", getX() + 45, getY() + 8, -1);
+                } else {
+                    guiGraphics.drawString(AlinLib.MINECRAFT.font, builder.toString(), getX() + 45, getY() + 8, -1);
+                }
+                guiGraphics.drawString(AlinLib.MINECRAFT.font, track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : StarScript.getTimestamp(Music.getDuration(track)), getX() + 45, getY() + 30 - AlinLib.MINECRAFT.font.lineHeight, -1);
             }
-            guiGraphics.drawString(AlinLib.MINECRAFT.font, track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : StarScript.getTimestamp(Music.getDuration(track)), getX() + 45, getY() + 30 - AlinLib.MINECRAFT.font.lineHeight, -1);
         }
     }
     public static void confirmLinkNow(Screen screen, String string) {

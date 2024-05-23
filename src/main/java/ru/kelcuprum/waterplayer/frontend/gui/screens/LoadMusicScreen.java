@@ -20,8 +20,6 @@ import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.gui.components.CurrentTrackButton;
 import ru.kelcuprum.waterplayer.frontend.gui.components.TrackButton;
-import ru.kelcuprum.waterplayer.frontend.localization.Music;
-import ru.kelcuprum.waterplayer.frontend.localization.StarScript;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +61,7 @@ public class LoadMusicScreen extends Screen {
                 .setSize(size, 20)
                 .build());
         //
-        addRenderableWidget(new ButtonSpriteBuilder(new ResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"),(s) -> {
+        addRenderableWidget(new ButtonSpriteBuilder(new ResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"), (s) -> {
             WaterPlayer.player.getAudioPlayer().setPaused(!WaterPlayer.player.getAudioPlayer().isPaused());
             s.setIcon(new ResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"));
         })
@@ -77,11 +75,12 @@ public class LoadMusicScreen extends Screen {
         })
                 .setSize(20, 20)
                 .setTextureSize(20, 20)
-                .setPosition(x+100, height - 30)
+                .setPosition(x + 100, height - 30)
                 .setDesignType(designType).build());
 
         addRenderableWidget(new ButtonSpriteBuilder(new ResourceLocation("waterplayer", "textures/player/skip.png"), (s) -> {
-            if(WaterPlayer.player.getTrackScheduler().queue.isEmpty() && WaterPlayer.player.getAudioPlayer().getPlayingTrack() == null) return;
+            if (WaterPlayer.player.getTrackScheduler().queue.isEmpty() && WaterPlayer.player.getAudioPlayer().getPlayingTrack() == null)
+                return;
             WaterPlayer.player.getTrackScheduler().nextTrack();
         })
                 .setSize(20, 20)
@@ -97,7 +96,7 @@ public class LoadMusicScreen extends Screen {
         })
                 .setSize(20, 20)
                 .setTextureSize(20, 20)
-                .setPosition(x+50, height - 30)
+                .setPosition(x + 50, height - 30)
                 .setDesignType(designType).build());
 
         addRenderableWidget(new ButtonSpriteBuilder(new ResourceLocation("waterplayer", "textures/player/reset_queue.png"), (s) -> WaterPlayer.player.getTrackScheduler().queue.clear())
@@ -105,7 +104,7 @@ public class LoadMusicScreen extends Screen {
                 .setTextureSize(20, 20)
                 .setPosition(x + 75, height - 30)
                 .setDesignType(designType).build());
-        addRenderableWidget(new Button(x+125, height - 30, size-125, 20, designType, CommonComponents.GUI_CANCEL, (OnPress) -> onClose()));
+        addRenderableWidget(new Button(x + 125, height - 30, size - 125, 20, designType, CommonComponents.GUI_CANCEL, (OnPress) -> onClose()));
     }
 
     private ConfigureScrolWidget scroller;
@@ -131,19 +130,10 @@ public class LoadMusicScreen extends Screen {
         try {
             if (!queue.isEmpty()) {
                 for (AudioTrack track : WaterPlayer.player.getTrackScheduler().queue) {
-                    if (WaterPlayer.config.getBoolean("SCREEN.QUEUE_COVER_SHOW", true)) {
-                        widgets.add(new TrackButton(x, -40, width - 200, track, this));
-                    } else {
-                        StringBuilder builder = new StringBuilder();
-                        if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
-                        builder.append(Music.getTitle(track)).append(" ").append(StarScript.getTimestamp(Music.getDuration(track)));
-                        widgets.add(new TextBox(x, -10, width - 200, 10, Component.literal(builder.toString()), false, (s) -> {
-                            if (track.getInfo().uri != null) TrackButton.confirmLinkNow(this, track.getInfo().uri);
-                        }));
-                    }
+                    widgets.add(new TrackButton(x, -40, width - 200, track, this, !WaterPlayer.config.getBoolean("SCREEN.QUEUE_COVER_SHOW", true)));
                 }
             }
-        } catch (Exception ex){
+        } catch (Exception ex) {
             lastCountQueue = 0;
             WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
         }
@@ -155,14 +145,16 @@ public class LoadMusicScreen extends Screen {
             this.addRenderableWidget(widget);
         }
     }
-    protected void rebuildWidgetsList(){
+
+    protected void rebuildWidgetsList() {
         removeWidget(scroller);
         scroller = null;
-        for(AbstractWidget widget : widgets){
+        for (AbstractWidget widget : widgets) {
             removeWidget(widget);
         }
         initList();
     }
+
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f) {
         super.renderBackground(guiGraphics, i, j, f);
@@ -172,17 +164,18 @@ public class LoadMusicScreen extends Screen {
     int lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.size();
     AudioTrack lastTrack = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
     long lastCheck = System.currentTimeMillis();
+
     @Override
     public void tick() {
         if (scroller != null) scroller.onScroll.accept(scroller);
         if (lastCountQueue != WaterPlayer.player.getTrackScheduler().queue.size()) {
-            if(System.currentTimeMillis()-lastCheck >= 1500) {
+            if (System.currentTimeMillis() - lastCheck >= 1500) {
                 lastCheck = System.currentTimeMillis();
                 this.lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.size();
                 rebuildWidgetsList();
             }
-        } else if(lastTrack != WaterPlayer.player.getAudioPlayer().getPlayingTrack()){
-            if(System.currentTimeMillis()-lastCheck >= 1500) {
+        } else if (lastTrack != WaterPlayer.player.getAudioPlayer().getPlayingTrack()) {
+            if (System.currentTimeMillis() - lastCheck >= 1500) {
                 lastCheck = System.currentTimeMillis();
                 this.lastTrack = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
                 rebuildWidgetsList();
