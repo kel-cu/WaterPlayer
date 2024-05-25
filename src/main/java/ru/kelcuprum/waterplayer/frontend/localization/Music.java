@@ -2,7 +2,6 @@ package ru.kelcuprum.waterplayer.frontend.localization;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.minecraft.resources.ResourceLocation;
-import oshi.util.platform.windows.WmiQueryHandler;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.gui.TexturesHelper;
 
