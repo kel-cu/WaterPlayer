@@ -41,7 +41,6 @@ public class TexturesHelper {
         if(urlsTextures.containsKey(url)) texture = urlsTextures.get(url);
         else {
             NativeImage image;
-            WaterPlayer.log("Register texture by url: " + url + ", ID: " + id);
             File textureFile = getTextureFile(id);
             boolean isFileExists = textureFile.exists();
             try {
