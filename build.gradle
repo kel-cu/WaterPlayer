@@ -39,7 +39,6 @@ dependencies {
     implementation shade("dev.arbjerg:lavaplayer:${project.lavaplayer}")
     implementation shade("dev.lavalink.youtube:v2:${project.youtube_source}")
 //    implementation shade("net.hycrafthd.lavaplayer:lavaplayer:${project.lavaplayer_u}")
-    implementation shade("dev.lavalink.youtube:youtube-source:1.0.5")
     implementation shade("com.github.topi314.lavasrc:lavasrc:${project.lavasrc}")
     implementation shade("com.github.topi314.lavasrc:lavasrc-protocol:${project.lavasrc_protocol}")
     modImplementation("ru.kelcuprum.alinlib:AlinLib-fabric:${project.alinlib}")

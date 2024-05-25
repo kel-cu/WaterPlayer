@@ -61,6 +61,7 @@ public class OverlayHandler implements HudRenderCallback, ClientTickEvents.Start
     }
 
     public void render(GuiGraphics guiGraphics, int pos) {
+        if(AlinLib.MINECRAFT.options.hideGui) return;
         if (WaterPlayer.player.getAudioPlayer().getPlayingTrack() == null) return;
         try {
             if (!texts.isEmpty()) {
