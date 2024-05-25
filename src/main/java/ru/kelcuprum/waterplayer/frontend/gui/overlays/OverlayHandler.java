@@ -2,7 +2,6 @@ package ru.kelcuprum.waterplayer.frontend.gui.overlays;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -13,10 +12,10 @@ import net.minecraft.util.FormattedCharSequence;
 
 import org.apache.logging.log4j.Level;
 import ru.kelcuprum.alinlib.AlinLib;
+import ru.kelcuprum.alinlib.api.events.client.ClientTickEvents;
 import ru.kelcuprum.alinlib.api.events.client.ScreenEvents;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.gui.TexturesHelper;
-import ru.kelcuprum.waterplayer.frontend.gui.components.CurrentTrackButton;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
 
 import java.util.List;
