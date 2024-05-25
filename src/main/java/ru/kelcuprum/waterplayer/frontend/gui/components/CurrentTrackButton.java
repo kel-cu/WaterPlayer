@@ -36,7 +36,7 @@ public class CurrentTrackButton extends Button {
         if(WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null){
             this.active = true;
             AudioTrack track = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
-            ResourceLocation icon = track.getInfo().artworkUrl != null ? TexturesHelper.getTexture(track.getInfo().artworkUrl, (track.getSourceManager().getSourceName()+"_"+track.getInfo().identifier)) : new ResourceLocation("waterplayer", "textures/no_icon.png");
+            ResourceLocation icon = Music.getThumbnail(track);
             guiGraphics.blit(icon, getX()+2, getY()+2, 0.0F, 0.0F, 36, 36, 36, 36);
             StringBuilder builder = new StringBuilder();
             if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");

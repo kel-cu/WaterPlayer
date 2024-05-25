@@ -8,6 +8,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 
 import org.apache.logging.log4j.Level;
@@ -75,7 +76,7 @@ public class OverlayHandler implements HudRenderCallback, ClientTickEvents.Start
                 boolean caverEnable = false;
                 int j = 0;
                 if (WaterPlayer.config.getBoolean("OVERLAY.ENABLE_CAVER", true)) {
-                    if (WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().artworkUrl != null) {
+                    if (WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().artworkUrl != null || Music.isFile()) {
                         caverEnable = true;
                         j = f * 3;
                         mx += j + 10;
@@ -116,7 +117,7 @@ public class OverlayHandler implements HudRenderCallback, ClientTickEvents.Start
                     int x = left ? 6 : guiGraphics.guiWidth() - 14 - mx;
                     int y = top ? 6 : guiGraphics.guiHeight() - 14 + ((l * f));
                     AudioTrack track = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
-                    guiGraphics.blit(TexturesHelper.getTexture(track.getInfo().artworkUrl, (track.getSourceManager().getSourceName() + "_" + track.getInfo().identifier)), left ? 6 : guiGraphics.guiWidth() - 14 - mx, (top ? 6 : guiGraphics.guiHeight() - 5 + i1), 0.0F, 0.0F, j + 3, j + 3, j + 3, j + 3);
+                    guiGraphics.blit(Music.getThumbnail(track), left ? 6 : guiGraphics.guiWidth() - 14 - mx, (top ? 6 : guiGraphics.guiHeight() - 5 + i1), 0.0F, 0.0F, j + 3, j + 3, j + 3, j + 3);
                 }
             }
         } catch (Exception ex) {

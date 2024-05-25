@@ -1,7 +1,12 @@
 package ru.kelcuprum.waterplayer.frontend.localization;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.minecraft.resources.ResourceLocation;
+import oshi.util.platform.windows.WmiQueryHandler;
 import ru.kelcuprum.waterplayer.WaterPlayer;
+import ru.kelcuprum.waterplayer.frontend.gui.TexturesHelper;
+
+import java.io.File;
 
 public class Music {
     //
@@ -18,7 +23,9 @@ public class Music {
     public static boolean isAuthorNull() {return isAuthorNull(WaterPlayer.player.getAudioPlayer().getPlayingTrack());}
     //
     public static String getAuthor(AudioTrack info){
-        return isAuthorNull(info) ? "" : info.getInfo().author;
+        String author = isAuthorNull(info) ? "" : info.getInfo().author;
+        if(author.endsWith(" - Topic")) author = author.replace(" - Topic", "");
+        return author;
     }
     public static String getAuthor() {return getAuthor(WaterPlayer.player.getAudioPlayer().getPlayingTrack());}
     //
@@ -45,6 +52,22 @@ public class Music {
     }
     public static String getPauseState(){
         return WaterPlayer.player.getAudioPlayer().isPaused() ? "⏸" : "▶";
+    }
+    public static boolean isFile(AudioTrack info){
+        if(trackIsNull(info)) return false;
+        File track = new File(info.getInfo().uri);
+        return track.exists() && track.isFile();
+    }
+
+    public static ResourceLocation getThumbnail(){
+        return trackIsNull() ? new ResourceLocation("waterplayer", "textures/no_icon.png") : getThumbnail(WaterPlayer.player.getAudioPlayer().getPlayingTrack());
+    }
+    public static ResourceLocation getThumbnail(AudioTrack info){
+        return info.getInfo().artworkUrl != null ? TexturesHelper.getTexture(info.getInfo().artworkUrl, (info.getSourceManager().getSourceName() + "_" + info.getInfo().identifier)) : Music.isFile(info) ? new ResourceLocation("waterplayer", "textures/file_icon.png") : new ResourceLocation("waterplayer", "textures/no_icon.png");
+    }
+
+    public static boolean isFile(){
+        return trackIsNull() || isFile(WaterPlayer.player.getAudioPlayer().getPlayingTrack());
     }
     //
     public static long getPosition(AudioTrack track){
