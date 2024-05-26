@@ -59,7 +59,7 @@ public class LoadMusicScreen extends Screen {
         }).setMax(100).setMin(0).setDefaultValue(WaterPlayer.config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue())
                 .setPosition(x, 110)
                 .setSize(size, 20)
-                .build());
+                .build().setTypeInteger("%"));
         //
         addRenderableWidget(new ButtonSpriteBuilder(new ResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"), (s) -> {
             WaterPlayer.player.getAudioPlayer().setPaused(!WaterPlayer.player.getAudioPlayer().isPaused());
