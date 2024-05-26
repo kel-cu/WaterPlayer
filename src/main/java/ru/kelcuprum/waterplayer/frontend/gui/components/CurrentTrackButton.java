@@ -6,6 +6,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
@@ -40,6 +41,17 @@ public class CurrentTrackButton extends Button {
 
     protected boolean isTrackEnable() {
         return WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null;
+    }
+
+    @Override
+    public @NotNull Component getMessage() {
+        if(isTrackEnable()){
+            AudioTrack track = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
+            StringBuilder builder = new StringBuilder();
+            if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
+            builder.append(Music.getTitle(track)).append(" ").append(track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : StarScript.getTimestamp(Music.getPosition(track)) + " / " + StarScript.getTimestamp(Music.getDuration(track)));
+            return Component.literal(builder.toString());
+        } else return Component.translatable("waterplayer.command.now_playing.notPlaying");
     }
 
     @Override
