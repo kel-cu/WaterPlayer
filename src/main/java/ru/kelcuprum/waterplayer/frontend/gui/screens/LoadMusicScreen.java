@@ -125,7 +125,7 @@ public class LoadMusicScreen extends Screen {
 
         Queue<AudioTrack> queue = WaterPlayer.player.getTrackScheduler().queue;
         widgets.add(new TextBox(x, -20, width - 200, 20, Component.translatable("waterplayer.load.current_track"), true));
-        widgets.add(new CurrentTrackButton(x, -42, width - 200, this));
+        widgets.add(new CurrentTrackButton(x, -42, width - 200, !WaterPlayer.config.getBoolean("SCREEN.QUEUE_COVER_SHOW", true), this));
         widgets.add(new TextBox(x, -20, width - 200, 20, Component.translatable(queue.isEmpty() ? "waterplayer.command.queue.blank" : "waterplayer.command.queue"), true));
         try {
             if (!queue.isEmpty()) {
