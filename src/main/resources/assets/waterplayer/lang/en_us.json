@@ -45,7 +45,7 @@
   "waterplayer.load.url.copy": "Last Track URL",
   "waterplayer.load.queue": "Queue",
 
-  "waterplayer.load.load_files": "Are you sure you want to download these files?",
+  "waterplayer.load.load_files": "Are you sure you want to load these files?",
   "waterplayer.load.load_files.count_files": "and %s other files...",
 
   "waterplayer.load.add": "Your request has been sent",
