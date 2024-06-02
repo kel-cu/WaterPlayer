@@ -1,6 +1,7 @@
 package ru.kelcuprum.waterplayer.frontend.gui.screens;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
@@ -9,6 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.NotNull;
+import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.alinlib.gui.components.ConfigureScrolWidget;
@@ -21,6 +23,7 @@ import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.gui.components.CurrentTrackButton;
 import ru.kelcuprum.waterplayer.frontend.gui.components.TrackButton;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
@@ -39,12 +42,12 @@ public class LoadMusicScreen extends Screen {
         initPanel();
         initList();
     }
-
+    protected EditBoxString request;
     public void initPanel() {
         int x = 5;
         int size = 180;
         addRenderableWidget(new TextBox(x, 15, size, 9, Localization.getText("waterplayer.load"), true));
-        EditBoxString request = new EditBoxString(x + 25, 60, size - 25, 20, designType, Localization.getText("waterplayer.load.url"));
+        request = new EditBoxString(x + 25, 60, size - 25, 20, designType, Localization.getText("waterplayer.load.url"));
         request.setMaxLength(Integer.MAX_VALUE);
         addRenderableWidget(request);
         addRenderableWidget(new ButtonSpriteBuilder(InterfaceUtils.Icons.RESET, (s) -> request.setValue(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", "")))
@@ -172,16 +175,28 @@ public class LoadMusicScreen extends Screen {
             if (System.currentTimeMillis() - lastCheck >= 1500) {
                 lastCheck = System.currentTimeMillis();
                 this.lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.size();
+                this.lastTrack = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
                 rebuildWidgetsList();
             }
         } else if (lastTrack != WaterPlayer.player.getAudioPlayer().getPlayingTrack()) {
             if (System.currentTimeMillis() - lastCheck >= 1500) {
                 lastCheck = System.currentTimeMillis();
                 this.lastTrack = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
+                this.lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.size();
                 rebuildWidgetsList();
             }
         }
         super.tick();
+    }
+
+    @Override
+    public void onFilesDrop(List<Path> list) {
+        if(list.size() == 1) {
+            if(list.get(0).getFileName().toString().endsWith(".json")){
+                WaterPlayer.player.loadMusic(String.format("playlist:%s", list.get(0).getFileName().toString().replace(".json", "")), false);
+            } else request.setValue(list.get(0).toString());
+        }
+        else AlinLib.MINECRAFT.setScreen(new ConfirmLoadFiles(list, this));
     }
 
     @Override

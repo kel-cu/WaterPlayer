@@ -57,7 +57,7 @@ public class TrackScheduler extends AudioEventAdapter {
     public void nextTrack() {
         // Start the next track, regardless of if something is already playing or not. In case queue was empty, we are
         // giving null to startTrack, which is a valid argument and will simply stop the player.
-        if(getRepeatStatus() == 1) {
+        if(getRepeatStatus() == 1 && !queue.isEmpty()) {
             if(player.getPlayingTrack() != null) queue(player.getPlayingTrack().makeClone());
             else if(lastTrack != null) queue(lastTrack.makeClone());
             else WaterPlayer.log("There's nothing to add to the queue");
@@ -99,15 +99,18 @@ public class TrackScheduler extends AudioEventAdapter {
         return new ResourceLocation("waterplayer", "textures/player/" + (getRepeatStatus() == 0 ? "non_repeat" : getRepeatStatus() == 1 ? "repeat" : "one_repeat" ) + ".png");
     }
 
-    public int repeatStatus = 0;
+    public int repeatStatus = WaterPlayer.config.getNumber("REPEAT_STATUS", 0).intValue();
+
     public int changeRepeatStatus(){
-        if(repeatStatus+1>2) repeatStatus = 0;
-        else repeatStatus = repeatStatus+1;
+        int changedRepeatStatus = repeatStatus+1;
+        if(changedRepeatStatus>2) changedRepeatStatus = 0;
+        setRepeatStatus(changedRepeatStatus);
         return repeatStatus;
     };
     public void setRepeatStatus(int i){
         if(i>2) i = 0;
         else if(i<0) i =2;
+        WaterPlayer.config.setNumber("REPEAT_STATUS", i);
         repeatStatus = i;
     }
 

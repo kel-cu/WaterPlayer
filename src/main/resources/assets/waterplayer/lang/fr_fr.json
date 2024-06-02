@@ -45,6 +45,9 @@
   "waterplayer.load.url.copy": "Dernière URL de piste",
   "waterplayer.load.queue": "File d'Attente",
 
+  "waterplayer.load.load_files": "Êtes-vous sûr de vouloir télécharger ces fichiers ?",
+  "waterplayer.load.load_files.count_files": "et %s autres fichiers...",
+
   "waterplayer.load.add": "Votre demande a été envoyée",
   "waterplayer.load.add.playlist": "La playlist « %playlist_name% » a été ajoutée à la file d'attente",
   "waterplayer.load.add.files": "Les fichiers ont été ajoutés à la file d'attente",

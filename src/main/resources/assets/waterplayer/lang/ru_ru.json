@@ -45,6 +45,9 @@
   "waterplayer.load.url.copy": "Посл. запрос",
   "waterplayer.load.queue": "Очередь",
 
+  "waterplayer.load.load_files": "Вы уверены, что хотите загрузить эти файлы?",
+  "waterplayer.load.load_files.count_files": "и еще %s файлов...",
+
   "waterplayer.load.add": "Ваш запрос отправлен",
   "waterplayer.load.add.playlist": "Плейлист «%playlist_name%» был добавлен в очередь",
   "waterplayer.load.add.files": "Файлы были добавлены в очередь",
