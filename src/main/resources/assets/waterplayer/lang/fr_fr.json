@@ -104,6 +104,5 @@
   "waterplayer.config.apple_music_media_api_token": "Token de l'API media",
   "waterplayer.config.apple_music_country_code": "Country Code",
   
-  "modmenu.descriptionTranslation.waterplayer": "Lecteur de musique en ligne intégré dans le client.",
-
+  "modmenu.descriptionTranslation.waterplayer": "Lecteur de musique en ligne intégré dans le client."
 }
