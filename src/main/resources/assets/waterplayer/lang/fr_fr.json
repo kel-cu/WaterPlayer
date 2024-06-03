@@ -9,7 +9,7 @@
 
   "waterplayer.playlist": "Playlist",
   "waterplayer.playlist.create": "Créer une playlist",
-  "waterplayer.playlist.create.filename": "ID de la playlist :",
+  "waterplayer.playlist.create.filename": "Nom de la liste de lecture :",
   "waterplayer.playlist.reload": "Recharger",
   "waterplayer.playlist.play": "Lire la playlist",
   "waterplayer.playlist.description": "Lire : playlist:%s",

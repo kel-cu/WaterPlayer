@@ -9,7 +9,7 @@
 
   "waterplayer.playlist": "Плейлист",
   "waterplayer.playlist.create": "Создать плейлист",
-  "waterplayer.playlist.create.filename": "ID плейлиста:",
+  "waterplayer.playlist.create.filename": "Название плейлиста:",
   "waterplayer.playlist.reload": "Перезагрузить",
   "waterplayer.playlist.play": "Загрузить плейлист",
   "waterplayer.playlist.description": "Воспроизвести: playlist:%s",
