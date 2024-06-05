@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Async;
 import ru.kelcuprum.alinlib.AlinLib;
+import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 
 import javax.imageio.ImageIO;
@@ -29,9 +30,9 @@ public class TexturesHelper {
             if (!urls.getOrDefault(id, false)) {
                 urls.put(id, true);
                 String finalId = id;
-                new Thread(() -> registerTexture(url, finalId, new ResourceLocation("waterplayer", finalId))).start();
+                new Thread(() -> registerTexture(url, finalId, new InterfaceUtils().getResourceLocation("waterplayer", finalId))).start();
             }
-            return new ResourceLocation("waterplayer", "textures/no_icon.png");
+            return new InterfaceUtils().getResourceLocation("waterplayer", "textures/no_icon.png");
         }
     }
 
@@ -61,7 +62,7 @@ public class TexturesHelper {
             } catch (Exception e) {
                 WaterPlayer.log("Error loading image from URL: " + url + " - " + e.getMessage());
                 e.printStackTrace();
-                resourceLocationMap.put(id, new ResourceLocation("waterplayer", "textures/no_icon.png"));
+                resourceLocationMap.put(id, new InterfaceUtils().getResourceLocation("waterplayer", "textures/no_icon.png"));
                 return;
             }
             texture = new DynamicTexture(image);

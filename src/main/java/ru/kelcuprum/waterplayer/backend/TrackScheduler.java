@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import org.apache.logging.log4j.Level;
+import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
@@ -87,7 +88,7 @@ public class TrackScheduler extends AudioEventAdapter {
             ToastBuilder toast = WaterPlayer.getToast().setTitle(Music.isAuthorNull(track) ? Component.translatable("waterplayer.name") : Component.literal(Music.getAuthor(track)))
                     .setMessage(Component.literal(Music.getTitle(track)));
             if (Music.getAuthor(track).equals("YonKaGor")) toast.setIcon(getYonKaGorMoment(track));
-            else toast.setIcon(new ResourceLocation("waterplayer", "textures/music.png"));
+            else toast.setIcon(new InterfaceUtils().getResourceLocation("waterplayer", "textures/music.png"));
             toast.show(WaterPlayer.MINECRAFT.getToasts());
         }
     }
@@ -96,7 +97,7 @@ public class TrackScheduler extends AudioEventAdapter {
     }
     
     public ResourceLocation getRepeatIcon(){
-        return new ResourceLocation("waterplayer", "textures/player/" + (getRepeatStatus() == 0 ? "non_repeat" : getRepeatStatus() == 1 ? "repeat" : "one_repeat" ) + ".png");
+        return new InterfaceUtils().getResourceLocation("waterplayer", "textures/player/" + (getRepeatStatus() == 0 ? "non_repeat" : getRepeatStatus() == 1 ? "repeat" : "one_repeat" ) + ".png");
     }
 
     public int repeatStatus = WaterPlayer.config.getNumber("REPEAT_STATUS", 0).intValue();

@@ -28,7 +28,7 @@ public class PlaylistsScreen {
     private static final Component PlaylistsCategory = Localization.getText("waterplayer.playlists");
     private static final Component PlayCategory = Localization.getText("waterplayer.play");
     //
-    int playlistSize = 0;
+    int assetsSize = 0;
     boolean isLoaded = false;
     private final InterfaceUtils.DesignType designType = InterfaceUtils.DesignType.FLAT;
     public Screen build(Screen parent) {
@@ -49,7 +49,7 @@ public class PlaylistsScreen {
                                 }
                             }
                         }
-                        if(isLoaded && (playlistSize != size)) AlinLib.MINECRAFT.setScreen(this.build(parent));
+                        if(isLoaded && (assetsSize != size)) AlinLib.MINECRAFT.setScreen(this.build(parent));
                     }
                 })
                 .addPanelWidget(new ButtonBuilder(MainConfigCategory, (e) -> WaterPlayer.MINECRAFT.setScreen(new MainConfigsScreen().build(parent))).build())
@@ -66,7 +66,7 @@ public class PlaylistsScreen {
                         JsonObject jsonPlaylist = GsonHelper.parse(Files.readString(playlist.toPath()));
                         Playlist playlistObject = new Playlist(jsonPlaylist);
                         String fileName = playlist.getName().replace(".json", "");
-                        playlistSize++;
+                        assetsSize++;
                         builder.addWidget(new ButtonBuilder(Component.literal(String.format("%s by %s (%s)", playlistObject.title, playlistObject.author, fileName)), (s) -> WaterPlayer.MINECRAFT.setScreen(new PlaylistScreen(new PlaylistsScreen().build(parent), fileName))).build());
                     } catch (Exception e){
                         WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);

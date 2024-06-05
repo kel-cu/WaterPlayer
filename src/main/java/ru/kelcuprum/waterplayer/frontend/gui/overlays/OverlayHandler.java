@@ -2,7 +2,6 @@ package ru.kelcuprum.waterplayer.frontend.gui.overlays;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -14,6 +13,7 @@ import org.apache.logging.log4j.Level;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.api.events.client.ClientTickEvents;
 import ru.kelcuprum.alinlib.api.events.client.ScreenEvents;
+import ru.kelcuprum.alinlib.api.events.client.GuiRenderEvents;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
 
@@ -21,7 +21,7 @@ import java.util.List;
 
 import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Colors.*;
 
-public class OverlayHandler implements HudRenderCallback, ClientTickEvents.StartTick, ScreenEvents.ScreenRender {
+public class OverlayHandler implements GuiRenderEvents, ClientTickEvents.StartTick, ScreenEvents.ScreenRender {
     private final List<FormattedCharSequence> texts = new ObjectArrayList<>();
 
     private boolean isLive = false;
@@ -130,7 +130,7 @@ public class OverlayHandler implements HudRenderCallback, ClientTickEvents.Start
     }
 
     @Override
-    public void onHudRender(GuiGraphics guiGraphics, float tickDelta) {
+    public void onRender(GuiGraphics guiGraphics, float tickDelta) {
         if (!WaterPlayer.config.getBoolean("ENABLE_OVERLAY", true)) return;
         int pos = WaterPlayer.config.getNumber("OVERLAY.POSITION", 0).intValue();
         render(guiGraphics, pos);

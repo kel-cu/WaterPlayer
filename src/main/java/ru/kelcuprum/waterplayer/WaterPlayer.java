@@ -3,7 +3,6 @@ package ru.kelcuprum.waterplayer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -41,7 +40,7 @@ public class WaterPlayer implements ClientModInitializer {
             player.startAudioOutput();
             OverlayHandler hud = new OverlayHandler();
             ScreenEvents.SCREEN_RENDER.register(hud);
-            HudRenderCallback.EVENT.register(hud);
+            GuiRenderEvents.RENDER.register(hud);
             ClientTickEvents.START_CLIENT_TICK.register(hud);
         });
         ClientLifecycleEvents.CLIENT_STOPPING.register(c -> player.getAudioPlayer().stopTrack());
