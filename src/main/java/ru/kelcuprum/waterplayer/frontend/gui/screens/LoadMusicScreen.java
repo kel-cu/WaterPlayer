@@ -1,13 +1,11 @@
 package ru.kelcuprum.waterplayer.frontend.gui.screens;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.NotNull;
 import ru.kelcuprum.alinlib.AlinLib;
@@ -64,9 +62,9 @@ public class LoadMusicScreen extends Screen {
                 .setSize(size, 20)
                 .build().setTypeInteger("%"));
         //
-        addRenderableWidget(new ButtonSpriteBuilder(new InterfaceUtils().getResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"), (s) -> {
+        addRenderableWidget(new ButtonSpriteBuilder(InterfaceUtils.getResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"), (s) -> {
             WaterPlayer.player.getAudioPlayer().setPaused(!WaterPlayer.player.getAudioPlayer().isPaused());
-            s.setIcon(new InterfaceUtils().getResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"));
+            s.setIcon(InterfaceUtils.getResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"));
         })
                 .setSize(20, 20)
                 .setTextureSize(20, 20)
@@ -81,7 +79,7 @@ public class LoadMusicScreen extends Screen {
                 .setPosition(x + 100, height - 30)
                 .setDesignType(designType).build());
 
-        addRenderableWidget(new ButtonSpriteBuilder(new InterfaceUtils().getResourceLocation("waterplayer", "textures/player/skip.png"), (s) -> {
+        addRenderableWidget(new ButtonSpriteBuilder(InterfaceUtils.getResourceLocation("waterplayer", "textures/player/skip.png"), (s) -> {
             if (WaterPlayer.player.getTrackScheduler().queue.isEmpty() && WaterPlayer.player.getAudioPlayer().getPlayingTrack() == null)
                 return;
             WaterPlayer.player.getTrackScheduler().nextTrack();
@@ -91,7 +89,7 @@ public class LoadMusicScreen extends Screen {
                 .setPosition(x + 25, height - 30)
                 .setDesignType(designType).build());
 
-        addRenderableWidget(new ButtonSpriteBuilder(new InterfaceUtils().getResourceLocation("waterplayer", "textures/player/shuffle.png"), (s) -> {
+        addRenderableWidget(new ButtonSpriteBuilder(InterfaceUtils.getResourceLocation("waterplayer", "textures/player/shuffle.png"), (s) -> {
             if (!WaterPlayer.player.getTrackScheduler().queue.isEmpty()) {
                 WaterPlayer.player.getTrackScheduler().shuffle();
                 rebuildWidgetsList();
@@ -102,7 +100,7 @@ public class LoadMusicScreen extends Screen {
                 .setPosition(x + 50, height - 30)
                 .setDesignType(designType).build());
 
-        addRenderableWidget(new ButtonSpriteBuilder(new InterfaceUtils().getResourceLocation("waterplayer", "textures/player/reset_queue.png"), (s) -> WaterPlayer.player.getTrackScheduler().queue.clear())
+        addRenderableWidget(new ButtonSpriteBuilder(InterfaceUtils.getResourceLocation("waterplayer", "textures/player/reset_queue.png"), (s) -> WaterPlayer.player.getTrackScheduler().queue.clear())
                 .setSize(20, 20)
                 .setTextureSize(20, 20)
                 .setPosition(x + 75, height - 30)

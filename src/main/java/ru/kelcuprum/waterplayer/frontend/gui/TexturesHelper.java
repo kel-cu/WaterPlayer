@@ -30,9 +30,9 @@ public class TexturesHelper {
             if (!urls.getOrDefault(id, false)) {
                 urls.put(id, true);
                 String finalId = id;
-                new Thread(() -> registerTexture(url, finalId, new InterfaceUtils().getResourceLocation("waterplayer", finalId))).start();
+                new Thread(() -> registerTexture(url, finalId, InterfaceUtils.getResourceLocation("waterplayer", finalId))).start();
             }
-            return new InterfaceUtils().getResourceLocation("waterplayer", "textures/no_icon.png");
+            return InterfaceUtils.getResourceLocation("waterplayer", "textures/no_icon.png");
         }
     }
 
@@ -62,7 +62,7 @@ public class TexturesHelper {
             } catch (Exception e) {
                 WaterPlayer.log("Error loading image from URL: " + url + " - " + e.getMessage());
                 e.printStackTrace();
-                resourceLocationMap.put(id, new InterfaceUtils().getResourceLocation("waterplayer", "textures/no_icon.png"));
+                resourceLocationMap.put(id, InterfaceUtils.getResourceLocation("waterplayer", "textures/no_icon.png"));
                 return;
             }
             texture = new DynamicTexture(image);
