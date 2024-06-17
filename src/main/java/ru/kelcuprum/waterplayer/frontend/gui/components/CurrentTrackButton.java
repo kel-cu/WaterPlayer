@@ -9,7 +9,9 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
+import ru.kelcuprum.alinlib.gui.components.Resetable;
 import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
+import ru.kelcuprum.alinlib.gui.components.sliders.base.SliderPercent;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
 import ru.kelcuprum.waterplayer.frontend.localization.StarScript;
@@ -36,6 +38,7 @@ public class CurrentTrackButton extends Button {
     public int getHeight() {
         int i = isShort ? 20 : 40;
         if (isTrackEnable()) i += 2;
+        this.height = i;
         return i;
     }
 
@@ -45,7 +48,7 @@ public class CurrentTrackButton extends Button {
 
     @Override
     public @NotNull Component getMessage() {
-        if(isTrackEnable()){
+        if (isTrackEnable()) {
             AudioTrack track = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
             StringBuilder builder = new StringBuilder();
             if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
@@ -69,11 +72,11 @@ public class CurrentTrackButton extends Button {
             int color = WaterPlayer.player.getAudioPlayer().isPaused() ? InterfaceUtils.Colors.CLOWNFISH : track.getInfo().isStream ? InterfaceUtils.Colors.GROUPIE : InterfaceUtils.Colors.SEADRIVE;
             //
             if (isShort) {
-                if(InterfaceUtils.isDoesNotFit(getMessage(), getWidth(), getHeight())){
+                if (InterfaceUtils.isDoesNotFit(getMessage(), getWidth(), getHeight())) {
                     this.renderScrollingString(guiGraphics, AlinLib.MINECRAFT.font, 2, 0xFFFFFF);
                 } else {
                     guiGraphics.drawString(AlinLib.MINECRAFT.font, builder.toString(), getX() + (getHeight() - 8) / 2, getY() + (getHeight() - 8) / 2, 0xffffff);
-                    guiGraphics.drawString(AlinLib.MINECRAFT.font, time, getX() + getWidth()-AlinLib.MINECRAFT.font.width(time)-((getHeight() - 8) / 2), getY() + (getHeight() - 8) / 2, 0xffffff);
+                    guiGraphics.drawString(AlinLib.MINECRAFT.font, time, getX() + getWidth() - AlinLib.MINECRAFT.font.width(time) - ((getHeight() - 8) / 2), getY() + (getHeight() - 8) / 2, 0xffffff);
                 }
             } else {
                 ResourceLocation icon = Music.getThumbnail(track);
@@ -93,5 +96,27 @@ public class CurrentTrackButton extends Button {
             guiGraphics.drawCenteredString(AlinLib.MINECRAFT.font, Component.translatable("waterplayer.command.now_playing.notPlaying"), getX() + (getWidth() / 2), getY() + (getHeight() / 2) - (AlinLib.MINECRAFT.font.lineHeight / 2), -1);
         }
 
+    }
+
+    private void setValueFromMouse(double d) {
+        if (isDragble()) {
+            double pos = ((d - (double) (this.getX() + 2)) / (double) (this.getWidth() - 4));
+            long dur = WaterPlayer.player.getAudioPlayer().getPlayingTrack().getDuration();
+            WaterPlayer.player.getAudioPlayer().getPlayingTrack().setPosition((long) (dur * pos));
+        }
+    }
+    protected boolean isDragble(){
+        return isTrackEnable() && !WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().isStream;
+    }
+
+    @Override
+    public void onClick(double d, double e) {
+        if(isDragble() && e > getY()+getHeight()-4) setValueFromMouse(d);
+        else super.onClick(d, e);
+    }
+    @Override
+    protected void onDrag(double d, double e, double f, double g) {
+        if(isDragble() && e > getY()+getHeight()-4) setValueFromMouse(d);
+        else super.onDrag(d, e, f, g);
     }
 }

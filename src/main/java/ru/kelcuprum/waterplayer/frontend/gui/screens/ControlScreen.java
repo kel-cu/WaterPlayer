@@ -26,11 +26,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
-public class LoadMusicScreen extends Screen {
+public class ControlScreen extends Screen {
     private final Screen parent;
     private final InterfaceUtils.DesignType designType = InterfaceUtils.DesignType.FLAT;
 
-    public LoadMusicScreen(Screen parent) {
+    public ControlScreen(Screen parent) {
         super(Localization.getText("waterplayer.name"));
         this.parent = parent;
     }
@@ -40,11 +40,13 @@ public class LoadMusicScreen extends Screen {
         initPanel();
         initList();
     }
+
     protected EditBoxString request;
+
     public void initPanel() {
         int x = 5;
         int size = 180;
-        addRenderableWidget(new TextBox(x, 15, size, 9, Localization.getText("waterplayer.load"), true));
+        addRenderableWidget(new TextBox(x, 15, size, 9, Localization.getText("waterplayer.control"), true));
         request = new EditBoxString(x + 25, 60, size - 25, 20, designType, Localization.getText("waterplayer.load.url"));
         request.setMaxLength(Integer.MAX_VALUE);
         addRenderableWidget(request);
@@ -112,8 +114,8 @@ public class LoadMusicScreen extends Screen {
     private List<AbstractWidget> widgets = new ArrayList<>();
 
     public void initList() {
-        widgets = new ArrayList<>();
         int x = 195;
+        widgets = new ArrayList<>();
         this.scroller = addRenderableWidget(new ConfigureScrolWidget(this.width - 8, 0, 4, this.height, Component.empty(), scroller -> {
             scroller.innerHeight = 5;
             for (AbstractWidget widget : widgets) {
@@ -128,6 +130,8 @@ public class LoadMusicScreen extends Screen {
         widgets.add(new TextBox(x, -20, width - 200, 20, Component.translatable("waterplayer.load.current_track"), true));
         widgets.add(new CurrentTrackButton(x, -42, width - 200, !WaterPlayer.config.getBoolean("SCREEN.QUEUE_COVER_SHOW", true), this));
         widgets.add(new TextBox(x, -20, width - 200, 20, Component.translatable(queue.isEmpty() ? "waterplayer.command.queue.blank" : "waterplayer.command.queue"), true));
+
+
         try {
             if (!queue.isEmpty()) {
                 for (AudioTrack track : WaterPlayer.player.getTrackScheduler().queue) {
@@ -150,9 +154,7 @@ public class LoadMusicScreen extends Screen {
     protected void rebuildWidgetsList() {
         removeWidget(scroller);
         scroller = null;
-        for (AbstractWidget widget : widgets) {
-            removeWidget(widget);
-        }
+        for (AbstractWidget widget : widgets) removeWidget(widget);
         initList();
     }
 
@@ -189,11 +191,7 @@ public class LoadMusicScreen extends Screen {
 
     @Override
     public void onFilesDrop(List<Path> list) {
-        if(list.size() == 1) {
-            if(list.get(0).getFileName().toString().endsWith(".json")){
-                WaterPlayer.player.loadMusic(String.format("playlist:%s", list.get(0).getFileName().toString().replace(".json", "")), false);
-            } else request.setValue(list.get(0).toString());
-        }
+        if (list.size() == 1) request.setValue(list.get(0).toString());
         else AlinLib.MINECRAFT.setScreen(new ConfirmLoadFiles(list, this));
     }
 

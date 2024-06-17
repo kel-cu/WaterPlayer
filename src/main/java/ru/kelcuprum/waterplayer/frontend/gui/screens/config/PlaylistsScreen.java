@@ -9,17 +9,21 @@ import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
+import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonWithIconBuilder;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.alinlib.gui.screens.ConfigScreenBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.CreatePlaylistScreen;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.LoadMusicScreen;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.ControlScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.PlaylistScreen;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.util.Objects;
+
+import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Icons.*;
+import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Icons.LIST;
 
 public class PlaylistsScreen {
     private static final Component MainConfigCategory = Localization.getText("waterplayer.config");
@@ -30,11 +34,10 @@ public class PlaylistsScreen {
     //
     int assetsSize = 0;
     boolean isLoaded = false;
-    private final InterfaceUtils.DesignType designType = InterfaceUtils.DesignType.FLAT;
     public Screen build(Screen parent) {
         File playlists = WaterPlayer.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists").toFile();
 
-        ConfigScreenBuilder builder = new ConfigScreenBuilder(parent, Component.translatable("waterplayer.name"), designType)
+        ConfigScreenBuilder builder = new ConfigScreenBuilder(parent, Component.translatable("waterplayer.name"))
                 .setOnTick((s) -> {
                     int size = 0;
                     if(playlists.exists() && playlists.isDirectory()){
@@ -52,22 +55,20 @@ public class PlaylistsScreen {
                         if(isLoaded && (assetsSize != size)) AlinLib.MINECRAFT.setScreen(this.build(parent));
                     }
                 })
-                .addPanelWidget(new ButtonBuilder(MainConfigCategory, (e) -> WaterPlayer.MINECRAFT.setScreen(new MainConfigsScreen().build(parent))).build())
-                .addPanelWidget(new ButtonBuilder(LocalizationConfigCategory, (e) -> WaterPlayer.MINECRAFT.setScreen(new LocalizationConfigsScreen().build(parent))).build())
-                .addPanelWidget(new ButtonBuilder(SecretConfigCategory, (e) -> WaterPlayer.MINECRAFT.setScreen(new SecretConfigsScreen().build(parent))).build())
-                .addPanelWidget(new ButtonBuilder(PlaylistsCategory, (e) -> WaterPlayer.MINECRAFT.setScreen(new PlaylistsScreen().build(parent))).build())
-                .addPanelWidget(new ButtonBuilder(PlayCategory, (e) -> WaterPlayer.MINECRAFT.setScreen(new LoadMusicScreen(this.build(parent)))).build())
+                .addPanelWidget(new ButtonWithIconBuilder(MainConfigCategory, OPTIONS, (e) -> WaterPlayer.MINECRAFT.setScreen(new MainConfigsScreen().build(parent))).setCentered(false).build())
+                .addPanelWidget(new ButtonWithIconBuilder(LocalizationConfigCategory, LIST, (e) -> WaterPlayer.MINECRAFT.setScreen(new LocalizationConfigsScreen().build(parent))).setCentered(false).build())
+                .addPanelWidget(new ButtonWithIconBuilder(SecretConfigCategory, WARNING, (e) -> WaterPlayer.MINECRAFT.setScreen(new SecretConfigsScreen().build(parent))).setCentered(false).build())
+                .addPanelWidget(new ButtonWithIconBuilder(PlaylistsCategory, LIST, (e) -> WaterPlayer.MINECRAFT.setScreen(new PlaylistsScreen().build(parent))).setCentered(false).build())
+                .addPanelWidget(new ButtonWithIconBuilder(PlayCategory, InterfaceUtils.getResourceLocation("waterplayer", "textures/player/play.png"), (e) -> WaterPlayer.MINECRAFT.setScreen(new ControlScreen(this.build(parent)))).setCentered(false).build())
                 //
                 .addWidget(new TextBox(140, 5, PlaylistsCategory, true));
         if(playlists.exists() && playlists.isDirectory()){
             for(File playlist : Objects.requireNonNull(playlists.listFiles())){
                 if(playlist.isFile() && playlist.getName().endsWith(".json")){
                     try {
-                        JsonObject jsonPlaylist = GsonHelper.parse(Files.readString(playlist.toPath()));
-                        Playlist playlistObject = new Playlist(jsonPlaylist);
-                        String fileName = playlist.getName().replace(".json", "");
+                        Playlist playlistObject = new Playlist(playlist.toPath());
                         assetsSize++;
-                        builder.addWidget(new ButtonBuilder(Component.literal(String.format("%s by %s (%s)", playlistObject.title, playlistObject.author, fileName)), (s) -> WaterPlayer.MINECRAFT.setScreen(new PlaylistScreen(new PlaylistsScreen().build(parent), fileName))).build());
+                        builder.addWidget(new ButtonBuilder(Component.literal(String.format("%s by %s (%s)", playlistObject.title, playlistObject.author, playlistObject.fileName)), (s) -> WaterPlayer.MINECRAFT.setScreen(new PlaylistScreen(new PlaylistsScreen().build(parent), playlistObject.fileName))).build());
                     } catch (Exception e){
                         WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);
                     }

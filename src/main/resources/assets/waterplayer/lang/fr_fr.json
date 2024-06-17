@@ -8,6 +8,7 @@
   "waterplayer.command.queue": "File d'attente actuelle :",
 
   "waterplayer.playlist": "Playlist",
+  "waterplayer.playlist.add_files": "Êtes-vous sûr de vouloir ajouter ces fichiers ?",
   "waterplayer.playlist.create": "Créer une playlist",
   "waterplayer.playlist.create.filename": "Nom de la liste de lecture :",
   "waterplayer.playlist.reload": "Recharger",
@@ -22,7 +23,7 @@
   "waterplayer.key.pause": "Mettre en pause",
   "waterplayer.key.volume.up": "Augmenter le volume",
   "waterplayer.key.volume.down": "Diminuer le volume",
-  "waterplayer.key.load": "Menu de chargement des pistes",
+  "waterplayer.key.control": "Écran de contrôle",
   "waterplayer.key.skip": "Passer à la piste suivante",
   "waterplayer.key.reset": "Réinitialiser la file d'attente",
   "waterplayer.key.shuffle": "Mélanger la file d'attente",
@@ -37,7 +38,7 @@
   "waterplayer.message.shuffle": "La file d'attente a été mélangée",
   "waterplayer.message.skip": "Piste passée",
 
-  "waterplayer.load": "Charger des pistes",
+  "waterplayer.control": "Gestion",
   "waterplayer.load.current_track": "Piste actuelle :",
   "waterplayer.load.load": "Charger",
   "waterplayer.load.volume": "Volume",
@@ -58,7 +59,7 @@
 
   "waterplayer.config": "Configuration",
   "waterplayer.playlists": "Playlists",
-  "waterplayer.play": "Ajouter des pistes",
+  "waterplayer.play": "Gestion",
   "waterplayer.config.enable_overlay": "Superposition en jeu",
   "waterplayer.config.overlay.position": "Position de la superposition en jeu",
   "waterplayer.config.enable_menu_overlay": "Superposition dans le menu principal",
@@ -73,6 +74,7 @@
   "waterplayer.config.enable_notice": "Notifications de contrôle des pistes",
   "waterplayer.config.enable_notice.start_track": "Notifications de titre de piste",
   "waterplayer.config.enable_notice.start_track.clear": "Effacer les notifications après le démarrage d'une nouvelle piste",
+  "waterplayer.config.enable_keybind": "Activer la liaison des touches dans le menu",
 
   "waterplayer.config.services": "Services",
   "waterplayer.config.services.youtube": "YouTube",

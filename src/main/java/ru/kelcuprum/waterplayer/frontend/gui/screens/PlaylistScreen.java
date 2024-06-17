@@ -1,16 +1,18 @@
 package ru.kelcuprum.waterplayer.frontend.gui.screens;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.glfw.GLFW;
+import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.alinlib.gui.components.ConfigureScrolWidget;
@@ -48,13 +50,12 @@ public class PlaylistScreen extends Screen {
         assert this.minecraft != null;
         playlistFile = this.minecraft.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/"+ playlistName +".json");
         try {
-            jsonPlaylist = GsonHelper.parse(Files.readString(playlistFile));
+            playlist = new Playlist(playlistFile);
         } catch (Exception ex){
             WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
         }
-        playlist = new Playlist(jsonPlaylist);
         initPanel();
-        initContent();
+        initList();
     }
     public void initPanel(){
         int x = 5;
@@ -89,7 +90,8 @@ public class PlaylistScreen extends Screen {
     }
     private ConfigureScrolWidget scroller;
     private List<AbstractWidget> widgets = new ArrayList<>();
-    public void initContent(){
+    private int lastSize = 0;
+    public void initList(){
         widgets = new ArrayList<>();
         this.scroller = addRenderableWidget(new ConfigureScrolWidget(this.width - 8, 0, 4, this.height, Component.empty(), scroller -> {
             scroller.innerHeight = 5;
@@ -103,10 +105,11 @@ public class PlaylistScreen extends Screen {
         int x = 195;
         widgets.add(new TextBox(x, 5, width-200, 20, Component.translatable("waterplayer.playlist.urls"), true));
         int i = 0;
-        for(String url : playlist.urls){
+        for(JsonElement element : playlist.getUrlsJSON()){
+            String url = element.getAsString();
             int finalI = i;
             widgets.add(new EditBoxString(x, -20, width-200, 20, false, url, designType, Component.literal(String.format("%s. ", i)), (s) -> {
-                playlist.urls.set(finalI, s);
+                playlist.setUrl(s, finalI);
                 save();
             }));
             i++;
@@ -114,16 +117,13 @@ public class PlaylistScreen extends Screen {
         widgets.add(new Button(x, -20, width-200, 20, designType, Component.translatable("waterplayer.playlist.add"), (s) -> {
            playlist.urls.add("https://c418.bandcamp.com/track/strad");
            save();
-           rebuildWidgets();
         }));
         addRenderableWidgets(widgets);
     }
     protected void addRenderableWidgets(@NotNull List<AbstractWidget> widgets) {
-
         for (AbstractWidget widget : widgets) {
             this.addRenderableWidget(widget);
         }
-
     }
     private void save(){
         Minecraft CLIENT = Minecraft.getInstance();
@@ -140,10 +140,37 @@ public class PlaylistScreen extends Screen {
         super.renderBackground(guiGraphics, i, j, f);
         InterfaceUtils.renderLeftPanel(guiGraphics, 190, height);
     }
+
     @Override
     public void tick(){
         if(scroller != null) scroller.onScroll.accept(scroller);
+        if(lastSize != playlist.getUrlsJSON().size()){
+            if(getFocused() == null || !(getFocused().isFocused() && (getFocused() instanceof EditBox))){
+                lastSize = playlist.getUrlsJSON().size();
+                rebuildWidgetsList();
+            }
+        }
         super.tick();
+    }
+
+    @Override
+    public boolean keyPressed(int i, int j, int k) {
+        if(i == GLFW.GLFW_KEY_ESCAPE){
+            if(getFocused() != null && getFocused().isFocused()) {
+                getFocused().setFocused(false);
+                return true;
+            }
+        }
+        return super.keyPressed(i, j, k);
+    }
+
+    protected void rebuildWidgetsList() {
+        removeWidget(scroller);
+        scroller = null;
+        for (AbstractWidget widget : widgets) {
+            removeWidget(widget);
+        }
+        initList();
     }
 
     @Override
@@ -154,6 +181,13 @@ public class PlaylistScreen extends Screen {
         }
         return scr;
     }
+
+    @Override
+    public void onFilesDrop(List<Path> list) {
+        if(list.size() == 1) playlist.addUrl(list.get(0).toString());
+        else AlinLib.MINECRAFT.setScreen(new ConfirmAddedFiles(list, this, playlist));
+    }
+
     public void onClose() {
         if(!isDeleted) save();
         assert this.minecraft != null;

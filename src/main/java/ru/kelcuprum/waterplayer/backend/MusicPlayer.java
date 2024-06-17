@@ -113,19 +113,28 @@ public class MusicPlayer {
             return;
         }
         if (isFirstLoadMusic) WaterPlayer.config.setString("LAST_REQUEST_MUSIC", url);
-        File folder = new File(url);
-        if (url.startsWith("playlist:")) {
+        File file = new File(url);
+        if (url.startsWith("playlist:") || (file.exists() && file.isFile() && file.getName().endsWith(".json"))) {
             String name = url.replace("playlist:", "");
             Playlist playlist;
-            JsonObject jsonPlaylist = new JsonObject();
+            if(file.exists()){
+                try{
+                    playlist = new Playlist(file.toPath());
+                } catch (Exception exception){
+                    WaterPlayer.log(exception.getMessage(), Level.ERROR);
+                    return;
+                }
+            } else {
+                JsonObject jsonPlaylist = new JsonObject();
 
-            final Path configFile = WaterPlayer.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/" + name + ".json");
-            try {
-                jsonPlaylist = GsonHelper.parse(Files.readString(configFile));
-            } catch (Exception ex) {
-                WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
+                final Path configFile = WaterPlayer.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/" + name + ".json");
+                try {
+                    jsonPlaylist = GsonHelper.parse(Files.readString(configFile));
+                } catch (Exception ex) {
+                    WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
+                }
+                playlist = new Playlist(jsonPlaylist);
             }
-            playlist = new Playlist(jsonPlaylist);
             for (int i = 0; i < playlist.urlsJSON.size(); i++) {
                 loadMusic(playlist.urlsJSON.get(i).getAsString(), false);
             }
@@ -133,13 +142,13 @@ public class MusicPlayer {
                     Localization.getStringText("waterplayer.load.add.playlist")
                             .replace("%playlist_name%", playlist.title)
             )).show(WaterPlayer.MINECRAFT.getToasts());
-        } else if (folder.exists() && folder.isDirectory()) {
+        } else if (file.exists() && file.isDirectory()) {
             try {
-                File[] list = folder.listFiles();
+                File[] list = file.listFiles();
                 assert list != null;
 
-                for (File file : list) {
-                    if (file.isFile()) getTracks(file.getPath());
+                for (File track : list) {
+                    if (track.isFile()) getTracks(track.getPath());
                 }
                 if(isFirstLoadMusic) WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add.files")).show(WaterPlayer.MINECRAFT.getToasts());
             } catch (Exception e) {

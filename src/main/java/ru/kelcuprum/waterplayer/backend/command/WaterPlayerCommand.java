@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandBuildContext;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.waterplayer.WaterPlayer;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.LoadMusicScreen;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.ControlScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.PlaylistScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.config.MainConfigsScreen;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
@@ -35,7 +35,7 @@ public class WaterPlayerCommand {
                         )
                         .executes(context -> {
                             Minecraft client = context.getSource().getClient();
-                            client.tell(() -> client.setScreen(new LoadMusicScreen(client.screen)));
+                            client.tell(() -> client.setScreen(new ControlScreen(client.screen)));
                             return 1;
                         })
                 )

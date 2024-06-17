@@ -8,6 +8,7 @@
   "waterplayer.command.queue": "Текущая очередь:",
 
   "waterplayer.playlist": "Плейлист",
+  "waterplayer.playlist.add_files": "Вы уверены, что хотите добавить эти файлы?",
   "waterplayer.playlist.create": "Создать плейлист",
   "waterplayer.playlist.create.filename": "Название плейлиста:",
   "waterplayer.playlist.reload": "Перезагрузить",
@@ -22,7 +23,7 @@
   "waterplayer.key.pause": "Пауза",
   "waterplayer.key.volume.up": "Увеличить громкость",
   "waterplayer.key.volume.down": "Уменьшить громкость",
-  "waterplayer.key.load": "Меню загрузки треков",
+  "waterplayer.key.control": "Экран управления",
   "waterplayer.key.skip": "Пропустить трек",
   "waterplayer.key.reset": "Сброс очереди",
   "waterplayer.key.shuffle": "Перемешать очередь",
@@ -37,7 +38,7 @@
   "waterplayer.message.shuffle": "Очередь перемешана",
   "waterplayer.message.skip": "Трек пропущен",
 
-  "waterplayer.load": "Загрузить треки",
+  "waterplayer.control": "Управление",
   "waterplayer.load.current_track": "Текущий трек:",
   "waterplayer.load.load": "Загрузить",
   "waterplayer.load.volume": "Громкость",
@@ -58,7 +59,7 @@
 
   "waterplayer.config": "Конфигурация",
   "waterplayer.playlists": "Плейлисты",
-  "waterplayer.play": "Добавить треки",
+  "waterplayer.play": "Управление",
   "waterplayer.config.enable_overlay": "Внутриигровой оверлей",
   "waterplayer.config.overlay.position": "Позиция внутриигрового оверлея",
   "waterplayer.config.enable_menu_overlay": "Оверлей в главном меню",
@@ -73,6 +74,7 @@
   "waterplayer.config.enable_notice": "Уведомления контроля трека",
   "waterplayer.config.enable_notice.start_track": "Уведомления названия трека",
   "waterplayer.config.enable_notice.start_track.clear": "Очистить уведомления после старта нового трека",
+  "waterplayer.config.enable_keybind": "Включить кейбинды в меню",
 
   "waterplayer.config.services": "Сервисы",
   "waterplayer.config.services.youtube": "YouTube",
