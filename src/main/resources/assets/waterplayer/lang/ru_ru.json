@@ -75,6 +75,7 @@
   "waterplayer.config.enable_notice.start_track": "Уведомления названия трека",
   "waterplayer.config.enable_notice.start_track.clear": "Очистить уведомления после старта нового трека",
   "waterplayer.config.enable_keybind": "Включить кейбинды в меню",
+  "waterplayer.config.control.enable_lyrics": "Тексты песен на экране управления",
 
   "waterplayer.config.services": "Сервисы",
   "waterplayer.config.services.youtube": "YouTube",

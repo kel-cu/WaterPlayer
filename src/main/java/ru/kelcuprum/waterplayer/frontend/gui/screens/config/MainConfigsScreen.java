@@ -33,6 +33,7 @@ public class MainConfigsScreen {
     private static final Component enableNoticeStartTrackClearText = Localization.getText("waterplayer.config.enable_notice.start_track.clear");
     private static final Component screenQueueCoverShow = Localization.getText("waterplayer.config.screem.queue_cover_show");
     private static final Component enableKeyBind = Localization.getText("waterplayer.config.enable_keybind");
+    private static final Component controlEnableLyrics = Localization.getText("waterplayer.config.control.enable_lyrics");
 
     public Screen build(Screen parent) {
         String[] type = {
@@ -59,6 +60,7 @@ public class MainConfigsScreen {
                 .addWidget(new ButtonBooleanBuilder(enableNoticeStartTrackClearText, false).setConfig(WaterPlayer.config, "ENABLE_NOTICE.START_TRACK.CLEAR").build())
                 .addWidget(new ButtonBooleanBuilder(screenQueueCoverShow, true).setConfig(WaterPlayer.config, "SCREEN.QUEUE_COVER_SHOW").build())
                 .addWidget(new ButtonBooleanBuilder(enableKeyBind, false).setConfig(WaterPlayer.config, "ENABLE_KEYBINDS").build())
+                .addWidget(new ButtonBooleanBuilder(controlEnableLyrics, true).setConfig(WaterPlayer.config, "CONTROL.ENABLE_LYRICS").build())
                 .addWidget(new CategoryBox(Component.translatable("waterplayer.config.services"))
                         .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.services.youtube"), true).setConfig(WaterPlayer.config, "ENABLE_YOUTUBE").build())
                         .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.services.soundcloud"), true).setConfig(WaterPlayer.config, "ENABLE_SOUNDCLOUD").build())

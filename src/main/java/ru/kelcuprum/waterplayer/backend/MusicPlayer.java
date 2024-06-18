@@ -1,10 +1,12 @@
 package ru.kelcuprum.waterplayer.backend;
 
+import com.github.topi314.lavalyrics.LyricsManager;
 import com.github.topi314.lavasrc.applemusic.AppleMusicSourceManager;
 import com.github.topi314.lavasrc.deezer.DeezerAudioSourceManager;
 import com.github.topi314.lavasrc.flowerytts.FloweryTTSSourceManager;
 import com.github.topi314.lavasrc.spotify.SpotifySourceManager;
 import com.github.topi314.lavasrc.yandexmusic.YandexMusicSourceManager;
+import com.github.topi314.lavasrc.youtube.YoutubeSearchManager;
 import com.google.gson.JsonObject;
 import com.sedmelluq.discord.lavaplayer.format.AudioDataFormat;
 import com.sedmelluq.discord.lavaplayer.format.Pcm16AudioDataFormat;
@@ -20,6 +22,7 @@ import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.yamusic.YandexMusicUtils;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -50,6 +53,7 @@ public class MusicPlayer {
 
     private final TrackScheduler trackScheduler;
     private final MusicManager musicManager;
+    private final LyricsManager lyricsManager;
 
     public final LocalAudioSourceManager localAudioSourceManager = new LocalAudioSourceManager();
 
@@ -58,6 +62,7 @@ public class MusicPlayer {
         audioDataFormat = new Pcm16AudioDataFormat(2, 48000, 960, true);
         audioPlayer = audioPlayerManager.createPlayer();
         audioOutput = new AudioOutput(this);
+        lyricsManager = new LyricsManager();
 
         trackScheduler = new TrackScheduler(audioPlayer);
         musicManager = new MusicManager(audioPlayer, trackScheduler);
@@ -75,32 +80,53 @@ public class MusicPlayer {
 
     private void registerSources() {
         Config config = WaterPlayer.config;
-        if (!config.getString("YANDEX_MUSIC_TOKEN", "").isBlank())
-            audioPlayerManager.registerSourceManager(new YandexMusicSourceManager(config.getString("YANDEX_MUSIC_TOKEN", "")));
+        if (!config.getString("YANDEX_MUSIC_TOKEN", "").isBlank()) {
+            YandexMusicSourceManager ym = new YandexMusicSourceManager(config.getString("YANDEX_MUSIC_TOKEN", ""));
+            audioPlayerManager.registerSourceManager(ym);
+            lyricsManager.registerLyricsManager(ym);
+        }
         if (!config.getString("FLOWERY_TTS_VOICE", "Alena").isBlank())
             audioPlayerManager.registerSourceManager(new FloweryTTSSourceManager(config.getString("FLOWERY_TTS_VOICE", "Alena")));
-        if (!config.getString("DEEZER_DECRYPTION_KEY", "").isBlank())
-            audioPlayerManager.registerSourceManager(new DeezerAudioSourceManager(config.getString("DEEZER_DECRYPTION_KEY", "")));
-        if (!config.getString("APPLE_MUSIC_MEDIA_API_TOKEN", "").isBlank() && !config.getString("APPLE_MUSIC_COUNTRY_CODE", "us").isBlank())
-            audioPlayerManager.registerSourceManager(new AppleMusicSourceManager(null, config.getString("APPLE_MUSIC_MEDIA_API_TOKEN", ""), config.getString("APPLE_MUSIC_COUNTRY_CODE", "us"), audioPlayerManager));
-        if (!config.getString("SPOTIFY_CLIENT_ID", "").isBlank() && !config.getString("SPOTIFY_CLIENT_SECRET", "").isBlank() && !config.getString("SPOTIFY_COUNTRY_CODE", "US").isBlank())
-            audioPlayerManager.registerSourceManager(new SpotifySourceManager(null, config.getString("SPOTIFY_CLIENT_ID", ""), config.getString("SPOTIFY_CLIENT_SECRET", ""), config.getString("SPOTIFY_COUNTRY_CODE", "US"), audioPlayerManager));
-
+        if (!config.getString("DEEZER_DECRYPTION_KEY", "").isBlank()) {
+            DeezerAudioSourceManager deezerAudioSourceManager = new DeezerAudioSourceManager(config.getString("DEEZER_DECRYPTION_KEY", ""));
+            audioPlayerManager.registerSourceManager(deezerAudioSourceManager);
+            lyricsManager.registerLyricsManager(deezerAudioSourceManager);
+        }
+        if (!config.getString("APPLE_MUSIC_MEDIA_API_TOKEN", "").isBlank() && !config.getString("APPLE_MUSIC_COUNTRY_CODE", "us").isBlank()) {
+            AppleMusicSourceManager appleMusicSourceManager = new AppleMusicSourceManager(null, config.getString("APPLE_MUSIC_MEDIA_API_TOKEN", ""), config.getString("APPLE_MUSIC_COUNTRY_CODE", "us"), audioPlayerManager);
+            audioPlayerManager.registerSourceManager(appleMusicSourceManager);
+        }
+        if (!config.getString("SPOTIFY_CLIENT_ID", "").isBlank() && !config.getString("SPOTIFY_CLIENT_SECRET", "").isBlank() && !config.getString("SPOTIFY_COUNTRY_CODE", "US").isBlank()){
+            SpotifySourceManager spotifySourceManager = new SpotifySourceManager(null, config.getString("SPOTIFY_CLIENT_ID", ""), config.getString("SPOTIFY_CLIENT_SECRET", ""), config.getString("SPOTIFY_COUNTRY_CODE", "US"), audioPlayerManager);
+            audioPlayerManager.registerSourceManager(spotifySourceManager);
+            lyricsManager.registerLyricsManager(spotifySourceManager);
+        }
         if (config.getBoolean("ENABLE_YOUTUBE", true)) {
-            final YoutubeAudioSourceManager youtube = new YoutubeAudioSourceManager(true, new Client[] { new MusicWithThumbnail(), new WebWithThumbnail(), new AndroidWithThumbnail()});
+            final YoutubeAudioSourceManager youtube = new YoutubeAudioSourceManager(true, new Client[]{new MusicWithThumbnail(), new WebWithThumbnail(), new AndroidWithThumbnail()});
             youtube.setPlaylistPageCount(100);
             audioPlayerManager.registerSourceManager(youtube);
+            lyricsManager.registerLyricsManager(new YoutubeSearchManager(() -> audioPlayerManager, "US"));
         }
-        if (config.getBoolean("ENABLE_SOUNDCLOUD", true))
-            audioPlayerManager.registerSourceManager(SoundCloudAudioSourceManager.createDefault());
-        if (config.getBoolean("ENABLE_BANDCAMP", true))
-            audioPlayerManager.registerSourceManager(new BandcampAudioSourceManager());
-        if (config.getBoolean("ENABLE_VIMEO", true))
-            audioPlayerManager.registerSourceManager(new VimeoAudioSourceManager());
-        if (config.getBoolean("ENABLE_TWITCH", false))
-            audioPlayerManager.registerSourceManager(new TwitchStreamAudioSourceManager());
-        if (config.getBoolean("ENABLE_BEAM", true))
-            audioPlayerManager.registerSourceManager(new BeamAudioSourceManager());
+        if (config.getBoolean("ENABLE_SOUNDCLOUD", true)){
+            SoundCloudAudioSourceManager soundCloudAudioSourceManager = SoundCloudAudioSourceManager.createDefault();
+            audioPlayerManager.registerSourceManager(soundCloudAudioSourceManager);
+        }
+        if (config.getBoolean("ENABLE_BANDCAMP", true)){
+            BandcampAudioSourceManager bandcampAudioSourceManager = new BandcampAudioSourceManager();
+            audioPlayerManager.registerSourceManager(bandcampAudioSourceManager);
+        }
+        if (config.getBoolean("ENABLE_VIMEO", true)){
+            VimeoAudioSourceManager vimeoAudioSourceManager = new VimeoAudioSourceManager();
+            audioPlayerManager.registerSourceManager(vimeoAudioSourceManager);
+        }
+        if (config.getBoolean("ENABLE_TWITCH", false)){
+            TwitchStreamAudioSourceManager twitchStreamAudioSourceManager = new TwitchStreamAudioSourceManager();
+            audioPlayerManager.registerSourceManager(twitchStreamAudioSourceManager);
+        }
+        if (config.getBoolean("ENABLE_BEAM", true)){
+            BeamAudioSourceManager beamAudioSourceManager = new BeamAudioSourceManager();
+            audioPlayerManager.registerSourceManager(beamAudioSourceManager);
+        }
         audioPlayerManager.registerSourceManager(new HttpAudioSourceManager());
         audioPlayerManager.registerSourceManager(localAudioSourceManager);
     }
@@ -117,10 +143,10 @@ public class MusicPlayer {
         if (url.startsWith("playlist:") || (file.exists() && file.isFile() && file.getName().endsWith(".json"))) {
             String name = url.replace("playlist:", "");
             Playlist playlist;
-            if(file.exists()){
-                try{
+            if (file.exists()) {
+                try {
                     playlist = new Playlist(file.toPath());
-                } catch (Exception exception){
+                } catch (Exception exception) {
                     WaterPlayer.log(exception.getMessage(), Level.ERROR);
                     return;
                 }
@@ -150,7 +176,8 @@ public class MusicPlayer {
                 for (File track : list) {
                     if (track.isFile()) getTracks(track.getPath());
                 }
-                if(isFirstLoadMusic) WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add.files")).show(WaterPlayer.MINECRAFT.getToasts());
+                if (isFirstLoadMusic)
+                    WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add.files")).show(WaterPlayer.MINECRAFT.getToasts());
             } catch (Exception e) {
                 WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);
             }
@@ -160,6 +187,7 @@ public class MusicPlayer {
                 WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add")).show(WaterPlayer.MINECRAFT.getToasts());
         }
     }
+
     private void getTracks(String url) {
         audioPlayerManager.loadItemOrdered(musicManager, url, new AudioLoadResultHandler() {
             @Override
@@ -195,6 +223,10 @@ public class MusicPlayer {
 
     public AudioPlayer getAudioPlayer() {
         return audioPlayer;
+    }
+
+    public LyricsManager getLyricsManager() {
+        return lyricsManager;
     }
 
     public TrackScheduler getTrackScheduler() {

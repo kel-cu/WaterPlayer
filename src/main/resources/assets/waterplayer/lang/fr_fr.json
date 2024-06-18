@@ -75,6 +75,7 @@
   "waterplayer.config.enable_notice.start_track": "Notifications de titre de piste",
   "waterplayer.config.enable_notice.start_track.clear": "Effacer les notifications après le démarrage d'une nouvelle piste",
   "waterplayer.config.enable_keybind": "Activer la liaison des touches dans le menu",
+  "waterplayer.config.control.enable_lyrics": "Paroles de chansons sur l'écran de contrôle",
 
   "waterplayer.config.services": "Services",
   "waterplayer.config.services.youtube": "YouTube",

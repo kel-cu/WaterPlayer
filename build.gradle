@@ -17,7 +17,6 @@ repositories {
     maven { url = "https://maven.meteordev.org/releases" }
     maven { url = "https://maven.lavalink.dev/releases" }
     maven { url = "https://maven.lavalink.dev/snapshots" }
-    maven { url = "https://repo.u-team.info" }
     ////
     maven { url = "https://repo.kelcuprum.ru/releases" }
     maven { url = "https://repo.kelcuprum.ru/snapshots" }
@@ -38,11 +37,10 @@ dependencies {
     //
     implementation shade("dev.arbjerg:lavaplayer:${project.lavaplayer}")
     implementation shade("dev.lavalink.youtube:v2:${project.youtube_source}")
-//    implementation shade("net.hycrafthd.lavaplayer:lavaplayer:${project.lavaplayer_u}")
     implementation shade("com.github.topi314.lavasrc:lavasrc:${project.lavasrc}")
     implementation shade("com.github.topi314.lavasrc:lavasrc-protocol:${project.lavasrc_protocol}")
+    implementation shade("com.github.topi314.lavalyrics:lavalyrics:${project.lavalyrics}")
     modImplementation("ru.kelcuprum.alinlib:AlinLib-fabric:${project.alinlib}")
-    include(implementation("meteordevelopment:starscript:0.2.2"))
 
     compileOnly 'org.projectlombok:lombok:1.18.26'
     annotationProcessor 'org.projectlombok:lombok:1.18.26'
