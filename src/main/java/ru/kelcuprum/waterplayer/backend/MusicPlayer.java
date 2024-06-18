@@ -80,6 +80,12 @@ public class MusicPlayer {
 
     private void registerSources() {
         Config config = WaterPlayer.config;
+        if (config.getBoolean("ENABLE_YOUTUBE", true)) {
+            final YoutubeAudioSourceManager youtube = new YoutubeAudioSourceManager(true, new Client[]{new MusicWithThumbnail(), new WebWithThumbnail(), new AndroidWithThumbnail()});
+            youtube.setPlaylistPageCount(100);
+            audioPlayerManager.registerSourceManager(youtube);
+            lyricsManager.registerLyricsManager(new YoutubeSearchManager(() -> audioPlayerManager, "US"));
+        }
         if (!config.getString("YANDEX_MUSIC_TOKEN", "").isBlank()) {
             YandexMusicSourceManager ym = new YandexMusicSourceManager(config.getString("YANDEX_MUSIC_TOKEN", ""));
             audioPlayerManager.registerSourceManager(ym);
@@ -96,34 +102,28 @@ public class MusicPlayer {
             AppleMusicSourceManager appleMusicSourceManager = new AppleMusicSourceManager(null, config.getString("APPLE_MUSIC_MEDIA_API_TOKEN", ""), config.getString("APPLE_MUSIC_COUNTRY_CODE", "us"), audioPlayerManager);
             audioPlayerManager.registerSourceManager(appleMusicSourceManager);
         }
-        if (!config.getString("SPOTIFY_CLIENT_ID", "").isBlank() && !config.getString("SPOTIFY_CLIENT_SECRET", "").isBlank() && !config.getString("SPOTIFY_COUNTRY_CODE", "US").isBlank()){
+        if (!config.getString("SPOTIFY_CLIENT_ID", "").isBlank() && !config.getString("SPOTIFY_CLIENT_SECRET", "").isBlank() && !config.getString("SPOTIFY_COUNTRY_CODE", "US").isBlank()) {
             SpotifySourceManager spotifySourceManager = new SpotifySourceManager(null, config.getString("SPOTIFY_CLIENT_ID", ""), config.getString("SPOTIFY_CLIENT_SECRET", ""), config.getString("SPOTIFY_COUNTRY_CODE", "US"), audioPlayerManager);
             audioPlayerManager.registerSourceManager(spotifySourceManager);
             lyricsManager.registerLyricsManager(spotifySourceManager);
         }
-        if (config.getBoolean("ENABLE_YOUTUBE", true)) {
-            final YoutubeAudioSourceManager youtube = new YoutubeAudioSourceManager(true, new Client[]{new MusicWithThumbnail(), new WebWithThumbnail(), new AndroidWithThumbnail()});
-            youtube.setPlaylistPageCount(100);
-            audioPlayerManager.registerSourceManager(youtube);
-            lyricsManager.registerLyricsManager(new YoutubeSearchManager(() -> audioPlayerManager, "US"));
-        }
-        if (config.getBoolean("ENABLE_SOUNDCLOUD", true)){
+        if (config.getBoolean("ENABLE_SOUNDCLOUD", true)) {
             SoundCloudAudioSourceManager soundCloudAudioSourceManager = SoundCloudAudioSourceManager.createDefault();
             audioPlayerManager.registerSourceManager(soundCloudAudioSourceManager);
         }
-        if (config.getBoolean("ENABLE_BANDCAMP", true)){
+        if (config.getBoolean("ENABLE_BANDCAMP", true)) {
             BandcampAudioSourceManager bandcampAudioSourceManager = new BandcampAudioSourceManager();
             audioPlayerManager.registerSourceManager(bandcampAudioSourceManager);
         }
-        if (config.getBoolean("ENABLE_VIMEO", true)){
+        if (config.getBoolean("ENABLE_VIMEO", true)) {
             VimeoAudioSourceManager vimeoAudioSourceManager = new VimeoAudioSourceManager();
             audioPlayerManager.registerSourceManager(vimeoAudioSourceManager);
         }
-        if (config.getBoolean("ENABLE_TWITCH", false)){
+        if (config.getBoolean("ENABLE_TWITCH", false)) {
             TwitchStreamAudioSourceManager twitchStreamAudioSourceManager = new TwitchStreamAudioSourceManager();
             audioPlayerManager.registerSourceManager(twitchStreamAudioSourceManager);
         }
-        if (config.getBoolean("ENABLE_BEAM", true)){
+        if (config.getBoolean("ENABLE_BEAM", true)) {
             BeamAudioSourceManager beamAudioSourceManager = new BeamAudioSourceManager();
             audioPlayerManager.registerSourceManager(beamAudioSourceManager);
         }
