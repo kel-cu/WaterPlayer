@@ -40,7 +40,7 @@
 
   "waterplayer.control.pause": "Пауза",
   "waterplayer.control.play": "Запустить",
-  "waterplayer.control.no_repeat": "Повтор выключен",
+  "waterplayer.control.non_repeat": "Повтор выключен",
   "waterplayer.control.one_repeat": "Повтор одного трека",
   "waterplayer.control.repeat": "Повтор",
   "waterplayer.control.shuffle": "Перемешать",

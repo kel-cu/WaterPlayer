@@ -40,7 +40,7 @@
 
   "waterplayer.control.pause": "Pause",
   "waterplayer.control.play": "Play",
-  "waterplayer.control.no_repeat": "Repeat off",
+  "waterplayer.control.non_repeat": "Repeat off",
   "waterplayer.control.one_repeat": "Single track repeat",
   "waterplayer.control.repeat": "Repeat",
   "waterplayer.control.shuffle": "Shuffle",
