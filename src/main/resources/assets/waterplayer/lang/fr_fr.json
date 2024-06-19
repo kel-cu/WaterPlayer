@@ -38,6 +38,15 @@
   "waterplayer.message.shuffle": "La file d'attente a été mélangée",
   "waterplayer.message.skip": "Piste passée",
 
+  "waterplayer.control.pause": "Pause",
+  "waterplayer.control.play": "Jouer",
+  "waterplayer.control.no_repeat": "Répétition de l'arrêt",
+  "waterplayer.control.one_repeat": "Répétition d'une piste unique",
+  "waterplayer.control.repeat": "Répéter",
+  "waterplayer.control.shuffle": "Aléatoire",
+  "waterplayer.control.skip": "Sauter",
+  "waterplayer.control.reset_queue": "Réinitialiser la file d'attente",
+
   "waterplayer.control": "Gestion",
   "waterplayer.load.current_track": "Piste actuelle :",
   "waterplayer.load.load": "Charger",

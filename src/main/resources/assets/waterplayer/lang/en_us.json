@@ -38,6 +38,15 @@
   "waterplayer.message.shuffle": "Queue shuffled",
   "waterplayer.message.skip": "Track skipped",
 
+  "waterplayer.control.pause": "Pause",
+  "waterplayer.control.play": "Play",
+  "waterplayer.control.no_repeat": "Repeat off",
+  "waterplayer.control.one_repeat": "Single track repeat",
+  "waterplayer.control.repeat": "Repeat",
+  "waterplayer.control.shuffle": "Shuffle",
+  "waterplayer.control.skip": "Skip",
+  "waterplayer.control.reset_queue": "Reset Queue",
+
   "waterplayer.control": "Control",
   "waterplayer.load.current_track": "Current Track:",
   "waterplayer.load.load": "Load",

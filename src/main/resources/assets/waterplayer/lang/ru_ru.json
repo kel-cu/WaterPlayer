@@ -38,6 +38,15 @@
   "waterplayer.message.shuffle": "Очередь перемешана",
   "waterplayer.message.skip": "Трек пропущен",
 
+  "waterplayer.control.pause": "Пауза",
+  "waterplayer.control.play": "Запустить",
+  "waterplayer.control.no_repeat": "Повтор выключен",
+  "waterplayer.control.one_repeat": "Повтор одного трека",
+  "waterplayer.control.repeat": "Повтор",
+  "waterplayer.control.shuffle": "Перемешать",
+  "waterplayer.control.skip": "Пропустить",
+  "waterplayer.control.reset_queue": "Сбросить очередь",
+
   "waterplayer.control": "Управление",
   "waterplayer.load.current_track": "Текущий трек:",
   "waterplayer.load.load": "Загрузить",
