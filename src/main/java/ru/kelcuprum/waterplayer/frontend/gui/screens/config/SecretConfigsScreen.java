@@ -10,7 +10,7 @@ import ru.kelcuprum.alinlib.gui.components.text.CategoryBox;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.alinlib.gui.screens.ConfigScreenBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.ControlScreen;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen;
 
 import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Icons.*;
 import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Icons.LIST;
@@ -30,6 +30,7 @@ public class SecretConfigsScreen {
     private final Component spotifyText = Localization.getText("waterplayer.secret.title.spotify");
     private final Component spotifyClientIDText = Localization.getText("waterplayer.config.spotify_client_id");
     private final Component spotifyClientSecretText = Localization.getText("waterplayer.config.spotify_client_secret");
+    private final Component spotifySPDC = Localization.getText("waterplayer.config.spotify_sp_dc");
     private final Component spotifyCountryCodeText = Localization.getText("waterplayer.config.spotify_country_code");
 
     private final Component appleMusicText = Localization.getText("waterplayer.secret.title.apple_music");
@@ -46,6 +47,9 @@ public class SecretConfigsScreen {
                 //
                 ///
                 .addWidget(new TextBox(SecretConfigCategory, true))
+                .addWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.secret.how_get_tokens"), WHAT, (s)->{
+
+                }).build())
                 .addWidget(new CategoryBox(tokensText)
                         .addValue(new EditBoxBuilder(yandexMusicText).setValue("").setConfig(WaterPlayer.config, "YANDEX_MUSIC_TOKEN").setSecret(true).build().setDescription(Component.translatable("waterplayer.secret.description")))
                         .addValue(new EditBoxBuilder(deezerText).setValue("").setConfig(WaterPlayer.config, "DEEZER_DECRYPTION_KEY").setSecret(true).build().setDescription(Component.translatable("waterplayer.secret.description")))
@@ -54,6 +58,7 @@ public class SecretConfigsScreen {
                 .addWidget(new CategoryBox(spotifyText)
                         .addValue(new EditBoxBuilder(spotifyClientIDText).setValue("").setConfig(WaterPlayer.config, "SPOTIFY_CLIENT_ID").setSecret(true).build().setDescription(Component.translatable("waterplayer.secret.description")))
                         .addValue(new EditBoxBuilder(spotifyClientSecretText).setValue("").setConfig(WaterPlayer.config, "SPOTIFY_CLIENT_SECRET").setSecret(true).build().setDescription(Component.translatable("waterplayer.secret.description")))
+                        .addValue(new EditBoxBuilder(spotifySPDC).setValue("").setConfig(WaterPlayer.config, "SPOTIFY_SP_DC").setSecret(true).build().setDescription(Component.translatable("waterplayer.secret.description")))
                         .addValue(new EditBoxBuilder(spotifyCountryCodeText).setValue("US").setConfig(WaterPlayer.config, "SPOTIFY_COUNTRY_CODE").build().setDescription(Component.translatable("waterplayer.secret.description")))
                 )
                 .addWidget(new CategoryBox(appleMusicText)

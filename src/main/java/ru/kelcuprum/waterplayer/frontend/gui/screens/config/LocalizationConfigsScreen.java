@@ -10,7 +10,7 @@ import ru.kelcuprum.alinlib.gui.components.text.CategoryBox;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.alinlib.gui.screens.ConfigScreenBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.ControlScreen;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen;
 
 import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Icons.*;
 

@@ -14,8 +14,6 @@ import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
 import ru.kelcuprum.waterplayer.frontend.localization.StarScript;
 
-import static ru.kelcuprum.waterplayer.frontend.gui.components.TrackButton.confirmLinkNow;
-
 public class CurrentTrackButton extends Button {
     protected Screen screen;
     private final boolean isShort;
@@ -29,13 +27,13 @@ public class CurrentTrackButton extends Button {
     @Override
     public void onPress() {
         if (isTrackEnable()) {
-            confirmLinkNow(screen, WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().uri);
+            WaterPlayer.confirmLinkNow(screen, WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().uri);
         }
     }
 
     public int getHeight() {
         int i = isShort ? 20 : 40;
-        if (isTrackEnable()) i += 2;
+        if (isTrackEnable()) i += getTimelineSize();
         this.height = i;
         return i;
     }
@@ -53,6 +51,10 @@ public class CurrentTrackButton extends Button {
             builder.append(Music.getTitle(track)).append(" ").append(track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : StarScript.getTimestamp(Music.getPosition(track)) + " / " + StarScript.getTimestamp(Music.getDuration(track)));
             return Component.literal(builder.toString());
         } else return Component.translatable("waterplayer.command.now_playing.notPlaying");
+    }
+
+    public int getTimelineSize() {
+        return isTrackEnable() ? 4 : 0;
     }
 
     @Override
@@ -79,21 +81,25 @@ public class CurrentTrackButton extends Button {
             } else {
                 ResourceLocation icon = Music.getThumbnail(track);
                 guiGraphics.blit(icon, getX() + 2, getY() + 2, 0.0F, 0.0F, 36, 36, 36, 36);
-                if (getWidth() - 50 < AlinLib.MINECRAFT.font.width(builder.toString())) {
-                    guiGraphics.drawString(AlinLib.MINECRAFT.font, AlinLib.MINECRAFT.font.substrByWidth(FormattedText.of(builder.toString()), getWidth() - 50 - AlinLib.MINECRAFT.font.width("...")).getString() + "...", getX() + 45, getY() + 8, -1);
-                } else {
-                    guiGraphics.drawString(AlinLib.MINECRAFT.font, builder.toString(), getX() + 45, getY() + 8, -1);
-                }
-                guiGraphics.drawString(AlinLib.MINECRAFT.font, time, getX() + 45, getY() + 30 - AlinLib.MINECRAFT.font.lineHeight, -1);
+                renderString(guiGraphics, track.getInfo().title, getX() + 45, getY() + 8);
+                renderString(guiGraphics, track.getInfo().author, getX() + 45, getY() + height - getTimelineSize() - 8 - AlinLib.MINECRAFT.font.lineHeight);
+                if(isHovered() && mouseY > getY() + getHeight() - getTimelineSize() - 2) guiGraphics.renderTooltip(AlinLib.MINECRAFT.font, Component.literal(time), mouseX, mouseY);
             }
             double state = track.getInfo().isStream ? 1 : ((double) track.getPosition() / track.getDuration());
-            guiGraphics.fill(getX(), getY() + getHeight() - 2, getX() + getWidth(), getY() + getHeight(), color - 0x7f000000);
-            guiGraphics.fill(getX(), getY() + getHeight() - 2, (int) (getX() + (getWidth() * state)), getY() + getHeight(), color - 0x7f000000);
+            guiGraphics.fill(getX(), getY() + getHeight() - getTimelineSize(), getX() + getWidth(), getY() + getHeight(), color - 0xb2000000);
+            guiGraphics.fill(getX(), getY() + getHeight() - getTimelineSize(), (int) (getX() + (getWidth() * state)), getY() + getHeight(), color - 1291845632);
         } else {
             this.active = false;
             guiGraphics.drawCenteredString(AlinLib.MINECRAFT.font, Component.translatable("waterplayer.command.now_playing.notPlaying"), getX() + (getWidth() / 2), getY() + (getHeight() / 2) - (AlinLib.MINECRAFT.font.lineHeight / 2), -1);
         }
+    }
 
+    protected void renderString(GuiGraphics guiGraphics, String text, int x, int y) {
+        if (getWidth() - 50 < AlinLib.MINECRAFT.font.width(text)) {
+            guiGraphics.drawString(AlinLib.MINECRAFT.font, AlinLib.MINECRAFT.font.substrByWidth(FormattedText.of(text), getWidth() - 50 - AlinLib.MINECRAFT.font.width("...")).getString() + "...", x, y, -1);
+        } else {
+            guiGraphics.drawString(AlinLib.MINECRAFT.font, text, x, y, -1);
+        }
     }
 
     private void setValueFromMouse(double d) {
@@ -103,18 +109,20 @@ public class CurrentTrackButton extends Button {
             WaterPlayer.player.getAudioPlayer().getPlayingTrack().setPosition((long) (dur * pos));
         }
     }
-    protected boolean isDragble(){
+
+    protected boolean isDragble() {
         return isTrackEnable() && !WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().isStream;
     }
 
     @Override
     public void onClick(double d, double e) {
-        if(isDragble() && e > getY()+getHeight()-4) setValueFromMouse(d);
+        if (isDragble() && e > getY() + getHeight() - getTimelineSize() - 2) setValueFromMouse(d);
         else super.onClick(d, e);
     }
+
     @Override
     protected void onDrag(double d, double e, double f, double g) {
-        if(isDragble() && e > getY()+getHeight()-4) setValueFromMouse(d);
+        if (isDragble() && e > getY() + getHeight() - getTimelineSize() - 2) setValueFromMouse(d);
         else super.onDrag(d, e, f, g);
     }
 }

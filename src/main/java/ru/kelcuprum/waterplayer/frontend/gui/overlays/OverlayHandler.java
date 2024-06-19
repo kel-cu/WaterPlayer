@@ -74,11 +74,11 @@ public class OverlayHandler implements GuiRenderEvents, ClientTickEvents.StartTi
                 boolean caverEnable = false;
                 int j = 0;
                 if (WaterPlayer.config.getBoolean("OVERLAY.ENABLE_CAVER", true)) {
-                    if (WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().artworkUrl != null || Music.isFile()) {
+//                    if (WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().artworkUrl != null || Music.isFile()) {
                         caverEnable = true;
                         j = f * Math.min(texts.size(), 3);
                         mx += j + 10;
-                    }
+//                    }
                 }
 
                 boolean left = pos == 0 || pos == 2;

@@ -20,7 +20,7 @@ public class TrackButton extends Button {
     protected AudioTrack track;
     private final boolean isShort;
     public TrackButton(int x, int y, int width, AudioTrack track, Screen screen, boolean isShort) {
-        super(x, y, width, isShort ? 20 : 40, InterfaceUtils.DesignType.FLAT, Component.empty(), (s) -> confirmLinkNow(screen, track.getInfo().uri));
+        super(x, y, width, isShort ? 20 : 40, InterfaceUtils.DesignType.FLAT, Component.empty(), (s) -> WaterPlayer.confirmLinkNow(screen, track.getInfo().uri));
         StringBuilder builder = new StringBuilder();
         if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
         builder.append(Music.getTitle(track)).append(" ").append(StarScript.getTimestamp(Music.getDuration(track)));
@@ -42,27 +42,20 @@ public class TrackButton extends Button {
                     guiGraphics.drawString(AlinLib.MINECRAFT.font, builder.toString(), getX() + (getHeight() - 8) / 2, getY() + (getHeight() - 8) / 2, 0xffffff);
                     guiGraphics.drawString(AlinLib.MINECRAFT.font, time, getX() + getWidth()-AlinLib.MINECRAFT.font.width(time)-((getHeight() - 8) / 2), getY() + (getHeight() - 8) / 2, 0xffffff);
                 }
-//                super.renderText(guiGraphics, mouseX, mouseY, partialTicks);
             } else {
                 ResourceLocation icon = Music.getThumbnail(track);
                 guiGraphics.blit(icon, getX() + 2, getY() + 2, 0.0F, 0.0F, 36, 36, 36, 36);
-                if (getWidth() - 50 < AlinLib.MINECRAFT.font.width(builder.toString())) {
-                    guiGraphics.drawString(AlinLib.MINECRAFT.font, AlinLib.MINECRAFT.font.substrByWidth(FormattedText.of(builder.toString()), getWidth() - 50 - AlinLib.MINECRAFT.font.width("...")).getString() + "...", getX() + 45, getY() + 8, -1);
-                } else {
-                    guiGraphics.drawString(AlinLib.MINECRAFT.font, builder.toString(), getX() + 45, getY() + 8, -1);
-                }
-                guiGraphics.drawString(AlinLib.MINECRAFT.font, time, getX() + 45, getY() + 30 - AlinLib.MINECRAFT.font.lineHeight, -1);
+                renderString(guiGraphics, track.getInfo().title, getX() + 45, getY() + 8);
+                renderString(guiGraphics, track.getInfo().author, getX() + 45, getY() + height - 8 - AlinLib.MINECRAFT.font.lineHeight);
+                if(isHovered()) guiGraphics.renderTooltip(AlinLib.MINECRAFT.font, Component.literal(time), mouseX, mouseY);
             }
         }
     }
-    public static void confirmLinkNow(Screen screen, String string) {
-        Minecraft minecraft = Minecraft.getInstance();
-        minecraft.setScreen(new ConfirmLinkScreen((bl) -> {
-            if (bl) {
-                Util.getPlatform().openUri(string);
-            }
-
-            minecraft.setScreen(screen);
-        }, string, true));
+    protected void renderString(GuiGraphics guiGraphics, String text, int x, int y) {
+        if (getWidth() - 50 < AlinLib.MINECRAFT.font.width(text)) {
+            guiGraphics.drawString(AlinLib.MINECRAFT.font, AlinLib.MINECRAFT.font.substrByWidth(FormattedText.of(text), getWidth() - 50 - AlinLib.MINECRAFT.font.width("...")).getString() + "...", x, y, -1);
+        } else {
+            guiGraphics.drawString(AlinLib.MINECRAFT.font, text, x, y, -1);
+        }
     }
 }

@@ -1,4 +1,4 @@
-package ru.kelcuprum.waterplayer.frontend.gui.screens;
+package ru.kelcuprum.waterplayer.frontend.gui.screens.playlist;
 
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;

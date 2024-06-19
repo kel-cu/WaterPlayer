@@ -60,22 +60,32 @@
   "waterplayer.config": "Configuration",
   "waterplayer.playlists": "Playlists",
   "waterplayer.play": "Control",
+
+  "waterplayer.config.overlay": "Overlay",
   "waterplayer.config.enable_overlay": "In-game Overlay",
   "waterplayer.config.overlay.position": "In-game Overlay Position",
-  "waterplayer.config.enable_menu_overlay": "Main Menu Overlay",
-  "waterplayer.config.menu_overlay.position": "Main Menu Overlay Position",
   "waterplayer.config.overlay.enable_caver": "Track Thumbnails in the Overlay",
-  "waterplayer.config.screem.queue_cover_show": "Track Thumbnails in the Queue",
   "waterplayer.config.overlay.position.top_left": "Top Left",
   "waterplayer.config.overlay.position.top_right": "Top Right",
   "waterplayer.config.overlay.position.bottom_left": "Bottom Left",
   "waterplayer.config.overlay.position.bottom_right": "Bottom Right",
 
+  "waterplayer.config.menu": "Menu",
+  "waterplayer.config.enable_menu_overlay": "Main Menu Overlay",
+  "waterplayer.config.menu_overlay.position": "Main Menu Overlay Position",
+  "waterplayer.config.enable_keybind": "Enable key bindings in the menu",
+  "waterplayer.config.screem.queue_cover_show": "Track Thumbnails in the Queue",
+  "waterplayer.config.control.enable_lyrics": "Song lyrics on the control screen",
+
+  "waterplayer.config.notice": "Notice",
   "waterplayer.config.enable_notice": "Track Control Notices",
   "waterplayer.config.enable_notice.start_track": "Track Title Notices",
   "waterplayer.config.enable_notice.start_track.clear": "Clear Notices After Starting a New Track",
-  "waterplayer.config.enable_keybind": "Enable key bindings in the menu",
-  "waterplayer.config.control.enable_lyrics": "Song lyrics on the control screen",
+
+  "waterplayer.config.subtitles": "Subtitles",
+  "waterplayer.config.subtitles.indent_y": "Indent Y",
+  "waterplayer.config.subtitles.back_alpha": "Background Transparency",
+  "waterplayer.config.subtitles.text_color": "Text Color",
 
   "waterplayer.config.services": "Services",
   "waterplayer.config.services.youtube": "YouTube",
@@ -101,7 +111,9 @@
   "waterplayer.secret.title.spotify": "Spotify",
   "waterplayer.config.spotify_client_id": "Client ID",
   "waterplayer.config.spotify_client_secret": "Client Secret",
+  "waterplayer.config.spotify_sp_dc": "SP DC",
   "waterplayer.config.spotify_country_code": "Country Code",
+
 
   "waterplayer.secret.title.apple_music": "Apple Music",
   "waterplayer.config.apple_music_media_api_token": "Media API Token",

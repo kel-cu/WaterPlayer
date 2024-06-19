@@ -3,8 +3,10 @@ package ru.kelcuprum.waterplayer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.minecraft.Util;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
@@ -23,8 +25,9 @@ import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
 import ru.kelcuprum.waterplayer.backend.KeyBind;
 import ru.kelcuprum.waterplayer.backend.MusicPlayer;
 import ru.kelcuprum.waterplayer.backend.command.WaterPlayerCommand;
+import ru.kelcuprum.waterplayer.frontend.gui.overlays.SubtitlesHandler;
 import ru.kelcuprum.waterplayer.frontend.localization.StarScript;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.ControlScreen;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.overlays.OverlayHandler;
 
 import java.util.ArrayList;
@@ -47,9 +50,12 @@ public class WaterPlayer implements ClientModInitializer {
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
             player.startAudioOutput();
             OverlayHandler hud = new OverlayHandler();
+            SubtitlesHandler sub = new SubtitlesHandler();
             ScreenEvents.SCREEN_RENDER.register(hud);
             GuiRenderEvents.RENDER.register(hud);
+            GuiRenderEvents.RENDER.register(sub);
             ClientTickEvents.START_CLIENT_TICK.register(hud);
+            ClientTickEvents.START_CLIENT_TICK.register(sub);
         });
         ClientLifecycleEvents.CLIENT_STOPPING.register(c -> player.getAudioPlayer().stopTrack());
         ClientCommandRegistrationCallback.EVENT.register(WaterPlayerCommand::register);
@@ -193,5 +199,15 @@ public class WaterPlayer implements ClientModInitializer {
 
     public static void log(String message, Level level) {
         LOG.log(level, "[" + LOG.getName() + "] " + message);
+    }
+    public static void confirmLinkNow(Screen screen, String string) {
+        Minecraft minecraft = Minecraft.getInstance();
+        minecraft.setScreen(new ConfirmLinkScreen((bl) -> {
+            if (bl) {
+                Util.getPlatform().openUri(string);
+            }
+
+            minecraft.setScreen(screen);
+        }, string, true));
     }
 }

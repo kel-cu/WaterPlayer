@@ -8,15 +8,15 @@ import org.apache.logging.log4j.Level;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
-import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
+import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonWTLBuilder;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonWithIconBuilder;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.alinlib.gui.screens.ConfigScreenBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.CreatePlaylistScreen;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.ControlScreen;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.PlaylistScreen;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.playlist.CreatePlaylistScreen;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.playlist.PlaylistScreen;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -68,7 +68,7 @@ public class PlaylistsScreen {
                     try {
                         Playlist playlistObject = new Playlist(playlist.toPath());
                         assetsSize++;
-                        builder.addWidget(new ButtonBuilder(Component.literal(String.format("%s by %s (%s)", playlistObject.title, playlistObject.author, playlistObject.fileName)), (s) -> WaterPlayer.MINECRAFT.setScreen(new PlaylistScreen(new PlaylistsScreen().build(parent), playlistObject.fileName))).build());
+                        builder.addWidget(new ButtonWTLBuilder(Component.literal(String.format("%s by %s", playlistObject.title, playlistObject.author)), Component.literal(playlistObject.fileName), (s) -> WaterPlayer.MINECRAFT.setScreen(new PlaylistScreen(new PlaylistsScreen().build(parent), playlistObject.fileName))).build());
                     } catch (Exception e){
                         WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);
                     }
@@ -76,7 +76,7 @@ public class PlaylistsScreen {
             }
         }
         isLoaded = true;
-        builder.addWidget(new ButtonBuilder(Component.translatable("waterplayer.playlist.create"), (s) -> WaterPlayer.MINECRAFT.setScreen(new CreatePlaylistScreen(new PlaylistsScreen().build(parent)))).build());
+        builder.addWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.playlist.create"), ADD, (s) -> WaterPlayer.MINECRAFT.setScreen(new CreatePlaylistScreen(new PlaylistsScreen().build(parent)))).build());
         return builder.build();
     }
 }

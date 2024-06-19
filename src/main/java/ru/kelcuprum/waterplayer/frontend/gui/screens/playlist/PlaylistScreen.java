@@ -1,4 +1,4 @@
-package ru.kelcuprum.waterplayer.frontend.gui.screens;
+package ru.kelcuprum.waterplayer.frontend.gui.screens.playlist;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -16,6 +16,7 @@ import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.alinlib.gui.components.ConfigureScrolWidget;
+import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonWithIconBuilder;
 import ru.kelcuprum.alinlib.gui.components.buttons.ButtonSprite;
 import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
 import ru.kelcuprum.alinlib.gui.components.editbox.base.EditBoxString;
@@ -29,8 +30,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Icons.REMOVE;
-import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Icons.RESET;
+import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Icons.*;
 
 public class PlaylistScreen extends Screen {
     private Playlist playlist;
@@ -108,16 +108,16 @@ public class PlaylistScreen extends Screen {
         for(JsonElement element : playlist.getUrlsJSON()){
             String url = element.getAsString();
             int finalI = i;
-            widgets.add(new EditBoxString(x, -20, width-200, 20, false, url, designType, Component.literal(String.format("%s. ", i)), (s) -> {
+            widgets.add(new EditBoxString(x, -20, width-200, 20, false, url, designType, Component.literal(String.format("%s. ", i+1)), (s) -> {
                 playlist.setUrl(s, finalI);
                 save();
             }));
             i++;
         }
-        widgets.add(new Button(x, -20, width-200, 20, designType, Component.translatable("waterplayer.playlist.add"), (s) -> {
+        widgets.add(new ButtonWithIconBuilder(Component.translatable("waterplayer.playlist.add"), ADD, (s) -> {
            playlist.urls.add("https://c418.bandcamp.com/track/strad");
            save();
-        }));
+        }).setPosition(x, -20).setSize(width-200, 20).build());
         addRenderableWidgets(widgets);
     }
     protected void addRenderableWidgets(@NotNull List<AbstractWidget> widgets) {
