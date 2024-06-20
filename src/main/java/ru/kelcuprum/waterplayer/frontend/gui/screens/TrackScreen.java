@@ -1,0 +1,132 @@
+package ru.kelcuprum.waterplayer.frontend.gui.screens;
+
+import com.github.topi314.lavalyrics.lyrics.AudioLyrics;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.minecraft.Util;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import ru.kelcuprum.alinlib.AlinLib;
+import ru.kelcuprum.alinlib.config.Localization;
+import ru.kelcuprum.alinlib.gui.InterfaceUtils;
+import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
+import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
+import ru.kelcuprum.alinlib.gui.components.text.TextBox;
+import ru.kelcuprum.waterplayer.WaterPlayer;
+import ru.kelcuprum.waterplayer.frontend.gui.LyricsHelper;
+import ru.kelcuprum.waterplayer.frontend.gui.SafeLyrics;
+import ru.kelcuprum.waterplayer.frontend.gui.components.LyricsBox;
+import ru.kelcuprum.waterplayer.frontend.localization.Music;
+
+import java.io.File;
+
+public class TrackScreen extends Screen {
+    protected final Screen parent;
+    protected final AudioTrack track;
+    protected final boolean isFile;
+    protected AudioLyrics lyrics;
+    protected boolean lyricsEnable = false;
+    protected boolean showLyrics = false;
+    public TrackScreen(Screen parent, AudioTrack track) {
+        super(Component.empty());
+        this.parent = parent;
+        this.track = track;
+        if(this.track == null) {
+            this.isFile = false;
+            onClose();
+            return;
+        }
+        this.isFile = new File(track.getInfo().uri).exists();
+        this.lyrics = LyricsHelper.getLyrics(track);
+    }
+    Button lyricsButton;
+    Button backButton;
+    LyricsBox lyricsBox;
+    int x = 10;
+    int iconSize = 5+(14*3);
+    int lyricsSize = 200;
+    int componentSize = 310;
+    @Override
+    protected void init() {
+        int iconSize = 5+((font.lineHeight+5)*3);
+        int pageSize = this.width;
+        lyricsSize = Math.min(width/2, 200);
+        if(showLyrics) pageSize-=lyricsSize;
+        componentSize = Math.min(310, pageSize-10);
+        x = (pageSize-componentSize) / 2;
+        if(showLyrics) x+=lyricsSize;
+        if(showLyrics) {
+            addRenderableWidget(new TextBox(5, 15, lyricsSize-10, 9, Localization.getText("waterplayer.track.lyrics.title"), true));
+            lyricsBox = addRenderableWidget(new LyricsBox(5, 40, lyricsSize-10, height-70, Component.empty())).setLyrics(Component.literal(lyrics.getText() == null ? "" : lyrics.getText()));
+            addRenderableWidget(new Button(5, height - 25, lyricsSize-10, 20, Component.translatable("waterplayer.track.lyrics.copy"), (onPress) -> {
+                AlinLib.MINECRAFT.keyboardHandler.setClipboard(lyrics.getText() == null ? "" : lyrics.getText());
+                WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.lyrics.copy.toast")).show(minecraft.getToasts());
+            }));
+        }
+        addRenderableWidget(new ButtonBuilder(Component.translatable( isFile ? "waterplayer.track.open_file" : "waterplayer.track.open_link"), (huy) -> {
+            if(isFile) Util.getPlatform().openFile(new File(track.getInfo().uri)); else Util.getPlatform().openUri(track.getInfo().uri);
+        }).setWidth(componentSize).setPosition(x, height/2-10).build());
+        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.track.copy_link"), (huy) -> {
+            AlinLib.MINECRAFT.keyboardHandler.setClipboard(track.getInfo().uri);
+        }).setWidth(componentSize).setPosition(x, height/2+15).build());
+
+        this.lyricsButton = addRenderableWidget(new ButtonBuilder(Component.translatable(showLyrics ? "waterplayer.track.hide_lyrics" : "waterplayer.track.lyrics"), (huy) -> {
+            showLyrics = !showLyrics;
+            rebuildWidgets();
+        }).setWidth(componentSize/2-2).setPosition(x, height/2+40).build().setActive(lyricsEnable));
+        this.lyricsButton.visible = lyricsEnable;
+
+        backButton = addRenderableWidget(new ButtonBuilder(CommonComponents.GUI_BACK, (huy) -> onClose()).setWidth(lyricsEnable ? componentSize/2-2 : componentSize).setPosition(lyricsEnable ? x+componentSize/2+2 : x, height/2+40).build());
+
+        int textY = height/2-15-iconSize+5;
+        addRenderableWidget(new TextBox(x+iconSize+5, textY, componentSize-(iconSize+10), font.lineHeight, Component.literal(Music.getTitle(track)), false));
+        textY+=(font.lineHeight+5);
+        if(!Music.getAuthor(track).isBlank()) {
+            addRenderableWidget(new TextBox(x+iconSize+5, textY, componentSize-(iconSize+10), font.lineHeight, Component.translatable("waterplayer.track.author", Music.getAuthor(track)), false));
+            textY+=(font.lineHeight+5);
+        }
+        addRenderableWidget(new TextBox(x+iconSize+5, textY, componentSize-(iconSize+10), font.lineHeight, Component.translatable("waterplayer.track.service", Music.getServiceName(Music.getService(track))), false));
+    }
+
+    @Override
+    public void render(GuiGraphics guiGraphics, int i, int j, float f) {
+        super.render(guiGraphics, i, j, f);
+        guiGraphics.blit(Music.getThumbnail(track), x, height/2-15-iconSize, 0.0F, 0.0F, iconSize, iconSize, iconSize, iconSize);
+    }
+
+    @Override
+    public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f) {
+        super.renderBackground(guiGraphics, i, j, f);
+        if(showLyrics) InterfaceUtils.renderLeftPanel(guiGraphics, lyricsSize, height);
+    }
+
+    @Override
+    public void tick() {
+        this.lyrics = LyricsHelper.getLyrics(track);
+        this.lyricsEnable = lyrics != null && lyrics.getText() != null && !(lyrics instanceof SafeLyrics);
+        if(this.lyricsButton != null) {
+            lyricsButton.setActive(lyricsEnable);
+            lyricsButton.visible = lyricsEnable;
+        }
+        if(this.backButton != null) {
+            backButton.setWidth(lyricsEnable ? componentSize / 2 - 2 : componentSize);
+            backButton.setPosition(lyricsEnable ? x + componentSize / 2 + 2 : x, height / 2 + 40);
+        }
+        super.tick();
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        boolean scr = super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+        if ((mouseX >= 5 && mouseX <= 195) && (mouseY >= 40 && mouseY <= height - 30)) {
+            scr = lyricsBox.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+        }
+        return scr;
+    }
+
+    public void onClose() {
+        assert this.minecraft != null;
+        this.minecraft.setScreen(parent);
+    }
+}

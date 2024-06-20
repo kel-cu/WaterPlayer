@@ -1,6 +1,7 @@
 package ru.kelcuprum.waterplayer.frontend.localization;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.waterplayer.WaterPlayer;
@@ -79,6 +80,34 @@ public class Music {
         return trackIsNull() ? 0 : track.getDuration();
     }
     public static long getDuration() {return getDuration(WaterPlayer.player.getAudioPlayer().getPlayingTrack());}
+    //
+    public static String getService(AudioTrack track){
+        return trackIsNull() ? "" : track.getSourceManager().getSourceName();
+    }
+    public static String getService() {return getService(WaterPlayer.player.getAudioPlayer().getPlayingTrack());}
+
+    //
+
+    public static Component getServiceName(String service){
+        return switch (service.toLowerCase()){
+            case "youtube" -> Component.translatable("waterplayer.config.services.youtube");
+            case "soundcloud" -> Component.translatable("waterplayer.config.services.soundcloud");
+            case "bandcamp" -> Component.translatable("waterplayer.config.services.bandcamp");
+            case "vimeo" -> Component.translatable("waterplayer.config.services.vimeo");
+            case "twitch" -> Component.translatable("waterplayer.config.services.twitch");
+            case "beam.pro" -> Component.translatable("waterplayer.config.services.beam");
+
+            case "yandexmusic" -> Component.translatable("waterplayer.config.services.yandex");
+            case "spotify" -> Component.translatable("waterplayer.config.services.spotify");
+            case "deezer" -> Component.translatable("waterplayer.config.services.deezer");
+            case "applemusic" -> Component.translatable("waterplayer.config.services.apple");
+            case "flowery-tts" -> Component.translatable("waterplayer.config.services.flowery");
+            case "http" -> Component.translatable("waterplayer.config.services.http");
+            case "local" -> Component.translatable("waterplayer.config.services.local");
+            default -> Component.literal("-");
+        };
+    }
+
     //
     public static boolean getIsLive(){return getIsLive(WaterPlayer.player.getAudioPlayer().getPlayingTrack());}
     public static boolean getIsLive(AudioTrack track){return !trackIsNull(track) && WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().isStream;}

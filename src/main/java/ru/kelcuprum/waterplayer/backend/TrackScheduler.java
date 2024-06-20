@@ -136,6 +136,7 @@ public class TrackScheduler extends AudioEventAdapter {
             case "Silly Plans" -> Items.LIGHT_BLUE_BED;
             case "Silly Plans ~ Revisit" -> Items.FILLED_MAP;
             case "Another Mistake" -> Items.BARRIER;
+            case "Memory Merge" -> Items.FLINT_AND_STEEL;
             case "Artificial Abandonment", "(Original Song) Artificial Abandonment" -> Items.MOSSY_COBBLESTONE;
             default -> Items.MUSIC_DISC_STRAD;
         };

@@ -20,9 +20,11 @@ import ru.kelcuprum.alinlib.gui.components.editbox.base.EditBoxString;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.gui.LyricsHelper;
+import ru.kelcuprum.waterplayer.frontend.gui.components.ButtonWithSprite;
 import ru.kelcuprum.waterplayer.frontend.gui.components.CurrentTrackButton;
 import ru.kelcuprum.waterplayer.frontend.gui.components.LyricsBox;
 import ru.kelcuprum.waterplayer.frontend.gui.components.TrackButton;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.search.SearchScreen;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -54,12 +56,15 @@ public class ControlScreen extends Screen {
         request = new EditBoxString(x + 25, 40, size - 25, 20, designType, Localization.getText("waterplayer.load.url"));
         request.setMaxLength(Integer.MAX_VALUE);
         addRenderableWidget(request);
-        addRenderableWidget(new ButtonSpriteBuilder(InterfaceUtils.Icons.RESET, (s) -> request.setValue(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", "")))
+        addRenderableWidget(new ButtonSpriteBuilder(InterfaceUtils.Icons.RESET, (buttonSprite) -> request.setValue(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", "")))
                 .setSize(20, 20)
                 .setTextureSize(20, 20)
                 .setPosition(x, 40)
                 .setDesignType(designType).build());
-        addRenderableWidget(new Button(x, 65, size, 20, designType, Localization.getText("waterplayer.load.load"), (OnPress) -> WaterPlayer.player.loadMusic(request.getValue(), true)));
+        ButtonWithSprite bws = new ButtonWithSprite(x, 65, 20, 20, InterfaceUtils.getResourceLocation("waterplayer", "search"), Component.translatable("waterplayer.control.search"), (s) -> AlinLib.MINECRAFT.setScreen(new SearchScreen(this)));
+        bws.active = false;
+        addRenderableWidget(bws);
+        addRenderableWidget(new Button(x+25, 65, size-25, 20, designType, Localization.getText("waterplayer.load.load"), (OnPress) -> WaterPlayer.player.loadMusic(request.getValue(), true)));
         addRenderableWidget(new SliderIntegerBuilder(Component.translatable("waterplayer.load.volume"), (onPress) -> {
             WaterPlayer.config.setNumber("CURRENT_MUSIC_VOLUME", onPress);
             WaterPlayer.player.getAudioPlayer().setVolume(onPress);

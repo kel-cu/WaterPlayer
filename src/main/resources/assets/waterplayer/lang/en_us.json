@@ -38,6 +38,7 @@
   "waterplayer.message.shuffle": "Queue shuffled",
   "waterplayer.message.skip": "Track skipped",
 
+  "waterplayer.control.search": "Search coming soon...",
   "waterplayer.control.pause": "Pause",
   "waterplayer.control.play": "Play",
   "waterplayer.control.non_repeat": "Repeat off",
@@ -68,6 +69,7 @@
 
   "waterplayer.config": "Configuration",
   "waterplayer.playlists": "Playlists",
+  "waterplayer.playlists.value": "%1$s by %2$s",
   "waterplayer.play": "Control",
 
   "waterplayer.config.overlay": "Overlay",
@@ -104,6 +106,14 @@
   "waterplayer.config.services.twitch": "Twitch",
   "waterplayer.config.services.beam": "Beam",
 
+  "waterplayer.config.services.yandex": "Yandex Music",
+  "waterplayer.config.services.spotify": "Spotify",
+  "waterplayer.config.services.deezer": "Deezer",
+  "waterplayer.config.services.apple": "Apple Music",
+  "waterplayer.config.services.flowery": "Flowery TTS",
+  "waterplayer.config.services.http": "Internet",
+  "waterplayer.config.services.local": "Local storage",
+
   "waterplayer.config.localization": "Localization",
 
   "waterplayer.config.localization.title.formats": "Formats",
@@ -111,6 +121,7 @@
   "waterplayer.config.localization.format.live": "Live",
 
   "waterplayer.secret": "TOP SECRET!",
+  "waterplayer.secret.how_to_get_tokens": "How to get my Tokens?",
   "waterplayer.secret.description": "After changing the data, you'll need to re-launch! Sorry...",
   "waterplayer.secret.title.tokens": "Tokens",
   "waterplayer.config.yandex_music_token": "Yandex Music Token",
@@ -127,6 +138,18 @@
   "waterplayer.secret.title.apple_music": "Apple Music",
   "waterplayer.config.apple_music_media_api_token": "Media API Token",
   "waterplayer.config.apple_music_country_code": "Country Code",
+
+  "waterplayer.track.author": "Author: %s",
+  "waterplayer.track.service": "Service: %s",
+
+  "waterplayer.track.lyrics": "Show text",
+  "waterplayer.track.hide_lyrics": "Hide text",
+  "waterplayer.track.lyrics.title": "Track text",
+  "waterplayer.track.lyrics.copy": "Copy text",
+  "waterplayer.track.lyrics.copy.toast": "Text copied to clipboard",
+  "waterplayer.track.copy_link": "Copy link",
+  "waterplayer.track.open_link": "Open in browser",
+  "waterplayer.track.open_file": "Open file",
 
   "modmenu.descriptionTranslation.waterplayer": "Internet music player built into the client."
 }

@@ -38,6 +38,7 @@
   "waterplayer.message.shuffle": "Очередь перемешана",
   "waterplayer.message.skip": "Трек пропущен",
 
+  "waterplayer.control.search": "Поиск скоро будет...",
   "waterplayer.control.pause": "Пауза",
   "waterplayer.control.play": "Запустить",
   "waterplayer.control.non_repeat": "Повтор выключен",
@@ -68,6 +69,7 @@
 
   "waterplayer.config": "Конфигурация",
   "waterplayer.playlists": "Плейлисты",
+  "waterplayer.playlists.value": "%1$s от %2$s",
   "waterplayer.play": "Управление",
 
   "waterplayer.config.overlay": "Оверлей",
@@ -97,12 +99,20 @@
   "waterplayer.config.subtitles.text_color": "Цвет текста",
 
   "waterplayer.config.services": "Сервисы",
-  "waterplayer.config.services.youtube": "YouTube",
+  "waterplayer.config.services.youtube": "Ютуб",
   "waterplayer.config.services.soundcloud": "SoundCloud",
   "waterplayer.config.services.bandcamp": "Bandcamp",
   "waterplayer.config.services.vimeo": "Vimeo",
   "waterplayer.config.services.twitch": "Twitch",
   "waterplayer.config.services.beam": "Beam",
+
+  "waterplayer.config.services.yandex": "Яндекс Музыка",
+  "waterplayer.config.services.spotify": "Spotify",
+  "waterplayer.config.services.deezer": "Deezer",
+  "waterplayer.config.services.apple": "Apple Music",
+  "waterplayer.config.services.flowery": "Flowery TTS",
+  "waterplayer.config.services.http": "Интернет",
+  "waterplayer.config.services.local": "Локальное хранилище",
 
   "waterplayer.config.localization": "Локализация",
 
@@ -111,6 +121,7 @@
   "waterplayer.config.localization.format.live": "Эфир",
 
   "waterplayer.secret": "TOP SECRET!",
+  "waterplayer.secret.how_to_get_tokens": "Как получить свои токены?",
   "waterplayer.secret.description": "После смены данных необходимо перезапустить игру! Извините...",
   "waterplayer.secret.title.tokens": "Токены",
   "waterplayer.config.yandex_music_token": "Токен Яндекс.Музыки",
@@ -126,6 +137,18 @@
   "waterplayer.secret.title.apple_music": "Apple Music",
   "waterplayer.config.apple_music_media_api_token": "Media API Token",
   "waterplayer.config.apple_music_country_code": "Код страны",
+
+  "waterplayer.track.author": "Автор: %s",
+  "waterplayer.track.service": "Сервис: %s",
+
+  "waterplayer.track.lyrics": "Показать текст",
+  "waterplayer.track.hide_lyrics": "Скрыть текст",
+  "waterplayer.track.lyrics.title": "Текст трека",
+  "waterplayer.track.lyrics.copy": "Скопировать текст",
+  "waterplayer.track.lyrics.copy.toast": "Текст скопирован в буфер обмена",
+  "waterplayer.track.copy_link": "Скопировать ссылку",
+  "waterplayer.track.open_link": "Открыть в браузере",
+  "waterplayer.track.open_file": "Открыть файл",
 
   "modmenu.descriptionTranslation.waterplayer": "Встроенный в клиент музыкальный интернет-плеер."
 }

@@ -59,7 +59,7 @@ public class SubtitlesHandler implements GuiRenderEvents, ClientTickEvents.Start
 
     @Override
     public void onRender(GuiGraphics guiGraphics, float tickDelta) {
-        if (!WaterPlayer.config.getBoolean("SUBTITLES", true)) return;
+        if (!WaterPlayer.config.getBoolean("SUBTITLES", false)) return;
         int l = texts.size() - 1;
         int iay = WaterPlayer.config.getNumber("SUBTITLES.INDENT_Y", 85).intValue();
         int f = AlinLib.MINECRAFT.font.lineHeight + 6;

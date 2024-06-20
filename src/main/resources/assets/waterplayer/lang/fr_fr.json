@@ -38,6 +38,7 @@
   "waterplayer.message.shuffle": "La file d'attente a été mélangée",
   "waterplayer.message.skip": "Piste passée",
 
+  "waterplayer.control.search": "Search coming soon...",
   "waterplayer.control.pause": "Pause",
   "waterplayer.control.play": "Jouer",
   "waterplayer.control.non_repeat": "Répétition de l'arrêt",
@@ -68,6 +69,7 @@
 
   "waterplayer.config": "Configuration",
   "waterplayer.playlists": "Playlists",
+  "waterplayer.playlists.value": "%1$s by %2$s",
   "waterplayer.play": "Gestion",
 
   "waterplayer.config.overlay": "Superposition",
@@ -104,6 +106,14 @@
   "waterplayer.config.services.twitch": "Twitch",
   "waterplayer.config.services.beam": "Beam",
 
+  "waterplayer.config.services.yandex": "Yandex Music",
+  "waterplayer.config.services.spotify": "Spotify",
+  "waterplayer.config.services.deezer": "Deezer",
+  "waterplayer.config.services.apple": "Apple Music",
+  "waterplayer.config.services.flowery": "Flowery TTS",
+  "waterplayer.config.services.http": "Internet",
+  "waterplayer.config.services.local": "Stockage local",
+
   "waterplayer.config.localization": "Localisation",
   
   "waterplayer.config.localization.title.formats": "Formats",
@@ -111,6 +121,7 @@
   "waterplayer.config.localization.format.live": "Live",
   
   "waterplayer.secret": "TOP SECRET !",
+  "waterplayer.secret.how_to_get_tokens": "Comment obtenir des tokens ?",
   "waterplayer.secret.description": "Après avoir modifié les données, vous devrez relancer ! Désolé...",
   "waterplayer.secret.title.tokens": "Tokens",
   "waterplayer.config.yandex_music_token": "Token Yandex Music",
@@ -126,6 +137,18 @@
   "waterplayer.secret.title.apple_music": "Apple Music",
   "waterplayer.config.apple_music_media_api_token": "Token de l'API media",
   "waterplayer.config.apple_music_country_code": "Country Code",
+
+  "waterplayer.track.author": "Auteur : %s",
+  "waterplayer.track.service": "Service : %s",
+
+  "waterplayer.track.lyrics": "Afficher le texte",
+  "waterplayer.track.hide_lyrics": "Cacher le texte",
+  "waterplayer.track.lyrics.title": "Texte de la piste",
+  "waterplayer.track.lyrics.copy": "Copier le texte",
+  "waterplayer.track.lyrics.copy.toast": "Texte copié dans le presse-papiers",
+  "waterplayer.track.copy_link": "Copier le lien",
+  "waterplayer.track.open_link": "Ouvrir dans le navigateur",
+  "waterplayer.track.open_file": "Ouvrir un fichier",
   
   "modmenu.descriptionTranslation.waterplayer": "Lecteur de musique en ligne intégré dans le client."
 }

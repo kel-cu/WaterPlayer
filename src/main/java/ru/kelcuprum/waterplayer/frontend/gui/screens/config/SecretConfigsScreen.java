@@ -47,9 +47,7 @@ public class SecretConfigsScreen {
                 //
                 ///
                 .addWidget(new TextBox(SecretConfigCategory, true))
-                .addWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.secret.how_get_tokens"), WHAT, (s)->{
-
-                }).build())
+                .addWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.secret.how_to_get_tokens"), InterfaceUtils.getResourceLocation("waterplayer", "textures/think.png"), (s)-> WaterPlayer.confirmLinkNow(new SecretConfigsScreen().build(parent), "https://github.com/topi314/LavaSrc?tab=readme-ov-file#usage")).build())
                 .addWidget(new CategoryBox(tokensText)
                         .addValue(new EditBoxBuilder(yandexMusicText).setValue("").setConfig(WaterPlayer.config, "YANDEX_MUSIC_TOKEN").setSecret(true).build().setDescription(Component.translatable("waterplayer.secret.description")))
                         .addValue(new EditBoxBuilder(deezerText).setValue("").setConfig(WaterPlayer.config, "DEEZER_DECRYPTION_KEY").setSecret(true).build().setDescription(Component.translatable("waterplayer.secret.description")))

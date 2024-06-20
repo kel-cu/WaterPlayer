@@ -52,7 +52,7 @@ public class LyricsBox extends AbstractWidget {
         guiGraphics.fill(getX(), getY(), getX() + width, getY() + height, 0x75000000);
         guiGraphics.enableScissor(getX(), getY(), getX() + width, getY() + height);
         int y = getY() + 6;
-        textHeight = (list.size()+1)*textSize;
+        textHeight = ((list.size()+1)*textSize)+12;
         if(lastTextHeight != textHeight){
             scrollAmount = Mth.clamp(scrollAmount, 0, textHeight-height-textSize);
             lastTextHeight -= lastTextHeight-textHeight;
