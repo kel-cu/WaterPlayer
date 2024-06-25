@@ -38,7 +38,7 @@
   "waterplayer.message.shuffle": "Очередь перемешана",
   "waterplayer.message.skip": "Трек пропущен",
 
-  "waterplayer.control.search": "Поиск скоро будет...",
+  "waterplayer.control.search": "Поиск...",
   "waterplayer.control.pause": "Пауза",
   "waterplayer.control.play": "Запустить",
   "waterplayer.control.non_repeat": "Повтор выключен",
@@ -100,10 +100,11 @@
 
   "waterplayer.config.services": "Сервисы",
   "waterplayer.config.services.youtube": "Ютуб",
+  "waterplayer.config.services.youtube_music": "YouTube Music",
   "waterplayer.config.services.soundcloud": "SoundCloud",
   "waterplayer.config.services.bandcamp": "Bandcamp",
   "waterplayer.config.services.vimeo": "Vimeo",
-  "waterplayer.config.services.twitch": "Twitch",
+  "waterplayer.config.services.twitch": "Твитч",
   "waterplayer.config.services.beam": "Beam",
 
   "waterplayer.config.services.yandex": "Яндекс Музыка",
@@ -149,6 +150,19 @@
   "waterplayer.track.copy_link": "Скопировать ссылку",
   "waterplayer.track.open_link": "Открыть в браузере",
   "waterplayer.track.open_file": "Открыть файл",
+  "waterplayer.track.playlists": "Плейлисты",
+  "waterplayer.track.playlists.hide": "Скрыть плейлисты",
+  "waterplayer.track.playlists.added": "Трек был добавлен в плейлист \"%s\"",
+  "waterplayer.track.add_playlist": "Добавить в плейлист",
+  "waterplayer.track.play": "Добавить в очередь",
+
+  "waterplayer.search": "Поиск",
+  "waterplayer.search.query": "Запрос",
+  "waterplayer.search.service": "Сервис",
+  "waterplayer.search.result": "Результаты",
+  "waterplayer.search.last_query": "Последний запрос",
+  "waterplayer.search.button": "Найти по запросу",
+  "waterplayer.search.not_found": "Ничего нет :(",
 
   "modmenu.descriptionTranslation.waterplayer": "Встроенный в клиент музыкальный интернет-плеер."
 }

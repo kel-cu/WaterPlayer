@@ -4,32 +4,38 @@ import com.github.topi314.lavalyrics.lyrics.AudioLyrics;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.glfw.GLFW;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.alinlib.gui.components.ConfigureScrolWidget;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonSpriteBuilder;
+import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonWithIconBuilder;
 import ru.kelcuprum.alinlib.gui.components.builder.slider.SliderIntegerBuilder;
+import ru.kelcuprum.alinlib.gui.components.buttons.ButtonSprite;
 import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
 import ru.kelcuprum.alinlib.gui.components.editbox.base.EditBoxString;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.gui.LyricsHelper;
-import ru.kelcuprum.waterplayer.frontend.gui.components.ButtonWithSprite;
 import ru.kelcuprum.waterplayer.frontend.gui.components.CurrentTrackButton;
 import ru.kelcuprum.waterplayer.frontend.gui.components.LyricsBox;
 import ru.kelcuprum.waterplayer.frontend.gui.components.TrackButton;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.config.PlaylistsScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.search.SearchScreen;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
+
+import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Icons.LIST;
 
 public class ControlScreen extends Screen {
     private final Screen parent;
@@ -48,7 +54,9 @@ public class ControlScreen extends Screen {
 
     protected EditBoxString request;
     LyricsBox lyrics;
-
+    public Button play;
+    public Button repeat;
+    public Button load;
     public void initPanel() {
         int x = 5;
         int size = 180;
@@ -61,10 +69,10 @@ public class ControlScreen extends Screen {
                 .setTextureSize(20, 20)
                 .setPosition(x, 40)
                 .setDesignType(designType).build());
-        ButtonWithSprite bws = new ButtonWithSprite(x, 65, 20, 20, InterfaceUtils.getResourceLocation("waterplayer", "search"), Component.translatable("waterplayer.control.search"), (s) -> AlinLib.MINECRAFT.setScreen(new SearchScreen(this)));
-        bws.active = false;
+        ButtonSprite bws = new ButtonSprite(x, 65, 20, 20, InterfaceUtils.getResourceLocation("waterplayer", "textures/search.png"), Component.translatable("waterplayer.control.search"), (s) -> AlinLib.MINECRAFT.setScreen(new SearchScreen(this)));
+//        bws.active = false;
         addRenderableWidget(bws);
-        addRenderableWidget(new Button(x+25, 65, size-25, 20, designType, Localization.getText("waterplayer.load.load"), (OnPress) -> WaterPlayer.player.loadMusic(request.getValue(), true)));
+        this.load = addRenderableWidget(new Button(x+25, 65, size-25, 20, designType, Localization.getText("waterplayer.load.load"), (OnPress) -> WaterPlayer.player.loadMusic(request.getValue(), true)));
         addRenderableWidget(new SliderIntegerBuilder(Component.translatable("waterplayer.load.volume"), (onPress) -> {
             WaterPlayer.config.setNumber("CURRENT_MUSIC_VOLUME", onPress);
             WaterPlayer.player.getAudioPlayer().setVolume(onPress);
@@ -72,14 +80,18 @@ public class ControlScreen extends Screen {
                 .setPosition(x, 90)
                 .setSize(size, 20)
                 .build().setTypeInteger("%"));
+
         //
 
-        this.lyrics = new LyricsBox(x, 115, size, height - 145, Component.empty());
+        this.lyrics = new LyricsBox(x, 115, size, height - 170, Component.empty());
         this.lyrics.visible = false;
         addRenderableWidget(lyrics);
 
         //
-        addRenderableWidget(new ButtonSpriteBuilder(InterfaceUtils.getResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"), (s) -> {
+        addRenderableWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.playlists"), LIST, (e) -> WaterPlayer.MINECRAFT.setScreen(new PlaylistsScreen().build(this)))
+                .setSize(size, 20).setPosition(x, height-50)
+                .setCentered(false).build());
+        this.play = addRenderableWidget(new ButtonSpriteBuilder(InterfaceUtils.getResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"), (s) -> {
             WaterPlayer.player.getAudioPlayer().setPaused(!WaterPlayer.player.getAudioPlayer().isPaused());
             s.setMessage(Component.translatable("waterplayer.control." + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause")));
             s.setIcon(InterfaceUtils.getResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"));
@@ -89,7 +101,7 @@ public class ControlScreen extends Screen {
                 .setTextureSize(20, 20)
                 .setPosition(x, height - 25)
                 .setDesignType(designType).build());
-        addRenderableWidget(new ButtonSpriteBuilder(WaterPlayer.player.getTrackScheduler().getRepeatIcon(), (s) -> {
+        this.repeat = addRenderableWidget(new ButtonSpriteBuilder(WaterPlayer.player.getTrackScheduler().getRepeatIcon(), (s) -> {
             WaterPlayer.player.getTrackScheduler().changeRepeatStatus();
             s.setMessage(Component.translatable("waterplayer.control."+(WaterPlayer.player.getTrackScheduler().getRepeatStatus() == 0 ? "non_repeat" : WaterPlayer.player.getTrackScheduler().getRepeatStatus() == 1 ? "repeat" : "one_repeat" )));
             s.setIcon(WaterPlayer.player.getTrackScheduler().getRepeatIcon());
@@ -193,6 +205,15 @@ public class ControlScreen extends Screen {
 
     protected boolean isTrackEnable() {
         return WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null;
+    }
+
+    @Override
+    public boolean keyPressed(int i, int j, int k) {
+        if(getFocused() != null && getFocused() instanceof EditBox && i == GLFW.GLFW_KEY_ENTER){
+            load.onPress();
+            return true;
+        }
+        return super.keyPressed(i, j, k);
     }
 
     @Override

@@ -63,7 +63,18 @@ public class TrackScheduler extends AudioEventAdapter {
             else WaterPlayer.log("There's nothing to add to the queue");
         }
         player.startTrack(queue.poll(), false);
-        if(player.getPlayingTrack() != null) WaterPlayer.log("Starting Track: " + Music.getTitle(player.getPlayingTrack()));
+        if(player.getPlayingTrack() != null) {
+            WaterPlayer.log("Starting Track: " + Music.getTitle(player.getPlayingTrack()));
+            if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true) && WaterPlayer.config.getBoolean("ENABLE_NOTICE.START_TRACK", true)) {
+                if (WaterPlayer.config.getBoolean("ENABLE_NOTICE.START_TRACK.CLEAR", false))
+                    WaterPlayer.MINECRAFT.getToasts().clear();
+                ToastBuilder toast = WaterPlayer.getToast().setTitle(Music.isAuthorNull(player.getPlayingTrack()) ? Component.translatable("waterplayer.name") : Component.literal(Music.getAuthor(player.getPlayingTrack())))
+                        .setMessage(Component.literal(Music.getTitle(player.getPlayingTrack())));
+                if (Music.getAuthor(player.getPlayingTrack()).equals("YonKaGor")) toast.setIcon(getYonKaGorMoment(player.getPlayingTrack()));
+                else toast.setIcon(InterfaceUtils.getResourceLocation("waterplayer", "textures/music.png"));
+                toast.show(WaterPlayer.MINECRAFT.getToasts());
+            }
+        }
     }
 
     @Override
@@ -79,18 +90,6 @@ public class TrackScheduler extends AudioEventAdapter {
 
     }
 
-    @Override
-    public void onTrackStart(AudioPlayer player, AudioTrack track) {
-        if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true) && WaterPlayer.config.getBoolean("ENABLE_NOTICE.START_TRACK", true)) {
-            if (WaterPlayer.config.getBoolean("ENABLE_NOTICE.START_TRACK.CLEAR", false))
-                WaterPlayer.MINECRAFT.getToasts().clear();
-            ToastBuilder toast = WaterPlayer.getToast().setTitle(Music.isAuthorNull(track) ? Component.translatable("waterplayer.name") : Component.literal(Music.getAuthor(track)))
-                    .setMessage(Component.literal(Music.getTitle(track)));
-            if (Music.getAuthor(track).equals("YonKaGor")) toast.setIcon(getYonKaGorMoment(track));
-            else toast.setIcon(InterfaceUtils.getResourceLocation("waterplayer", "textures/music.png"));
-            toast.show(WaterPlayer.MINECRAFT.getToasts());
-        }
-    }
     public int getRepeatStatus() {
         return repeatStatus;
     }

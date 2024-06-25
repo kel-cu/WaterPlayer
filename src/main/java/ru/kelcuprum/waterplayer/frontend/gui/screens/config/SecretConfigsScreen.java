@@ -7,6 +7,7 @@ import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonWithIconBuilder;
 import ru.kelcuprum.alinlib.gui.components.builder.editbox.EditBoxBuilder;
 import ru.kelcuprum.alinlib.gui.components.text.CategoryBox;
+import ru.kelcuprum.alinlib.gui.components.text.MessageBox;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.alinlib.gui.screens.ConfigScreenBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
@@ -44,24 +45,24 @@ public class SecretConfigsScreen {
                 .addPanelWidget(new ButtonWithIconBuilder(SecretConfigCategory, WARNING, (e) -> WaterPlayer.MINECRAFT.setScreen(new SecretConfigsScreen().build(parent))).setCentered(false).build())
                 .addPanelWidget(new ButtonWithIconBuilder(PlaylistsCategory, LIST, (e) -> WaterPlayer.MINECRAFT.setScreen(new PlaylistsScreen().build(parent))).setCentered(false).build())
                 .addPanelWidget(new ButtonWithIconBuilder(PlayCategory, InterfaceUtils.getResourceLocation("waterplayer", "textures/player/play.png"), (e) -> WaterPlayer.MINECRAFT.setScreen(new ControlScreen(this.build(parent)))).setCentered(false).build())
-                //
-                ///
+
                 .addWidget(new TextBox(SecretConfigCategory, true))
                 .addWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.secret.how_to_get_tokens"), InterfaceUtils.getResourceLocation("waterplayer", "textures/think.png"), (s)-> WaterPlayer.confirmLinkNow(new SecretConfigsScreen().build(parent), "https://github.com/topi314/LavaSrc?tab=readme-ov-file#usage")).build())
+                .addWidget(new MessageBox(Component.translatable("waterplayer.secret.description")))
                 .addWidget(new CategoryBox(tokensText)
-                        .addValue(new EditBoxBuilder(yandexMusicText).setValue("").setConfig(WaterPlayer.config, "YANDEX_MUSIC_TOKEN").setSecret(true).build().setDescription(Component.translatable("waterplayer.secret.description")))
-                        .addValue(new EditBoxBuilder(deezerText).setValue("").setConfig(WaterPlayer.config, "DEEZER_DECRYPTION_KEY").setSecret(true).build().setDescription(Component.translatable("waterplayer.secret.description")))
-                        .addValue(new EditBoxBuilder(floweryTTSText).setValue("").setConfig(WaterPlayer.config, "FLOWERY_TTS_VOICE").build().setDescription(Component.translatable("waterplayer.secret.description")))
+                        .addValue(new EditBoxBuilder(yandexMusicText).setValue("").setConfig(WaterPlayer.config, "YANDEX_MUSIC_TOKEN").setSecret(true).build())
+                        .addValue(new EditBoxBuilder(deezerText).setValue("").setConfig(WaterPlayer.config, "DEEZER_DECRYPTION_KEY").setSecret(true).build())
+                        .addValue(new EditBoxBuilder(floweryTTSText).setValue("").setConfig(WaterPlayer.config, "FLOWERY_TTS_VOICE").build())
                 )
                 .addWidget(new CategoryBox(spotifyText)
-                        .addValue(new EditBoxBuilder(spotifyClientIDText).setValue("").setConfig(WaterPlayer.config, "SPOTIFY_CLIENT_ID").setSecret(true).build().setDescription(Component.translatable("waterplayer.secret.description")))
-                        .addValue(new EditBoxBuilder(spotifyClientSecretText).setValue("").setConfig(WaterPlayer.config, "SPOTIFY_CLIENT_SECRET").setSecret(true).build().setDescription(Component.translatable("waterplayer.secret.description")))
-                        .addValue(new EditBoxBuilder(spotifySPDC).setValue("").setConfig(WaterPlayer.config, "SPOTIFY_SP_DC").setSecret(true).build().setDescription(Component.translatable("waterplayer.secret.description")))
-                        .addValue(new EditBoxBuilder(spotifyCountryCodeText).setValue("US").setConfig(WaterPlayer.config, "SPOTIFY_COUNTRY_CODE").build().setDescription(Component.translatable("waterplayer.secret.description")))
+                        .addValue(new EditBoxBuilder(spotifyClientIDText).setValue("").setConfig(WaterPlayer.config, "SPOTIFY_CLIENT_ID").setSecret(true).build())
+                        .addValue(new EditBoxBuilder(spotifyClientSecretText).setValue("").setConfig(WaterPlayer.config, "SPOTIFY_CLIENT_SECRET").setSecret(true).build())
+                        .addValue(new EditBoxBuilder(spotifySPDC).setValue("").setConfig(WaterPlayer.config, "SPOTIFY_SP_DC").setSecret(true).build())
+                        .addValue(new EditBoxBuilder(spotifyCountryCodeText).setValue("US").setConfig(WaterPlayer.config, "SPOTIFY_COUNTRY_CODE").build())
                 )
                 .addWidget(new CategoryBox(appleMusicText)
-                        .addValue(new EditBoxBuilder(appleMusicMediaAPITokenText).setValue("").setConfig(WaterPlayer.config, "APPLE_MUSIC_MEDIA_API_TOKEN").setSecret(true).build().setDescription(Component.translatable("waterplayer.secret.description")))
-                        .addValue(new EditBoxBuilder(appleMusicCountryCodeText).setValue("US").setConfig(WaterPlayer.config, "APPLE_MUSIC_COUNTRY_CODE").build().setDescription(Component.translatable("waterplayer.secret.description")))
+                        .addValue(new EditBoxBuilder(appleMusicMediaAPITokenText).setValue("").setConfig(WaterPlayer.config, "APPLE_MUSIC_MEDIA_API_TOKEN").setSecret(true).build())
+                        .addValue(new EditBoxBuilder(appleMusicCountryCodeText).setValue("US").setConfig(WaterPlayer.config, "APPLE_MUSIC_COUNTRY_CODE").build())
                 )
                 .build();
     }

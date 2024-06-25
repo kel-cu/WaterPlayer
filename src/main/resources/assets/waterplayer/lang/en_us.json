@@ -38,7 +38,7 @@
   "waterplayer.message.shuffle": "Queue shuffled",
   "waterplayer.message.skip": "Track skipped",
 
-  "waterplayer.control.search": "Search coming soon...",
+  "waterplayer.control.search": "Search...",
   "waterplayer.control.pause": "Pause",
   "waterplayer.control.play": "Play",
   "waterplayer.control.non_repeat": "Repeat off",
@@ -100,6 +100,7 @@
 
   "waterplayer.config.services": "Services",
   "waterplayer.config.services.youtube": "YouTube",
+  "waterplayer.config.services.youtube_music": "YouTube Music",
   "waterplayer.config.services.soundcloud": "SoundCloud",
   "waterplayer.config.services.bandcamp": "Bandcamp",
   "waterplayer.config.services.vimeo": "Vimeo",
@@ -150,6 +151,20 @@
   "waterplayer.track.copy_link": "Copy link",
   "waterplayer.track.open_link": "Open in browser",
   "waterplayer.track.open_file": "Open file",
+  "waterplayer.track.playlists": "Playlists",
+  "waterplayer.track.playlists.hide": "Hide Playlists",
+  "waterplayer.track.playlists.added": "The track has been added to the \"%s\" playlist.",
+  "waterplayer.track.add_playlist": "Add to Playlist",
+  "waterplayer.track.play": "Add to queue",
+
+
+  "waterplayer.search": "Search",
+  "waterplayer.search.query": "Request",
+  "waterplayer.search.service": "Service",
+  "waterplayer.search.result": "Results",
+  "waterplayer.search.last_query": "Last request",
+  "waterplayer.search.button": "Find by request",
+  "waterplayer.search.not_found": "Not found :(",
 
   "modmenu.descriptionTranslation.waterplayer": "Internet music player built into the client."
 }

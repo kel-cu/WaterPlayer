@@ -1,10 +1,7 @@
 package ru.kelcuprum.waterplayer.frontend.gui.components;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
@@ -21,10 +18,11 @@ public class TrackButton extends Button {
     protected AudioTrack track;
     private final boolean isShort;
     public TrackButton(int x, int y, int width, AudioTrack track, Screen screen, boolean isShort) {
-        super(x, y, width, isShort ? 20 : 40, InterfaceUtils.DesignType.FLAT, Component.empty(), (s) -> {
-//            WaterPlayer.confirmLinkNow(screen, track.getInfo().uri);
-            AlinLib.MINECRAFT.setScreen(new TrackScreen(screen, track));
-        });
+        this(x, y, width, track, screen, isShort, false);
+    }
+    public TrackButton(int x, int y, int width, AudioTrack track, Screen screen, boolean isShort, boolean isSearch) {
+        super(x, y, width, isShort ? 20 : 40, InterfaceUtils.DesignType.FLAT, Component.empty(),
+                (s) -> AlinLib.MINECRAFT.setScreen(new TrackScreen(screen, track, isSearch)));
         StringBuilder builder = new StringBuilder();
         if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
         builder.append(Music.getTitle(track)).append(" ").append(StarScript.getTimestamp(Music.getDuration(track)));

@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.Util;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
@@ -61,7 +62,7 @@ public class WaterPlayer implements ClientModInitializer {
         ClientCommandRegistrationCallback.EVENT.register(WaterPlayerCommand::register);
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             for(KeyBind bind : keyBinds){
-                if(bind.key().consumeClick()) bind.onExecute().onExecute();
+                if(bind.key().consumeClick()) bind.onExecute().run();
             }
         });
         ScreenEvents.KEY_PRESS.register((Screen screen, int code, int scan, int modifiers, CallbackInfoReturnable<Boolean> var5) -> {
@@ -69,7 +70,7 @@ public class WaterPlayer implements ClientModInitializer {
             if(screen instanceof TitleScreen || screen instanceof PauseScreen || screen instanceof ControlScreen) {
 //                AlinLib.log("click");
                 for (KeyBind bind : keyBinds) {
-                    if ((bind.key().matches(code, scan) || bind.key().matchesMouse(code)) && bind.onExecute().onExecute()) {
+                    if ((bind.key().matches(code, scan) || bind.key().matchesMouse(code)) && bind.onExecute().run()) {
 //                            AlinLib.log("Execute");
                             var5.setReturnValue(true);
                             var5.cancel();
@@ -133,8 +134,12 @@ public class WaterPlayer implements ClientModInitializer {
             } else return false;
         }));
         keyBinds.add(new KeyBind(key2, () -> {
-            if(AlinLib.MINECRAFT.screen instanceof ControlScreen) return false;
-            player.getAudioPlayer().setPaused(!player.getAudioPlayer().isPaused());
+            if(AlinLib.MINECRAFT.screen instanceof ControlScreen){
+                if(AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
+                ((ControlScreen) AlinLib.MINECRAFT.screen).play.onPress();
+            } else {
+                player.getAudioPlayer().setPaused(!player.getAudioPlayer().isPaused());
+            }
             if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) getToast().setMessage(Localization.getText(player.getAudioPlayer().isPaused() ? "waterplayer.message.pause" : "waterplayer.message.play"))
                     .show(AlinLib.MINECRAFT.getToasts());
             return true;
@@ -166,7 +171,12 @@ public class WaterPlayer implements ClientModInitializer {
         }));
         keyBinds.add(new KeyBind(key6, () -> {
             if(player.getAudioPlayer().getPlayingTrack() == null) return false;
-            player.getTrackScheduler().changeRepeatStatus();
+            if(AlinLib.MINECRAFT.screen instanceof ControlScreen){
+                if(AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
+                ((ControlScreen) AlinLib.MINECRAFT.screen).repeat.onPress();
+            } else {
+                player.getTrackScheduler().changeRepeatStatus();
+            }
             if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) getToast().setIcon(player.getTrackScheduler().getRepeatIcon())
                     .setMessage(Localization.getText(player.getTrackScheduler().getRepeatStatus() == 0 ? "waterplayer.message.repeat.no" : player.getTrackScheduler().getRepeatStatus() == 1 ? "waterplayer.message.repeat" : "waterplayer.message.repeat.one" ))
                     .show(AlinLib.MINECRAFT.getToasts());

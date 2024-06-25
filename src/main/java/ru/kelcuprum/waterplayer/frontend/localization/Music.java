@@ -64,7 +64,7 @@ public class Music {
         return trackIsNull() ? InterfaceUtils.getResourceLocation("waterplayer", "textures/no_icon.png") : getThumbnail(WaterPlayer.player.getAudioPlayer().getPlayingTrack());
     }
     public static ResourceLocation getThumbnail(AudioTrack info){
-        return info.getInfo().artworkUrl != null ? TexturesHelper.getTexture(info.getInfo().artworkUrl, (info.getSourceManager().getSourceName() + "_" + info.getInfo().identifier)) : Music.isFile(info) ? InterfaceUtils.getResourceLocation("waterplayer", "textures/file_icon.png") : InterfaceUtils.getResourceLocation("waterplayer", "textures/no_icon.png");
+        return trackIsNull(info) ? InterfaceUtils.getResourceLocation("waterplayer", "textures/no_icon.png") : info.getInfo().artworkUrl != null ? TexturesHelper.getTexture(info.getInfo().artworkUrl, (info.getSourceManager().getSourceName() + "_" + info.getInfo().identifier)) : Music.isFile(info) ? InterfaceUtils.getResourceLocation("waterplayer", "textures/file_icon.png") : InterfaceUtils.getResourceLocation("waterplayer", "textures/no_icon.png");
     }
 
     public static boolean isFile(){
@@ -77,12 +77,12 @@ public class Music {
     public static long getPosition() {return getPosition(WaterPlayer.player.getAudioPlayer().getPlayingTrack());}
     //
     public static long getDuration(AudioTrack track){
-        return trackIsNull() ? 0 : track.getDuration();
+        return trackIsNull(track) ? 0 : track.getDuration();
     }
     public static long getDuration() {return getDuration(WaterPlayer.player.getAudioPlayer().getPlayingTrack());}
     //
     public static String getService(AudioTrack track){
-        return trackIsNull() ? "" : track.getSourceManager().getSourceName();
+        return trackIsNull(track) ? "" : track.getSourceManager().getSourceName();
     }
     public static String getService() {return getService(WaterPlayer.player.getAudioPlayer().getPlayingTrack());}
 
@@ -104,7 +104,7 @@ public class Music {
             case "flowery-tts" -> Component.translatable("waterplayer.config.services.flowery");
             case "http" -> Component.translatable("waterplayer.config.services.http");
             case "local" -> Component.translatable("waterplayer.config.services.local");
-            default -> Component.literal("-");
+            default -> Component.literal(service);
         };
     }
 

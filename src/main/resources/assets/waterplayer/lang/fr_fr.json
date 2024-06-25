@@ -38,7 +38,7 @@
   "waterplayer.message.shuffle": "La file d'attente a été mélangée",
   "waterplayer.message.skip": "Piste passée",
 
-  "waterplayer.control.search": "Search coming soon...",
+  "waterplayer.control.search": "Search...",
   "waterplayer.control.pause": "Pause",
   "waterplayer.control.play": "Jouer",
   "waterplayer.control.non_repeat": "Répétition de l'arrêt",
@@ -100,6 +100,7 @@
 
   "waterplayer.config.services": "Services",
   "waterplayer.config.services.youtube": "YouTube",
+  "waterplayer.config.services.youtube_music": "YouTube Music",
   "waterplayer.config.services.soundcloud": "SoundCloud",
   "waterplayer.config.services.bandcamp": "Bandcamp",
   "waterplayer.config.services.vimeo": "Vimeo",
@@ -149,6 +150,19 @@
   "waterplayer.track.copy_link": "Copier le lien",
   "waterplayer.track.open_link": "Ouvrir dans le navigateur",
   "waterplayer.track.open_file": "Ouvrir un fichier",
+  "waterplayer.track.playlists": "Listes de lecture",
+  "waterplayer.track.playlists.hide": "Masquer les listes de lecture",
+  "waterplayer.track.playlists.added": "La piste a été ajoutée à la liste de lecture \"%s\".",
+  "waterplayer.track.add_playlist": "Ajouter à la liste de lecture",
+  "waterplayer.track.play": "Ajouter à la file d'attente",
+
+  "waterplayer.search": "Search",
+  "waterplayer.search.query": "Request",
+  "waterplayer.search.service": "Service",
+  "waterplayer.search.result": "Results",
+  "waterplayer.search.last_query": "Last request",
+  "waterplayer.search.button": "Find by request",
+  "waterplayer.search.not_found": "Not found :(",
   
   "modmenu.descriptionTranslation.waterplayer": "Lecteur de musique en ligne intégré dans le client."
 }

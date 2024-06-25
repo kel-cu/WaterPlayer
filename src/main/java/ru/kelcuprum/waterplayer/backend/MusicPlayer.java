@@ -86,7 +86,7 @@ public class MusicPlayer {
     private void registerSources() {
         Config config = WaterPlayer.config;
         if (config.getBoolean("ENABLE_YOUTUBE", true)) {
-            final YoutubeAudioSourceManager youtube = new YoutubeAudioSourceManager(true, new Client[]{new MusicWithThumbnail(), new WebWithThumbnail(), new AndroidWithThumbnail()});
+            final YoutubeAudioSourceManager youtube = new YoutubeAudioSourceManager(true, new MusicWithThumbnail(), new WebWithThumbnail(), new AndroidWithThumbnail());
             youtube.setPlaylistPageCount(100);
             audioPlayerManager.registerSourceManager(youtube);
             AudioSearchManager ytSearch = new YoutubeSearchManager(() -> audioPlayerManager, "US");
@@ -238,6 +238,9 @@ public class MusicPlayer {
 
     public AudioPlayer getAudioPlayer() {
         return audioPlayer;
+    }
+    public AudioPlayerManager getAudioPlayerManager() {
+        return audioPlayerManager;
     }
 
     public LyricsManager getLyricsManager() {
