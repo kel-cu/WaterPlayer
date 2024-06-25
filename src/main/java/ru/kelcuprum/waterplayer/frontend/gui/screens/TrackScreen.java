@@ -89,6 +89,7 @@ public class TrackScreen extends Screen {
         if(isSearch){
             addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.track.play"), (huy) -> {
                 WaterPlayer.player.loadMusic(track.getInfo().uri, false);
+                onClose();
             }).setWidth(componentSize/2-2).setPosition(x, y).build());
             addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.track.add_playlist"), (huy) -> {
                 showPlaylist = true;
