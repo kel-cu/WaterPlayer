@@ -27,7 +27,7 @@ public class CurrentTrackButton extends Button {
 
     @Override
     public void onPress() {
-        if (isTrackEnable()) AlinLib.MINECRAFT.setScreen(new TrackScreen(screen, WaterPlayer.player.getAudioPlayer().getPlayingTrack(), false));
+        if (isTrackEnable()) AlinLib.MINECRAFT.setScreen(new TrackScreen(screen, WaterPlayer.player.getAudioPlayer().getPlayingTrack()));
     }
 
     public int getHeight() {

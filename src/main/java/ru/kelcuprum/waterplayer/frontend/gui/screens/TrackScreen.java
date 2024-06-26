@@ -37,13 +37,12 @@ public class TrackScreen extends Screen {
     protected boolean lyricsEnable = false;
     protected boolean showLyrics = false;
     protected boolean showPlaylist = false;
-    protected boolean isSearch = false;
-    public TrackScreen(Screen parent, AudioTrack track, boolean isSearch) {
+
+    public TrackScreen(Screen parent, AudioTrack track) {
         super(Component.empty());
-        this.isSearch = isSearch;
         this.parent = parent;
         this.track = track;
-        if(this.track == null) {
+        if (this.track == null) {
             this.isFile = false;
             onClose();
             return;
@@ -51,96 +50,99 @@ public class TrackScreen extends Screen {
         this.isFile = new File(track.getInfo().uri).exists();
         this.lyrics = LyricsHelper.getLyrics(track);
     }
+
     Button lyricsButton;
     Button backButton;
     LyricsBox lyricsBox;
     int x = 10;
-    int iconSize = 5+(14*3);
+    int iconSize = 5 + (14 * 3);
     int lyricsSize = 200;
     int componentSize = 310;
+
     @Override
     protected void init() {
-        int iconSize = 5+((font.lineHeight+5)*3);
+        int iconSize = 5 + ((font.lineHeight + 5) * 3);
         int pageSize = this.width;
-        lyricsSize = Math.min(width/2, 200);
-        if(showLyrics || showPlaylist) pageSize-=lyricsSize;
-        componentSize = Math.min(310, pageSize-10);
-        x = (pageSize-componentSize) / 2;
-        if(showLyrics || showPlaylist) x+=lyricsSize;
-        if(showPlaylist){
+        lyricsSize = Math.min(width / 2, 200);
+        if (showLyrics || showPlaylist) pageSize -= lyricsSize;
+        componentSize = Math.min(310, pageSize - 10);
+        x = (pageSize - componentSize) / 2;
+        if (showLyrics || showPlaylist) x += lyricsSize;
+        if (showPlaylist) {
             initPlaylist();
-        } else if(showLyrics) {
-            addRenderableWidget(new TextBox(5, 15, lyricsSize-10, 9, Localization.getText("waterplayer.track.lyrics.title"), true));
-            lyricsBox = addRenderableWidget(new LyricsBox(5, 40, lyricsSize-10, height-70, Component.empty())).setLyrics(Component.literal(lyrics.getText() == null ? "" : lyrics.getText()));
-            addRenderableWidget(new Button(5, height - 25, lyricsSize-10, 20, Component.translatable("waterplayer.track.lyrics.copy"), (onPress) -> {
+        } else if (showLyrics) {
+            addRenderableWidget(new TextBox(5, 15, lyricsSize - 10, 9, Localization.getText("waterplayer.track.lyrics.title"), true));
+            lyricsBox = addRenderableWidget(new LyricsBox(5, 40, lyricsSize - 10, height - 70, Component.empty())).setLyrics(Component.literal(lyrics.getText() == null ? "" : lyrics.getText()));
+            addRenderableWidget(new Button(5, height - 25, lyricsSize - 10, 20, Component.translatable("waterplayer.track.lyrics.copy"), (onPress) -> {
                 AlinLib.MINECRAFT.keyboardHandler.setClipboard(lyrics.getText() == null ? "" : lyrics.getText());
                 WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.lyrics.copy.toast")).show(minecraft.getToasts());
             }));
         }
-        addRenderableWidget(new ButtonBuilder(Component.translatable( isFile ? "waterplayer.track.open_file" : "waterplayer.track.open_link"), (huy) -> {
-            if(isFile) Util.getPlatform().openFile(new File(track.getInfo().uri)); else Util.getPlatform().openUri(track.getInfo().uri);
-        }).setWidth(componentSize/2-2).setPosition(x, height/2-10).build());
+        addRenderableWidget(new ButtonBuilder(Component.translatable(isFile ? "waterplayer.track.open_file" : "waterplayer.track.open_link"), (huy) -> {
+            if (isFile) Util.getPlatform().openFile(new File(track.getInfo().uri));
+            else Util.getPlatform().openUri(track.getInfo().uri);
+        }).setWidth(componentSize / 2 - 2).setPosition(x, height / 2 - 10).build());
         addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.track.copy_link"), (huy) -> {
             AlinLib.MINECRAFT.keyboardHandler.setClipboard(track.getInfo().uri);
-        }).setWidth(componentSize/2-2).setPosition(x+componentSize/2+2, height/2-10).build());
+        }).setWidth(componentSize / 2 - 2).setPosition(x + componentSize / 2 + 2, height / 2 - 10).build());
 
-        int y = height/2+15;
+        int y = height / 2 + 15;
 
-        if(isSearch){
-            addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.track.play"), (huy) -> {
-                WaterPlayer.player.loadMusic(track.getInfo().uri, false);
-                onClose();
-            }).setWidth(componentSize/2-2).setPosition(x, y).build());
-            addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.track.add_playlist"), (huy) -> {
-                showPlaylist = true;
-                rebuildWidgets();
-            }).setWidth(componentSize/2-2).setPosition(x+componentSize/2+2, y).build());
-            y+=25;
-        }
+        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.track.play"), (huy) -> {
+            WaterPlayer.player.loadMusic(track.getInfo().uri, false);
+            onClose();
+        }).setWidth(componentSize / 2 - 2).setPosition(x, y).build());
+        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.track.add_playlist"), (huy) -> {
+            showPlaylist = true;
+            rebuildWidgets();
+        }).setWidth(componentSize / 2 - 2).setPosition(x + componentSize / 2 + 2, y).build());
+        y += 25;
+
 
         this.lyricsButton = addRenderableWidget(new ButtonBuilder(Component.translatable(showLyrics ? "waterplayer.track.hide_lyrics" : "waterplayer.track.lyrics"), (huy) -> {
             showLyrics = !showLyrics;
             rebuildWidgets();
-        }).setWidth(componentSize/2-2).setPosition(x, y).build().setActive(lyricsEnable));
+        }).setWidth(componentSize / 2 - 2).setPosition(x, y).build().setActive(lyricsEnable));
         this.lyricsButton.visible = lyricsEnable;
 
-        backButton = addRenderableWidget(new ButtonBuilder(CommonComponents.GUI_BACK, (huy) -> onClose()).setWidth(lyricsEnable ? componentSize/2-2 : componentSize).setPosition(lyricsEnable ? x+componentSize/2+2 : x, y).build());
+        backButton = addRenderableWidget(new ButtonBuilder(CommonComponents.GUI_BACK, (huy) -> onClose()).setWidth(lyricsEnable ? componentSize / 2 - 2 : componentSize).setPosition(lyricsEnable ? x + componentSize / 2 + 2 : x, y).build());
 
-        int textY = height/2-15-iconSize+5;
-        addRenderableWidget(new TextBox(x+iconSize+5, textY, componentSize-(iconSize+10), font.lineHeight, Component.literal(Music.getTitle(track)), false));
-        textY+=(font.lineHeight+5);
-        if(!Music.getAuthor(track).isBlank()) {
-            addRenderableWidget(new TextBox(x+iconSize+5, textY, componentSize-(iconSize+10), font.lineHeight, Component.translatable("waterplayer.track.author", Music.getAuthor(track)), false));
-            textY+=(font.lineHeight+5);
+        int textY = height / 2 - 15 - iconSize + 5;
+        addRenderableWidget(new TextBox(x + iconSize + 5, textY, componentSize - (iconSize + 10), font.lineHeight, Component.literal(Music.getTitle(track)), false));
+        textY += (font.lineHeight + 5);
+        if (!Music.getAuthor(track).isBlank()) {
+            addRenderableWidget(new TextBox(x + iconSize + 5, textY, componentSize - (iconSize + 10), font.lineHeight, Component.translatable("waterplayer.track.author", Music.getAuthor(track)), false));
+            textY += (font.lineHeight + 5);
         }
-        addRenderableWidget(new TextBox(x+iconSize+5, textY, componentSize-(iconSize+10), font.lineHeight, Component.translatable("waterplayer.track.service", Music.getServiceName(Music.getService(track))), false));
+        addRenderableWidget(new TextBox(x + iconSize + 5, textY, componentSize - (iconSize + 10), font.lineHeight, Component.translatable("waterplayer.track.service", Music.getServiceName(Music.getService(track))), false));
     }
 
     private ConfigureScrolWidget scroller_panel;
     private TextBox titleW;
     private Button back;
     private List<AbstractWidget> playlists;
-    public void initPlaylist(){
+
+    public void initPlaylist() {
         playlists = new ArrayList<>();
-        titleW = addRenderableWidget(new TextBox(5, 5, lyricsSize-10, 30, Localization.getText("waterplayer.track.playlists"), true));
-        back = addRenderableWidget(new Button(5, height - 25, lyricsSize-10, 20, Component.translatable("waterplayer.track.playlists.hide"), (onPress) -> {
+        titleW = addRenderableWidget(new TextBox(5, 5, lyricsSize - 10, 30, Localization.getText("waterplayer.track.playlists"), true));
+        back = addRenderableWidget(new Button(5, height - 25, lyricsSize - 10, 20, Component.translatable("waterplayer.track.playlists.hide"), (onPress) -> {
             showPlaylist = false;
             rebuildWidgets();
         }));
         File playlistsFolder = AlinLib.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists").toFile();
         int yP = 40;
-        if(playlistsFolder.exists() && playlistsFolder.isDirectory()){
-            for(File playlist : Objects.requireNonNull(playlistsFolder.listFiles())){
-                if(playlist.isFile() && playlist.getName().endsWith(".json")){
+        if (playlistsFolder.exists() && playlistsFolder.isDirectory()) {
+            for (File playlist : Objects.requireNonNull(playlistsFolder.listFiles())) {
+                if (playlist.isFile() && playlist.getName().endsWith(".json")) {
                     try {
                         Playlist playlistObject = new Playlist(playlist.toPath());
                         playlists.add(new ButtonBuilder(Component.translatable("waterplayer.playlists.value", playlistObject.title, playlistObject.author), (s) -> {
                             playlistObject.addUrl(track.getInfo().uri);
                             WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.playlists.added", playlistObject.title)).show(AlinLib.MINECRAFT.getToasts());
                             onClose();
-                        }).setSize(lyricsSize-10, 20).setPosition(5, yP).build());
-                        yP+=25;
-                    } catch (Exception e){
+                        }).setSize(lyricsSize - 10, 20).setPosition(5, yP).build());
+                        yP += 25;
+                    } catch (Exception e) {
                         WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);
                     }
                 }
@@ -151,18 +153,18 @@ public class TrackScreen extends Screen {
         this.scroller_panel = addRenderableWidget(new ConfigureScrolWidget(-8, 0, 4, this.height, Component.empty(), scroller -> {
             scroller.innerHeight = 5;
             titleW.setY((int) (scroller.innerHeight - scroller.scrollAmount()));
-            scroller.innerHeight+=titleW.getHeight()+5;
+            scroller.innerHeight += titleW.getHeight() + 5;
 
-            for(AbstractWidget widget : playlists){
-                if(widget.visible){
+            for (AbstractWidget widget : playlists) {
+                if (widget.visible) {
                     widget.setY((int) (scroller.innerHeight - scroller.scrollAmount()));
-                    scroller.innerHeight += (widget.getHeight()+5);
+                    scroller.innerHeight += (widget.getHeight() + 5);
                 } else widget.setY(-widget.getHeight());
             }
-            if(scroller.innerHeight >= height-25){
+            if (scroller.innerHeight >= height - 25) {
                 back.setY((int) (scroller.innerHeight - scroller.scrollAmount()));
                 scroller.innerHeight += (20);
-            } else back.setY(height-25);
+            } else back.setY(height - 25);
         }));
     }
 
@@ -175,25 +177,25 @@ public class TrackScreen extends Screen {
     @Override
     public void render(GuiGraphics guiGraphics, int i, int j, float f) {
         super.render(guiGraphics, i, j, f);
-        guiGraphics.blit(Music.getThumbnail(track), x, height/2-15-iconSize, 0.0F, 0.0F, iconSize, iconSize, iconSize, iconSize);
+        guiGraphics.blit(Music.getThumbnail(track), x, height / 2 - 15 - iconSize, 0.0F, 0.0F, iconSize, iconSize, iconSize, iconSize);
     }
 
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f) {
         super.renderBackground(guiGraphics, i, j, f);
-        if(showLyrics || showPlaylist) InterfaceUtils.renderLeftPanel(guiGraphics, lyricsSize, height);
+        if (showLyrics || showPlaylist) InterfaceUtils.renderLeftPanel(guiGraphics, lyricsSize, height);
     }
 
     @Override
     public void tick() {
-        if(showPlaylist && scroller_panel != null) scroller_panel.onScroll.accept(scroller_panel);
+        if (showPlaylist && scroller_panel != null) scroller_panel.onScroll.accept(scroller_panel);
         this.lyrics = LyricsHelper.getLyrics(track);
         this.lyricsEnable = lyrics != null && lyrics.getText() != null && !(lyrics instanceof SafeLyrics);
-        if(this.backButton != null) {
+        if (this.backButton != null) {
             backButton.setWidth(lyricsEnable ? componentSize / 2 - 2 : componentSize);
             backButton.setX(lyricsEnable ? x + componentSize / 2 + 2 : x);
         }
-        if(this.lyricsButton != null) {
+        if (this.lyricsButton != null) {
             lyricsButton.setActive(lyricsEnable);
             lyricsButton.visible = lyricsEnable;
         }
@@ -203,9 +205,9 @@ public class TrackScreen extends Screen {
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
         boolean scr = super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
-        if(showPlaylist) {
-            if(mouseX <= 200) scr = scroller_panel.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
-        } else if(showLyrics) {
+        if (showPlaylist) {
+            if (mouseX <= 200) scr = scroller_panel.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+        } else if (showLyrics) {
             if ((mouseX >= 5 && mouseX <= 195) && (mouseY >= 40 && mouseY <= height - 30)) {
                 scr = lyricsBox.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
             }

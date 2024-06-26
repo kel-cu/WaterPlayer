@@ -18,11 +18,8 @@ public class TrackButton extends Button {
     protected AudioTrack track;
     private final boolean isShort;
     public TrackButton(int x, int y, int width, AudioTrack track, Screen screen, boolean isShort) {
-        this(x, y, width, track, screen, isShort, false);
-    }
-    public TrackButton(int x, int y, int width, AudioTrack track, Screen screen, boolean isShort, boolean isSearch) {
         super(x, y, width, isShort ? 20 : 40, InterfaceUtils.DesignType.FLAT, Component.empty(),
-                (s) -> AlinLib.MINECRAFT.setScreen(new TrackScreen(screen, track, isSearch)));
+                (s) -> AlinLib.MINECRAFT.setScreen(new TrackScreen(screen, track)));
         StringBuilder builder = new StringBuilder();
         if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
         builder.append(Music.getTitle(track)).append(" ").append(StarScript.getTimestamp(Music.getDuration(track)));

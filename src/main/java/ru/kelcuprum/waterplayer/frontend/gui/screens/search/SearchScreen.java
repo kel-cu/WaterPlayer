@@ -122,7 +122,7 @@ public class SearchScreen extends Screen {
         }));
         widgets.add(new TextBox(x, 5, width-200, 20, Component.translatable("waterplayer.search.result"), true));
         if(list.isEmpty()) widgets.add(new MessageBox(x, 20, width - 200, 20, Component.translatable("waterplayer.search.not_found"), true));
-        else for (AudioTrack track : list) widgets.add(new TrackButton(x, 20, width - 200, track, this, false, true));
+        else for (AudioTrack track : list) widgets.add(new TrackButton(x, 20, width - 200, track, this, false));
 
         int i = 0;
         addRenderableWidgets(widgets);
