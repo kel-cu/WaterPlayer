@@ -8,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
@@ -67,12 +68,12 @@ public class TrackScheduler extends AudioEventAdapter {
             WaterPlayer.log("Starting Track: " + Music.getTitle(player.getPlayingTrack()));
             if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true) && WaterPlayer.config.getBoolean("ENABLE_NOTICE.START_TRACK", true)) {
                 if (WaterPlayer.config.getBoolean("ENABLE_NOTICE.START_TRACK.CLEAR", false))
-                    WaterPlayer.MINECRAFT.getToasts().clear();
+                    AlinLib.MINECRAFT.getToasts().clear();
                 ToastBuilder toast = WaterPlayer.getToast().setTitle(Music.isAuthorNull(player.getPlayingTrack()) ? Component.translatable("waterplayer.name") : Component.literal(Music.getAuthor(player.getPlayingTrack())))
                         .setMessage(Component.literal(Music.getTitle(player.getPlayingTrack())));
                 if (Music.getAuthor(player.getPlayingTrack()).equals("YonKaGor")) toast.setIcon(getYonKaGorMoment(player.getPlayingTrack()));
                 else toast.setIcon(InterfaceUtils.getResourceLocation("waterplayer", "textures/music.png"));
-                toast.show(WaterPlayer.MINECRAFT.getToasts());
+                toast.show(AlinLib.MINECRAFT.getToasts());
             }
         }
     }
@@ -105,7 +106,8 @@ public class TrackScheduler extends AudioEventAdapter {
         if(changedRepeatStatus>2) changedRepeatStatus = 0;
         setRepeatStatus(changedRepeatStatus);
         return repeatStatus;
-    };
+    }
+
     public void setRepeatStatus(int i){
         if(i>2) i = 0;
         else if(i<0) i =2;

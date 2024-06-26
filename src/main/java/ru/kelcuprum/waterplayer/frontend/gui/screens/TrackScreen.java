@@ -127,7 +127,7 @@ public class TrackScreen extends Screen {
             showPlaylist = false;
             rebuildWidgets();
         }));
-        File playlistsFolder = WaterPlayer.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists").toFile();
+        File playlistsFolder = AlinLib.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists").toFile();
         int yP = 40;
         if(playlistsFolder.exists() && playlistsFolder.isDirectory()){
             for(File playlist : Objects.requireNonNull(playlistsFolder.listFiles())){

@@ -39,7 +39,6 @@ public class WaterPlayer implements ClientModInitializer {
     public static final Logger LOG = LogManager.getLogger("WaterPlayer");
     public static MusicPlayer player;
     public static Localization localization = new Localization("waterplayer", "config/WaterPlayer/lang");
-    public static Minecraft MINECRAFT = Minecraft.getInstance();
 
     @Override
     public void onInitializeClient() {
@@ -58,7 +57,7 @@ public class WaterPlayer implements ClientModInitializer {
             ClientTickEvents.START_CLIENT_TICK.register(hud);
             ClientTickEvents.START_CLIENT_TICK.register(sub);
         });
-        ClientLifecycleEvents.CLIENT_STOPPING.register(c -> player.getAudioPlayer().stopTrack());
+        ClientLifecycleEvents.CLIENT_STOPPING.register(e -> player.getAudioPlayer().stopTrack());
         ClientCommandRegistrationCallback.EVENT.register(WaterPlayerCommand::register);
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             for(KeyBind bind : keyBinds){
@@ -208,14 +207,14 @@ public class WaterPlayer implements ClientModInitializer {
     public static void log(String message, Level level) {
         LOG.log(level, "[" + LOG.getName() + "] " + message);
     }
-    public static void confirmLinkNow(Screen screen, String string) {
+    public static void confirmLinkNow(Screen screen, String link) {
         Minecraft minecraft = Minecraft.getInstance();
         minecraft.setScreen(new ConfirmLinkScreen((bl) -> {
             if (bl) {
-                Util.getPlatform().openUri(string);
+                Util.getPlatform().openUri(link);
             }
 
             minecraft.setScreen(screen);
-        }, string, true));
+        }, link, true));
     }
 }

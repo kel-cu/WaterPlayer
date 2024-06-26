@@ -48,11 +48,11 @@ public class OverlayHandler implements GuiRenderEvents, ClientTickEvents.StartTi
                 Component state = Component.literal(WaterPlayer.localization.getParsedText("{player.speaker_icon} {player.volume}% {format.time}{player.repeat_icon}"));
                 int pos = WaterPlayer.config.getNumber("OVERLAY.POSITION", 0).intValue();
                 int pos1 = WaterPlayer.config.getNumber("OVERLAY.POSITION", 0).intValue();
-                int maxWidth = Math.max(WaterPlayer.MINECRAFT.font.width(state), (bottom ? (pos == 0 || pos == 1) : (pos1 == 0 || pos1 == 1)) ? AlinLib.MINECRAFT.getWindow().getGuiScaledWidth() / 2 : ((AlinLib.MINECRAFT.getWindow().getGuiScaledWidth() - 280) / 2) - (WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().artworkUrl != null || Music.isFile() ? (WaterPlayer.MINECRAFT.font.lineHeight + 3) * 3 : 0));
+                int maxWidth = Math.max(AlinLib.MINECRAFT.font.width(state), (bottom ? (pos == 0 || pos == 1) : (pos1 == 0 || pos1 == 1)) ? AlinLib.MINECRAFT.getWindow().getGuiScaledWidth() / 2 : ((AlinLib.MINECRAFT.getWindow().getGuiScaledWidth() - 280) / 2) - (WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().artworkUrl != null || Music.isFile() ? (AlinLib.MINECRAFT.font.lineHeight + 3) * 3 : 0));
                 //-=-=-=-
-                if (!Music.isAuthorNull()) texts.addAll(WaterPlayer.MINECRAFT.font.split(author, maxWidth));
-                texts.addAll(WaterPlayer.MINECRAFT.font.split(title, maxWidth));
-                texts.addAll(WaterPlayer.MINECRAFT.font.split(state, maxWidth));
+                if (!Music.isAuthorNull()) texts.addAll(AlinLib.MINECRAFT.font.split(author, maxWidth));
+                texts.addAll(AlinLib.MINECRAFT.font.split(title, maxWidth));
+                texts.addAll(AlinLib.MINECRAFT.font.split(state, maxWidth));
             }
         } catch (Exception ex) {
             WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
@@ -65,11 +65,11 @@ public class OverlayHandler implements GuiRenderEvents, ClientTickEvents.StartTi
         try {
             if (!texts.isEmpty()) {
                 int l = pos == 0 || pos == 1 ? 0 : texts.size() - 1;
-                int f = WaterPlayer.MINECRAFT.font.lineHeight + 3;
+                int f = AlinLib.MINECRAFT.font.lineHeight + 3;
                 int my = f * texts.size();
                 int mx = 0;
                 for (FormattedCharSequence text : texts) {
-                    mx = Math.max(mx, WaterPlayer.MINECRAFT.font.width(text));
+                    mx = Math.max(mx, AlinLib.MINECRAFT.font.width(text));
                 }
                 boolean caverEnable = false;
                 int j = 0;
@@ -106,8 +106,8 @@ public class OverlayHandler implements GuiRenderEvents, ClientTickEvents.StartTi
 
                 for (FormattedCharSequence text : texts) {
                     int x = (left ? 10 : guiGraphics.guiWidth() - 10 - mx) + (caverEnable ? j + 5 : 0);
-                    int y = top ? 10 + (l * f) : guiGraphics.guiHeight() - 11 - WaterPlayer.MINECRAFT.font.lineHeight - (l * f);
-                    guiGraphics.drawString(WaterPlayer.MINECRAFT.font, text, x, y, -1);
+                    int y = top ? 10 + (l * f) : guiGraphics.guiHeight() - 11 - AlinLib.MINECRAFT.font.lineHeight - (l * f);
+                    guiGraphics.drawString(AlinLib.MINECRAFT.font, text, x, y, -1);
                     if (top) l++;
                     else l--;
                 }

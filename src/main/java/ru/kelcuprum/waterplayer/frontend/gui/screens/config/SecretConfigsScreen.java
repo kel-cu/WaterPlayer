@@ -2,6 +2,7 @@ package ru.kelcuprum.waterplayer.frontend.gui.screens.config;
 
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonWithIconBuilder;
@@ -40,14 +41,14 @@ public class SecretConfigsScreen {
     //
     public Screen build(Screen parent) {
         return new ConfigScreenBuilder(parent, Component.translatable("waterplayer.name"))
-                .addPanelWidget(new ButtonWithIconBuilder(MainConfigCategory, OPTIONS, (e) -> WaterPlayer.MINECRAFT.setScreen(new MainConfigsScreen().build(parent))).setCentered(false).build())
-                .addPanelWidget(new ButtonWithIconBuilder(LocalizationConfigCategory, LIST, (e) -> WaterPlayer.MINECRAFT.setScreen(new LocalizationConfigsScreen().build(parent))).setCentered(false).build())
-                .addPanelWidget(new ButtonWithIconBuilder(SecretConfigCategory, WARNING, (e) -> WaterPlayer.MINECRAFT.setScreen(new SecretConfigsScreen().build(parent))).setCentered(false).build())
-                .addPanelWidget(new ButtonWithIconBuilder(PlaylistsCategory, LIST, (e) -> WaterPlayer.MINECRAFT.setScreen(new PlaylistsScreen().build(parent))).setCentered(false).build())
-                .addPanelWidget(new ButtonWithIconBuilder(PlayCategory, InterfaceUtils.getResourceLocation("waterplayer", "textures/player/play.png"), (e) -> WaterPlayer.MINECRAFT.setScreen(new ControlScreen(this.build(parent)))).setCentered(false).build())
+                .addPanelWidget(new ButtonWithIconBuilder(MainConfigCategory, OPTIONS, (e) -> AlinLib.MINECRAFT.setScreen(new MainConfigsScreen().build(parent))).setCentered(false).build())
+                .addPanelWidget(new ButtonWithIconBuilder(LocalizationConfigCategory, LIST, (e) -> AlinLib.MINECRAFT.setScreen(new LocalizationConfigsScreen().build(parent))).setCentered(false).build())
+                .addPanelWidget(new ButtonWithIconBuilder(SecretConfigCategory, WARNING, (e) -> AlinLib.MINECRAFT.setScreen(new SecretConfigsScreen().build(parent))).setCentered(false).build())
+                .addPanelWidget(new ButtonWithIconBuilder(PlaylistsCategory, LIST, (e) -> AlinLib.MINECRAFT.setScreen(new PlaylistsScreen().build(parent))).setCentered(false).build())
+                .addPanelWidget(new ButtonWithIconBuilder(PlayCategory, InterfaceUtils.getResourceLocation("waterplayer", "textures/player/play.png"), (e) -> AlinLib.MINECRAFT.setScreen(new ControlScreen(this.build(parent)))).setCentered(false).build())
 
                 .addWidget(new TextBox(SecretConfigCategory, true))
-                .addWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.secret.how_to_get_tokens"), InterfaceUtils.getResourceLocation("waterplayer", "textures/think.png"), (s)-> WaterPlayer.confirmLinkNow(new SecretConfigsScreen().build(parent), "https://github.com/topi314/LavaSrc?tab=readme-ov-file#usage")).build())
+                .addWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.secret.how_to_get_tokens"), InterfaceUtils.getResourceLocation("waterplayer", "textures/think.png"), (e)-> WaterPlayer.confirmLinkNow(new SecretConfigsScreen().build(parent), "https://github.com/topi314/LavaSrc?tab=readme-ov-file#usage")).build())
                 .addWidget(new MessageBox(Component.translatable("waterplayer.secret.description")))
                 .addWidget(new CategoryBox(tokensText)
                         .addValue(new EditBoxBuilder(yandexMusicText).setValue("").setConfig(WaterPlayer.config, "YANDEX_MUSIC_TOKEN").setSecret(true).build())

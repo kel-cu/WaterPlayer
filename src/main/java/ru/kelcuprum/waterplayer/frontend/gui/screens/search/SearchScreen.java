@@ -77,10 +77,10 @@ public class SearchScreen extends Screen {
         request.setResponder((s) -> requestValue = s);
         request.setMaxLength(Integer.MAX_VALUE);
         addRenderableWidget(request);
-        addRenderableWidget(new ButtonSprite(x, 40, 20, 20, RESET, Component.translatable("waterplayer.search.last_query"), (s) -> request.setValue(WaterPlayer.config.getString("SEARCH.LAST", ""))));
-        this.search = addRenderableWidget(new Button(x, 65, size, 20, Component.translatable("waterplayer.search.button"), (s) -> {
+        addRenderableWidget(new ButtonSprite(x, 40, 20, 20, RESET, Component.translatable("waterplayer.search.last_query"), (e) -> request.setValue(WaterPlayer.config.getString("SEARCH.LAST", ""))));
+        this.search = addRenderableWidget(new Button(x, 65, size, 20, Component.translatable("waterplayer.search.button"), (e) -> {
             if (requestValue.isBlank()) {
-                WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add.blank")).show(WaterPlayer.MINECRAFT.getToasts());
+                WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add.blank")).show(AlinLib.MINECRAFT.getToasts());
                 return;
             }
             WaterPlayer.config.setString("SEARCH.LAST", requestValue);
@@ -96,9 +96,9 @@ public class SearchScreen extends Screen {
                 Component.translatable("waterplayer.config.services.soundcloud").getString(),
                 Component.translatable("waterplayer.config.services.apple").getString(),
                 Component.translatable("waterplayer.config.services.deezer").getString()
-        }).setOnPress((s) -> searchService = s.getPosition()).setPosition(x, 90).setSize(size, 20).build());
+        }).setOnPress((e) -> searchService = e.getPosition()).setPosition(x, 90).setSize(size, 20).build());
 
-        addRenderableWidget(new Button(x, height-25, size, 20, CommonComponents.GUI_BACK, (s) -> onClose()));
+        addRenderableWidget(new Button(x, height-25, size, 20, CommonComponents.GUI_BACK, (e) -> onClose()));
         initList();
     }
     private ConfigureScrolWidget scroller;

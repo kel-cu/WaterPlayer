@@ -33,9 +33,9 @@ import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import dev.lavalink.youtube.clients.AndroidWithThumbnail;
 import dev.lavalink.youtube.clients.MusicWithThumbnail;
 import dev.lavalink.youtube.clients.WebWithThumbnail;
-import dev.lavalink.youtube.clients.skeleton.Client;
 import net.minecraft.util.GsonHelper;
 import org.apache.logging.log4j.Level;
+import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.config.Config;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.waterplayer.WaterPlayer;
@@ -150,7 +150,7 @@ public class MusicPlayer {
     public void loadMusic(String url, boolean isFirstLoadMusic) {
         if (url.isBlank()) {
             if (isFirstLoadMusic)
-                WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add.blank")).show(WaterPlayer.MINECRAFT.getToasts());
+                WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add.blank")).show(AlinLib.MINECRAFT.getToasts());
             return;
         }
         if (isFirstLoadMusic) WaterPlayer.config.setString("LAST_REQUEST_MUSIC", url);
@@ -168,7 +168,7 @@ public class MusicPlayer {
             } else {
                 JsonObject jsonPlaylist = new JsonObject();
 
-                final Path configFile = WaterPlayer.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/" + name + ".json");
+                final Path configFile = AlinLib.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/" + name + ".json");
                 try {
                     jsonPlaylist = GsonHelper.parse(Files.readString(configFile));
                 } catch (Exception ex) {
@@ -182,7 +182,7 @@ public class MusicPlayer {
             if (isFirstLoadMusic) WaterPlayer.getToast().setMessage(Localization.toText(
                     Localization.getStringText("waterplayer.load.add.playlist")
                             .replace("%playlist_name%", playlist.title)
-            )).show(WaterPlayer.MINECRAFT.getToasts());
+            )).show(AlinLib.MINECRAFT.getToasts());
         } else if (file.exists() && file.isDirectory()) {
             try {
                 File[] list = file.listFiles();
@@ -192,14 +192,14 @@ public class MusicPlayer {
                     if (track.isFile()) getTracks(track.getPath());
                 }
                 if (isFirstLoadMusic)
-                    WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add.files")).show(WaterPlayer.MINECRAFT.getToasts());
+                    WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add.files")).show(AlinLib.MINECRAFT.getToasts());
             } catch (Exception e) {
                 WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);
             }
         } else {
             getTracks(url);
             if (isFirstLoadMusic)
-                WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add")).show(WaterPlayer.MINECRAFT.getToasts());
+                WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add")).show(AlinLib.MINECRAFT.getToasts());
         }
     }
 
