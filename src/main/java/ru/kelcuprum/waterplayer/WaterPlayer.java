@@ -25,6 +25,7 @@ import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
 import ru.kelcuprum.waterplayer.backend.KeyBind;
 import ru.kelcuprum.waterplayer.backend.MusicPlayer;
+import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
 import ru.kelcuprum.waterplayer.backend.command.WaterPlayerCommand;
 import ru.kelcuprum.waterplayer.frontend.gui.overlays.SubtitlesHandler;
 import ru.kelcuprum.waterplayer.frontend.localization.StarScript;
@@ -43,6 +44,7 @@ public class WaterPlayer implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         log("Hello, world! UwU");
+        WaterPlayerAPI.loadConfig();
         StarScript.init();
         localization.setParser((s) -> StarScript.run(StarScript.compile(s)));
         player = new MusicPlayer();

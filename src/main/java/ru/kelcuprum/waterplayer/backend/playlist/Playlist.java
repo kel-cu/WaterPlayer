@@ -22,7 +22,7 @@ public class Playlist {
     public String fileName = "Unknown";
 
     public Playlist(String name) throws IOException {
-        this(Path.of(AlinLib.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/"+name+".json").toUri()));
+        this(AlinLib.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/"+name+".json"));
     }
 
     public Playlist(Path path) throws IOException {

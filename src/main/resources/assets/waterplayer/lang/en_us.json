@@ -20,6 +20,11 @@
   "waterplayer.playlist.title": "Title",
   "waterplayer.playlist.urls": "URLs",
 
+  "waterplayer.playlist.upload": "Share this playlist",
+  "waterplayer.playlist.copy_link": "Copy link",
+  "waterplayer.playlist.uploaded": "The playlist has been published, the link to the playlist has been copied to the clipboard",
+  "waterplayer.playlist.link_copied": "The link is copied",
+
   "waterplayer.key.pause": "Toggle Pause",
   "waterplayer.key.volume.up": "Volume Up",
   "waterplayer.key.volume.down": "Volume Down",
@@ -135,6 +140,11 @@
   "waterplayer.config.spotify_sp_dc": "SP DC",
   "waterplayer.config.spotify_country_code": "Country Code",
 
+  "waterplayer.api": "WaterPlayer API",
+  "waterplayer.api.url": "API URL",
+  "waterplayer.api.update_configs": "Update API configs",
+  "waterplayer.api.config_updated": "Configurations updated",
+
 
   "waterplayer.secret.title.apple_music": "Apple Music",
   "waterplayer.config.apple_music_media_api_token": "Media API Token",
@@ -165,6 +175,9 @@
   "waterplayer.search.last_query": "Last request",
   "waterplayer.search.button": "Find by request",
   "waterplayer.search.not_found": "Not found :(",
+
+
+  "waterplayer.web.what_data_is_sent": "What kind of data is Kel getting?",
 
   "modmenu.descriptionTranslation.waterplayer": "Internet music player built into the client."
 }

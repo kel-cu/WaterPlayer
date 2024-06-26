@@ -20,6 +20,11 @@
   "waterplayer.playlist.title": "Titre",
   "waterplayer.playlist.urls": "URLs",
 
+  "waterplayer.playlist.upload": "Partager cette liste de lecture",
+  "waterplayer.playlist.copy_link": "Copier le lien",
+  "waterplayer.playlist.uploaded": "La liste de lecture a été publiée, le lien vers la liste de lecture a été copié dans le presse-papiers.",
+  "waterplayer.playlist.link_copied": "Le lien est copié",
+
   "waterplayer.key.pause": "Mettre en pause",
   "waterplayer.key.volume.up": "Augmenter le volume",
   "waterplayer.key.volume.down": "Diminuer le volume",
@@ -138,6 +143,11 @@
   "waterplayer.secret.title.apple_music": "Apple Music",
   "waterplayer.config.apple_music_media_api_token": "Token de l'API media",
   "waterplayer.config.apple_music_country_code": "Country Code",
+
+  "waterplayer.api": "WaterPlayer API",
+  "waterplayer.api.url": "API URL",
+  "waterplayer.api.update_configs": "Mise à jour des configurations de l'API",
+  "waterplayer.api.config_updated": "Mise à jour des configurations",
 
   "waterplayer.track.author": "Auteur : %s",
   "waterplayer.track.service": "Service : %s",

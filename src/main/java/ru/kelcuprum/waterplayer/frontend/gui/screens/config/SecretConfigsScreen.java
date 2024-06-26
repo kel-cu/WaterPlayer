@@ -12,6 +12,7 @@ import ru.kelcuprum.alinlib.gui.components.text.MessageBox;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.alinlib.gui.screens.ConfigScreenBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
+import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen;
 
 import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Icons.*;
@@ -64,6 +65,14 @@ public class SecretConfigsScreen {
                 .addWidget(new CategoryBox(appleMusicText)
                         .addValue(new EditBoxBuilder(appleMusicMediaAPITokenText).setValue("").setConfig(WaterPlayer.config, "APPLE_MUSIC_MEDIA_API_TOKEN").setSecret(true).build())
                         .addValue(new EditBoxBuilder(appleMusicCountryCodeText).setValue("US").setConfig(WaterPlayer.config, "APPLE_MUSIC_COUNTRY_CODE").build())
+                )
+                .addWidget(new CategoryBox(Component.translatable("waterplayer.api"))
+                        .addValue(new ButtonWithIconBuilder(Component.translatable("waterplayer.web.what_data_is_sent"), InterfaceUtils.getResourceLocation("waterplayer", "textures/think.png"), (e) -> WaterPlayer.confirmLinkNow(new SecretConfigsScreen().build(parent), "https://waterplayer.ru/data")).build())
+                        .addValue(new EditBoxBuilder(Component.translatable("waterplayer.api.url")).setValue("https://api.waterplayer.ru").setConfig(WaterPlayer.config, "API.URL").build())
+                        .addValue(new ButtonWithIconBuilder(Component.translatable("waterplayer.api.update_configs"), RESET, (e) -> {
+                            WaterPlayerAPI.loadConfig();
+                            WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.api.config_updated")).show(AlinLib.MINECRAFT.getToasts());
+                        }).build())
                 )
                 .build();
     }

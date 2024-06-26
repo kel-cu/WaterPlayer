@@ -22,6 +22,7 @@ import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
 import ru.kelcuprum.alinlib.gui.components.editbox.base.EditBoxString;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.waterplayer.WaterPlayer;
+import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
 import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 
 import java.io.IOException;
@@ -45,6 +46,9 @@ public class PlaylistScreen extends Screen {
     private final InterfaceUtils.DesignType designType = InterfaceUtils.DesignType.FLAT;
     Path playlistFile;
     boolean isDeleted = false;
+    boolean isCreatedLink = false;
+    boolean enableUpload = WaterPlayerAPI.isPlaylistUploadEnable();
+    String link = "";
     @Override
     protected void init() {
         assert this.minecraft != null;
@@ -71,19 +75,40 @@ public class PlaylistScreen extends Screen {
             playlist.author = s;
             save();
         }));
-        addRenderableWidget(new TextBox(x, 90, size, 20, Localization.toText(String.format(WaterPlayer.localization.getLocalization("playlist.description"), playlistName)), true));
-        addRenderableWidget(new Button(x, height-30, size-75, 20, designType, CommonComponents.GUI_BACK, (s) -> onClose()));
-        addRenderableWidget(new ButtonSprite(x+size-70, height-30, 20, 20, designType, InterfaceUtils.getResourceLocation("waterplayer", "textures/player/play.png"), Localization.getText("waterplayer.playlist.play"), (OnPress) -> {
+        int y = 90;
+        if(enableUpload) {
+            addRenderableWidget(new Button(x, y, size, 20, Component.translatable(isCreatedLink ? "waterplayer.playlist.copy_link" : "waterplayer.playlist.upload"), (e) -> {
+                if (isCreatedLink) {
+                    AlinLib.MINECRAFT.keyboardHandler.setClipboard(link);
+                    WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.playlist.link_copied")).show(AlinLib.MINECRAFT.getToasts());
+                } else {
+                    try {
+                        link = WaterPlayerAPI.uploadPlaylist(playlist, playlist.fileName);
+                        AlinLib.MINECRAFT.keyboardHandler.setClipboard(link);
+                        isCreatedLink = true;
+                        WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.playlist.uploaded")).show(AlinLib.MINECRAFT.getToasts());
+                        e.setMessage(Component.translatable("waterplayer.playlist.copy_link"));
+                    } catch (Exception ex) {
+                        e.setActive(false);
+                        WaterPlayer.log(ex.getMessage() == null ? e.getClass().getName() : ex.getMessage(), Level.ERROR);
+                    }
+                }
+            }).setActive(WaterPlayerAPI.isPlaylistUploadEnable()));
+            y+=25;
+        }
+        addRenderableWidget(new TextBox(x, y, size, 20, Localization.toText(String.format(WaterPlayer.localization.getLocalization("playlist.description"), playlistName)), true));
+        addRenderableWidget(new Button(x, height-30, size-75, 20, designType, CommonComponents.GUI_BACK, (e) -> onClose()));
+        addRenderableWidget(new ButtonSprite(x+size-70, height-30, 20, 20, designType, InterfaceUtils.getResourceLocation("waterplayer", "textures/player/play.png"), Localization.getText("waterplayer.playlist.play"), (e) -> {
             save();
             WaterPlayer.player.loadMusic(String.format("playlist:%s", playlistName), true);
             onClose();
         }));
-        addRenderableWidget(new ButtonSprite(x+size-45, height-30, 20, 20, designType, InterfaceUtils.getResourceLocation("waterplayer", "textures/player/reset_queue.png"), Localization.getText("waterplayer.playlist.remove"), (OnPress) -> {
+        addRenderableWidget(new ButtonSprite(x+size-45, height-30, 20, 20, designType, InterfaceUtils.getResourceLocation("waterplayer", "textures/player/reset_queue.png"), Localization.getText("waterplayer.playlist.remove"), (e) -> {
             isDeleted = true;
             playlistFile.toFile().delete();
             onClose();
         }));
-        addRenderableWidget(new ButtonSprite(x+size-20, height-30, 20, 20, designType, RESET, Localization.getText("waterplayer.playlist.reload"), (OnPress) -> {
+        addRenderableWidget(new ButtonSprite(x+size-20, height-30, 20, 20, designType, RESET, Localization.getText("waterplayer.playlist.reload"), (e) -> {
            save();
            rebuildWidgets();
         }));
@@ -114,7 +139,7 @@ public class PlaylistScreen extends Screen {
             }));
             i++;
         }
-        widgets.add(new ButtonWithIconBuilder(Component.translatable("waterplayer.playlist.add"), ADD, (s) -> {
+        widgets.add(new ButtonWithIconBuilder(Component.translatable("waterplayer.playlist.add"), ADD, (e) -> {
            playlist.urls.add("https://c418.bandcamp.com/track/strad");
            save();
         }).setPosition(x, -20).setSize(width-200, 20).build());
