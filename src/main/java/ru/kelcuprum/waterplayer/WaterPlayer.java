@@ -68,10 +68,8 @@ public class WaterPlayer implements ClientModInitializer {
         ScreenEvents.KEY_PRESS.register((Screen screen, int code, int scan, int modifiers, CallbackInfoReturnable<Boolean> var5) -> {
             if(!WaterPlayer.config.getBoolean("ENABLE_KEYBINDS", false)) return;
             if(screen instanceof TitleScreen || screen instanceof PauseScreen || screen instanceof ControlScreen) {
-//                AlinLib.log("click");
                 for (KeyBind bind : keyBinds) {
                     if ((bind.key().matches(code, scan) || bind.key().matchesMouse(code)) && bind.onExecute().run()) {
-//                            AlinLib.log("Execute");
                             var5.setReturnValue(true);
                             var5.cancel();
                             break;
