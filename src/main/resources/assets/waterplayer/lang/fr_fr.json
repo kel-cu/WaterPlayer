@@ -9,8 +9,8 @@
 
   "waterplayer.playlist": "Playlist",
   "waterplayer.playlist.add_files": "Êtes-vous sûr de vouloir ajouter ces fichiers ?",
-  "waterplayer.playlist.create": "Créer une playlist",
-  "waterplayer.playlist.create.filename": "Nom de la liste de lecture :",
+  "waterplayer.playlist.create": "Créer/charger une liste de playlistt",
+  "waterplayer.playlist.create.filename": "Nom de la liste de lecture/URL :",
   "waterplayer.playlist.reload": "Recharger",
   "waterplayer.playlist.play": "Lire la playlist",
   "waterplayer.playlist.description": "Lire : playlist:%s",

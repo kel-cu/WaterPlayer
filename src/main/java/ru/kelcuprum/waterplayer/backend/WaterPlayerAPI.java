@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.network.chat.Component;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.logging.log4j.Level;
+import org.jetbrains.annotations.Async;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.WebAPI;
 import ru.kelcuprum.alinlib.config.Config;
@@ -29,6 +30,7 @@ public class WaterPlayerAPI {
         return WaterPlayer.config.getString("API.URL", "https://api.waterplayer.ru") + route;
     }
 
+    @Async.Execute
     public static boolean serverEnable(){
         try{
             JsonObject object = WebAPI.getJsonObject(getURL("/ping"));
@@ -41,7 +43,7 @@ public class WaterPlayerAPI {
     public static boolean isPlaylistUploadEnable(){
         return serverEnable() && isVerified();
     }
-
+    @Async.Execute
     public static boolean isVerified(){
         if(!config.getBoolean("ENABLE_VERIFY", true)) return true;
         try {
@@ -61,7 +63,7 @@ public class WaterPlayerAPI {
             return false;
         }
     }
-
+    @Async.Execute
     public static void loadConfig(){
         try{
             JsonObject object = WebAPI.getJsonObject(getURL("/public_config"));
@@ -96,7 +98,7 @@ public class WaterPlayerAPI {
     public static boolean isValidWebPlaylist(JsonObject data){
         return data.has("id") && data.has("url") && data.has("data");
     }
-
+    @Async.Execute
     public static String uploadPlaylist(Playlist playlist, String id) throws AuthException {
         if(!isVerified()) throw new AuthException("Your account is not authorized!");
         String base64 = new String(Base64.encodeBase64(playlist.toJSON().toString().getBytes(StandardCharsets.UTF_8)) );

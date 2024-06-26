@@ -9,8 +9,8 @@
 
   "waterplayer.playlist": "Плейлист",
   "waterplayer.playlist.add_files": "Вы уверены, что хотите добавить эти файлы?",
-  "waterplayer.playlist.create": "Создать плейлист",
-  "waterplayer.playlist.create.filename": "Название плейлиста:",
+  "waterplayer.playlist.create": "Создать/Загрузить плейлист",
+  "waterplayer.playlist.create.filename": "Название/Ссылка плейлиста:",
   "waterplayer.playlist.reload": "Перезагрузить",
   "waterplayer.playlist.play": "Загрузить плейлист",
   "waterplayer.playlist.description": "Воспроизвести: playlist:%s",

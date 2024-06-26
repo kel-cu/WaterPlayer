@@ -65,7 +65,7 @@ public class SearchScreen extends Screen {
     protected EditBoxString request;
     protected Button search;
     protected String requestValue = "";
-    protected int searchService = 1;
+    protected int searchService = WaterPlayer.config.getNumber("SEARCH.LAST_SERVICE", 1).intValue();
     @Override
     protected void init() {
         int x = 5;
@@ -96,7 +96,10 @@ public class SearchScreen extends Screen {
                 Component.translatable("waterplayer.config.services.soundcloud").getString(),
                 Component.translatable("waterplayer.config.services.apple").getString(),
                 Component.translatable("waterplayer.config.services.deezer").getString()
-        }).setOnPress((e) -> searchService = e.getPosition()).setPosition(x, 90).setSize(size, 20).build());
+        }).setOnPress((e) -> {
+            searchService = e.getPosition();
+            WaterPlayer.config.setNumber("SEARCH.LAST_SERVICE", searchService);
+        }).setPosition(x, 90).setSize(size, 20).build());
 
         addRenderableWidget(new Button(x, height-25, size, 20, CommonComponents.GUI_BACK, (e) -> onClose()));
         initList();
