@@ -47,7 +47,7 @@ public class PlaylistScreen extends Screen {
     Path playlistFile;
     boolean isDeleted = false;
     boolean isCreatedLink = false;
-    boolean enableUpload = WaterPlayerAPI.isPlaylistUploadEnable();
+    static boolean enableUpload = WaterPlayer.config.getBoolean("API.ENABLE", true) && WaterPlayerAPI.isPlaylistUploadEnable();
     String link = "";
     @Override
     protected void init() {

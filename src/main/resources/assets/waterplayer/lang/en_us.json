@@ -141,6 +141,7 @@
   "waterplayer.config.spotify_country_code": "Country Code",
 
   "waterplayer.api": "WaterPlayer API",
+  "waterplayer.api.enable": "Use API",
   "waterplayer.api.url": "API URL",
   "waterplayer.api.update_configs": "Update API configs",
   "waterplayer.api.config_updated": "Configurations updated",

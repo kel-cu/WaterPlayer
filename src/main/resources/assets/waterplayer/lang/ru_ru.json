@@ -145,6 +145,7 @@
   "waterplayer.config.apple_music_country_code": "Код страны",
 
   "waterplayer.api": "WaterPlayer API",
+  "waterplayer.api.enable": "Использовать API",
   "waterplayer.api.url": "Ссылка API",
   "waterplayer.api.update_configs": "Обновить конфиги API",
   "waterplayer.api.config_updated": "Конфиги обновлены",

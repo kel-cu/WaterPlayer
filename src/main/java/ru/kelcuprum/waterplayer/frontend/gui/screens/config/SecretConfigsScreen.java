@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
+import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBooleanBuilder;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonWithIconBuilder;
 import ru.kelcuprum.alinlib.gui.components.builder.editbox.EditBoxBuilder;
 import ru.kelcuprum.alinlib.gui.components.text.CategoryBox;
@@ -68,6 +69,7 @@ public class SecretConfigsScreen {
                 )
                 .addWidget(new CategoryBox(Component.translatable("waterplayer.api"))
                         .addValue(new ButtonWithIconBuilder(Component.translatable("waterplayer.web.what_data_is_sent"), InterfaceUtils.getResourceLocation("waterplayer", "textures/think.png"), (e) -> WaterPlayer.confirmLinkNow(new SecretConfigsScreen().build(parent), "https://waterplayer.ru/data")).build())
+                        .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.api.enable"), true).setConfig(WaterPlayer.config, "API.ENABLE").build())
                         .addValue(new EditBoxBuilder(Component.translatable("waterplayer.api.url")).setValue("https://api.waterplayer.ru").setConfig(WaterPlayer.config, "API.URL").build())
                         .addValue(new ButtonWithIconBuilder(Component.translatable("waterplayer.api.update_configs"), RESET, (e) -> {
                             WaterPlayerAPI.loadConfig();
