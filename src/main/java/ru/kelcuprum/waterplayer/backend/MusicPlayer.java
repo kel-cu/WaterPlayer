@@ -57,7 +57,6 @@ public class MusicPlayer {
     private final TrackScheduler trackScheduler;
     private final MusicManager musicManager;
     private final LyricsManager lyricsManager;
-    private final SearchManager searchManager;
 
     public final LocalAudioSourceManager localAudioSourceManager = new LocalAudioSourceManager();
 
@@ -66,7 +65,6 @@ public class MusicPlayer {
         audioDataFormat = new Pcm16AudioDataFormat(2, 48000, 960, true);
         audioPlayer = audioPlayerManager.createPlayer();
         audioOutput = new AudioOutput(this);
-        searchManager = new SearchManager();
         lyricsManager = new LyricsManager();
 
         trackScheduler = new TrackScheduler(audioPlayer);
@@ -90,13 +88,11 @@ public class MusicPlayer {
             youtube.setPlaylistPageCount(100);
             audioPlayerManager.registerSourceManager(youtube);
             AudioSearchManager ytSearch = new YoutubeSearchManager(() -> audioPlayerManager, "US");
-            searchManager.registerSearchManager(ytSearch);
             lyricsManager.registerLyricsManager((AudioLyricsManager) ytSearch);
         }
         if (!config.getString("YANDEX_MUSIC_TOKEN", "").isBlank()) {
             YandexMusicSourceManager ym = new YandexMusicSourceManager(config.getString("YANDEX_MUSIC_TOKEN", ""));
             audioPlayerManager.registerSourceManager(ym);
-            searchManager.registerSearchManager(ym);
             lyricsManager.registerLyricsManager(ym);
         }
         if (!config.getString("FLOWERY_TTS_VOICE", "Alena").isBlank())
@@ -104,13 +100,11 @@ public class MusicPlayer {
         if (!config.getString("DEEZER_DECRYPTION_KEY", "").isBlank()) {
             DeezerAudioSourceManager deezerAudioSourceManager = new DeezerAudioSourceManager(config.getString("DEEZER_DECRYPTION_KEY", ""));
             audioPlayerManager.registerSourceManager(deezerAudioSourceManager);
-            searchManager.registerSearchManager(deezerAudioSourceManager);
             lyricsManager.registerLyricsManager(deezerAudioSourceManager);
         }
         if (!config.getString("APPLE_MUSIC_MEDIA_API_TOKEN", "").isBlank() && !config.getString("APPLE_MUSIC_COUNTRY_CODE", "us").isBlank()) {
             AppleMusicSourceManager appleMusicSourceManager = new AppleMusicSourceManager(null, config.getString("APPLE_MUSIC_MEDIA_API_TOKEN", ""), config.getString("APPLE_MUSIC_COUNTRY_CODE", "us"), audioPlayerManager);
             audioPlayerManager.registerSourceManager(appleMusicSourceManager);
-            searchManager.registerSearchManager(appleMusicSourceManager);
         }
         if (!config.getString("SPOTIFY_CLIENT_ID", "").isBlank() && !config.getString("SPOTIFY_CLIENT_SECRET", "").isBlank() && !config.getString("SPOTIFY_COUNTRY_CODE", "US").isBlank()) {
             SpotifySourceManager spotifySourceManager;
@@ -119,7 +113,6 @@ public class MusicPlayer {
                 spotifySourceManager = new SpotifySourceManager(config.getString("SPOTIFY_CLIENT_ID", ""), config.getString("SPOTIFY_CLIENT_SECRET", ""), config.getString("SPOTIFY_SP_DC", ""), config.getString("SPOTIFY_COUNTRY_CODE", "US"), unused -> audioPlayerManager, new DefaultMirroringAudioTrackResolver(null));
                 lyricsManager.registerLyricsManager(spotifySourceManager);
             }
-            searchManager.registerSearchManager(spotifySourceManager);
             audioPlayerManager.registerSourceManager(spotifySourceManager);
         }
         if (config.getBoolean("ENABLE_SOUNDCLOUD", true)) {
@@ -245,9 +238,6 @@ public class MusicPlayer {
 
     public LyricsManager getLyricsManager() {
         return lyricsManager;
-    }
-    public SearchManager getSearchManager() {
-        return searchManager;
     }
 
     public TrackScheduler getTrackScheduler() {
