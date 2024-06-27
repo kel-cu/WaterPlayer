@@ -59,9 +59,11 @@ public class TrackScheduler extends AudioEventAdapter {
         // Start the next track, regardless of if something is already playing or not. In case queue was empty, we are
         // giving null to startTrack, which is a valid argument and will simply stop the player.
         if(getRepeatStatus() == 1 && !queue.isEmpty()) {
-            if(player.getPlayingTrack() != null) queue(player.getPlayingTrack().makeClone());
-            else if(lastTrack != null) queue(lastTrack.makeClone());
-            else WaterPlayer.log("There's nothing to add to the queue");
+            AudioTrack track = player.getPlayingTrack() != null ? player.getPlayingTrack().makeClone() : lastTrack != null ? lastTrack.makeClone() : null;
+            if(track == null) WaterPlayer.log("There's nothing to add to the queue");
+            else {
+                queue.add(track.makeClone());
+            }
         }
         player.startTrack(queue.poll(), false);
         if(player.getPlayingTrack() != null) {
