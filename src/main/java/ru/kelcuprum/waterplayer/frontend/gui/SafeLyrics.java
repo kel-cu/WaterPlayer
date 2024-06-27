@@ -25,7 +25,7 @@ public class SafeLyrics implements AudioLyrics {
 
     @Override
     public @Nullable String getText() {
-        return "Loading lyrics...";
+        return "Loading lyrics...\nPlease wait...";
     }
 
     @Override
@@ -44,6 +44,21 @@ public class SafeLyrics implements AudioLyrics {
             @Override
             public @NotNull String getLine() {
                 return "Loading lyrics...";
+            }
+        }, new Line() {
+            @Override
+            public @NotNull Duration getTimestamp() {
+                return Duration.ofSeconds(0);
+            }
+
+            @Override
+            public @Nullable Duration getDuration() {
+                return Duration.ofSeconds(track.getDuration()/1000);
+            }
+
+            @Override
+            public @NotNull String getLine() {
+                return "Please wait...";
             }
         });
     }

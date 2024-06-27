@@ -57,12 +57,15 @@ public class ControlScreen extends Screen {
     public Button play;
     public Button repeat;
     public Button load;
+    public String query = "";
     public void initPanel() {
         int x = 5;
         int size = 180;
         addRenderableWidget(new TextBox(x, 15, size, 9, Localization.getText("waterplayer.control"), true));
         request = new EditBoxString(x + 25, 40, size - 25, 20, designType, Localization.getText("waterplayer.load.url"));
         request.setMaxLength(Integer.MAX_VALUE);
+        request.setResponder((s) ->  query = s);
+        request.setValue(query);
         addRenderableWidget(request);
         addRenderableWidget(new ButtonSpriteBuilder(InterfaceUtils.Icons.RESET, (buttonSprite) -> request.setValue(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", "")))
                 .setSize(20, 20)
@@ -72,7 +75,7 @@ public class ControlScreen extends Screen {
         ButtonSprite bws = new ButtonSprite(x, 65, 20, 20, InterfaceUtils.getResourceLocation("waterplayer", "textures/search.png"), Component.translatable("waterplayer.control.search"), (e) -> AlinLib.MINECRAFT.setScreen(new SearchScreen(this)));
 //        bws.active = false;
         addRenderableWidget(bws);
-        this.load = addRenderableWidget(new Button(x+25, 65, size-25, 20, designType, Localization.getText("waterplayer.load.load"), (e) -> WaterPlayer.player.loadMusic(request.getValue(), true)));
+        this.load = addRenderableWidget(new Button(x+25, 65, size-25, 20, designType, Localization.getText("waterplayer.load.load"), (e) -> WaterPlayer.player.loadMusic(query, true)));
         addRenderableWidget(new SliderIntegerBuilder(Component.translatable("waterplayer.load.volume"), (onPress) -> {
             WaterPlayer.config.setNumber("CURRENT_MUSIC_VOLUME", onPress);
             WaterPlayer.player.getAudioPlayer().setVolume(onPress);

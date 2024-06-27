@@ -151,7 +151,6 @@ public class SearchScreen extends Screen {
                 list = new ArrayList<>();
                 list.add(track);
                 rebuildWidgetsList();
-                WaterPlayer.log("Adding Track: " + track.getInfo().title);
             }
 
             @Override

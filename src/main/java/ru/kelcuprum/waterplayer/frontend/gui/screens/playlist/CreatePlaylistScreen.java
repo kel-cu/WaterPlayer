@@ -37,7 +37,7 @@ public class CreatePlaylistScreen extends Screen {
         addRenderableWidget(new Button(x+5, y+15, 145, 20, InterfaceUtils.DesignType.FLAT, CommonComponents.GUI_CONTINUE, (s) -> {
             if(fileName.startsWith("http://") || fileName.startsWith("https://")){
                 try {
-                    fileName = WaterPlayerAPI.getPlaylist(fileName).fileName;
+                    fileName = WaterPlayerAPI.getPlaylist(fileName, true).fileName;
                 } catch (Exception e){
                     WaterPlayer.log(e.getMessage() == null ? e.getClass().getName() : e.getMessage(), Level.ERROR);
                     WaterPlayer.getToast().setMessage(Component.literal(e.getMessage() == null ? e.getClass().getName() : e.getMessage())).setType(ToastBuilder.Type.ERROR).show(AlinLib.MINECRAFT.getToasts());

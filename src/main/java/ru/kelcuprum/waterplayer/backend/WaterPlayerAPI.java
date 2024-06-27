@@ -74,19 +74,24 @@ public class WaterPlayerAPI {
         }
     }
 
-    public static Playlist getPlaylist(String url) throws WebPlaylistException {
+    public static Playlist getPlaylist(String url, boolean save) throws WebPlaylistException {
         try {
             JsonObject data = WebAPI.getJsonObject(url);
             if(isValidWebPlaylist(data)) {
-                Path path = AlinLib.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/"+data.get("id").getAsString()+".json");
-                if(path.toFile().exists()) path = AlinLib.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/"+data.get("url").getAsString()+".json");
-                try {
-                    Files.createDirectories(path.getParent());
-                    Files.writeString(path, data.getAsJsonObject("data").toString());
-                    return new Playlist(path);
-                } catch (IOException e) {
-                    WaterPlayer.log(e.getMessage() == null ? e.getClass().getName() : e.getMessage(), Level.ERROR);
-                    throw new WebPlaylistException("External error: "+(e.getMessage() == null ? e.getClass().getName() : e.getMessage()));
+                if(save) {
+                    Path path = AlinLib.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/" + data.get("id").getAsString() + ".json");
+                    if (path.toFile().exists())
+                        path = AlinLib.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/" + data.get("url").getAsString() + ".json");
+                    try {
+                        Files.createDirectories(path.getParent());
+                        Files.writeString(path, data.getAsJsonObject("data").toString());
+                        return new Playlist(path);
+                    } catch (IOException e) {
+                        WaterPlayer.log(e.getMessage() == null ? e.getClass().getName() : e.getMessage(), Level.ERROR);
+                        throw new WebPlaylistException("External error: " + (e.getMessage() == null ? e.getClass().getName() : e.getMessage()));
+                    }
+                } else {
+                    return new Playlist(data.getAsJsonObject("data"));
                 }
             } else throw new WebPlaylistException("Incorrect response format");
         } catch (Exception e){

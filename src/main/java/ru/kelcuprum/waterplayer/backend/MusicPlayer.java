@@ -3,7 +3,6 @@ package ru.kelcuprum.waterplayer.backend;
 import com.github.topi314.lavalyrics.AudioLyricsManager;
 import com.github.topi314.lavalyrics.LyricsManager;
 import com.github.topi314.lavasearch.AudioSearchManager;
-import com.github.topi314.lavasearch.SearchManager;
 import com.github.topi314.lavasrc.applemusic.AppleMusicSourceManager;
 import com.github.topi314.lavasrc.deezer.DeezerAudioSourceManager;
 import com.github.topi314.lavasrc.flowerytts.FloweryTTSSourceManager;
@@ -33,18 +32,15 @@ import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import dev.lavalink.youtube.clients.AndroidWithThumbnail;
 import dev.lavalink.youtube.clients.MusicWithThumbnail;
 import dev.lavalink.youtube.clients.WebWithThumbnail;
-import net.minecraft.util.GsonHelper;
 import org.apache.logging.log4j.Level;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.config.Config;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.output.AudioOutput;
-import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
+import ru.kelcuprum.waterplayer.backend.sources.directory.DirectoriesSource;
+import ru.kelcuprum.waterplayer.backend.sources.waterplayer.WaterPlayerSource;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 
 public class MusicPlayer {
@@ -108,7 +104,8 @@ public class MusicPlayer {
         }
         if (!config.getString("SPOTIFY_CLIENT_ID", "").isBlank() && !config.getString("SPOTIFY_CLIENT_SECRET", "").isBlank() && !config.getString("SPOTIFY_COUNTRY_CODE", "US").isBlank()) {
             SpotifySourceManager spotifySourceManager;
-            if(config.getString("SPOTIFY_SP_DC", "").isBlank()) spotifySourceManager = new SpotifySourceManager(null, config.getString("SPOTIFY_CLIENT_ID", ""), config.getString("SPOTIFY_CLIENT_SECRET", ""), config.getString("SPOTIFY_COUNTRY_CODE", "US"), audioPlayerManager);
+            if (config.getString("SPOTIFY_SP_DC", "").isBlank())
+                spotifySourceManager = new SpotifySourceManager(null, config.getString("SPOTIFY_CLIENT_ID", ""), config.getString("SPOTIFY_CLIENT_SECRET", ""), config.getString("SPOTIFY_COUNTRY_CODE", "US"), audioPlayerManager);
             else {
                 spotifySourceManager = new SpotifySourceManager(config.getString("SPOTIFY_CLIENT_ID", ""), config.getString("SPOTIFY_CLIENT_SECRET", ""), config.getString("SPOTIFY_SP_DC", ""), config.getString("SPOTIFY_COUNTRY_CODE", "US"), unused -> audioPlayerManager, new DefaultMirroringAudioTrackResolver(null));
                 lyricsManager.registerLyricsManager(spotifySourceManager);
@@ -135,6 +132,8 @@ public class MusicPlayer {
             BeamAudioSourceManager beamAudioSourceManager = new BeamAudioSourceManager();
             audioPlayerManager.registerSourceManager(beamAudioSourceManager);
         }
+        audioPlayerManager.registerSourceManager(new WaterPlayerSource());
+        audioPlayerManager.registerSourceManager(new DirectoriesSource());
         audioPlayerManager.registerSourceManager(new HttpAudioSourceManager());
         audioPlayerManager.registerSourceManager(localAudioSourceManager);
     }
@@ -147,56 +146,12 @@ public class MusicPlayer {
             return;
         }
         if (isFirstLoadMusic) WaterPlayer.config.setString("LAST_REQUEST_MUSIC", url);
-        File file = new File(url);
-        if (url.startsWith("playlist:") || (file.exists() && file.isFile() && file.getName().endsWith(".json"))) {
-            String name = url.replace("playlist:", "");
-            Playlist playlist;
-            if (file.exists()) {
-                try {
-                    playlist = new Playlist(file.toPath());
-                } catch (Exception exception) {
-                    WaterPlayer.log(exception.getMessage(), Level.ERROR);
-                    return;
-                }
-            } else {
-                JsonObject jsonPlaylist = new JsonObject();
-
-                final Path configFile = AlinLib.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/" + name + ".json");
-                try {
-                    jsonPlaylist = GsonHelper.parse(Files.readString(configFile));
-                } catch (Exception ex) {
-                    WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
-                }
-                playlist = new Playlist(jsonPlaylist);
-            }
-            for (int i = 0; i < playlist.urlsJSON.size(); i++) {
-                loadMusic(playlist.urlsJSON.get(i).getAsString(), false);
-            }
-            if (isFirstLoadMusic) WaterPlayer.getToast().setMessage(Localization.toText(
-                    Localization.getStringText("waterplayer.load.add.playlist")
-                            .replace("%playlist_name%", playlist.title)
-            )).show(AlinLib.MINECRAFT.getToasts());
-        } else if (file.exists() && file.isDirectory()) {
-            try {
-                File[] list = file.listFiles();
-                assert list != null;
-
-                for (File track : list) {
-                    if (track.isFile()) getTracks(track.getPath());
-                }
-                if (isFirstLoadMusic)
-                    WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add.files")).show(AlinLib.MINECRAFT.getToasts());
-            } catch (Exception e) {
-                WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);
-            }
-        } else {
-            getTracks(url);
-            if (isFirstLoadMusic)
-                WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add")).show(AlinLib.MINECRAFT.getToasts());
-        }
+        loadTracks(url);
+        if (isFirstLoadMusic)
+            WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add")).show(AlinLib.MINECRAFT.getToasts());
     }
 
-    private void getTracks(String url) {
+    private void loadTracks(String url) {
         audioPlayerManager.loadItemOrdered(musicManager, url, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
@@ -214,7 +169,7 @@ public class MusicPlayer {
 
             @Override
             public void noMatches() {
-                WaterPlayer.log("Nothing Found by " + url, Level.ERROR);
+                WaterPlayer.log("Nothing Found by " + url, Level.WARN);
             }
 
             @Override
