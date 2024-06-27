@@ -175,5 +175,8 @@
   "waterplayer.search.button": "Найти по запросу",
   "waterplayer.search.not_found": "Ничего нет :(",
 
+
+  "waterplayer.web.what_data_is_sent": "Какие данные получает Кел?",
+
   "modmenu.descriptionTranslation.waterplayer": "Встроенный в клиент музыкальный интернет-плеер."
 }

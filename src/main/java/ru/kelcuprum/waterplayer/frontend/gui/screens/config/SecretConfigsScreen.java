@@ -68,7 +68,7 @@ public class SecretConfigsScreen {
                         .addValue(new EditBoxBuilder(appleMusicCountryCodeText).setValue("US").setConfig(WaterPlayer.config, "APPLE_MUSIC_COUNTRY_CODE").build())
                 )
                 .addWidget(new CategoryBox(Component.translatable("waterplayer.api"))
-                        .addValue(new ButtonWithIconBuilder(Component.translatable("waterplayer.web.what_data_is_sent"), InterfaceUtils.getResourceLocation("waterplayer", "textures/think.png"), (e) -> WaterPlayer.confirmLinkNow(new SecretConfigsScreen().build(parent), "https://waterplayer.ru/data")).build())
+                        .addValue(new ButtonWithIconBuilder(Component.translatable("waterplayer.web.what_data_is_sent"), InterfaceUtils.getResourceLocation("waterplayer", "textures/think.png"), (e) -> WaterPlayer.confirmLinkNow(new SecretConfigsScreen().build(parent), AlinLib.MINECRAFT.options.languageCode.equals("ru_ru") ? "https://waterplayer.ru/data" : "https://waterplayer.ru/data_en")).build())
                         .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.api.enable"), true).setConfig(WaterPlayer.config, "API.ENABLE").build())
                         .addValue(new EditBoxBuilder(Component.translatable("waterplayer.api.url")).setValue("https://api.waterplayer.ru").setConfig(WaterPlayer.config, "API.URL").build())
                         .addValue(new ButtonWithIconBuilder(Component.translatable("waterplayer.api.update_configs"), RESET, (e) -> {
