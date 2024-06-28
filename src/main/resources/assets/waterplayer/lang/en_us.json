@@ -19,6 +19,8 @@
   "waterplayer.playlist.author": "Author",
   "waterplayer.playlist.title": "Title",
   "waterplayer.playlist.urls": "URLs",
+  "waterplayer.playlist.tracks": "Tracks",
+  "waterplayer.playlist.save": "Save Playlist",
 
   "waterplayer.playlist.upload": "Share this playlist",
   "waterplayer.playlist.copy_link": "Copy link",
@@ -119,6 +121,9 @@
   "waterplayer.config.services.flowery": "Flowery TTS",
   "waterplayer.config.services.http": "Internet",
   "waterplayer.config.services.local": "Local storage",
+
+
+  "waterplayer.config.services.wp": "WP Playlists",
 
   "waterplayer.config.localization": "Localization",
 

@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Level;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
+import ru.kelcuprum.waterplayer.backend.exception.WebPlaylistException;
 import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 
 import java.io.DataInput;
@@ -58,6 +59,15 @@ public class WaterPlayerSource implements AudioSourceManager {
             return new WaterPlayerPlaylist(playlist);
         } catch (Exception ex){
             WaterPlayer.log("ERROR: "+(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage()), Level.DEBUG);
+        }
+        if(identifier.startsWith(getSourceName()+":")){
+            String id = identifier.replace(getSourceName()+":", "");
+            String url = String.format(WaterPlayerAPI.config.getString("PLAYLIST_URL", WaterPlayerAPI.getURL("/playlist/%s")), id);
+            try {
+                return new WaterPlayerPlaylist(WaterPlayerAPI.getPlaylist(url, false));
+            } catch (WebPlaylistException ex) {
+                WaterPlayer.log("ERROR: "+(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage()), Level.DEBUG);
+            }
         }
         return null;
     }

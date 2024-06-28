@@ -40,6 +40,9 @@ public class Playlist {
             urls.add(urlsJSON.get(i).getAsString());
         }
     }
+    public static boolean isValid(JsonObject data){
+        return data.has("title") && data.has("author") && data.has("urls");
+    }
 
     public void save(){
         if(this.path == null) return;
@@ -50,8 +53,6 @@ public class Playlist {
             WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);
         }
     }
-
-
 
     public Playlist addUrl(String url){
         urls.add(url);

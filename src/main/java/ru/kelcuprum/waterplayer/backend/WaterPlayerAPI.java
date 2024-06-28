@@ -1,5 +1,6 @@
 package ru.kelcuprum.waterplayer.backend;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.network.chat.Component;
 import org.apache.commons.codec.binary.Base64;
@@ -13,11 +14,11 @@ import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.exception.AuthException;
 import ru.kelcuprum.waterplayer.backend.exception.WebPlaylistException;
 import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
+import ru.kelcuprum.waterplayer.backend.playlist.WebPlaylist;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Icons.DONT;
 
@@ -76,33 +77,15 @@ public class WaterPlayerAPI {
 
     public static Playlist getPlaylist(String url, boolean save) throws WebPlaylistException {
         try {
-            JsonObject data = WebAPI.getJsonObject(url);
-            if(isValidWebPlaylist(data)) {
-                if(save) {
-                    Path path = AlinLib.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/" + data.get("id").getAsString() + ".json");
-                    if (path.toFile().exists())
-                        path = AlinLib.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/" + data.get("url").getAsString() + ".json");
-                    try {
-                        Files.createDirectories(path.getParent());
-                        Files.writeString(path, data.getAsJsonObject("data").toString());
-                        return new Playlist(path);
-                    } catch (IOException e) {
-                        WaterPlayer.log(e.getMessage() == null ? e.getClass().getName() : e.getMessage(), Level.ERROR);
-                        throw new WebPlaylistException("External error: " + (e.getMessage() == null ? e.getClass().getName() : e.getMessage()));
-                    }
-                } else {
-                    return new Playlist(data.getAsJsonObject("data"));
-                }
-            } else throw new WebPlaylistException("Incorrect response format");
+            WebPlaylist data = new WebPlaylist(WebAPI.getJsonObject(url));
+            if(save) data.save();
+            return data.playlist;
         } catch (Exception e){
             WaterPlayer.log(e.getMessage() == null ? e.getClass().getName() : e.getMessage(), Level.ERROR);
             throw new WebPlaylistException("External error: "+(e.getMessage() == null ? e.getClass().getName() : e.getMessage()));
         }
     }
 
-    public static boolean isValidWebPlaylist(JsonObject data){
-        return data.has("id") && data.has("url") && data.has("data");
-    }
     @Async.Execute
     public static String uploadPlaylist(Playlist playlist, String id) throws AuthException {
         if(!isVerified()) throw new AuthException("Your account is not authorized!");
@@ -114,6 +97,28 @@ public class WaterPlayerAPI {
         } catch (Exception e){
             WaterPlayer.log(e.getMessage() == null ? e.getClass().getName() : e.getMessage(), Level.ERROR);
             return "";
+        }
+    }
+
+    public static List<WebPlaylist> searchPlaylists(String query){
+        List<WebPlaylist> results = new ArrayList<>();
+        if(!config.getBoolean("SEARCH", true)) return results;
+        try {
+            JsonObject data = WebAPI.getJsonObject(getURL(String.format("/search?query=%s", query)));
+            if(data.has("results") && data.get("results").isJsonArray()){
+                for(JsonElement j : data.getAsJsonArray("results")){
+                    try {
+                        WebPlaylist wp = new WebPlaylist(j.getAsJsonObject());
+                        results.add(wp);
+                    } catch (Exception e){
+                        WaterPlayer.log((e.getMessage() == null ? e.getClass().getName() : e.getMessage()), Level.ERROR);
+                    }
+                }
+                return results;
+            } else return results;
+        } catch (Exception e){
+            WaterPlayer.log((e.getMessage() == null ? e.getClass().getName() : e.getMessage()), Level.ERROR);
+            return results;
         }
     }
 }

@@ -17,6 +17,7 @@ import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.alinlib.gui.components.ConfigureScrolWidget;
+import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonWTLBuilder;
 import ru.kelcuprum.alinlib.gui.components.builder.selector.SelectorBuilder;
 import ru.kelcuprum.alinlib.gui.components.buttons.ButtonSprite;
 import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
@@ -24,7 +25,10 @@ import ru.kelcuprum.alinlib.gui.components.editbox.base.EditBoxString;
 import ru.kelcuprum.alinlib.gui.components.text.MessageBox;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.waterplayer.WaterPlayer;
+import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
+import ru.kelcuprum.waterplayer.backend.playlist.WebPlaylist;
 import ru.kelcuprum.waterplayer.frontend.gui.components.TrackButton;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.playlist.WebPlaylistScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +64,8 @@ public class SearchScreen extends Screen {
             "ymsearch:",
             "scsearch:",
             "amsearch:",
-            "dzsearch:"
+            "dzsearch:",
+            "wpsearch:"
     };
     protected EditBoxString request;
     protected Button search;
@@ -84,9 +89,13 @@ public class SearchScreen extends Screen {
                 return;
             }
             WaterPlayer.config.setString("SEARCH.LAST", requestValue);
-            String value = services[searchService] + requestValue;
-            AlinLib.log(value);
-            load(value, this);
+            if(services[searchService].startsWith("wpsearch:")){
+                playlists = WaterPlayerAPI.searchPlaylists(requestValue);
+                rebuildWidgetsList();
+            } else {
+                String value = services[searchService] + requestValue;
+                load(value);
+            }
         }));
         addRenderableWidget(new SelectorBuilder(Component.translatable("waterplayer.search.service")).setValue(searchService).setList(new String[]{
                 Component.translatable("waterplayer.config.services.youtube").getString(),
@@ -95,7 +104,8 @@ public class SearchScreen extends Screen {
                 Component.translatable("waterplayer.config.services.yandex").getString(),
                 Component.translatable("waterplayer.config.services.soundcloud").getString(),
                 Component.translatable("waterplayer.config.services.apple").getString(),
-                Component.translatable("waterplayer.config.services.deezer").getString()
+                Component.translatable("waterplayer.config.services.deezer").getString(),
+                Component.translatable("waterplayer.config.services.wp").getString()
         }).setOnPress((e) -> {
             searchService = e.getPosition();
             WaterPlayer.config.setNumber("SEARCH.LAST_SERVICE", searchService);
@@ -107,6 +117,7 @@ public class SearchScreen extends Screen {
     private ConfigureScrolWidget scroller;
     private List<AbstractWidget> widgets = new ArrayList<>();
     List<AudioTrack> list = new ArrayList<>();
+    List<WebPlaylist> playlists = new ArrayList<>();
     public void initList(){
         widgets = new ArrayList<>();
         int x = 195;
@@ -121,8 +132,14 @@ public class SearchScreen extends Screen {
             }
         }));
         widgets.add(new TextBox(x, 5, width-200, 20, Component.translatable("waterplayer.search.result"), true));
-        if(list.isEmpty()) widgets.add(new MessageBox(x, 20, width - 200, 20, Component.translatable("waterplayer.search.not_found"), true));
-        else for (AudioTrack track : list) widgets.add(new TrackButton(x, 20, width - 200, track, this, false));
+        if(services[searchService].startsWith("wpsearch:")){
+            if(playlists.isEmpty()) widgets.add(new MessageBox(x, 20, width - 200, 20, Component.translatable("waterplayer.search.not_found"), true));
+            else for(WebPlaylist playlist : playlists) widgets.add(new ButtonWTLBuilder(Component.translatable("waterplayer.playlists.value", playlist.playlist.title, playlist.playlist.author), Component.literal(playlist.url), (s) -> AlinLib.MINECRAFT.setScreen(new WebPlaylistScreen(this, playlist))).setPosition(x, 20).setSize(width - 200, 20).build());
+        } else {
+            if (list.isEmpty())
+                widgets.add(new MessageBox(x, 20, width - 200, 20, Component.translatable("waterplayer.search.not_found"), true));
+            else for (AudioTrack track : list) widgets.add(new TrackButton(x, 20, width - 200, track, this, false));
+        }
 
         int i = 0;
         addRenderableWidgets(widgets);
@@ -144,7 +161,7 @@ public class SearchScreen extends Screen {
     }
 
 
-    public void load(String url, Screen screen){
+    public void load(String url){
         WaterPlayer.player.getAudioPlayerManager().loadItemOrdered(WaterPlayer.player.getAudioPlayerManager(), url, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
