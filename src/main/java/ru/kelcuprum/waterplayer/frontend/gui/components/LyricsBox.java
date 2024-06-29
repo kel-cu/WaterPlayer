@@ -72,7 +72,7 @@ public class LyricsBox extends AbstractWidget {
     double scrollRate = 9.0;
     double scrollAmount = 0;
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollY) {
         scrollAmount = Mth.clamp(scrollAmount- scrollY*scrollRate, 0, lastTextHeight-height-textSize);
         return true;
     }

@@ -195,9 +195,18 @@ public class ControlScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f) {
-        super.renderBackground(guiGraphics, i, j, f);
+    public void renderBackground(GuiGraphics guiGraphics) {
+        super.renderBackground(guiGraphics);
         InterfaceUtils.renderLeftPanel(guiGraphics, 190, height);
+    }
+    @Override
+    public void render(GuiGraphics guiGraphics, int i, int j, float f) {
+        try {
+            renderBackground(guiGraphics);
+            super.render(guiGraphics, i, j, f);
+        } catch (Exception e) {
+            WaterPlayer.log("Mojang, иди нахуй со своим "+ (e.getLocalizedMessage() == null ? e.getClass().getName() : e.getLocalizedMessage()));
+        }
     }
 
     int lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.size();
@@ -269,12 +278,12 @@ public class ControlScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
-        boolean scr = super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollY) {
+        boolean scr = super.mouseScrolled(mouseX, mouseY, scrollY);
         if ((mouseX >= 5 && mouseX <= 185) && (mouseY >= 115 && mouseY <= height - 30)) {
-            scr = lyrics.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+            scr = lyrics.mouseScrolled(mouseX, mouseY, scrollY);
         }else if (!scr && scroller != null && mouseX > 190) {
-            scr = scroller.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+            scr = scroller.mouseScrolled(mouseX, mouseY, scrollY);
         }
         return scr;
     }

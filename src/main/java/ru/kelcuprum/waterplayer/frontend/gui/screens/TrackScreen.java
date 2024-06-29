@@ -174,13 +174,14 @@ public class TrackScreen extends Screen {
 
     @Override
     public void render(GuiGraphics guiGraphics, int i, int j, float f) {
+        renderBackground(guiGraphics);
         super.render(guiGraphics, i, j, f);
         guiGraphics.blit(Music.getThumbnail(track), x, height / 2 - 15 - iconSize, 0.0F, 0.0F, iconSize, iconSize, iconSize, iconSize);
     }
 
     @Override
-    public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f) {
-        super.renderBackground(guiGraphics, i, j, f);
+    public void renderBackground(GuiGraphics guiGraphics) {
+        super.renderBackground(guiGraphics);
         if (showLyrics || showPlaylist) InterfaceUtils.renderLeftPanel(guiGraphics, lyricsSize, height);
     }
 
@@ -201,13 +202,13 @@ public class TrackScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
-        boolean scr = super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollY) {
+        boolean scr = super.mouseScrolled(mouseX, mouseY, scrollY);
         if (showPlaylist) {
-            if (mouseX <= 200) scr = scroller_panel.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+            if (mouseX <= 200) scr = scroller_panel.mouseScrolled(mouseX, mouseY, scrollY);
         } else if (showLyrics) {
             if ((mouseX >= 5 && mouseX <= 195) && (mouseY >= 40 && mouseY <= height - 30)) {
-                scr = lyricsBox.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+                scr = lyricsBox.mouseScrolled(mouseX, mouseY, scrollY);
             }
         }
         return scr;

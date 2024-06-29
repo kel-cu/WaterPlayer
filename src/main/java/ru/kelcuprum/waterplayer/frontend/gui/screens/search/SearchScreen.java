@@ -43,14 +43,15 @@ public class SearchScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f) {
-        super.renderBackground(guiGraphics, i, j, f);
+    public void renderBackground(GuiGraphics guiGraphics) {
+        super.renderBackground(guiGraphics);
         InterfaceUtils.renderLeftPanel(guiGraphics, 190, height);
     }
 
     @Override
     public void render(GuiGraphics guiGraphics, int i, int j, float f) {
         try {
+            renderBackground(guiGraphics);
             super.render(guiGraphics, i, j, f);
         } catch (Exception e) {
             WaterPlayer.log("Mojang, иди нахуй со своим "+ (e.getLocalizedMessage() == null ? e.getClass().getName() : e.getLocalizedMessage()));
@@ -192,10 +193,10 @@ public class SearchScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
-        boolean scr = super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollY) {
+        boolean scr = super.mouseScrolled(mouseX, mouseY, scrollY);
         if (!scr && scroller != null) {
-            scr = scroller.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+            scr = scroller.mouseScrolled(mouseX, mouseY, scrollY);
         }
         return scr;
     }
