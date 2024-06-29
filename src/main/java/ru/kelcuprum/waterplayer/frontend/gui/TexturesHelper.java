@@ -54,7 +54,6 @@ public class TexturesHelper {
             data.addProperty("url", url);
             data.addProperty("id", id);
             if(!map.contains(data)) map.add(data);
-            saveMap();
             texture = urlsTextures.get(url);
         }
         else {
@@ -89,7 +88,6 @@ public class TexturesHelper {
         data.addProperty("url", url);
         data.addProperty("id", id);
         if(!map.contains(data)) map.add(data);
-        saveMap();
     }
 
     public static File getTextureFile(String url) {

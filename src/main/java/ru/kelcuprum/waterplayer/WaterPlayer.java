@@ -27,6 +27,7 @@ import ru.kelcuprum.waterplayer.backend.KeyBind;
 import ru.kelcuprum.waterplayer.backend.MusicPlayer;
 import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
 import ru.kelcuprum.waterplayer.backend.command.WaterPlayerCommand;
+import ru.kelcuprum.waterplayer.frontend.gui.TexturesHelper;
 import ru.kelcuprum.waterplayer.frontend.gui.overlays.SubtitlesHandler;
 import ru.kelcuprum.waterplayer.frontend.localization.StarScript;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen;
@@ -59,7 +60,10 @@ public class WaterPlayer implements ClientModInitializer {
             ClientTickEvents.START_CLIENT_TICK.register(hud);
             ClientTickEvents.START_CLIENT_TICK.register(sub);
         });
-        ClientLifecycleEvents.CLIENT_STOPPING.register(e -> player.getAudioPlayer().stopTrack());
+        ClientLifecycleEvents.CLIENT_STOPPING.register(e -> {
+            player.getAudioPlayer().stopTrack();
+            TexturesHelper.saveMap();
+        });
         ClientCommandRegistrationCallback.EVENT.register(WaterPlayerCommand::register);
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             for(KeyBind bind : keyBinds){
