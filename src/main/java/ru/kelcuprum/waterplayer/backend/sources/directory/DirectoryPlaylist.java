@@ -6,11 +6,11 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import org.apache.logging.log4j.Level;
 import ru.kelcuprum.waterplayer.WaterPlayer;
-import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class DirectoryPlaylist implements AudioPlaylist {
     protected final File file;
@@ -20,7 +20,7 @@ public class DirectoryPlaylist implements AudioPlaylist {
         tracks = new ArrayList<>();
         if(!file.isDirectory()) throw new IllegalArgumentException("File is not folder");
         if(file.exists() && file.listFiles() != null) {
-            for (File url : file.listFiles()) {
+            for (File url : Objects.requireNonNull(file.listFiles())) {
                 if(url.isFile()) WaterPlayer.player.getAudioPlayerManager().loadItemSync(url.getPath(), new AudioLoadResultHandler() {
                     @Override
                     public void trackLoaded(AudioTrack track) {

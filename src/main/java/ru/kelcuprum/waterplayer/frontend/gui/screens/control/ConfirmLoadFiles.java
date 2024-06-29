@@ -30,7 +30,6 @@ public class ConfirmLoadFiles extends Screen {
         for(Path path : list){
             if(i>5){
                 name.append("\n").append(Component.translatable("waterplayer.load.load_files.count_files", list.size()-6).getString());
-//                        .append(list.size()-6).append(Component.translatable("waterplayer.load.load_files.count_files"));
                 break;
             } else if(i == 0) name = new StringBuilder(path.getFileName().toString());
             else name.append("\n").append(path.getFileName().toString());

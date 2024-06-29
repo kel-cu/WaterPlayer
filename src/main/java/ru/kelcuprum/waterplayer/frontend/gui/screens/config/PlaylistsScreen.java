@@ -6,7 +6,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.GsonHelper;
 import org.apache.logging.log4j.Level;
 import ru.kelcuprum.alinlib.AlinLib;
-import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.InterfaceUtils;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonWTLBuilder;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonWithIconBuilder;
@@ -26,15 +25,9 @@ import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Icons.*;
 import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Icons.LIST;
 
 public class PlaylistsScreen {
-    private static final Component MainConfigCategory = Localization.getText("waterplayer.config");
-    private static final Component LocalizationConfigCategory = Localization.getText("waterplayer.config.localization");
-    private static final Component SecretConfigCategory = Localization.getText("waterplayer.secret");
-    private static final Component PlaylistsCategory = Localization.getText("waterplayer.playlists");
-    private static final Component PlayCategory = Localization.getText("waterplayer.play");
-    //
-    int assetsSize = 0;
-    boolean isLoaded = false;
-    public Screen build(Screen parent) {
+    static int assetsSize = 0;
+    static boolean isLoaded = false;
+    public static Screen build(Screen parent) {
         File playlists = AlinLib.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists").toFile();
 
         ConfigScreenBuilder builder = new ConfigScreenBuilder(parent, Component.translatable("waterplayer.name"))
@@ -52,23 +45,23 @@ public class PlaylistsScreen {
                                 }
                             }
                         }
-                        if(isLoaded && (assetsSize != size)) AlinLib.MINECRAFT.setScreen(this.build(parent));
+                        if(isLoaded && (assetsSize != size)) AlinLib.MINECRAFT.setScreen(PlaylistsScreen.build(parent));
                     }
                 })
-                .addPanelWidget(new ButtonWithIconBuilder(MainConfigCategory, OPTIONS, (e) -> AlinLib.MINECRAFT.setScreen(new MainConfigsScreen().build(parent))).setCentered(false).build())
-                .addPanelWidget(new ButtonWithIconBuilder(LocalizationConfigCategory, LIST, (e) -> AlinLib.MINECRAFT.setScreen(new LocalizationConfigsScreen().build(parent))).setCentered(false).build())
-                .addPanelWidget(new ButtonWithIconBuilder(SecretConfigCategory, WARNING, (e) -> AlinLib.MINECRAFT.setScreen(new SecretConfigsScreen().build(parent))).setCentered(false).build())
-                .addPanelWidget(new ButtonWithIconBuilder(PlaylistsCategory, LIST, (e) -> AlinLib.MINECRAFT.setScreen(new PlaylistsScreen().build(parent))).setCentered(false).build())
-                .addPanelWidget(new ButtonWithIconBuilder(PlayCategory, InterfaceUtils.getResourceLocation("waterplayer", "textures/player/play.png"), (e) -> AlinLib.MINECRAFT.setScreen(new ControlScreen(this.build(parent)))).setCentered(false).build())
+                .addPanelWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.config"), OPTIONS, (e) -> AlinLib.MINECRAFT.setScreen(MainConfigsScreen.build(parent))).setCentered(false).build())
+                .addPanelWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.config.localization"), LIST, (e) -> AlinLib.MINECRAFT.setScreen(LocalizationConfigsScreen.build(parent))).setCentered(false).build())
+                .addPanelWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.secret"), WARNING, (e) -> AlinLib.MINECRAFT.setScreen(SecretConfigsScreen.build(parent))).setCentered(false).build())
+                .addPanelWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.playlists"), LIST, (e) -> AlinLib.MINECRAFT.setScreen(PlaylistsScreen.build(parent))).setCentered(false).build())
+                .addPanelWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.play"), InterfaceUtils.getResourceLocation("waterplayer", "textures/player/play.png"), (e) -> AlinLib.MINECRAFT.setScreen(new ControlScreen(SecretConfigsScreen.build(parent)))).setCentered(false).build())
                 //
-                .addWidget(new TextBox(140, 5, PlaylistsCategory, true));
+                .addWidget(new TextBox(140, 5, Component.translatable("waterplayer.playlists"), true));
         if(playlists.exists() && playlists.isDirectory()){
             for(File playlist : Objects.requireNonNull(playlists.listFiles())){
                 if(playlist.isFile() && playlist.getName().endsWith(".json")){
                     try {
                         Playlist playlistObject = new Playlist(playlist.toPath());
                         assetsSize++;
-                        builder.addWidget(new ButtonWTLBuilder(Component.translatable("waterplayer.playlists.value", playlistObject.title, playlistObject.author), Component.literal(playlistObject.fileName), (s) -> AlinLib.MINECRAFT.setScreen(new PlaylistScreen(new PlaylistsScreen().build(parent), playlistObject.fileName))).build());
+                        builder.addWidget(new ButtonWTLBuilder(Component.translatable("waterplayer.playlists.value", playlistObject.title, playlistObject.author), Component.literal(playlistObject.fileName), (s) -> AlinLib.MINECRAFT.setScreen(new PlaylistScreen(PlaylistsScreen.build(parent), playlistObject.fileName))).build());
                     } catch (Exception e){
                         WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);
                     }
@@ -76,7 +69,7 @@ public class PlaylistsScreen {
             }
         }
         isLoaded = true;
-        builder.addWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.playlist.create"), ADD, (s) -> AlinLib.MINECRAFT.setScreen(new CreatePlaylistScreen(new PlaylistsScreen().build(parent)))).build());
+        builder.addWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.playlist.create"), ADD, (s) -> AlinLib.MINECRAFT.setScreen(new CreatePlaylistScreen(PlaylistsScreen.build(parent)))).build());
         return builder.build();
     }
 }

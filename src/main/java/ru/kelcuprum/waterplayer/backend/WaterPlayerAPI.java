@@ -50,13 +50,11 @@ public class WaterPlayerAPI {
         try {
             JsonObject json = WebAPI.getJsonObject(String.format(getURL("/verify?access=%s"), AlinLib.MINECRAFT.getUser().getAccessToken()));
             if(json.has("error")){
-                if(json.getAsJsonObject("error").get("code").getAsNumber().intValue() == 401){
-                    return false;
-                } else {
+                if (json.getAsJsonObject("error").get("code").getAsNumber().intValue() != 401) {
                     String msg = json.getAsJsonObject("error").has("message") ? json.getAsJsonObject("error").get("message").getAsString() : json.getAsJsonObject("error").get("codename").getAsString();
                     WaterPlayer.getToast().setMessage(Component.literal(msg)).setType(ToastBuilder.Type.ERROR).setIcon(DONT).show(AlinLib.MINECRAFT.getToasts());
-                    return false;
                 }
+                return false;
             }
             return true;
         } catch (Exception e){
@@ -114,8 +112,8 @@ public class WaterPlayerAPI {
                         WaterPlayer.log((e.getMessage() == null ? e.getClass().getName() : e.getMessage()), Level.ERROR);
                     }
                 }
-                return results;
-            } else return results;
+            }
+            return results;
         } catch (Exception e){
             WaterPlayer.log((e.getMessage() == null ? e.getClass().getName() : e.getMessage()), Level.ERROR);
             return results;

@@ -1,9 +1,6 @@
 package ru.kelcuprum.waterplayer.backend.playlist;
 
 import com.google.gson.JsonObject;
-import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
-import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
-import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import org.apache.logging.log4j.Level;
 import ru.kelcuprum.alinlib.AlinLib;
@@ -14,7 +11,6 @@ import ru.kelcuprum.waterplayer.backend.sources.waterplayer.WaterPlayerPlaylist;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 public class WebPlaylist {

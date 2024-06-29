@@ -18,7 +18,6 @@ import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -78,12 +77,12 @@ public class WaterPlayerSource implements AudioSourceManager {
     }
 
     @Override
-    public void encodeTrack(AudioTrack track, DataOutput output) throws IOException {
+    public void encodeTrack(AudioTrack track, DataOutput output) {
 
     }
 
     @Override
-    public AudioTrack decodeTrack(AudioTrackInfo trackInfo, DataInput input) throws IOException {
+    public AudioTrack decodeTrack(AudioTrackInfo trackInfo, DataInput input) {
         return null;
     }
 

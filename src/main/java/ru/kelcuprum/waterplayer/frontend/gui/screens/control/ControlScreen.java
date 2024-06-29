@@ -91,7 +91,7 @@ public class ControlScreen extends Screen {
         addRenderableWidget(lyrics);
 
         //
-        addRenderableWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.playlists"), LIST, (e) -> AlinLib.MINECRAFT.setScreen(new PlaylistsScreen().build(this)))
+        addRenderableWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.playlists"), LIST, (e) -> AlinLib.MINECRAFT.setScreen(PlaylistsScreen.build(this)))
                 .setSize(size, 20).setPosition(x, height-50)
                 .setCentered(false).build());
         this.play = addRenderableWidget(new ButtonSpriteBuilder(InterfaceUtils.getResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"), (e) -> {

@@ -61,7 +61,6 @@ public class TexturesHelper {
                 }
             } catch (Exception e) {
                 WaterPlayer.log("Error loading image from URL: " + url + " - " + e.getMessage());
-                e.printStackTrace();
                 resourceLocationMap.put(id, InterfaceUtils.getResourceLocation("waterplayer", "textures/no_icon.png"));
                 return;
             }

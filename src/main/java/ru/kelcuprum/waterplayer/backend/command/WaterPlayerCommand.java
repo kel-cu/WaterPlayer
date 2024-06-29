@@ -85,7 +85,7 @@ public class WaterPlayerCommand {
                         }))
                 .executes(context -> {
                     Minecraft client = context.getSource().getClient();
-                    client.tell(() -> client.setScreen(new MainConfigsScreen().build(client.screen)));
+                    client.tell(() -> client.setScreen(MainConfigsScreen.build(client.screen)));
                     return 1;
                 })
         );

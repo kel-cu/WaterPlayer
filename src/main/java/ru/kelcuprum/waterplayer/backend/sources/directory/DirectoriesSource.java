@@ -10,7 +10,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.File;
-import java.io.IOException;
 
 public class DirectoriesSource implements AudioSourceManager {
     @Override
@@ -33,12 +32,12 @@ public class DirectoriesSource implements AudioSourceManager {
     }
 
     @Override
-    public void encodeTrack(AudioTrack track, DataOutput output) throws IOException {
+    public void encodeTrack(AudioTrack track, DataOutput output) {
 
     }
 
     @Override
-    public AudioTrack decodeTrack(AudioTrackInfo trackInfo, DataInput input) throws IOException {
+    public AudioTrack decodeTrack(AudioTrackInfo trackInfo, DataInput input) {
         return null;
     }
 

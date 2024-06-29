@@ -75,16 +75,14 @@ public class TrackScreen extends Screen {
             lyricsBox = addRenderableWidget(new LyricsBox(5, 40, lyricsSize - 10, height - 70, Component.empty())).setLyrics(Component.literal(lyrics.getText() == null ? "" : lyrics.getText()));
             addRenderableWidget(new Button(5, height - 25, lyricsSize - 10, 20, Component.translatable("waterplayer.track.lyrics.copy"), (onPress) -> {
                 AlinLib.MINECRAFT.keyboardHandler.setClipboard(lyrics.getText() == null ? "" : lyrics.getText());
-                WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.lyrics.copy.toast")).show(minecraft.getToasts());
+                WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.lyrics.copy.toast")).show(AlinLib.MINECRAFT.getToasts());
             }));
         }
         addRenderableWidget(new ButtonBuilder(Component.translatable(isFile ? "waterplayer.track.open_file" : "waterplayer.track.open_link"), (huy) -> {
             if (isFile) Util.getPlatform().openFile(new File(track.getInfo().uri));
             else Util.getPlatform().openUri(track.getInfo().uri);
         }).setWidth(componentSize / 2 - 2).setPosition(x, height / 2 - 10).build());
-        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.track.copy_link"), (huy) -> {
-            AlinLib.MINECRAFT.keyboardHandler.setClipboard(track.getInfo().uri);
-        }).setWidth(componentSize / 2 - 2).setPosition(x + componentSize / 2 + 2, height / 2 - 10).build());
+        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.track.copy_link"), (huy) -> AlinLib.MINECRAFT.keyboardHandler.setClipboard(track.getInfo().uri)).setWidth(componentSize / 2 - 2).setPosition(x + componentSize / 2 + 2, height / 2 - 10).build());
 
         int y = height / 2 + 15;
 

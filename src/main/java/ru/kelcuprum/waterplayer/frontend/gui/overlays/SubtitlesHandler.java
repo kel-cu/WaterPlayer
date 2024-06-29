@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class SubtitlesHandler implements GuiRenderEvents, ClientTickEvents.StartTick {
-    private List<FormattedCharSequence> texts = new ArrayList<>();
+    private final List<FormattedCharSequence> texts = new ArrayList<>();
     @Override
     public void onStartTick(Minecraft client) {
         updateTexts();
