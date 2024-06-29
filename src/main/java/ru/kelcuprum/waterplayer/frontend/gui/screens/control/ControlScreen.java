@@ -106,10 +106,9 @@ public class ControlScreen extends Screen {
                 .setDesignType(designType).build());
         this.repeat = addRenderableWidget(new ButtonSpriteBuilder(WaterPlayer.player.getTrackScheduler().getRepeatIcon(), (e) -> {
             WaterPlayer.player.getTrackScheduler().changeRepeatStatus();
-            e.setMessage(Component.translatable("waterplayer.control."+(WaterPlayer.player.getTrackScheduler().getRepeatStatus() == 0 ? "non_repeat" : WaterPlayer.player.getTrackScheduler().getRepeatStatus() == 1 ? "repeat" : "one_repeat" )));
             e.setIcon(WaterPlayer.player.getTrackScheduler().getRepeatIcon());
         })
-                .setTitle(Component.translatable("waterplayer.control."+(WaterPlayer.player.getTrackScheduler().getRepeatStatus() == 0 ? "non_repeat" : WaterPlayer.player.getTrackScheduler().getRepeatStatus() == 1 ? "repeat" : "one_repeat" )))
+                .setTitle(Component.translatable("waterplayer.control.repeat"))
                 .setSize(20, 20)
                 .setTextureSize(20, 20)
                 .setPosition(x + 100, height - 25)
