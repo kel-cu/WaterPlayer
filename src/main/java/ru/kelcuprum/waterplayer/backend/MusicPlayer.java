@@ -151,6 +151,8 @@ public class MusicPlayer {
     }
 
     private void loadTracks(String url) {
+        url = url.replace("\\", "/");
+        String finalUrl = url;
         audioPlayerManager.loadItemOrdered(musicManager, url, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
@@ -162,18 +164,17 @@ public class MusicPlayer {
             public void playlistLoaded(AudioPlaylist playlist) {
                 List<AudioTrack> tracks = playlist.getTracks();
                 tracks.forEach(musicManager.scheduler::queue);
-                WaterPlayer.log("Adding Playlist: " + playlist.getName() + ". Tracks Count: " + playlist.getTracks().size()
-                );
+                WaterPlayer.log("Adding Playlist: " + playlist.getName() + ". Tracks Count: " + playlist.getTracks().size());
             }
 
             @Override
             public void noMatches() {
-                WaterPlayer.log("Nothing Found by " + url, Level.WARN);
+                WaterPlayer.log("Nothing Found by " + finalUrl, Level.WARN);
             }
 
             @Override
-            public void loadFailed(FriendlyException exception) {
-                WaterPlayer.log(exception.getMessage(), Level.ERROR);
+            public void loadFailed(FriendlyException ex) {
+                WaterPlayer.log("ERROR: "+(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage()), Level.DEBUG);
             }
         });
     }

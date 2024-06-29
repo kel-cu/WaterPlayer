@@ -35,8 +35,8 @@ public class WaterPlayerPlaylist implements AudioPlaylist {
                 }
 
                 @Override
-                public void loadFailed(FriendlyException exception) {
-                    WaterPlayer.log(exception.getMessage(), Level.ERROR);
+                public void loadFailed(FriendlyException ex) {
+                    WaterPlayer.log("ERROR: "+(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage()), Level.DEBUG);
                 }
             });
         }

@@ -65,8 +65,6 @@
   "waterplayer.load.load_files.count_files": "et %s autres fichiers...",
 
   "waterplayer.load.add": "Votre demande a été envoyée",
-  "waterplayer.load.add.playlist": "La playlist « %playlist_name% » a été ajoutée à la file d'attente",
-  "waterplayer.load.add.files": "Les fichiers ont été ajoutés à la file d'attente",
   "waterplayer.load.add.blank": "Demande vide !",
 
   "waterplayer.format.time": "{track.time.position} / {track.time.duration}",

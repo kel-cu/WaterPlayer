@@ -65,8 +65,6 @@
   "waterplayer.load.load_files.count_files": "and %s other files...",
 
   "waterplayer.load.add": "Your request has been sent",
-  "waterplayer.load.add.playlist": "Playlist «%playlist_name%» has been added to the queue",
-  "waterplayer.load.add.files": "Files have been added to the queue",
   "waterplayer.load.add.blank": "Empty request!",
 
   "waterplayer.format.time": "{track.time.position} / {track.time.duration}",

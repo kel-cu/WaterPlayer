@@ -37,8 +37,8 @@ public class WaterPlayerSource implements AudioSourceManager {
             if (file.exists()) {
                 try {
                     return new WaterPlayerPlaylist(new Playlist(file.toPath()));
-                } catch (Exception exception) {
-                    WaterPlayer.log(exception.getMessage(), Level.ERROR);
+                } catch (Exception ex) {
+                    WaterPlayer.log("ERROR: "+(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage()), Level.DEBUG);
                 }
             } else {
                 JsonObject jsonPlaylist = new JsonObject();
@@ -47,17 +47,19 @@ public class WaterPlayerSource implements AudioSourceManager {
                 try {
                     jsonPlaylist = GsonHelper.parse(Files.readString(configFile));
                 } catch (Exception ex) {
-                    WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
+                    WaterPlayer.log("ERROR: "+(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage()), Level.DEBUG);
                 }
                 return new WaterPlayerPlaylist(new Playlist(jsonPlaylist));
             }
 
         }
-        try{
-            Playlist playlist = WaterPlayerAPI.getPlaylist(identifier, false);
-            return new WaterPlayerPlaylist(playlist);
-        } catch (Exception ex){
-            WaterPlayer.log("ERROR: "+(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage()), Level.DEBUG);
+        if(identifier.startsWith("http://") || identifier.startsWith("https://")){
+            try{
+                Playlist playlist = WaterPlayerAPI.getPlaylist(identifier, false);
+                return new WaterPlayerPlaylist(playlist);
+            } catch (Exception ex){
+                WaterPlayer.log("ERROR: "+(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage()), Level.DEBUG);
+            }
         }
         if(identifier.startsWith(getSourceName()+":")){
             String id = identifier.replace(getSourceName()+":", "");

@@ -65,8 +65,6 @@
   "waterplayer.load.load_files.count_files": "и еще %s файлов...",
 
   "waterplayer.load.add": "Ваш запрос отправлен",
-  "waterplayer.load.add.playlist": "Плейлист «%playlist_name%» был добавлен в очередь",
-  "waterplayer.load.add.files": "Файлы были добавлены в очередь",
   "waterplayer.load.add.blank": "Пустой запрос!",
 
   "waterplayer.format.time": "{track.time.position} / {track.time.duration}",
