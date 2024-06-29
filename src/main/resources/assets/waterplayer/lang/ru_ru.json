@@ -22,9 +22,9 @@
   "waterplayer.playlist.tracks": "Треки",
   "waterplayer.playlist.save": "Сохранить плейлист",
 
-  "waterplayer.playlist.upload": "Поделится этим плейлистом",
+  "waterplayer.playlist.upload": "Поделится",
   "waterplayer.playlist.copy_link": "Скопировать ссылку",
-  "waterplayer.playlist.uploaded": "Плейлист опубликован, ссылка на него скопирована в буфер обмена",
+  "waterplayer.playlist.uploaded": "Ссылка на плейлист скопирована в буфер обмена",
   "waterplayer.playlist.link_copied": "Ссылка скопирована",
 
   "waterplayer.key.pause": "Пауза",
@@ -38,18 +38,18 @@
 
   "waterplayer.message.pause": "Трек приостановлен",
   "waterplayer.message.play": "Трек возобновлен",
-  "waterplayer.message.repeat": "Повтор очереди вкл",
-  "waterplayer.message.repeat.one": "Повтор трека вкл",
-  "waterplayer.message.repeat.no": "Повтор выкл",
+  "waterplayer.message.repeat": "Повтор очереди Вкл",
+  "waterplayer.message.repeat.one": "Повтор трека Вкл",
+  "waterplayer.message.repeat.no": "Повтор Выкл",
   "waterplayer.message.reset": "Очередь сброшена",
   "waterplayer.message.shuffle": "Очередь перемешана",
   "waterplayer.message.skip": "Трек пропущен",
 
   "waterplayer.control.search": "Поиск...",
   "waterplayer.control.pause": "Пауза",
-  "waterplayer.control.play": "Запустить",
-  "waterplayer.control.non_repeat": "Повтор выключен",
-  "waterplayer.control.one_repeat": "Повтор одного трека",
+  "waterplayer.control.play": "Воспроизвести",
+  "waterplayer.control.non_repeat": "Повтор",
+  "waterplayer.control.one_repeat": "Повтор",
   "waterplayer.control.repeat": "Повтор",
   "waterplayer.control.shuffle": "Перемешать",
   "waterplayer.control.skip": "Пропустить",
@@ -91,7 +91,7 @@
   "waterplayer.config.menu": "Меню",
   "waterplayer.config.enable_menu_overlay": "Оверлей в главном меню",
   "waterplayer.config.menu_overlay.position": "Позиция оверлея в главном меню",
-  "waterplayer.config.enable_keybind": "Включить кейбинды в меню",
+  "waterplayer.config.enable_keybind": "Включить бинды в меню",
   "waterplayer.config.screem.queue_cover_show": "Миниатюры треков в очереди",
   "waterplayer.config.control.enable_lyrics": "Тексты песен на экране управления",
 
@@ -142,7 +142,7 @@
   "waterplayer.secret.title.spotify": "Spotify",
   "waterplayer.config.spotify_client_id": "Client ID",
   "waterplayer.config.spotify_client_secret": "Client Secret",
-  "waterplayer.config.spotify_sp_dc": "SP DC",
+  "waterplayer.config.spotify_sp_dc": "SP DC куки",
   "waterplayer.config.spotify_country_code": "Код страны",
 
   "waterplayer.secret.title.apple_music": "Apple Music",
@@ -151,7 +151,7 @@
 
   "waterplayer.api": "WaterPlayer API",
   "waterplayer.api.enable": "Использовать API",
-  "waterplayer.api.url": "Ссылка API",
+  "waterplayer.api.url": "Ссылка на API",
   "waterplayer.api.update_configs": "Обновить конфиги API",
   "waterplayer.api.config_updated": "Конфиги обновлены",
 
@@ -177,8 +177,8 @@
   "waterplayer.search.service": "Сервис",
   "waterplayer.search.result": "Результаты",
   "waterplayer.search.last_query": "Последний запрос",
-  "waterplayer.search.button": "Найти по запросу",
-  "waterplayer.search.not_found": "Ничего нет :(",
+  "waterplayer.search.button": "Найти",
+  "waterplayer.search.not_found": "Ничего не найдено :(",
 
 
   "waterplayer.web.what_data_is_sent": "Какие данные получает Кел?",
