@@ -1,6 +1,7 @@
 package ru.kelcuprum.waterplayer.frontend.gui.components;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -95,10 +96,17 @@ public class CurrentTrackButton extends Button {
 
     protected void renderString(GuiGraphics guiGraphics, String text, int x, int y) {
         if (getWidth() - 50 < AlinLib.MINECRAFT.font.width(text)) {
-            guiGraphics.drawString(AlinLib.MINECRAFT.font, AlinLib.MINECRAFT.font.substrByWidth(FormattedText.of(text), getWidth() - 50 - AlinLib.MINECRAFT.font.width("...")).getString() + "...", x, y, -1);
+            renderScrollingString(guiGraphics, AlinLib.MINECRAFT.font, Component.literal(text), 5, y-1, -1);
         } else {
             guiGraphics.drawString(AlinLib.MINECRAFT.font, text, x, y, -1);
         }
+    }
+
+    protected void renderScrollingString(GuiGraphics guiGraphics, Font font, Component message, int x, int y, int color) {
+        int k = this.getX() + x;
+        int l = this.getX() + this.getWidth() - x;
+        if(!isShort) k+=40;
+        renderScrollingString(guiGraphics, font, message, k, y, l, y+font.lineHeight, color);
     }
 
     private void setValueFromMouse(double d) {
