@@ -29,6 +29,7 @@ public class PlaylistsScreen {
     static int assetsSize = 0;
     static boolean isLoaded = false;
     public static Screen build(Screen parent) {
+        assetsSize = 0;
         File playlists = AlinLib.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists").toFile();
 
         ConfigScreenBuilder builder = new ConfigScreenBuilder(parent, Component.translatable("waterplayer.name"))
