@@ -5,11 +5,11 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
 import ru.kelcuprum.alinlib.AlinLib;
-import ru.kelcuprum.alinlib.gui.InterfaceUtils;
-import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
+import ru.kelcuprum.alinlib.gui.GuiUtils;
+import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
+import ru.kelcuprum.alinlib.gui.components.buttons.Button;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.TrackScreen;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
@@ -19,8 +19,7 @@ public class TrackButton extends Button {
     protected AudioTrack track;
     private final boolean isShort;
     public TrackButton(int x, int y, int width, AudioTrack track, Screen screen, boolean isShort) {
-        super(x, y, width, isShort ? 20 : 40, InterfaceUtils.DesignType.FLAT, Component.empty(),
-                (s) -> AlinLib.MINECRAFT.setScreen(new TrackScreen(screen, track)));
+        super(new ButtonBuilder().setOnPress((s) -> AlinLib.MINECRAFT.setScreen(new TrackScreen(screen, track))).setTitle(Component.empty()).setStyle(GuiUtils.getSelected()).setSize(width, isShort ? 20 : 40).setPosition(x, y));
         StringBuilder builder = new StringBuilder();
         if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
         builder.append(Music.getTitle(track)).append(" ").append(StarScript.getTimestamp(Music.getDuration(track)));
@@ -36,7 +35,7 @@ public class TrackButton extends Button {
             builder.append(Music.getTitle(track));
             String time = track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : StarScript.getTimestamp(Music.getDuration(track));
             if (isShort) {
-                if(InterfaceUtils.isDoesNotFit(getMessage(), getWidth(), getHeight())){
+                if(GuiUtils.isDoesNotFit(getMessage(), getWidth(), getHeight())){
                     this.renderScrollingString(guiGraphics, AlinLib.MINECRAFT.font, 2, 0xFFFFFF);
                 } else {
                     guiGraphics.drawString(AlinLib.MINECRAFT.font, builder.toString(), getX() + (getHeight() - 8) / 2, getY() + (getHeight() - 8) / 2, 0xffffff);

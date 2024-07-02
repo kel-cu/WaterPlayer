@@ -10,10 +10,10 @@ import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 import ru.kelcuprum.alinlib.AlinLib;
-import ru.kelcuprum.alinlib.gui.InterfaceUtils;
+import ru.kelcuprum.alinlib.gui.Colors;
 import ru.kelcuprum.alinlib.gui.components.ConfigureScrolWidget;
-import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonWTLBuilder;
-import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
+import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
+import ru.kelcuprum.alinlib.gui.components.buttons.Button;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.exception.WebPlaylistException;
@@ -49,18 +49,18 @@ public class WebPlaylistScreen extends Screen {
         int size = 180;
         addRenderableWidget(new TextBox(x, 15, size, 9, title, true));
         //x, 40, size, 20,
-        addRenderableWidget(new ButtonWTLBuilder(Component.translatable("waterplayer.playlist.title"), Component.literal(playlist.playlist.title), null).setPosition(x, 40).setSize(size, 20).build().setActive(false));
-        addRenderableWidget(new ButtonWTLBuilder(Component.translatable("waterplayer.playlist.author"), Component.literal(playlist.playlist.author), null).setPosition(x, 65).setSize(size, 20).build().setActive(false));
-        addRenderableWidget(new Button(x, 90, size, 20, Component.translatable("waterplayer.playlist.play"), (s) -> WaterPlayer.player.loadMusic(String.format("wplayer:%s", playlist.url), false)));
-        addRenderableWidget(new Button(x, 115, size, 20, Component.translatable("waterplayer.playlist.save"), (s) -> {
+        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.playlist.title"), Component.literal(playlist.playlist.title), null).setPosition(x, 40).setSize(size, 20).setActive(false).build());
+        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.playlist.author"), Component.literal(playlist.playlist.author), null).setPosition(x, 65).setSize(size, 20).setActive(false).build());
+        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.playlist.play"), (s) -> WaterPlayer.player.loadMusic(String.format("wplayer:%s", playlist.url), false)).setPosition(x, 90).setSize(size, 20).build());
+        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.playlist.save"), (s) -> {
             try {
                 playlist.save();
                 AlinLib.MINECRAFT.setScreen(new PlaylistScreen(parent, playlist.playlist.fileName));
             } catch (WebPlaylistException e) {
                 WaterPlayer.log((e.getMessage() == null ? e.getClass().getName() : e.getMessage()), Level.ERROR);
             }
-        }));
-        addRenderableWidget(new Button(x, height - 30, size, 20, CommonComponents.GUI_BACK, (e) -> onClose()));
+        }).setPosition(x, 115).setSize(size, 20).build());
+        addRenderableWidget(new ButtonBuilder(CommonComponents.GUI_BACK, (e) -> onClose()).setPosition(x, height - 30).setSize(size, 20).build());
     }
 
     private ConfigureScrolWidget scroller;
@@ -97,7 +97,7 @@ public class WebPlaylistScreen extends Screen {
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f) {
         super.renderBackground(guiGraphics, i, j, f);
-        InterfaceUtils.renderLeftPanel(guiGraphics, 190, height);
+        guiGraphics.fill(0, 0, 190, height, Colors.BLACK_ALPHA);
     }
     List<AudioTrack> lastTracks = new ArrayList<>();
     @Override

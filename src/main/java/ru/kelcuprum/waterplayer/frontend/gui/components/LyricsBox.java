@@ -10,8 +10,8 @@ import ru.kelcuprum.alinlib.AlinLib;
 
 import java.util.List;
 
-import static ru.kelcuprum.alinlib.gui.InterfaceUtils.DEFAULT_HEIGHT;
-import static ru.kelcuprum.alinlib.gui.InterfaceUtils.DEFAULT_WIDTH;
+import static com.mojang.blaze3d.pipeline.MainTarget.DEFAULT_HEIGHT;
+import static ru.kelcuprum.alinlib.gui.GuiUtils.DEFAULT_WIDTH;
 
 public class LyricsBox extends AbstractWidget {
     protected Component lyrics;

@@ -14,12 +14,12 @@ import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.config.Localization;
-import ru.kelcuprum.alinlib.gui.InterfaceUtils;
+import ru.kelcuprum.alinlib.gui.Colors;
+import ru.kelcuprum.alinlib.gui.GuiUtils;
 import ru.kelcuprum.alinlib.gui.components.ConfigureScrolWidget;
-import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonWithIconBuilder;
-import ru.kelcuprum.alinlib.gui.components.buttons.ButtonSprite;
-import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
-import ru.kelcuprum.alinlib.gui.components.editbox.base.EditBoxString;
+import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
+import ru.kelcuprum.alinlib.gui.components.builder.editbox.EditBoxBuilder;
+import ru.kelcuprum.alinlib.gui.components.buttons.Button;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
@@ -31,7 +31,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Icons.*;
+import static ru.kelcuprum.alinlib.gui.Icons.*;
 
 public class PlaylistScreen extends Screen {
     private Playlist playlist;
@@ -45,7 +45,6 @@ public class PlaylistScreen extends Screen {
         this.playlistName = playlistName;
     }
 
-    private final InterfaceUtils.DesignType designType = InterfaceUtils.DesignType.FLAT;
     Path playlistFile;
     boolean isDeleted = false;
     boolean isCreatedLink = false;
@@ -75,17 +74,17 @@ public class PlaylistScreen extends Screen {
         int size = 180;
         addRenderableWidget(new TextBox(x, 15, size, 9, title, true));
 
-        addRenderableWidget(new EditBoxString(x, 40, size, 20, false, playlist.title, designType, Component.translatable("waterplayer.playlist.title"), (s) -> {
+        addRenderableWidget(new EditBoxBuilder(Component.translatable("waterplayer.playlist.title"), (s) -> {
             playlist.title = s;
             save();
-        }));
+        }).setSecret(false).setValue(playlist.title).setPosition(x, 40).setSize(size, 20).build());
 
-        addRenderableWidget(new EditBoxString(x, 65, size, 20, false, playlist.author, designType, Component.translatable("waterplayer.playlist.author"), (s) -> {
+        addRenderableWidget(new EditBoxBuilder(Component.translatable("waterplayer.playlist.author"), (s) -> {
             playlist.author = s;
             save();
-        }));
+        }).setSecret(false).setValue(playlist.author).setPosition(x, 65).setSize(size, 20).build());
         int y = 90;
-        upload = addRenderableWidget(new Button(x, y, size, 20, Component.translatable(isCreatedLink ? "waterplayer.playlist.copy_link" : "waterplayer.playlist.upload"), (e) -> {
+        upload = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable(isCreatedLink ? "waterplayer.playlist.copy_link" : "waterplayer.playlist.upload"), (e) -> {
             if (isCreatedLink) {
                 AlinLib.MINECRAFT.keyboardHandler.setClipboard(link);
                 WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.playlist.link_copied")).show(AlinLib.MINECRAFT.getToasts());
@@ -101,25 +100,34 @@ public class PlaylistScreen extends Screen {
                     WaterPlayer.log(ex.getMessage() == null ? e.getClass().getName() : ex.getMessage(), Level.ERROR);
                 }
             }
-        }).setActive(false));
+        }).setPosition(x, y).setSize(size, 20).setActive(false).build());
         upload.visible = false;
 
         desc = addRenderableWidget(new TextBox(x, y, size, 20, Localization.toText(String.format(WaterPlayer.localization.getLocalization("playlist.description"), playlistName)), true));
-        addRenderableWidget(new Button(x, height - 30, size - 75, 20, designType, CommonComponents.GUI_BACK, (e) -> onClose()));
-        addRenderableWidget(new ButtonSprite(x + size - 70, height - 30, 20, 20, designType, InterfaceUtils.getResourceLocation("waterplayer", "textures/player/play.png"), Localization.getText("waterplayer.playlist.play"), (e) -> {
+        addRenderableWidget(new ButtonBuilder(CommonComponents.GUI_BACK, (e) -> onClose()).setPosition(x, height-30).setSize(size - 75, 20).build());
+        addRenderableWidget(new ButtonBuilder(Localization.getText("waterplayer.playlist.play"), (e) -> {
             save();
             WaterPlayer.player.loadMusic(String.format("playlist:%s", playlistName), true);
             onClose();
-        }));
-        addRenderableWidget(new ButtonSprite(x + size - 45, height - 30, 20, 20, designType, InterfaceUtils.getResourceLocation("waterplayer", "textures/player/reset_queue.png"), Localization.getText("waterplayer.playlist.remove"), (e) -> {
+        })
+                .setIcon(GuiUtils.getResourceLocation("waterplayer", "textures/player/play.png"))
+                .setPosition(x + size - 70, height - 30).setSize(20, 20).build());
+        addRenderableWidget(new ButtonBuilder(Localization.getText("waterplayer.playlist.remove"), (e) -> {
             isDeleted = true;
             playlistFile.toFile().delete();
             onClose();
-        }));
-        addRenderableWidget(new ButtonSprite(x + size - 20, height - 30, 20, 20, designType, RESET, Localization.getText("waterplayer.playlist.reload"), (e) -> {
+        })
+                .setIcon(GuiUtils.getResourceLocation("waterplayer", "textures/player/reset_queue.png"))
+                .setPosition(x + size - 45, height - 30)
+                .setSize(20, 20)
+                .build());
+        addRenderableWidget(new ButtonBuilder(Localization.getText("waterplayer.playlist.reload"), (e) -> {
             save();
             rebuildWidgets();
-        }));
+        }).setIcon(RESET)
+                .setPosition(x + size - 20, height - 30)
+                .setSize(20, 20)
+                .build());
     }
 
     private ConfigureScrolWidget scroller;
@@ -143,16 +151,21 @@ public class PlaylistScreen extends Screen {
         for (JsonElement element : playlist.getUrlsJSON()) {
             String url = element.getAsString();
             int finalI = i;
-            widgets.add(new EditBoxString(x, -20, width - 200, 20, false, url, designType, Component.literal(String.format("%s. ", i + 1)), (s) -> {
+            widgets.add(new EditBoxBuilder(Component.literal(String.format("%s. ", i + 1)), (s) -> {
                 playlist.setUrl(s, finalI);
                 save();
-            }));
+            })
+                    .setSecret(false)
+                    .setValue(url)
+                    .setPosition(x, -20)
+                    .setSize(width - 200, 20)
+                    .build());
             i++;
         }
-        widgets.add(new ButtonWithIconBuilder(Component.translatable("waterplayer.playlist.add"), ADD, (e) -> {
+        widgets.add(new ButtonBuilder(Component.translatable("waterplayer.playlist.add"), (e) -> {
             playlist.urls.add("https://c418.bandcamp.com/track/strad");
             save();
-        }).setPosition(x, -20).setSize(width - 200, 20).build());
+        }).setIcon(ADD).setPosition(x, -20).setSize(width - 200, 20).build());
         addRenderableWidgets(widgets);
     }
 
@@ -176,7 +189,7 @@ public class PlaylistScreen extends Screen {
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f) {
         super.renderBackground(guiGraphics, i, j, f);
-        InterfaceUtils.renderLeftPanel(guiGraphics, 190, height);
+        guiGraphics.fill(0, 0, 190, height, Colors.BLACK_ALPHA);
     }
 
     @Override

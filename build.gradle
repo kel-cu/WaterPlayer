@@ -17,6 +17,7 @@ repositories {
     maven { url = "https://maven.meteordev.org/releases" }
     maven { url = "https://maven.lavalink.dev/releases" }
     maven { url = "https://maven.lavalink.dev/snapshots" }
+    maven { url = "https://maven.terraformersmc.com/releases" } // MODMENU
     ////
     maven { url = "https://repo.kelcuprum.ru/releases" }
     maven { url = "https://repo.kelcuprum.ru/snapshots" }
@@ -33,7 +34,7 @@ dependencies {
 
     // Fabric API, ModMenu, Cloth Config
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation "maven.modrinth:modmenu:${project.modmenu_version}"
+    modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
     //
     implementation shade("dev.arbjerg:lavaplayer:${project.lavaplayer}")
     implementation shade("dev.lavalink.youtube:v2:${project.youtube_source}")
@@ -41,6 +42,8 @@ dependencies {
     implementation shade("com.github.topi314.lavasrc:lavasrc-protocol:${project.lavasrc_protocol}")
     implementation shade("com.github.topi314.lavalyrics:lavalyrics:${project.lavalyrics}")
     modImplementation("ru.kelcuprum.alinlib:AlinLib-fabric:${project.alinlib}")
+
+    implementation("meteordevelopment:starscript:0.3.4")
 
     compileOnly 'org.projectlombok:lombok:1.18.26'
     annotationProcessor 'org.projectlombok:lombok:1.18.26'

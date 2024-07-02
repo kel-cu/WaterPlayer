@@ -70,6 +70,7 @@ public class WaterPlayer implements ClientModInitializer {
                 if(bind.key().consumeClick()) bind.onExecute().run();
             }
         });
+        TextureManagerEvent.INIT.register(TexturesHelper::loadTextures);
         ScreenEvents.KEY_PRESS.register((Screen screen, int code, int scan, int modifiers, CallbackInfoReturnable<Boolean> var5) -> {
             if(!WaterPlayer.config.getBoolean("ENABLE_KEYBINDS", false)) return;
             if(screen instanceof TitleScreen || screen instanceof PauseScreen || screen instanceof ControlScreen) {

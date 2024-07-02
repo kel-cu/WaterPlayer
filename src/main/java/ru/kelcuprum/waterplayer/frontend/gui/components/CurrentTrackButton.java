@@ -5,12 +5,13 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import ru.kelcuprum.alinlib.AlinLib;
-import ru.kelcuprum.alinlib.gui.InterfaceUtils;
-import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
+import ru.kelcuprum.alinlib.gui.Colors;
+import ru.kelcuprum.alinlib.gui.GuiUtils;
+import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
+import ru.kelcuprum.alinlib.gui.components.buttons.Button;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.TrackScreen;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
@@ -21,7 +22,7 @@ public class CurrentTrackButton extends Button {
     private final boolean isShort;
 
     public CurrentTrackButton(int x, int y, int width, boolean isShort, Screen screen) {
-        super(x, y, width, isShort ? 20 : 40, InterfaceUtils.DesignType.FLAT, Component.empty(), null);
+        super(new ButtonBuilder().setTitle(Component.empty()).setStyle(GuiUtils.getSelected()).setSize(width, isShort ? 20 : 40).setPosition(x, y));
         this.isShort = isShort;
         this.screen = screen;
     }
@@ -69,10 +70,10 @@ public class CurrentTrackButton extends Button {
 
             String time = track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : StarScript.getTimestamp(Music.getPosition(track)) + " / " + StarScript.getTimestamp(Music.getDuration(track));
 
-            int color = WaterPlayer.player.getAudioPlayer().isPaused() ? InterfaceUtils.Colors.CLOWNFISH : track.getInfo().isStream ? InterfaceUtils.Colors.GROUPIE : InterfaceUtils.Colors.SEADRIVE;
+            int color = WaterPlayer.player.getAudioPlayer().isPaused() ? Colors.CLOWNFISH : track.getInfo().isStream ? Colors.GROUPIE : Colors.SEADRIVE;
             //
             if (isShort) {
-                if (InterfaceUtils.isDoesNotFit(getMessage(), getWidth(), getHeight())) {
+                if (GuiUtils.isDoesNotFit(getMessage(), getWidth(), getHeight())) {
                     this.renderScrollingString(guiGraphics, AlinLib.MINECRAFT.font, 2, 0xFFFFFF);
                 } else {
                     guiGraphics.drawString(AlinLib.MINECRAFT.font, builder.toString(), getX() + (getHeight() - 8) / 2, getY() + (getHeight() - 8) / 2, 0xffffff);

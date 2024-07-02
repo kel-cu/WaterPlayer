@@ -4,7 +4,6 @@ import com.github.topi314.lavalyrics.lyrics.AudioLyrics;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -12,15 +11,15 @@ import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 import ru.kelcuprum.alinlib.AlinLib;
-import ru.kelcuprum.alinlib.config.Localization;
-import ru.kelcuprum.alinlib.gui.InterfaceUtils;
+import ru.kelcuprum.alinlib.gui.Colors;
+import ru.kelcuprum.alinlib.gui.GuiUtils;
+import ru.kelcuprum.alinlib.gui.Icons;
 import ru.kelcuprum.alinlib.gui.components.ConfigureScrolWidget;
-import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonSpriteBuilder;
-import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonWithIconBuilder;
-import ru.kelcuprum.alinlib.gui.components.builder.slider.SliderIntegerBuilder;
-import ru.kelcuprum.alinlib.gui.components.buttons.ButtonSprite;
-import ru.kelcuprum.alinlib.gui.components.buttons.base.Button;
-import ru.kelcuprum.alinlib.gui.components.editbox.base.EditBoxString;
+import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
+import ru.kelcuprum.alinlib.gui.components.builder.editbox.EditBoxBuilder;
+import ru.kelcuprum.alinlib.gui.components.builder.slider.SliderBuilder;
+import ru.kelcuprum.alinlib.gui.components.buttons.Button;
+import ru.kelcuprum.alinlib.gui.components.editbox.EditBox;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.gui.LyricsHelper;
@@ -35,14 +34,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
-import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Icons.LIST;
+import static ru.kelcuprum.alinlib.gui.Icons.LIST;
 
 public class ControlScreen extends Screen {
     private final Screen parent;
-    private final InterfaceUtils.DesignType designType = InterfaceUtils.DesignType.FLAT;
 
     public ControlScreen(Screen parent) {
-        super(Localization.getText("waterplayer.name"));
+        super(Component.translatable("waterplayer.name"));
         this.parent = parent;
     }
 
@@ -52,7 +50,7 @@ public class ControlScreen extends Screen {
         initList();
     }
 
-    protected EditBoxString request;
+    protected EditBox request;
     LyricsBox lyrics;
     public Button play;
     public Button repeat;
@@ -61,28 +59,36 @@ public class ControlScreen extends Screen {
     public void initPanel() {
         int x = 5;
         int size = 180;
-        addRenderableWidget(new TextBox(x, 15, size, 9, Localization.getText("waterplayer.control"), true));
-        request = new EditBoxString(x + 25, 40, size - 25, 20, designType, Localization.getText("waterplayer.load.url"));
+        addRenderableWidget(new TextBox(x, 15, size, 9, Component.translatable("waterplayer.control"), true));
+        request = (EditBox) new EditBoxBuilder(Component.translatable("waterplayer.load.url")).setSize(size-25, 20).setPosition(x+25, 40).build();
         request.setMaxLength(Integer.MAX_VALUE);
         request.setResponder((s) ->  query = s);
         request.setValue(query);
         addRenderableWidget(request);
-        addRenderableWidget(new ButtonSpriteBuilder(InterfaceUtils.Icons.RESET, (buttonSprite) -> request.setValue(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", "")))
-                .setSize(20, 20)
+        addRenderableWidget(new ButtonBuilder(Component.empty(), (buttonSprite) -> request.setValue(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", "")))
+                .setIcon(Icons.RESET)
                 .setTextureSize(20, 20)
+                .setSize(20, 20)
                 .setPosition(x, 40)
-                .setDesignType(designType).build());
-        ButtonSprite bws = new ButtonSprite(x, 65, 20, 20, InterfaceUtils.getResourceLocation("waterplayer", "textures/search.png"), Component.translatable("waterplayer.control.search"), (e) -> AlinLib.MINECRAFT.setScreen(new SearchScreen(this)));
+                .build());
+        Button bws = (Button) new ButtonBuilder(Component.translatable("waterplayer.control.search"), (e) -> AlinLib.MINECRAFT.setScreen(new SearchScreen(this)))
+                .setIcon(GuiUtils.getResourceLocation("waterplayer", "textures/search.png"))
+                .setTextureSize(20, 20)
+                .setPosition(x, 65).setSize(20, 20)
+                .build();
 //        bws.active = false;
         addRenderableWidget(bws);
-        this.load = addRenderableWidget(new Button(x+25, 65, size-25, 20, designType, Localization.getText("waterplayer.load.load"), (e) -> WaterPlayer.player.loadMusic(query, true)));
-        addRenderableWidget(new SliderIntegerBuilder(Component.translatable("waterplayer.load.volume"), (onPress) -> {
-            WaterPlayer.config.setNumber("CURRENT_MUSIC_VOLUME", onPress);
-            WaterPlayer.player.getAudioPlayer().setVolume(onPress);
+        this.load = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.load.load"), (e) -> WaterPlayer.player.loadMusic(query, true))
+                .setPosition(x+25, 65)
+                .setSize(size-25, 20).build());
+        addRenderableWidget(new SliderBuilder(Component.translatable("waterplayer.load.volume"), (onPress) -> {
+            WaterPlayer.config.setNumber("CURRENT_MUSIC_VOLUME", (int) (100*onPress));
+            WaterPlayer.player.getAudioPlayer().setVolume((int) (100*onPress));
         }).setMax(100).setMin(0).setDefaultValue(WaterPlayer.config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue())
+                .setValueType("%")
                 .setPosition(x, 90)
                 .setSize(size, 20)
-                .build().setTypeInteger("%"));
+                .build());
 
         //
 
@@ -91,59 +97,60 @@ public class ControlScreen extends Screen {
         addRenderableWidget(lyrics);
 
         //
-        addRenderableWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.playlists"), LIST, (e) -> AlinLib.MINECRAFT.setScreen(PlaylistsScreen.build(this)))
+        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.playlists"), (e) -> AlinLib.MINECRAFT.setScreen(PlaylistsScreen.build(this)))
+                .setIcon(LIST)
+                .setCentered(false)
                 .setSize(size, 20).setPosition(x, height-50)
-                .setCentered(false).build());
-        this.play = addRenderableWidget(new ButtonSpriteBuilder(InterfaceUtils.getResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"), (e) -> {
+                .build());
+        this.play = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control." + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause")), (e) -> {
             WaterPlayer.player.getAudioPlayer().setPaused(!WaterPlayer.player.getAudioPlayer().isPaused());
             e.setMessage(Component.translatable("waterplayer.control." + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause")));
-            e.setIcon(InterfaceUtils.getResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"));
+            ((ButtonBuilder)e.builder).setIcon(GuiUtils.getResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"));
         })
-                .setTitle(Component.translatable("waterplayer.control." + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause")))
-                .setSize(20, 20)
+                .setIcon(GuiUtils.getResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"))
                 .setTextureSize(20, 20)
-                .setPosition(x, height - 25)
-                .setDesignType(designType).build());
-        this.repeat = addRenderableWidget(new ButtonSpriteBuilder(WaterPlayer.player.getTrackScheduler().getRepeatIcon(), (e) -> {
+                .setSize(20, 20)
+                .setPosition(x, height - 25).build());
+        this.repeat = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control.repeat"), (e) -> {
             WaterPlayer.player.getTrackScheduler().changeRepeatStatus();
-            e.setIcon(WaterPlayer.player.getTrackScheduler().getRepeatIcon());
+            ((ButtonBuilder)e.builder).setIcon(WaterPlayer.player.getTrackScheduler().getRepeatIcon());
         })
-                .setTitle(Component.translatable("waterplayer.control.repeat"))
-                .setSize(20, 20)
+                .setIcon(WaterPlayer.player.getTrackScheduler().getRepeatIcon())
                 .setTextureSize(20, 20)
-                .setPosition(x + 100, height - 25)
-                .setDesignType(designType).build());
+                .setSize(20, 20)
+                .setPosition(x + 100, height - 25).build());
 
-        addRenderableWidget(new ButtonSpriteBuilder(InterfaceUtils.getResourceLocation("waterplayer", "textures/player/skip.png"), (e) -> {
+        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control.skip"), (e) -> {
             if (WaterPlayer.player.getTrackScheduler().queue.isEmpty() && WaterPlayer.player.getAudioPlayer().getPlayingTrack() == null)
                 return;
             WaterPlayer.player.getTrackScheduler().nextTrack();
         })
-                .setTitle(Component.translatable("waterplayer.control.skip"))
-                .setSize(20, 20)
+                .setIcon(GuiUtils.getResourceLocation("waterplayer", "textures/player/skip.png"))
                 .setTextureSize(20, 20)
+                .setSize(20, 20)
                 .setPosition(x + 25, height - 25)
-                .setDesignType(designType).build());
+                .build());
 
-        addRenderableWidget(new ButtonSpriteBuilder(InterfaceUtils.getResourceLocation("waterplayer", "textures/player/shuffle.png"), (e) -> {
+        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control.shuffle"), (e) -> {
             if (!WaterPlayer.player.getTrackScheduler().queue.isEmpty()) {
                 WaterPlayer.player.getTrackScheduler().shuffle();
                 rebuildWidgetsList();
             }
         })
-                .setTitle(Component.translatable("waterplayer.control.shuffle"))
-                .setSize(20, 20)
+                .setIcon(GuiUtils.getResourceLocation("waterplayer", "textures/player/shuffle.png"))
                 .setTextureSize(20, 20)
+                .setSize(20, 20)
                 .setPosition(x + 50, height - 25)
-                .setDesignType(designType).build());
+                .build());
 
-        addRenderableWidget(new ButtonSpriteBuilder(InterfaceUtils.getResourceLocation("waterplayer", "textures/player/reset_queue.png"), (e) -> WaterPlayer.player.getTrackScheduler().queue.clear())
-                .setTitle(Component.translatable("waterplayer.control.reset_queue"))
-                .setSize(20, 20)
+        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control.reset_queue"), (e) -> WaterPlayer.player.getTrackScheduler().queue.clear())
+                .setIcon(GuiUtils.getResourceLocation("waterplayer", "textures/player/reset_queue.png"))
                 .setTextureSize(20, 20)
+                .setSize(20, 20)
                 .setPosition(x + 75, height - 25)
-                .setDesignType(designType).build());
-        addRenderableWidget(new Button(x + 125, height - 25, size - 125, 20, designType, CommonComponents.GUI_CANCEL, (e) -> onClose()));
+                .build());
+        addRenderableWidget(new ButtonBuilder(CommonComponents.GUI_CANCEL, (e) -> onClose())
+                .setPosition(x+125, height-25).setSize(size-125, 20).build());
     }
 
     private ConfigureScrolWidget scroller;
@@ -197,7 +204,7 @@ public class ControlScreen extends Screen {
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f) {
         super.renderBackground(guiGraphics, i, j, f);
-        InterfaceUtils.renderLeftPanel(guiGraphics, 190, height);
+        guiGraphics.fill(0,0 , 190, height, Colors.BLACK_ALPHA);
     }
 
     int lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.size();

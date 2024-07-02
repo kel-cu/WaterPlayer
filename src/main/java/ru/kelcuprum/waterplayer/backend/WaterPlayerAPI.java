@@ -20,7 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Icons.DONT;
+import static ru.kelcuprum.alinlib.gui.Icons.DONT;
 
 public class WaterPlayerAPI {
     public static Config config = new Config(new JsonObject());

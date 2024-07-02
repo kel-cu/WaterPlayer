@@ -3,7 +3,7 @@ package ru.kelcuprum.waterplayer.frontend.gui.screens.search;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import ru.kelcuprum.alinlib.gui.InterfaceUtils;
+import ru.kelcuprum.alinlib.gui.GuiUtils;
 
 public class SeaDriveScreen extends Screen {
     protected final Screen parent;
@@ -26,7 +26,7 @@ public class SeaDriveScreen extends Screen {
 
         guiGraphics.fill(0, 0, width, 37, 0xFF90B763);
         guiGraphics.fill(0, 39, width, 41, 0xFF90B763);
-        guiGraphics.blitSprite(InterfaceUtils.getResourceLocation("waterplayer", "search"), seaDrivePos, (int) (height*0.55)-seaDriveSize/2, seaDriveSize, seaDriveSize);
+        guiGraphics.blitSprite(GuiUtils.getResourceLocation("waterplayer", "search"), seaDrivePos, (int) (height*0.55)-seaDriveSize/2, seaDriveSize, seaDriveSize);
     }
 
     @Override

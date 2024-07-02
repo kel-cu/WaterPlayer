@@ -12,7 +12,7 @@ import net.minecraft.util.GsonHelper;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Async;
 import ru.kelcuprum.alinlib.AlinLib;
-import ru.kelcuprum.alinlib.gui.InterfaceUtils;
+import ru.kelcuprum.alinlib.gui.GuiUtils;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 
 import javax.imageio.ImageIO;
@@ -39,9 +39,9 @@ public class TexturesHelper {
             if (!urls.getOrDefault(id, false)) {
                 urls.put(id, true);
                 String finalId = id;
-                new Thread(() -> registerTexture(url, finalId, AlinLib.MINECRAFT.getTextureManager(), InterfaceUtils.getResourceLocation("waterplayer", finalId))).start();
+                new Thread(() -> registerTexture(url, finalId, AlinLib.MINECRAFT.getTextureManager(), GuiUtils.getResourceLocation("waterplayer", finalId))).start();
             }
-            return InterfaceUtils.getResourceLocation("waterplayer", "textures/no_icon.png");
+            return GuiUtils.getResourceLocation("waterplayer", "textures/no_icon.png");
         }
     }
 
@@ -77,7 +77,7 @@ public class TexturesHelper {
                 }
             } catch (Exception e) {
                 WaterPlayer.log("Error loading image from URL: " + url + " - " + e.getMessage());
-                resourceLocationMap.put(id, InterfaceUtils.getResourceLocation("waterplayer", "textures/no_icon.png"));
+                resourceLocationMap.put(id, GuiUtils.getResourceLocation("waterplayer", "textures/no_icon.png"));
                 return;
             }
             texture = new DynamicTexture(image);
@@ -107,7 +107,7 @@ public class TexturesHelper {
         loadMap();
         for(JsonElement json : map){
             JsonObject data = json.getAsJsonObject();
-            ResourceLocation l = InterfaceUtils.getResourceLocation("waterplayer", data.get("id").getAsString());
+            ResourceLocation l = GuiUtils.getResourceLocation("waterplayer", data.get("id").getAsString());
             registerTexture(data.get("url").getAsString(), data.get("id").getAsString(), textureManager, l);
         }
     }

@@ -19,7 +19,7 @@ import ru.kelcuprum.waterplayer.frontend.localization.Music;
 
 import java.util.List;
 
-import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Colors.*;
+import static ru.kelcuprum.alinlib.gui.Colors.*;
 
 public class OverlayHandler implements GuiRenderEvents, ClientTickEvents.StartTick, ScreenEvents.ScreenRender {
     private final List<FormattedCharSequence> texts = new ObjectArrayList<>();

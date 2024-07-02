@@ -24,7 +24,6 @@
       "ru.kelcuprum.waterplayer.frontend.gui.screens.ModMenuIntegration"
     ]
   },
-  "mixins": [ "waterplayer.mixin.json" ],
   "depends": {
     "fabricloader": "*",
     "fabric": "*",

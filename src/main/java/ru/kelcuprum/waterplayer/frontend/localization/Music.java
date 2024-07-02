@@ -3,7 +3,7 @@ package ru.kelcuprum.waterplayer.frontend.localization;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import ru.kelcuprum.alinlib.gui.InterfaceUtils;
+import ru.kelcuprum.alinlib.gui.GuiUtils;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.gui.TexturesHelper;
 
@@ -61,10 +61,10 @@ public class Music {
     }
 
     public static ResourceLocation getThumbnail(){
-        return trackIsNull() ? InterfaceUtils.getResourceLocation("waterplayer", "textures/no_icon.png") : getThumbnail(WaterPlayer.player.getAudioPlayer().getPlayingTrack());
+        return trackIsNull() ? GuiUtils.getResourceLocation("waterplayer", "textures/no_icon.png") : getThumbnail(WaterPlayer.player.getAudioPlayer().getPlayingTrack());
     }
     public static ResourceLocation getThumbnail(AudioTrack info){
-        return trackIsNull(info) ? InterfaceUtils.getResourceLocation("waterplayer", "textures/no_icon.png") : info.getInfo().artworkUrl != null ? TexturesHelper.getTexture(info.getInfo().artworkUrl, (info.getSourceManager().getSourceName() + "_" + info.getInfo().identifier)) : Music.isFile(info) ? InterfaceUtils.getResourceLocation("waterplayer", "textures/file_icon.png") : InterfaceUtils.getResourceLocation("waterplayer", "textures/no_icon.png");
+        return trackIsNull(info) ? GuiUtils.getResourceLocation("waterplayer", "textures/no_icon.png") : info.getInfo().artworkUrl != null ? TexturesHelper.getTexture(info.getInfo().artworkUrl, (info.getSourceManager().getSourceName() + "_" + info.getInfo().identifier)) : Music.isFile(info) ? GuiUtils.getResourceLocation("waterplayer", "textures/file_icon.png") : GuiUtils.getResourceLocation("waterplayer", "textures/no_icon.png");
     }
 
     public static boolean isFile(){

@@ -6,9 +6,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.GsonHelper;
 import org.apache.logging.log4j.Level;
 import ru.kelcuprum.alinlib.AlinLib;
-import ru.kelcuprum.alinlib.gui.InterfaceUtils;
-import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonWTLBuilder;
-import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonWithIconBuilder;
+import ru.kelcuprum.alinlib.gui.GuiUtils;
+import ru.kelcuprum.alinlib.gui.Icons;
+import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.alinlib.gui.screens.ConfigScreenBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
@@ -21,8 +21,9 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.Objects;
 
-import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Icons.*;
-import static ru.kelcuprum.alinlib.gui.InterfaceUtils.Icons.LIST;
+import static ru.kelcuprum.alinlib.gui.Icons.OPTIONS;
+import static ru.kelcuprum.alinlib.gui.Icons.WARNING;
+import static ru.kelcuprum.alinlib.gui.Icons.*;
 
 public class PlaylistsScreen {
     static int assetsSize = 0;
@@ -48,11 +49,11 @@ public class PlaylistsScreen {
                         if(isLoaded && (assetsSize != size)) AlinLib.MINECRAFT.setScreen(PlaylistsScreen.build(parent));
                     }
                 })
-                .addPanelWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.config"), OPTIONS, (e) -> AlinLib.MINECRAFT.setScreen(MainConfigsScreen.build(parent))).setCentered(false).build())
-                .addPanelWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.config.localization"), LIST, (e) -> AlinLib.MINECRAFT.setScreen(LocalizationConfigsScreen.build(parent))).setCentered(false).build())
-                .addPanelWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.secret"), WARNING, (e) -> AlinLib.MINECRAFT.setScreen(SecretConfigsScreen.build(parent))).setCentered(false).build())
-                .addPanelWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.playlists"), LIST, (e) -> AlinLib.MINECRAFT.setScreen(PlaylistsScreen.build(parent))).setCentered(false).build())
-                .addPanelWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.play"), InterfaceUtils.getResourceLocation("waterplayer", "textures/player/play.png"), (e) -> AlinLib.MINECRAFT.setScreen(new ControlScreen(SecretConfigsScreen.build(parent)))).setCentered(false).build())
+                .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.config"), (e) -> AlinLib.MINECRAFT.setScreen(MainConfigsScreen.build(parent))).setIcon(OPTIONS).setCentered(false).build())
+                .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.config.localization"), (e) -> AlinLib.MINECRAFT.setScreen(LocalizationConfigsScreen.build(parent))).setIcon(Icons.LIST).setCentered(false).build())
+                .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.secret"), (e) -> AlinLib.MINECRAFT.setScreen(SecretConfigsScreen.build(parent))).setIcon(WARNING).setCentered(false).build())
+                .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.playlists"), (e) -> AlinLib.MINECRAFT.setScreen(PlaylistsScreen.build(parent))).setIcon(Icons.LIST).setCentered(false).build())
+                .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.play"), (e) -> AlinLib.MINECRAFT.setScreen(new ControlScreen(SecretConfigsScreen.build(parent)))).setIcon(GuiUtils.getResourceLocation("waterplayer", "textures/player/play.png")).setCentered(false).build())
                 //
                 .addWidget(new TextBox(140, 5, Component.translatable("waterplayer.playlists"), true));
         if(playlists.exists() && playlists.isDirectory()){
@@ -61,7 +62,7 @@ public class PlaylistsScreen {
                     try {
                         Playlist playlistObject = new Playlist(playlist.toPath());
                         assetsSize++;
-                        builder.addWidget(new ButtonWTLBuilder(Component.translatable("waterplayer.playlists.value", playlistObject.title, playlistObject.author), Component.literal(playlistObject.fileName), (s) -> AlinLib.MINECRAFT.setScreen(new PlaylistScreen(PlaylistsScreen.build(parent), playlistObject.fileName))).build());
+                        builder.addWidget(new ButtonBuilder(Component.translatable("waterplayer.playlists.value", playlistObject.title, playlistObject.author), Component.literal(playlistObject.fileName), (s) -> AlinLib.MINECRAFT.setScreen(new PlaylistScreen(PlaylistsScreen.build(parent), playlistObject.fileName))).build());
                     } catch (Exception e){
                         WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);
                     }
@@ -69,7 +70,7 @@ public class PlaylistsScreen {
             }
         }
         isLoaded = true;
-        builder.addWidget(new ButtonWithIconBuilder(Component.translatable("waterplayer.playlist.create"), ADD, (s) -> AlinLib.MINECRAFT.setScreen(new CreatePlaylistScreen(PlaylistsScreen.build(parent)))).build());
+        builder.addWidget(new ButtonBuilder(Component.translatable("waterplayer.playlist.create"), (s) -> AlinLib.MINECRAFT.setScreen(new CreatePlaylistScreen(PlaylistsScreen.build(parent)))).setIcon(ADD).build());
         return builder.build();
     }
 }
