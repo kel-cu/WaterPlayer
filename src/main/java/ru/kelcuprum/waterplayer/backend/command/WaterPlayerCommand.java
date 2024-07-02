@@ -12,7 +12,6 @@ import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.playlist.PlaylistScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.config.MainConfigsScreen;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
-import ru.kelcuprum.waterplayer.frontend.localization.StarScript;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +21,7 @@ import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static java.lang.Integer.parseInt;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
+import static ru.kelcuprum.waterplayer.WaterPlayer.getTimestamp;
 
 public class WaterPlayerCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandBuildContext registryAccess) {
@@ -100,7 +100,7 @@ public class WaterPlayerCommand {
             if (Music.isAuthorNull(track)) builder.append(Music.getTitle(track)).append(" ");
             else
                 builder.append("«").append(Music.getAuthor(track)).append("» ").append(Music.getTitle(track)).append(" ");
-            builder.append(Music.getIsLive(track) ? WaterPlayer.localization.getLocalization("format.live") : StarScript.getTimestamp(Music.getDuration(track)));
+            builder.append(Music.getIsLive(track) ? WaterPlayer.localization.getLocalization("format.live") : getTimestamp(Music.getDuration(track)));
             list.add(builder.toString());
             pos++;
         }

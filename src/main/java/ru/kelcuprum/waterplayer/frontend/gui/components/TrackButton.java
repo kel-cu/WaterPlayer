@@ -13,7 +13,8 @@ import ru.kelcuprum.alinlib.gui.components.buttons.Button;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.TrackScreen;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
-import ru.kelcuprum.waterplayer.frontend.localization.StarScript;
+
+import static ru.kelcuprum.waterplayer.WaterPlayer.getTimestamp;
 
 public class TrackButton extends Button {
     protected AudioTrack track;
@@ -22,7 +23,7 @@ public class TrackButton extends Button {
         super(new ButtonBuilder().setOnPress((s) -> AlinLib.MINECRAFT.setScreen(new TrackScreen(screen, track))).setTitle(Component.empty()).setStyle(GuiUtils.getSelected()).setSize(width, isShort ? 20 : 40).setPosition(x, y));
         StringBuilder builder = new StringBuilder();
         if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
-        builder.append(Music.getTitle(track)).append(" ").append(StarScript.getTimestamp(Music.getDuration(track)));
+        builder.append(Music.getTitle(track)).append(" ").append(getTimestamp(Music.getDuration(track)));
         setMessage(Component.literal(builder.toString()));
         this.isShort = isShort;
         this.track = track;
@@ -33,7 +34,7 @@ public class TrackButton extends Button {
             StringBuilder builder = new StringBuilder();
             if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
             builder.append(Music.getTitle(track));
-            String time = track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : StarScript.getTimestamp(Music.getDuration(track));
+            String time = track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : getTimestamp(Music.getDuration(track));
             if (isShort) {
                 if(GuiUtils.isDoesNotFit(getMessage(), getWidth(), getHeight())){
                     this.renderScrollingString(guiGraphics, AlinLib.MINECRAFT.font, 2, 0xFFFFFF);

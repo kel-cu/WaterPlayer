@@ -17,8 +17,12 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
+import org.meteordev.starscript.Starscript;
+import org.meteordev.starscript.value.Value;
+import org.meteordev.starscript.value.ValueMap;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import ru.kelcuprum.alinlib.AlinLib;
+import ru.kelcuprum.alinlib.api.events.alinlib.LocalizationEvents;
 import ru.kelcuprum.alinlib.api.events.client.*;
 import ru.kelcuprum.alinlib.config.Config;
 import ru.kelcuprum.alinlib.config.Localization;
@@ -29,7 +33,7 @@ import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
 import ru.kelcuprum.waterplayer.backend.command.WaterPlayerCommand;
 import ru.kelcuprum.waterplayer.frontend.gui.TexturesHelper;
 import ru.kelcuprum.waterplayer.frontend.gui.overlays.SubtitlesHandler;
-import ru.kelcuprum.waterplayer.frontend.localization.StarScript;
+import ru.kelcuprum.waterplayer.frontend.localization.Music;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.overlays.OverlayHandler;
 
@@ -46,8 +50,6 @@ public class WaterPlayer implements ClientModInitializer {
     public void onInitializeClient() {
         log("Hello, world! UwU");
         WaterPlayerAPI.loadConfig();
-        StarScript.init();
-        localization.setParser((s) -> StarScript.run(StarScript.compile(s)));
         player = new MusicPlayer();
         WaterPlayer.registerBinds();
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
@@ -71,6 +73,30 @@ public class WaterPlayer implements ClientModInitializer {
             }
         });
         TextureManagerEvent.INIT.register(TexturesHelper::loadTextures);
+        LocalizationEvents.DEFAULT_PARSER_INIT.register((starScript -> {
+            Starscript ss = starScript.ss;
+            ss.set("waterplayer", new ValueMap()
+                    .set("player", new ValueMap()
+                        .set("volume", () -> Value.number(Music.getVolume()))
+                        .set("speaker_icon", () -> Value.string(Music.getSpeakerVolume()))
+                        .set("repeat_icon", () -> Value.string(Music.getRepeatState()))
+                        .set("pause_icon", () -> Value.string(Music.getPauseState()))
+                    ).set("format", new ValueMap()
+                            .set("time", () -> Value.string(Music.getIsLive() ? WaterPlayer.localization.getLocalization("format.live", true)
+                                    : WaterPlayer.localization.getLocalization("format.time", true)))
+                            .set("title", () -> Value.string(WaterPlayer.localization.getLocalization("format.title", true)))
+                            .set("author", () -> Value.string(WaterPlayer.localization.getLocalization("format.author", true)))
+                    ).set("track", new ValueMap()
+                            .set("title", () -> Value.string(Music.getTitle()))
+                            .set("author", () -> Value.string(Music.getAuthor()))
+                            .set("time", new ValueMap()
+                                    .set("position", () -> Value.string(getTimestamp(Music.getPosition())))
+                                    .set("duration", () -> Value.string(getTimestamp(Music.getDuration())))
+                            )
+                    )
+            );
+        }));
+
         ScreenEvents.KEY_PRESS.register((Screen screen, int code, int scan, int modifiers, CallbackInfoReturnable<Boolean> var5) -> {
             if(!WaterPlayer.config.getBoolean("ENABLE_KEYBINDS", false)) return;
             if(screen instanceof TitleScreen || screen instanceof PauseScreen || screen instanceof ControlScreen) {
@@ -84,7 +110,17 @@ public class WaterPlayer implements ClientModInitializer {
             }
         });
     }
+    public static String getTimestamp(long milliseconds)
+    {
+        int seconds = (int) (milliseconds / 1000) % 60 ;
+        int minutes = (int) ((milliseconds / (1000 * 60)) % 60);
+        int hours = (int) ((milliseconds / (1000 * 60 * 60)) % 24);
 
+        if (hours > 0)
+            return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        else
+            return String.format("%02d:%02d", minutes, seconds);
+    }
     public static ToastBuilder getToast() {
         return new ToastBuilder().setIcon(Items.MUSIC_DISC_STRAD).setTitle(Component.translatable("waterplayer.name"));
     }

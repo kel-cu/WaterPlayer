@@ -67,7 +67,7 @@
   "waterplayer.load.add": "Ваш запрос отправлен",
   "waterplayer.load.add.blank": "Пустой запрос!",
 
-  "waterplayer.format.time": "{track.time.position} / {track.time.duration}",
+  "waterplayer.format.time": "{waterplayer.track.time.position} / {waterplayer.track.time.duration}",
   "waterplayer.format.live": "(Эфир)",
 
   "waterplayer.config": "Конфигурация",

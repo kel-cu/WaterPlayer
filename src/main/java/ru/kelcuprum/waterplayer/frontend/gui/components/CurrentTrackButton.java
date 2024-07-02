@@ -15,7 +15,8 @@ import ru.kelcuprum.alinlib.gui.components.buttons.Button;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.TrackScreen;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
-import ru.kelcuprum.waterplayer.frontend.localization.StarScript;
+
+import static ru.kelcuprum.waterplayer.WaterPlayer.getTimestamp;
 
 public class CurrentTrackButton extends Button {
     protected Screen screen;
@@ -49,7 +50,7 @@ public class CurrentTrackButton extends Button {
             AudioTrack track = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
             StringBuilder builder = new StringBuilder();
             if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
-            builder.append(Music.getTitle(track)).append(" ").append(track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : StarScript.getTimestamp(Music.getPosition(track)) + " / " + StarScript.getTimestamp(Music.getDuration(track)));
+            builder.append(Music.getTitle(track)).append(" ").append(track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : getTimestamp(Music.getPosition(track)) + " / " + getTimestamp(Music.getDuration(track)));
             return Component.literal(builder.toString());
         } else return Component.translatable("waterplayer.command.now_playing.notPlaying");
     }
@@ -68,7 +69,7 @@ public class CurrentTrackButton extends Button {
             if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
             builder.append(Music.getTitle(track));
 
-            String time = track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : StarScript.getTimestamp(Music.getPosition(track)) + " / " + StarScript.getTimestamp(Music.getDuration(track));
+            String time = track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : getTimestamp(Music.getPosition(track)) + " / " + getTimestamp(Music.getDuration(track));
 
             int color = WaterPlayer.player.getAudioPlayer().isPaused() ? Colors.CLOWNFISH : track.getInfo().isStream ? Colors.GROUPIE : Colors.SEADRIVE;
             //

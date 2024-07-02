@@ -67,7 +67,7 @@
   "waterplayer.load.add": "Your request has been sent",
   "waterplayer.load.add.blank": "Empty request!",
 
-  "waterplayer.format.time": "{track.time.position} / {track.time.duration}",
+  "waterplayer.format.time": "{waterplayer.track.time.position} / {waterplayer.track.time.duration}",
   "waterplayer.format.live": "(Live)",
 
   "waterplayer.config": "Configuration",
