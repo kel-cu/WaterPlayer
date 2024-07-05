@@ -66,4 +66,9 @@ public class MainConfigsScreen {
                 )
                 .build();
     }
+    //if FORGE && MC >= 12002
+    //$$ public static Screen build(net.minecraft.client.Minecraft minecraft, Screen screen) {
+    //$$     return build(screen);
+    //$$ }
+    //endif
 }

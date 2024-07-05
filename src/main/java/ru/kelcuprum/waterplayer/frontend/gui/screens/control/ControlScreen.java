@@ -202,10 +202,23 @@ public class ControlScreen extends Screen {
     }
 
     @Override
+    //#if MC >=12002
     public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f) {
         super.renderBackground(guiGraphics, i, j, f);
-        guiGraphics.fill(0,0 , 190, height, Colors.BLACK_ALPHA);
+        //#elseif MC < 12002
+        //$$ public void renderBackground(GuiGraphics guiGraphics) {
+        //$$         super.renderBackground(guiGraphics);
+        //#endif
+        guiGraphics.fill(0, 0, 190, height, Colors.BLACK_ALPHA);
     }
+
+    //#if MC < 12002
+    //$$ @Override
+    //$$ public void render(GuiGraphics guiGraphics, int i, int j, float f) {
+    //$$     renderBackground(guiGraphics);
+    //$$     super.render(guiGraphics, i, j, f);
+    //$$ }
+    //#endif
 
     int lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.size();
     AudioTrack lastTrack = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
@@ -276,6 +289,8 @@ public class ControlScreen extends Screen {
     }
 
     @Override
+
+    //#if MC >=12002
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
         boolean scr = super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
         if ((mouseX >= 5 && mouseX <= 185) && (mouseY >= 115 && mouseY <= height - 30)) {
@@ -285,6 +300,17 @@ public class ControlScreen extends Screen {
         }
         return scr;
     }
+    //#elseif MC < 12002
+    //$$ public boolean mouseScrolled(double mouseX, double mouseY, double scrollY) {
+    //$$     boolean scr = super.mouseScrolled(mouseX, mouseY, scrollY);
+    //$$     if ((mouseX >= 5 && mouseX <= 185) && (mouseY >= 115 && mouseY <= height - 30)) {
+    //$$         scr = lyrics.mouseScrolled(mouseX, mouseY, scrollY);
+    //$$     }else if (!scr && scroller != null && mouseX > 190) {
+    //$$         scr = scroller.mouseScrolled(mouseX, mouseY, scrollY);
+    //$$     }
+    //$$     return scr;
+    //$$ }
+    //#endif
 
     public void onClose() {
         assert this.minecraft != null;

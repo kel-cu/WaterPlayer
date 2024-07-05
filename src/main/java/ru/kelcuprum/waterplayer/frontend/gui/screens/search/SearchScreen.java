@@ -42,14 +42,22 @@ public class SearchScreen extends Screen {
     }
 
     @Override
+    //#if MC >= 12002
     public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f) {
         super.renderBackground(guiGraphics, i, j, f);
+        //#elseif MC < 12002
+        //$$ public void renderBackground(GuiGraphics guiGraphics) {
+        //$$         super.renderBackground(guiGraphics);
+        //#endif
         guiGraphics.fill(0, 0, 190, height, Colors.BLACK_ALPHA);
     }
 
     @Override
     public void render(GuiGraphics guiGraphics, int i, int j, float f) {
         try {
+            //#if MC < 12002
+            //$$ renderBackground(guiGraphics);
+            //#endif
             super.render(guiGraphics, i, j, f);
         } catch (Exception e) {
             WaterPlayer.log("Mojang, иди нахуй со своим "+ (e.getLocalizedMessage() == null ? e.getClass().getName() : e.getLocalizedMessage()));
@@ -198,6 +206,7 @@ public class SearchScreen extends Screen {
     }
 
     @Override
+    //#if MC >=12002
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
         boolean scr = super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
         if (!scr && scroller != null) {
@@ -205,6 +214,15 @@ public class SearchScreen extends Screen {
         }
         return scr;
     }
+    //#elseif MC < 12002
+    //$$ public boolean mouseScrolled(double mouseX, double mouseY, double scrollY) {
+    //$$     boolean scr = super.mouseScrolled(mouseX, mouseY, scrollY);
+    //$$     if (!scr && scroller != null) {
+    //$$         scr = scroller.mouseScrolled(mouseX, mouseY, scrollY);
+    //$$     }
+    //$$     return scr;
+    //$$ }
+    //#endif
 
     @Override
     public boolean keyPressed(int i, int j, int k) {

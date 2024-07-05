@@ -1,8 +1,5 @@
 package ru.kelcuprum.waterplayer;
 
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.Util;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -22,6 +19,7 @@ import org.meteordev.starscript.value.Value;
 import org.meteordev.starscript.value.ValueMap;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import ru.kelcuprum.alinlib.AlinLib;
+import ru.kelcuprum.alinlib.api.KeyMappingHelper;
 import ru.kelcuprum.alinlib.api.events.alinlib.LocalizationEvents;
 import ru.kelcuprum.alinlib.api.events.client.*;
 import ru.kelcuprum.alinlib.config.Config;
@@ -30,7 +28,6 @@ import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
 import ru.kelcuprum.waterplayer.backend.KeyBind;
 import ru.kelcuprum.waterplayer.backend.MusicPlayer;
 import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
-import ru.kelcuprum.waterplayer.backend.command.WaterPlayerCommand;
 import ru.kelcuprum.waterplayer.frontend.gui.TexturesHelper;
 import ru.kelcuprum.waterplayer.frontend.gui.overlays.SubtitlesHandler;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
@@ -39,15 +36,23 @@ import ru.kelcuprum.waterplayer.frontend.gui.overlays.OverlayHandler;
 
 import java.util.ArrayList;
 import java.util.List;
-
-public class WaterPlayer implements ClientModInitializer {
+//#if FORGE
+//$$ @net.minecraftforge.fml.common.Mod("waterplayer")
+//$$ @net.minecraftforge.fml.common.Mod.EventBusSubscriber(bus = net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus.MOD, value = net.minecraftforge.api.distmarker.Dist.CLIENT)
+//#elseif NEOFORGE
+//$$ @net.neoforged.fml.common.Mod("waterplayer")
+//#endif
+public class WaterPlayer
+        //#if FABRIC
+        implements net.fabricmc.api.ClientModInitializer
+        //#endif
+{
     public static Config config = new Config("config/WaterPlayer/config.json");
     public static final Logger LOG = LogManager.getLogger("WaterPlayer");
     public static MusicPlayer player;
     public static Localization localization = new Localization("waterplayer", "config/WaterPlayer/lang");
 
-    @Override
-    public void onInitializeClient() {
+    public void init() {
         log("Hello, world! UwU");
         WaterPlayerAPI.loadConfig();
         player = new MusicPlayer();
@@ -66,7 +71,6 @@ public class WaterPlayer implements ClientModInitializer {
             player.getAudioPlayer().stopTrack();
             TexturesHelper.saveMap();
         });
-        ClientCommandRegistrationCallback.EVENT.register(WaterPlayerCommand::register);
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             for(KeyBind bind : keyBinds){
                 if(bind.key().consumeClick()) bind.onExecute().run();
@@ -110,8 +114,50 @@ public class WaterPlayer implements ClientModInitializer {
             }
         });
     }
-    public static String getTimestamp(long milliseconds)
-    {
+    
+    // Адское место ML
+
+    //#if FABRIC
+    @Override
+    public void onInitializeClient() {
+        init();
+        net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback.EVENT.register(ru.kelcuprum.waterplayer.backend.command.WaterPlayerCommand::register);
+    }
+    //#elseif FORGE
+    //$$  public WaterPlayer(){
+    //$$      init();
+    //$$      if (net.minecraftforge.fml.loading.FMLLoader.getDist() == net.minecraftforge.api.distmarker.Dist.CLIENT) {
+    //$$          registerScreen();
+    //$$      }
+    //$$  }
+    //#elseif NEOFORGE
+    //$$  public WaterPlayer(){
+    //$$      init();
+    //$$      if (net.neoforged.fml.loading.FMLLoader.getDist() == net.neoforged.api.distmarker.Dist.CLIENT) {
+    //$$          net.neoforged.fml.ModLoadingContext.get().registerExtensionPoint(
+    //$$                  net.neoforged.neoforge.client.gui.IConfigScreenFactory.class,
+    //$$                  () -> (minecraftClient, screen) -> ru.kelcuprum.waterplayer.frontend.gui.screens.config.MainConfigsScreen.build(screen));
+    //$$      }
+    //$$  }
+    //#endif
+
+    //#if FORGE && MC < 12002
+    //$$ public void registerScreen(){
+    //$$          net.minecraftforge.fml.ModLoadingContext.get().registerExtensionPoint(
+    //$$                  net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory.class,
+    //$$                  () -> new net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory((java.util.function.Function<net.minecraft.client.gui.screens.Screen, net.minecraft.client.gui.screens.Screen>) ru.kelcuprum.waterplayer.frontend.gui.screens.config.MainConfigsScreen::build));
+    //$$ }
+    //#elseif FORGE && MC >= 12002
+    //$$ public void registerScreen(){
+    //$$          net.minecraftforge.fml.ModLoadingContext.get().registerExtensionPoint(
+    //$$                  net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory.class,
+    //$$                  () -> new net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory(ru.kelcuprum.waterplayer.frontend.gui.screens.config.MainConfigsScreen::build));
+    //$$ }
+    //#endif
+
+    //
+    
+    public static String getTimestamp(long milliseconds) {
         int seconds = (int) (milliseconds / 1000) % 60 ;
         int minutes = (int) ((milliseconds / (1000 * 60)) % 60);
         int hours = (int) ((milliseconds / (1000 * 60 * 60)) % 24);
@@ -127,42 +173,42 @@ public class WaterPlayer implements ClientModInitializer {
     public static List<KeyBind> keyBinds = new ArrayList<>();
 
     public static void registerBinds() {
-        KeyMapping key1 = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        KeyMapping key1 = KeyMappingHelper.register(new KeyMapping(
                 "waterplayer.key.control",
                 GLFW.GLFW_KEY_ENTER, // The keycode of the key
                 "waterplayer.name"
         ));
-        KeyMapping key2 = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        KeyMapping key2 = KeyMappingHelper.register(new KeyMapping(
                 "waterplayer.key.pause",
                 GLFW.GLFW_KEY_P, // The keycode of the key
                 "waterplayer.name"
         ));
-        KeyMapping key3 = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        KeyMapping key3 = KeyMappingHelper.register(new KeyMapping(
                 "waterplayer.key.skip",
                 GLFW.GLFW_KEY_X, // The keycode of the key
                 "waterplayer.name"
         ));
-        KeyMapping key4 = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        KeyMapping key4 = KeyMappingHelper.register(new KeyMapping(
                 "waterplayer.key.reset",
                 GLFW.GLFW_KEY_DELETE, // The keycode of the key
                 "waterplayer.name"
         ));
-        KeyMapping key5 = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        KeyMapping key5 = KeyMappingHelper.register(new KeyMapping(
                 "waterplayer.key.shuffle",
                 GLFW.GLFW_KEY_PAGE_DOWN, // The keycode of the key
                 "waterplayer.name"
         ));
-        KeyMapping key6 = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        KeyMapping key6 = KeyMappingHelper.register(new KeyMapping(
                 "waterplayer.key.repeating",
                 GLFW.GLFW_KEY_PAGE_UP, // The keycode of the key
                 "waterplayer.name"
         ));
-        KeyMapping key7 = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        KeyMapping key7 = KeyMappingHelper.register(new KeyMapping(
                 "waterplayer.key.volume.up",
                 GLFW.GLFW_KEY_UP, // The keycode of the key
                 "waterplayer.name"
         ));
-        KeyMapping key8 = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        KeyMapping key8 = KeyMappingHelper.register(new KeyMapping(
                 "waterplayer.key.volume.down",
                 GLFW.GLFW_KEY_DOWN, // The keycode of the key
                 "waterplayer.name"

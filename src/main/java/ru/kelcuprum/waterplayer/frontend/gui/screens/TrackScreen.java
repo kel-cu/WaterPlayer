@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.Colors;
-import ru.kelcuprum.alinlib.gui.GuiUtils;
 import ru.kelcuprum.alinlib.gui.components.ConfigureScrolWidget;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
 import ru.kelcuprum.alinlib.gui.components.buttons.Button;
@@ -175,13 +174,21 @@ public class TrackScreen extends Screen {
 
     @Override
     public void render(GuiGraphics guiGraphics, int i, int j, float f) {
+        //#if MC < 12002
+        //$$ renderBackground(guiGraphics);
+        //#endif
         super.render(guiGraphics, i, j, f);
         guiGraphics.blit(Music.getThumbnail(track), x, height / 2 - 15 - iconSize, 0.0F, 0.0F, iconSize, iconSize, iconSize, iconSize);
     }
 
     @Override
+    //#if MC >= 12002
     public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f) {
         super.renderBackground(guiGraphics, i, j, f);
+        //#elseif MC < 12002
+        //$$ public void renderBackground(GuiGraphics guiGraphics) {
+        //$$         super.renderBackground(guiGraphics);
+        //#endif
         if (showLyrics || showPlaylist) guiGraphics.fill(0, 0, lyricsSize, height, Colors.BLACK_ALPHA);
     }
 
@@ -202,6 +209,7 @@ public class TrackScreen extends Screen {
     }
 
     @Override
+    //#if MC >= 12002
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
         boolean scr = super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
         if (showPlaylist) {
@@ -213,6 +221,19 @@ public class TrackScreen extends Screen {
         }
         return scr;
     }
+    //#elseif MC < 12002
+    //$$ public boolean mouseScrolled(double mouseX, double mouseY, double scrollY) {
+    //$$         boolean scr = super.mouseScrolled(mouseX, mouseY, scrollY);
+    //$$         if (showPlaylist) {
+    //$$             if (mouseX <= 200) scr = scroller_panel.mouseScrolled(mouseX, mouseY, scrollY);
+    //$$         } else if (showLyrics) {
+    //$$             if ((mouseX >= 5 && mouseX <= 195) && (mouseY >= 40 && mouseY <= height - 30)) {
+    //$$                 scr = lyricsBox.mouseScrolled(mouseX, mouseY, scrollY);
+    //$$             }
+    //$$         }
+    //$$         return scr;
+    //$$     }
+    //#endif
 
     public void onClose() {
         assert this.minecraft != null;
