@@ -59,13 +59,6 @@ remapJar {
     injectAccessWidener = true
 }
 
-def shadeExclusions = {
-    // Cannot just add these to the shade configuration because they'd be inherited by the compile configuration then
-    exclude group: 'org.slf4j'
-    exclude group: 'org.apache.httpcomponents'
-    exclude group: 'commons-io'
-}
-
 configurations {
     shade
     implementation.extendsFrom shade
@@ -82,11 +75,11 @@ dependencies {
     }
 
     implementation("meteordevelopment:starscript:0.3.4")
-    shade (implementation("dev.arbjerg:lavaplayer:${project.lavaplayer}"), shadeExclusions)
-    shade (implementation("dev.lavalink.youtube:v2:${project.youtube_source}"), shadeExclusions)
-    shade (implementation("com.github.topi314.lavasrc:lavasrc:${project.lavasrc}"), shadeExclusions)
-    shade (implementation("com.github.topi314.lavasrc:lavasrc-protocol:${project.lavasrc_protocol}"), shadeExclusions)
-    shade (implementation("com.github.topi314.lavalyrics:lavalyrics:${project.lavalyrics}"), shadeExclusions)
+    include (implementation("dev.arbjerg:lavaplayer:${project.lavaplayer}"))
+    include (implementation("dev.lavalink.youtube:v2:${project.youtube_source}"))
+    include (implementation("com.github.topi314.lavasrc:lavasrc:${project.lavasrc}"))
+    include (implementation("com.github.topi314.lavasrc:lavasrc-protocol:${project.lavasrc_protocol}"))
+    include (implementation("com.github.topi314.lavalyrics:lavalyrics:${project.lavalyrics}"))
 
     if (mod_brand == 'fabric') {
         modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
