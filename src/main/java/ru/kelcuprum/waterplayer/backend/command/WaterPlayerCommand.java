@@ -1,3 +1,4 @@
+//#if FABRIC
 package ru.kelcuprum.waterplayer.backend.command;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -115,3 +116,4 @@ public class WaterPlayerCommand {
         }
     }
 }
+//#endif

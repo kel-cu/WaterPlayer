@@ -1,3 +1,4 @@
+//#if FABRIC
 package ru.kelcuprum.waterplayer.frontend.gui.screens;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
@@ -11,3 +12,4 @@ public class ModMenuIntegration implements ModMenuApi {
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() { return MainConfigsScreen::build; }
 }
+//#endif

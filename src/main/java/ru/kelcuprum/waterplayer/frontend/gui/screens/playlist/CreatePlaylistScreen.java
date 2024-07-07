@@ -19,6 +19,13 @@ public class CreatePlaylistScreen extends Screen {
         super(Component.translatable("waterplayer.playlist.create"));
         this.parent = parent;
     }
+    //#if MC < 12002
+    //$$ @Override
+    //$$ public void render(net.minecraft.client.gui.GuiGraphics guiGraphics, int i, int j, float f) {
+    //$$     renderBackground(guiGraphics);
+    //$$     super.render(guiGraphics, i, j, f);
+    //$$ }
+    //#endif
 
     @Override
     protected void init() {
