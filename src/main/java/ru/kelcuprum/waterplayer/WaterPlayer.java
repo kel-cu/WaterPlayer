@@ -1,5 +1,7 @@
 package ru.kelcuprum.waterplayer;
 
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.Util;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -20,6 +22,7 @@ import org.meteordev.starscript.value.ValueMap;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.api.KeyMappingHelper;
+import ru.kelcuprum.alinlib.api.events.alinlib.AlinLibEvents;
 import ru.kelcuprum.alinlib.api.events.alinlib.LocalizationEvents;
 import ru.kelcuprum.alinlib.api.events.client.*;
 import ru.kelcuprum.alinlib.config.Config;
@@ -36,27 +39,20 @@ import ru.kelcuprum.waterplayer.frontend.gui.overlays.OverlayHandler;
 
 import java.util.ArrayList;
 import java.util.List;
-//#if FORGE
-//$$ @net.minecraftforge.fml.common.Mod("waterplayer")
-//$$ @net.minecraftforge.fml.common.Mod.EventBusSubscriber(bus = net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus.MOD, value = net.minecraftforge.api.distmarker.Dist.CLIENT)
-//#elseif NEOFORGE
-//$$ @net.neoforged.fml.common.Mod("waterplayer")
-//#endif
-public class WaterPlayer
-        //#if FABRIC
-        implements net.fabricmc.api.ClientModInitializer
-        //#endif
-{
+
+public class WaterPlayer implements ClientModInitializer {
     public static Config config = new Config("config/WaterPlayer/config.json");
     public static final Logger LOG = LogManager.getLogger("WaterPlayer");
     public static MusicPlayer player;
     public static Localization localization = new Localization("waterplayer", "config/WaterPlayer/lang");
 
-    public void init() {
+    @Override
+    public void onInitializeClient() {
         log("Hello, world! UwU");
         WaterPlayerAPI.loadConfig();
         player = new MusicPlayer();
-        WaterPlayer.registerBinds();
+        AlinLibEvents.INIT.register(WaterPlayer::registerBinds);
+        ClientCommandRegistrationCallback.EVENT.register(ru.kelcuprum.waterplayer.backend.command.WaterPlayerCommand::register);
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
             player.startAudioOutput();
             OverlayHandler hud = new OverlayHandler();
@@ -72,8 +68,8 @@ public class WaterPlayer
             TexturesHelper.saveMap();
         });
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            for(KeyBind bind : keyBinds){
-                if(bind.key().consumeClick()) bind.onExecute().run();
+            for (KeyBind bind : keyBinds) {
+                if (bind.key().consumeClick()) bind.onExecute().run();
             }
         });
         TextureManagerEvent.INIT.register(TexturesHelper::loadTextures);
@@ -81,10 +77,10 @@ public class WaterPlayer
             Starscript ss = starScript.ss;
             ss.set("waterplayer", new ValueMap()
                     .set("player", new ValueMap()
-                        .set("volume", () -> Value.number(Music.getVolume()))
-                        .set("speaker_icon", () -> Value.string(Music.getSpeakerVolume()))
-                        .set("repeat_icon", () -> Value.string(Music.getRepeatState()))
-                        .set("pause_icon", () -> Value.string(Music.getPauseState()))
+                            .set("volume", () -> Value.number(Music.getVolume()))
+                            .set("speaker_icon", () -> Value.string(Music.getSpeakerVolume()))
+                            .set("repeat_icon", () -> Value.string(Music.getRepeatState()))
+                            .set("pause_icon", () -> Value.string(Music.getPauseState()))
                     ).set("format", new ValueMap()
                             .set("time", () -> Value.string(Music.getIsLive() ? WaterPlayer.localization.getLocalization("format.live", true)
                                     : WaterPlayer.localization.getLocalization("format.time", true)))
@@ -102,63 +98,21 @@ public class WaterPlayer
         }));
 
         ScreenEvents.KEY_PRESS.register((Screen screen, int code, int scan, int modifiers, CallbackInfoReturnable<Boolean> var5) -> {
-            if(!WaterPlayer.config.getBoolean("ENABLE_KEYBINDS", false)) return;
-            if(screen instanceof TitleScreen || screen instanceof PauseScreen || screen instanceof ControlScreen) {
+            if (!WaterPlayer.config.getBoolean("ENABLE_KEYBINDS", false)) return;
+            if (screen instanceof TitleScreen || screen instanceof PauseScreen || screen instanceof ControlScreen) {
                 for (KeyBind bind : keyBinds) {
                     if ((bind.key().matches(code, scan) || bind.key().matchesMouse(code)) && bind.onExecute().run()) {
-                            var5.setReturnValue(true);
-                            var5.cancel();
-                            break;
+                        var5.setReturnValue(true);
+                        var5.cancel();
+                        break;
                     }
                 }
             }
         });
     }
-    
-    // Адское место ML
 
-    //#if FABRIC
-    @Override
-    public void onInitializeClient() {
-        init();
-        net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback.EVENT.register(ru.kelcuprum.waterplayer.backend.command.WaterPlayerCommand::register);
-    }
-    //#elseif FORGE
-    //$$  public WaterPlayer(){
-    //$$      init();
-    //$$      if (net.minecraftforge.fml.loading.FMLLoader.getDist() == net.minecraftforge.api.distmarker.Dist.CLIENT) {
-    //$$          registerScreen();
-    //$$      }
-    //$$  }
-    //#elseif NEOFORGE
-    //$$  public WaterPlayer(){
-    //$$      init();
-    //$$      if (net.neoforged.fml.loading.FMLLoader.getDist() == net.neoforged.api.distmarker.Dist.CLIENT) {
-    //$$          net.neoforged.fml.ModLoadingContext.get().registerExtensionPoint(
-    //$$                  net.neoforged.neoforge.client.gui.IConfigScreenFactory.class,
-    //$$                  () -> (minecraftClient, screen) -> ru.kelcuprum.waterplayer.frontend.gui.screens.config.MainConfigsScreen.build(screen));
-    //$$      }
-    //$$  }
-    //#endif
-
-    //#if FORGE && MC < 12002
-    //$$ public void registerScreen(){
-    //$$          net.minecraftforge.fml.ModLoadingContext.get().registerExtensionPoint(
-    //$$                  net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory.class,
-    //$$                  () -> new net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory((java.util.function.Function<net.minecraft.client.gui.screens.Screen, net.minecraft.client.gui.screens.Screen>) ru.kelcuprum.waterplayer.frontend.gui.screens.config.MainConfigsScreen::build));
-    //$$ }
-    //#elseif FORGE && MC >= 12002
-    //$$ public void registerScreen(){
-    //$$          net.minecraftforge.fml.ModLoadingContext.get().registerExtensionPoint(
-    //$$                  net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory.class,
-    //$$                  () -> new net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory(ru.kelcuprum.waterplayer.frontend.gui.screens.config.MainConfigsScreen::build));
-    //$$ }
-    //#endif
-
-    //
-    
     public static String getTimestamp(long milliseconds) {
-        int seconds = (int) (milliseconds / 1000) % 60 ;
+        int seconds = (int) (milliseconds / 1000) % 60;
         int minutes = (int) ((milliseconds / (1000 * 60)) % 60);
         int hours = (int) ((milliseconds / (1000 * 60 * 60)) % 24);
 
@@ -167,9 +121,11 @@ public class WaterPlayer
         else
             return String.format("%02d:%02d", minutes, seconds);
     }
+
     public static ToastBuilder getToast() {
         return new ToastBuilder().setIcon(Items.MUSIC_DISC_STRAD).setTitle(Component.translatable("waterplayer.name"));
     }
+
     public static List<KeyBind> keyBinds = new ArrayList<>();
 
     public static void registerBinds() {
@@ -214,62 +170,68 @@ public class WaterPlayer
                 "waterplayer.name"
         ));
         keyBinds.add(new KeyBind(key1, () -> {
-            if(!(AlinLib.MINECRAFT.screen instanceof ControlScreen)) {
+            if (!(AlinLib.MINECRAFT.screen instanceof ControlScreen)) {
                 AlinLib.MINECRAFT.setScreen(new ControlScreen(AlinLib.MINECRAFT.screen));
                 return true;
             } else return false;
         }));
         keyBinds.add(new KeyBind(key2, () -> {
-            if(AlinLib.MINECRAFT.screen instanceof ControlScreen){
-                if(AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
+            if (AlinLib.MINECRAFT.screen instanceof ControlScreen) {
+                if (AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
                 ((ControlScreen) AlinLib.MINECRAFT.screen).play.onPress();
             } else {
                 player.getAudioPlayer().setPaused(!player.getAudioPlayer().isPaused());
             }
-            if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) getToast().setMessage(Localization.getText(player.getAudioPlayer().isPaused() ? "waterplayer.message.pause" : "waterplayer.message.play"))
-                    .show(AlinLib.MINECRAFT.getToasts());
+            if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true))
+                getToast().setMessage(Localization.getText(player.getAudioPlayer().isPaused() ? "waterplayer.message.pause" : "waterplayer.message.play"))
+                        .show(AlinLib.MINECRAFT.getToasts());
             return true;
         }));
         keyBinds.add(new KeyBind(key3, () -> {
             if (player.getTrackScheduler().queue.isEmpty() && player.getAudioPlayer().getPlayingTrack() == null)
                 return false;
             player.getTrackScheduler().nextTrack();
-            if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) getToast().setMessage(Localization.getText("waterplayer.message.skip"))
-                    .show(AlinLib.MINECRAFT.getToasts());
+            if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true))
+                getToast().setMessage(Localization.getText("waterplayer.message.skip"))
+                        .show(AlinLib.MINECRAFT.getToasts());
             return true;
         }));
         keyBinds.add(new KeyBind(key4, () -> {
             player.getTrackScheduler().skiping = false;
             if (!player.getTrackScheduler().queue.isEmpty()) {
                 player.getTrackScheduler().queue.clear();
-                if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) getToast().setMessage(Localization.getText("waterplayer.message.reset"))
-                        .show(AlinLib.MINECRAFT.getToasts());
+                if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true))
+                    getToast().setMessage(Localization.getText("waterplayer.message.reset"))
+                            .show(AlinLib.MINECRAFT.getToasts());
             }
             return true;
         }));
         keyBinds.add(new KeyBind(key5, () -> {
             if (player.getTrackScheduler().queue.size() >= 2) {
                 player.getTrackScheduler().shuffle();
-                if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) getToast().setMessage(Localization.getText("waterplayer.message.shuffle"))
-                        .show(AlinLib.MINECRAFT.getToasts());
+                if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true))
+                    getToast().setMessage(Localization.getText("waterplayer.message.shuffle"))
+                            .show(AlinLib.MINECRAFT.getToasts());
             }
             return true;
         }));
         keyBinds.add(new KeyBind(key6, () -> {
-            if(player.getAudioPlayer().getPlayingTrack() == null) return false;
-            if(AlinLib.MINECRAFT.screen instanceof ControlScreen){
-                if(AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
+            if (player.getAudioPlayer().getPlayingTrack() == null) return false;
+            if (AlinLib.MINECRAFT.screen instanceof ControlScreen) {
+                if (AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
                 ((ControlScreen) AlinLib.MINECRAFT.screen).repeat.onPress();
             } else {
                 player.getTrackScheduler().changeRepeatStatus();
             }
-            if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true)) getToast().setIcon(player.getTrackScheduler().getRepeatIcon())
-                    .setMessage(Localization.getText(player.getTrackScheduler().getRepeatStatus() == 0 ? "waterplayer.message.repeat.no" : player.getTrackScheduler().getRepeatStatus() == 1 ? "waterplayer.message.repeat" : "waterplayer.message.repeat.one" ))
-                    .show(AlinLib.MINECRAFT.getToasts());
+            if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true))
+                getToast().setIcon(player.getTrackScheduler().getRepeatIcon())
+                        .setMessage(Localization.getText(player.getTrackScheduler().getRepeatStatus() == 0 ? "waterplayer.message.repeat.no" : player.getTrackScheduler().getRepeatStatus() == 1 ? "waterplayer.message.repeat" : "waterplayer.message.repeat.one"))
+                        .show(AlinLib.MINECRAFT.getToasts());
             return true;
         }));
         keyBinds.add(new KeyBind(key7, () -> {
-            if(player.getAudioPlayer().getPlayingTrack() == null || AlinLib.MINECRAFT.screen instanceof ControlScreen) return false;
+            if (player.getAudioPlayer().getPlayingTrack() == null || AlinLib.MINECRAFT.screen instanceof ControlScreen)
+                return false;
             int current = config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue() + config.getNumber("SELECT_MUSIC_VOLUME", 1).intValue();
             if (current >= 100) current = 100;
             config.setNumber("CURRENT_MUSIC_VOLUME", current);
@@ -278,7 +240,8 @@ public class WaterPlayer
             return true;
         }));
         keyBinds.add(new KeyBind(key8, () -> {
-            if(player.getAudioPlayer().getPlayingTrack() == null || AlinLib.MINECRAFT.screen instanceof ControlScreen) return false;
+            if (player.getAudioPlayer().getPlayingTrack() == null || AlinLib.MINECRAFT.screen instanceof ControlScreen)
+                return false;
             int current = config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue() - config.getNumber("SELECT_MUSIC_VOLUME", 1).intValue();
             if (current <= 0) current = 0;
             config.setNumber("CURRENT_MUSIC_VOLUME", current);
@@ -296,6 +259,7 @@ public class WaterPlayer
     public static void log(String message, Level level) {
         LOG.log(level, "[" + LOG.getName() + "] " + message);
     }
+
     public static void confirmLinkNow(Screen screen, String link) {
         Minecraft minecraft = Minecraft.getInstance();
         minecraft.setScreen(new ConfirmLinkScreen((bl) -> {

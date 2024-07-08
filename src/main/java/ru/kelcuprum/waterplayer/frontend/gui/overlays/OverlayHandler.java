@@ -123,10 +123,11 @@ public class OverlayHandler implements GuiRenderEvents, ClientTickEvents.StartTi
 
     @Override
     public void onScreenRender(Screen screen, GuiGraphics guiGraphics, int mx130, int my, float tick) {
-        if (!(screen instanceof TitleScreen)) return;
-        if (!WaterPlayer.config.getBoolean("ENABLE_MENU_OVERLAY", true)) return;
-        int pos = WaterPlayer.config.getNumber("MENU_OVERLAY.POSITION", 0).intValue();
-        render(guiGraphics, pos);
+        if (screen instanceof TitleScreen) {
+            if (!WaterPlayer.config.getBoolean("ENABLE_MENU_OVERLAY", true)) return;
+            int pos = WaterPlayer.config.getNumber("MENU_OVERLAY.POSITION", 0).intValue();
+            render(guiGraphics, pos);
+        }
     }
 
     @Override

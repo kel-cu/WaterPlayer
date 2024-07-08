@@ -30,6 +30,7 @@ import ru.kelcuprum.waterplayer.frontend.gui.screens.config.PlaylistsScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.search.SearchScreen;
 
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
@@ -251,15 +252,16 @@ public class ControlScreen extends Screen {
                     StringBuilder builder = new StringBuilder();
                     for (AudioLyrics.Line line : list) {
                         if (!(line.getDuration() == null)) {
-                            if (((track.getPosition() / 1000) <= line.getTimestamp().getSeconds()) || ((track.getPosition() / 1000) >= line.getTimestamp().getSeconds() && (track.getPosition() / 1000) <= line.getTimestamp().getSeconds() + line.getDuration().getSeconds())) {
-                                builder.append(line.getLine()).append("\n");
+                            Duration pos = Duration.ofMillis(track.getPosition());
+                            if ((pos.toMillis() <= line.getTimestamp().toMillis()) || (pos.toMillis() >= line.getTimestamp().toMillis() && pos.toMillis() <= line.getTimestamp().toMillis() + line.getDuration().toMillis())) {
+                                builder.append(line.getLine().replace("\r", "")).append("\n");
                             }
                         }
                     }
                     this.lyrics.setLyrics(Component.literal(builder.toString()));
                     this.lyrics.visible = !builder.toString().isEmpty();
                 } else if (text != null) {
-                    this.lyrics.setLyrics(Component.literal(text));
+                    this.lyrics.setLyrics(Component.literal(text.replace("\r", "")));
                     this.lyrics.visible = !text.isBlank();
                 } else this.lyrics.visible = false;
             } else this.lyrics.visible = false;

@@ -160,6 +160,12 @@
   "waterplayer.track.lyrics.title": "Track Text",
   "waterplayer.track.lyrics.copy": "Copy Text",
   "waterplayer.track.lyrics.copy.toast": "Text copied to clipboard",
+
+  "waterplayer.track.lyrics.create_srt": "Create SRT File",
+  "waterplayer.track.lyrics.created_srt": "SRT File created",
+  "waterplayer.track.lyrics.create_wplf": "Create WPLF File",
+  "waterplayer.track.lyrics.created_wplf": "WPLF File created",
+
   "waterplayer.track.copy_link": "Copy Link",
   "waterplayer.track.open_link": "Open in Browser",
   "waterplayer.track.open_file": "Open File",

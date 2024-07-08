@@ -72,11 +72,24 @@ public class TrackScreen extends Screen {
             initPlaylist();
         } else if (showLyrics) {
             addRenderableWidget(new TextBox(5, 15, lyricsSize - 10, 9, Localization.getText("waterplayer.track.lyrics.title"), true));
-            lyricsBox = addRenderableWidget(new LyricsBox(5, 40, lyricsSize - 10, height - 70, Component.empty())).setLyrics(Component.literal(lyrics.getText() == null ? "" : lyrics.getText()));
-            addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.track.lyrics.copy"), (onPress) -> {
-                                AlinLib.MINECRAFT.keyboardHandler.setClipboard(lyrics.getText() == null ? "" : lyrics.getText());
-                                WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.lyrics.copy.toast")).show(AlinLib.MINECRAFT.getToasts());
-                            }).setPosition(5, height - 25).setSize(lyricsSize - 10, 20).build());
+            lyricsBox = addRenderableWidget(new LyricsBox(5, 40, lyricsSize - 10, height - (lyricsEnable ? 95 : 70), Component.empty())).setLyrics(Component.literal(lyricsEnable ? lyrics.getText() != null ? lyrics.getText().replace("\r", "") : "404: Not found" : "404: Not found"));
+            if(lyricsEnable) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.track.lyrics.copy"), (onPress) -> {
+                AlinLib.MINECRAFT.keyboardHandler.setClipboard(lyrics.getText() == null ? "" : lyrics.getText());
+                WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.lyrics.copy.toast")).show(AlinLib.MINECRAFT.getToasts());
+            }).setPosition(5, height - 25).setSize(lyricsSize - 10, 20).build());
+
+            String id = track.getSourceManager().getSourceName() + "_" + track.getIdentifier();
+            addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.track.lyrics.create_srt"), (onPress) -> {
+                LyricsHelper.saveSRT(track, lyricsEnable ? lyrics.getText() != null ? lyrics.getText().replace("\r", "") : "Example text" : "Example text");
+                Util.getPlatform().openFile(new File("./config/WaterPlayer/Lyrics/"+id+".srt"));
+                WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.lyrics.created_srt")).show(AlinLib.MINECRAFT.getToasts());
+            }).setPosition(5+(lyricsSize-8) / 2, height - (lyricsEnable ? 50 : 25)).setSize((lyricsSize - 14)/2, 20).build());
+
+            addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.track.lyrics.create_wplf"), (onPress) -> {
+                LyricsHelper.saveWPLF(track, lyricsEnable ? lyrics.getText() != null ? lyrics.getText().replace("\r", "") : "Example text" : "Example text");
+                Util.getPlatform().openFile(new File("./config/WaterPlayer/Lyrics/"+id+".wplf"));
+                WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.lyrics.created_wplf")).show(AlinLib.MINECRAFT.getToasts());
+            }).setPosition(5, height - (lyricsEnable ? 50 : 25)).setSize((lyricsSize - 14)/2, 20).build());
         }
         addRenderableWidget(new ButtonBuilder(Component.translatable(isFile ? "waterplayer.track.open_file" : "waterplayer.track.open_link"), (huy) -> {
             if (isFile) Util.getPlatform().openFile(new File(track.getInfo().uri));
@@ -100,10 +113,9 @@ public class TrackScreen extends Screen {
         this.lyricsButton = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable(showLyrics ? "waterplayer.track.hide_lyrics" : "waterplayer.track.lyrics"), (huy) -> {
             showLyrics = !showLyrics;
             rebuildWidgets();
-        }).setWidth(componentSize / 2 - 2).setPosition(x, y).setActive(lyricsEnable).build());
-        this.lyricsButton.visible = lyricsEnable;
+        }).setWidth(componentSize / 2 - 2).setPosition(x, y).build());
 
-        backButton = (Button) addRenderableWidget(new ButtonBuilder(CommonComponents.GUI_BACK, (huy) -> onClose()).setWidth(lyricsEnable ? componentSize / 2 - 2 : componentSize).setPosition(lyricsEnable ? x + componentSize / 2 + 2 : x, y).build());
+        backButton = (Button) addRenderableWidget(new ButtonBuilder(CommonComponents.GUI_BACK, (huy) -> onClose()).setWidth(componentSize / 2 - 2).setPosition(x + componentSize / 2 + 2, y).build());
 
         int textY = height / 2 - 15 - iconSize + 5;
         addRenderableWidget(new TextBox(x + iconSize + 5, textY, componentSize - (iconSize + 10), font.lineHeight, Component.literal(Music.getTitle(track)), false));
@@ -197,14 +209,14 @@ public class TrackScreen extends Screen {
         if (showPlaylist && scroller_panel != null) scroller_panel.onScroll.accept(scroller_panel);
         this.lyrics = LyricsHelper.getLyrics(track);
         this.lyricsEnable = lyrics != null && lyrics.getText() != null && !(lyrics instanceof SafeLyrics);
-        if (this.backButton != null) {
-            backButton.setWidth(lyricsEnable ? componentSize / 2 - 2 : componentSize);
-            backButton.setX(lyricsEnable ? x + componentSize / 2 + 2 : x);
-        }
-        if (this.lyricsButton != null) {
-            lyricsButton.setActive(lyricsEnable);
-            lyricsButton.visible = lyricsEnable;
-        }
+//        if (this.backButton != null) {
+//            backButton.setWidth(lyricsEnable ? componentSize / 2 - 2 : componentSize);
+//            backButton.setX(lyricsEnable ? x + componentSize / 2 + 2 : x);
+//        }
+//        if (this.lyricsButton != null) {
+//            lyricsButton.setActive(lyricsEnable);
+//            lyricsButton.visible = lyricsEnable;
+//        }
         super.tick();
     }
 

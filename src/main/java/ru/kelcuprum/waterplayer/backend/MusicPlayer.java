@@ -78,6 +78,10 @@ public class MusicPlayer {
 
     private void registerSources() {
         Config config = WaterPlayer.config;
+        WaterPlayerSource wps = new WaterPlayerSource();
+        audioPlayerManager.registerSourceManager(wps);
+        lyricsManager.registerLyricsManager(wps);
+
         if (config.getBoolean("ENABLE_YOUTUBE", true)) {
             final YoutubeAudioSourceManager youtube = new YoutubeAudioSourceManager(true, new MusicWithThumbnail(), new WebWithThumbnail(), new AndroidWithThumbnail());
             youtube.setPlaylistPageCount(100);
@@ -131,7 +135,6 @@ public class MusicPlayer {
             BeamAudioSourceManager beamAudioSourceManager = new BeamAudioSourceManager();
             audioPlayerManager.registerSourceManager(beamAudioSourceManager);
         }
-        audioPlayerManager.registerSourceManager(new WaterPlayerSource());
         audioPlayerManager.registerSourceManager(new DirectoriesSource());
         audioPlayerManager.registerSourceManager(new HttpAudioSourceManager());
         audioPlayerManager.registerSourceManager(localAudioSourceManager);

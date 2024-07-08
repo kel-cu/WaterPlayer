@@ -16,7 +16,6 @@ import ru.kelcuprum.waterplayer.frontend.gui.LyricsHelper;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class SubtitlesHandler implements GuiRenderEvents, ClientTickEvents.StartTick {
     private final List<FormattedCharSequence> texts = new ArrayList<>();
@@ -38,8 +37,8 @@ public class SubtitlesHandler implements GuiRenderEvents, ClientTickEvents.Start
                         StringBuilder builder = new StringBuilder();
                         for (AudioLyrics.Line line : list) {
                             Duration pos = Duration.ofMillis(track.getPosition());
-                            if (!(line.getDuration() == null)) {
-                                if (pos.getSeconds() >= line.getTimestamp().getSeconds() && pos.getSeconds() <= line.getTimestamp().getSeconds() + Objects.requireNonNull(line.getDuration()).getSeconds()) {
+                            if (line.getDuration() != null) {
+                                if (pos.toMillis() >= line.getTimestamp().toMillis() && pos.toMillis() <= line.getTimestamp().toMillis() + line.getDuration().toMillis()) {
                                     builder.append(line.getLine()).append("\n");
                                 }
                             }

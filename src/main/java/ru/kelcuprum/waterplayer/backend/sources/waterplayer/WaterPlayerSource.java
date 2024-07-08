@@ -1,5 +1,7 @@
 package ru.kelcuprum.waterplayer.backend.sources.waterplayer;
 
+import com.github.topi314.lavalyrics.AudioLyricsManager;
+import com.github.topi314.lavalyrics.lyrics.AudioLyrics;
 import com.google.gson.JsonObject;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager;
@@ -9,11 +11,15 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.minecraft.util.GsonHelper;
 import org.apache.logging.log4j.Level;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
 import ru.kelcuprum.waterplayer.backend.exception.WebPlaylistException;
 import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
+import ru.kelcuprum.waterplayer.backend.sources.waterplayer.lyrics.SRTLyricsFormat;
+import ru.kelcuprum.waterplayer.backend.sources.waterplayer.lyrics.WPLyricsFormat;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -21,10 +27,10 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class WaterPlayerSource implements AudioSourceManager {
+public class WaterPlayerSource implements AudioSourceManager, AudioLyricsManager {
 
     @Override
-    public String getSourceName() {
+    public @NotNull String getSourceName() {
         return "wplayer";
     }
 
@@ -71,6 +77,30 @@ public class WaterPlayerSource implements AudioSourceManager {
             }
         }
         return null;
+    }
+
+    @Override
+    public @Nullable AudioLyrics loadLyrics(AudioTrack track) {
+        String id = track.getSourceManager().getSourceName() + "_" + track.getIdentifier();
+        WaterPlayer.log(id);
+        File json = new File("./config/WaterPlayer/Lyrics/"+id+".wplf");
+        File srt = new File("./config/WaterPlayer/Lyrics/"+id+".srt");
+        if(json.exists() && json.isFile()){
+            try {
+                JsonObject data = GsonHelper.parse(Files.readString(json.toPath()));
+                return new WPLyricsFormat(track, data);
+            } catch (Exception ex){
+                WaterPlayer.log(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage(), Level.ERROR);
+                return null;
+            }
+        } else if(srt.exists() && srt.isFile()){
+            try {
+                return new SRTLyricsFormat(track, Files.readString(srt.toPath()));
+            } catch (Exception ex){
+                WaterPlayer.log(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage(), Level.ERROR);
+                return null;
+            }
+        } else return null;
     }
 
     @Override
