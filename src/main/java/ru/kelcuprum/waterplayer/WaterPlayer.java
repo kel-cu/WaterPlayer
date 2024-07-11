@@ -62,7 +62,7 @@ public class WaterPlayer implements ClientModInitializer {
             GuiRenderEvents.RENDER.register(hud);
             GuiRenderEvents.RENDER.register(sub);
             ClientTickEvents.START_CLIENT_TICK.register(hud);
-            ClientTickEvents.START_CLIENT_TICK.register(sub);
+//            ClientTickEvents.START_CLIENT_TICK.register(sub);
         });
         ClientLifecycleEvents.CLIENT_STOPPING.register(e -> {
             player.getAudioPlayer().stopTrack();

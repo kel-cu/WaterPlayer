@@ -35,7 +35,7 @@ public class Playlist {
     public Playlist(JsonObject data){
         title = data.has("title") ? data.get("title").getAsString() : "Example title";
         author = data.has("author") ? data.get("author").getAsString() : AlinLib.MINECRAFT.getUser().getName();
-        urlsJSON = data.has("urls") ? data.get("urls").getAsJsonArray() : GsonHelper.parseArray("[\"https://c418.bandcamp.com/track/strad\"]");
+        urlsJSON = data.has("urls") ? data.get("urls").getAsJsonArray() : GsonHelper.parseArray("[\"https://www.youtube.com/watch?v=2bjBl-nX1oc\"]");
         for(int i = 0; i < urlsJSON.size(); i++){
             urls.add(urlsJSON.get(i).getAsString());
         }

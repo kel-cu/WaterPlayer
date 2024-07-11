@@ -21,8 +21,11 @@ import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
 import ru.kelcuprum.alinlib.gui.components.builder.editbox.EditBoxBuilder;
 import ru.kelcuprum.alinlib.gui.components.buttons.Button;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
+import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
+import ru.kelcuprum.waterplayer.backend.exception.AuthException;
+import ru.kelcuprum.waterplayer.backend.exception.WebPlaylistException;
 import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 
 import java.io.IOException;
@@ -94,10 +97,12 @@ public class PlaylistScreen extends Screen {
                     AlinLib.MINECRAFT.keyboardHandler.setClipboard(link);
                     isCreatedLink = true;
                     WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.playlist.uploaded")).show(AlinLib.MINECRAFT.getToasts());
-                    e.setMessage(Component.translatable("waterplayer.playlist.copy_link"));
+                    e.builder.setTitle(Component.translatable("waterplayer.playlist.copy_link"));
                 } catch (Exception ex) {
-                    e.setActive(false);
-                    WaterPlayer.log(ex.getMessage() == null ? e.getClass().getName() : ex.getMessage(), Level.ERROR);
+                    if(ex instanceof RuntimeException) isEnable = false;
+                    String msg = ex.getMessage() == null ? e.getClass().getName() : ex.getMessage();
+                    WaterPlayer.getToast().setMessage(Component.literal(msg)).setType(ToastBuilder.Type.ERROR).setIcon(DONT).show(AlinLib.MINECRAFT.getToasts());
+                    WaterPlayer.log(msg, Level.ERROR);
                 }
             }
         }).setPosition(x, y).setSize(size, 20).setActive(false).build());

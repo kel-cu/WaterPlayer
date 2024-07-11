@@ -17,12 +17,12 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubtitlesHandler implements GuiRenderEvents, ClientTickEvents.StartTick {
+public class SubtitlesHandler implements GuiRenderEvents {
     private final List<FormattedCharSequence> texts = new ArrayList<>();
-    @Override
-    public void onStartTick(Minecraft client) {
-        updateTexts();
-    }
+//    @Override
+//    public void onStartTick(Minecraft client) {
+//        updateTexts();
+//    }
 
     public void updateTexts() {
         this.texts.clear();
@@ -59,6 +59,7 @@ public class SubtitlesHandler implements GuiRenderEvents, ClientTickEvents.Start
     @Override
     public void onRender(GuiGraphics guiGraphics, float tickDelta) {
         if (!WaterPlayer.config.getBoolean("SUBTITLES", false)) return;
+        updateTexts();
         int l = texts.size() - 1;
         int iay = WaterPlayer.config.getNumber("SUBTITLES.INDENT_Y", 85).intValue();
         int f = AlinLib.MINECRAFT.font.lineHeight + 6;

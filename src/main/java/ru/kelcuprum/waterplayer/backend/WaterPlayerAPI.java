@@ -16,6 +16,8 @@ import ru.kelcuprum.waterplayer.backend.exception.WebPlaylistException;
 import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 import ru.kelcuprum.waterplayer.backend.playlist.WebPlaylist;
 
+import java.net.URI;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,7 @@ public class WaterPlayerAPI {
         return getURL("/");
     }
     public static String getURL(String route){
-        return WaterPlayer.config.getString("API.URL", "https://api.waterplayer.ru") + route;
+        return WaterPlayer.config.getString("API.URL", "https://api.waterplayer.ru") + route.replace(" ", "%20");
     }
 
     @Async.Execute
@@ -85,16 +87,19 @@ public class WaterPlayerAPI {
     }
 
     @Async.Execute
-    public static String uploadPlaylist(Playlist playlist, String id) throws AuthException {
+    public static String uploadPlaylist(Playlist playlist, String id) throws AuthException, WebPlaylistException {
         if(!isVerified()) throw new AuthException("Your account is not authorized!");
-        String base64 = new String(Base64.encodeBase64(playlist.toJSON().toString().getBytes(StandardCharsets.UTF_8)) );
+        String base64 = new String(Base64.encodeBase64(playlist.toJSON().toString().getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
         try {
             String url = config.getBoolean("ENABLE_VERIFY", true) ? String.format("/upload?playlist_data=%1$s&id=%2$s&access=%3$s", base64, id, AlinLib.MINECRAFT.getUser().getAccessToken()) : String.format("/upload?playlist_data=%1$s&id=%2$s", base64, id);
             JsonObject data = WebAPI.getJsonObject(getURL(url));
+            if(data.has("error")){
+                throw new WebPlaylistException(data.getAsJsonObject("error").get("message").getAsString());
+            }
             return data.has("url") ? String.format(config.getString("PLAYLIST_URL", getURL("/playlist/%s")), data.get("url").getAsString()) : "";
         } catch (Exception e){
-            WaterPlayer.log(e.getMessage() == null ? e.getClass().getName() : e.getMessage(), Level.ERROR);
-            return "";
+            if(e instanceof WebPlaylistException) throw new WebPlaylistException(e.getMessage() == null ? e.getClass().getName() : e.getMessage());
+            else throw new RuntimeException((e.getMessage() == null ? e.getClass().getName() : e.getMessage()));
         }
     }
 
