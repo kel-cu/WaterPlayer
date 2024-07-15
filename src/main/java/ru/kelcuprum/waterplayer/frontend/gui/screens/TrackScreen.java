@@ -109,13 +109,13 @@ public class TrackScreen extends Screen {
         }).setWidth(componentSize / 2 - 2).setPosition(x + componentSize / 2 + 2, y).build());
         y += 25;
 
-
-        this.lyricsButton = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable(showLyrics ? "waterplayer.track.hide_lyrics" : "waterplayer.track.lyrics"), (huy) -> {
-            showLyrics = !showLyrics;
-            rebuildWidgets();
-        }).setWidth(componentSize / 2 - 2).setPosition(x, y).build());
-
-        backButton = (Button) addRenderableWidget(new ButtonBuilder(CommonComponents.GUI_BACK, (huy) -> onClose()).setWidth(componentSize / 2 - 2).setPosition(x + componentSize / 2 + 2, y).build());
+        if(!track.getInfo().isStream) {
+            this.lyricsButton = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable(showLyrics ? "waterplayer.track.hide_lyrics" : "waterplayer.track.lyrics"), (huy) -> {
+                showLyrics = !showLyrics;
+                rebuildWidgets();
+            }).setWidth(componentSize / 2 - 2).setPosition(x, y).build());
+        }
+        backButton = (Button) addRenderableWidget(new ButtonBuilder(CommonComponents.GUI_BACK, (huy) -> onClose()).setWidth(track.getInfo().isStream ? componentSize : componentSize / 2 - 2).setPosition(track.getInfo().isStream ? x : x + componentSize / 2 + 2, y).build());
 
         int textY = height / 2 - 15 - iconSize + 5;
         addRenderableWidget(new TextBox(x + iconSize + 5, textY, componentSize - (iconSize + 10), font.lineHeight, Component.literal(Music.getTitle(track)), false));

@@ -47,17 +47,14 @@ public class WaterPlayerSource implements AudioSourceManager, AudioLyricsManager
                     WaterPlayer.log("ERROR: "+(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage()), Level.DEBUG);
                 }
             } else {
-                JsonObject jsonPlaylist = new JsonObject();
-
                 final Path configFile = AlinLib.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/" + name + ".json");
                 try {
-                    jsonPlaylist = GsonHelper.parse(Files.readString(configFile));
+                    JsonObject jsonPlaylist = GsonHelper.parse(Files.readString(configFile));
+                    return new WaterPlayerPlaylist(new Playlist(jsonPlaylist));
                 } catch (Exception ex) {
                     WaterPlayer.log("ERROR: "+(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage()), Level.DEBUG);
                 }
-                return new WaterPlayerPlaylist(new Playlist(jsonPlaylist));
             }
-
         }
         if(identifier.startsWith("http://") || identifier.startsWith("https://")){
             try{

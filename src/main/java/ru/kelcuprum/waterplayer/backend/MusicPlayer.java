@@ -79,7 +79,6 @@ public class MusicPlayer {
     private void registerSources() {
         Config config = WaterPlayer.config;
         WaterPlayerSource wps = new WaterPlayerSource();
-        audioPlayerManager.registerSourceManager(wps);
         lyricsManager.registerLyricsManager(wps);
 
         if (config.getBoolean("ENABLE_YOUTUBE", true)) {
@@ -138,6 +137,7 @@ public class MusicPlayer {
         audioPlayerManager.registerSourceManager(new DirectoriesSource());
         audioPlayerManager.registerSourceManager(new HttpAudioSourceManager());
         audioPlayerManager.registerSourceManager(localAudioSourceManager);
+        audioPlayerManager.registerSourceManager(wps);
     }
 
     //
