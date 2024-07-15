@@ -8,7 +8,6 @@ import net.minecraft.network.chat.FormattedText;
 import net.minecraft.util.FormattedCharSequence;
 import org.apache.logging.log4j.Level;
 import ru.kelcuprum.alinlib.AlinLib;
-import ru.kelcuprum.alinlib.api.events.client.ClientTickEvents;
 import ru.kelcuprum.alinlib.api.events.client.GuiRenderEvents;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.gui.LyricsHelper;

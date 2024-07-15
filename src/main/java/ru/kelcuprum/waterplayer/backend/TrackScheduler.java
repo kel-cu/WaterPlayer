@@ -9,7 +9,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import ru.kelcuprum.alinlib.AlinLib;
-import ru.kelcuprum.alinlib.gui.GuiUtils;
 import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
@@ -18,6 +17,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+
+import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.*;
 
 /**
  * This class schedules tracks for the audio player. It contains the queue of tracks.
@@ -74,7 +75,7 @@ public class TrackScheduler extends AudioEventAdapter {
                 ToastBuilder toast = WaterPlayer.getToast().setTitle(Music.isAuthorNull(player.getPlayingTrack()) ? Component.translatable("waterplayer.name") : Component.literal(Music.getAuthor(player.getPlayingTrack())))
                         .setMessage(Component.literal(Music.getTitle(player.getPlayingTrack())));
                 if (Music.getAuthor(player.getPlayingTrack()).equals("YonKaGor")) toast.setIcon(getYonKaGorMoment(player.getPlayingTrack()));
-                else toast.setIcon(GuiUtils.getResourceLocation("waterplayer", "textures/music.png"));
+                else toast.setIcon(MUSIC);
                 toast.show(AlinLib.MINECRAFT.getToasts());
             }
         }
@@ -98,7 +99,7 @@ public class TrackScheduler extends AudioEventAdapter {
     }
     
     public ResourceLocation getRepeatIcon(){
-        return GuiUtils.getResourceLocation("waterplayer", "textures/player/" + (getRepeatStatus() == 0 ? "non_repeat" : getRepeatStatus() == 1 ? "repeat" : "one_repeat" ) + ".png");
+        return getRepeatStatus() == 0 ? REPEAT_NON : getRepeatStatus() == 1 ? REPEAT : REPEAT_ONE;
     }
 
     public int repeatStatus = WaterPlayer.config.getNumber("REPEAT_STATUS", 0).intValue();

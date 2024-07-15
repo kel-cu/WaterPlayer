@@ -3,11 +3,12 @@ package ru.kelcuprum.waterplayer.frontend.localization;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import ru.kelcuprum.alinlib.gui.GuiUtils;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.gui.TexturesHelper;
 
 import java.io.File;
+
+import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.*;
 
 public class Music {
     //
@@ -50,7 +51,7 @@ public class Music {
         return (getVolume() <= 0) ? "🔇" : (getVolume() <= 1) ? "🔈" : (getVolume() <= 70) ? "🔉" :  "🔊";
     }
     public static ResourceLocation getSpeakerVolumeIcon(){
-        return GuiUtils.getResourceLocation("waterplayer", "textures/player/volume_"+((getVolume() <= 0) ? "mute" : (getVolume() <= 1) ? "low" : (getVolume() <= 70) ? "ok" :  "max")+".png");
+        return ((getVolume() <= 0) ? VOLUME_MUTE : (getVolume() <= 1) ? VOLUME_LOW : (getVolume() <= 70) ? VOLUME_OK :  VOLUME_MAX);
     }
     public static String getRepeatState(){
         return WaterPlayer.player.getTrackScheduler().getRepeatStatus() == 0 ? "" : WaterPlayer.player.getTrackScheduler().getRepeatStatus() == 1 ? " 🔁" : " 🔂";
@@ -65,10 +66,10 @@ public class Music {
     }
 
     public static ResourceLocation getThumbnail(){
-        return trackIsNull() ? GuiUtils.getResourceLocation("waterplayer", "textures/no_icon.png") : getThumbnail(WaterPlayer.player.getAudioPlayer().getPlayingTrack());
+        return trackIsNull() ? NO_ICON : getThumbnail(WaterPlayer.player.getAudioPlayer().getPlayingTrack());
     }
     public static ResourceLocation getThumbnail(AudioTrack info){
-        return trackIsNull(info) ? GuiUtils.getResourceLocation("waterplayer", "textures/no_icon.png") : info.getInfo().artworkUrl != null ? TexturesHelper.getTexture(info.getInfo().artworkUrl, (info.getSourceManager().getSourceName() + "_" + info.getInfo().identifier)) : Music.isFile(info) ? GuiUtils.getResourceLocation("waterplayer", "textures/file_icon.png") : GuiUtils.getResourceLocation("waterplayer", "textures/no_icon.png");
+        return trackIsNull(info) ? NO_ICON : info.getInfo().artworkUrl != null ? TexturesHelper.getTexture(info.getInfo().artworkUrl, (info.getSourceManager().getSourceName() + "_" + info.getInfo().identifier)) : Music.isFile(info) ? FILE_ICON : NO_ICON;
     }
 
     public static boolean isFile(){

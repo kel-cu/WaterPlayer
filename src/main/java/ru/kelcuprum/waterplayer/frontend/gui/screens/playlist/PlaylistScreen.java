@@ -15,7 +15,6 @@ import org.lwjgl.glfw.GLFW;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.Colors;
-import ru.kelcuprum.alinlib.gui.GuiUtils;
 import ru.kelcuprum.alinlib.gui.components.ConfigureScrolWidget;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
 import ru.kelcuprum.alinlib.gui.components.builder.editbox.EditBoxBuilder;
@@ -24,8 +23,6 @@ import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
-import ru.kelcuprum.waterplayer.backend.exception.AuthException;
-import ru.kelcuprum.waterplayer.backend.exception.WebPlaylistException;
 import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 
 import java.io.IOException;
@@ -35,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ru.kelcuprum.alinlib.gui.Icons.*;
+import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.*;
 
 public class PlaylistScreen extends Screen {
     private Playlist playlist;
@@ -115,14 +113,14 @@ public class PlaylistScreen extends Screen {
             WaterPlayer.player.loadMusic(String.format("playlist:%s", playlistName), true);
             onClose();
         })
-                .setIcon(GuiUtils.getResourceLocation("waterplayer", "textures/player/play.png"))
+                .setIcon(PLAY)
                 .setPosition(x + size - 70, height - 30).setSize(20, 20).build());
         addRenderableWidget(new ButtonBuilder(Localization.getText("waterplayer.playlist.remove"), (e) -> {
             isDeleted = true;
             playlistFile.toFile().delete();
             onClose();
         })
-                .setIcon(GuiUtils.getResourceLocation("waterplayer", "textures/player/reset_queue.png"))
+                .setIcon(RESET_QUEUE)
                 .setPosition(x + size - 45, height - 30)
                 .setSize(20, 20)
                 .build());

@@ -38,6 +38,7 @@ import java.util.*;
 
 import static ru.kelcuprum.alinlib.gui.Colors.BLACK_ALPHA;
 import static ru.kelcuprum.alinlib.gui.Icons.*;
+import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.*;
 
 public class ModernControlScreen extends Screen {
     private final Screen parent;
@@ -86,7 +87,7 @@ public class ModernControlScreen extends Screen {
         y += 22;
         addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control.search"), (s) -> AlinLib.MINECRAFT.setScreen(new SearchScreen(this)))
                 .setCentered(false)
-                .setSprite(GuiUtils.getResourceLocation("waterplayer", "textures/search.png")).
+                .setSprite(SEARCH).
                 setSize(20, 20).setPosition(x, y)
                 .build());
         load = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.load.load"), (e) -> WaterPlayer.player.loadMusic(value, true))
@@ -139,7 +140,7 @@ public class ModernControlScreen extends Screen {
             queue.resetWidgets();
             addQueue();
         })
-                .setSprite(GuiUtils.getResourceLocation("waterplayer", "textures/player/shuffle.png"))
+                .setSprite(SHUFFLE)
                 .setSize(20, 20)
                 .setPosition(x$Buttons, y + 3)
                 .build());
@@ -147,9 +148,9 @@ public class ModernControlScreen extends Screen {
         playOrPause = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control." + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause")), (e) -> {
             WaterPlayer.player.getAudioPlayer().setPaused(!WaterPlayer.player.getAudioPlayer().isPaused());
             e.builder.setTitle(Component.translatable("waterplayer.control." + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause")));
-            ((ButtonBuilder) e.builder).setSprite(GuiUtils.getResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"));
+            ((ButtonBuilder) e.builder).setSprite(getPlayOrPause(WaterPlayer.player.getAudioPlayer().isPaused()));
         })
-                .setSprite(GuiUtils.getResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"))
+                .setSprite(getPlayOrPause(WaterPlayer.player.getAudioPlayer().isPaused()))
                 .setSize(20, 20)
                 .setPosition(x$Buttons, y + 3)
                 .build());
@@ -159,7 +160,7 @@ public class ModernControlScreen extends Screen {
                 return;
             WaterPlayer.player.getTrackScheduler().nextTrack();
         })
-                .setSprite(GuiUtils.getResourceLocation("waterplayer", "textures/player/skip.png"))
+                .setSprite(SKIP)
                 .setSize(20, 20)
                 .setPosition(x$Buttons, y + 3)
                 .build());

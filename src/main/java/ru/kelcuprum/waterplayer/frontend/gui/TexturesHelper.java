@@ -26,6 +26,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 
+import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.NO_ICON;
+
 public class TexturesHelper {
     public static HashMap<String, ResourceLocation> resourceLocationMap = new HashMap<>();
     public static HashMap<String, Boolean> urls = new HashMap<>();
@@ -41,7 +43,7 @@ public class TexturesHelper {
                 String finalId = id;
                 new Thread(() -> registerTexture(url, finalId, AlinLib.MINECRAFT.getTextureManager(), GuiUtils.getResourceLocation("waterplayer", finalId))).start();
             }
-            return GuiUtils.getResourceLocation("waterplayer", "textures/no_icon.png");
+            return NO_ICON;
         }
     }
 
@@ -77,7 +79,7 @@ public class TexturesHelper {
                 }
             } catch (Exception e) {
                 WaterPlayer.log("Error loading image from URL: " + url + " - " + e.getMessage());
-                resourceLocationMap.put(id, GuiUtils.getResourceLocation("waterplayer", "textures/no_icon.png"));
+                resourceLocationMap.put(id, NO_ICON);
                 return;
             }
             texture = new DynamicTexture(image);

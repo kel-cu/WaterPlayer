@@ -6,7 +6,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.GsonHelper;
 import org.apache.logging.log4j.Level;
 import ru.kelcuprum.alinlib.AlinLib;
-import ru.kelcuprum.alinlib.gui.GuiUtils;
 import ru.kelcuprum.alinlib.gui.Icons;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
@@ -14,7 +13,6 @@ import ru.kelcuprum.alinlib.gui.screens.ConfigScreenBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.playlist.CreatePlaylistScreen;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.playlist.PlaylistScreen;
 
 import java.io.File;
@@ -24,6 +22,7 @@ import java.util.Objects;
 import static ru.kelcuprum.alinlib.gui.Icons.OPTIONS;
 import static ru.kelcuprum.alinlib.gui.Icons.WARNING;
 import static ru.kelcuprum.alinlib.gui.Icons.*;
+import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.getPlayOrPause;
 
 public class PlaylistsScreen {
     static int assetsSize = 0;
@@ -54,7 +53,7 @@ public class PlaylistsScreen {
                 .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.config.localization"), (e) -> AlinLib.MINECRAFT.setScreen(LocalizationConfigsScreen.build(parent))).setIcon(Icons.LIST).setCentered(false).build())
                 .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.secret"), (e) -> AlinLib.MINECRAFT.setScreen(SecretConfigsScreen.build(parent))).setIcon(WARNING).setCentered(false).build())
                 .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.playlists"), (e) -> AlinLib.MINECRAFT.setScreen(PlaylistsScreen.build(parent))).setIcon(Icons.LIST).setCentered(false).build())
-                .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.play"), (e) -> AlinLib.MINECRAFT.setScreen(WaterPlayer.getControlScreen(PlaylistsScreen.build(parent)))).setIcon(GuiUtils.getResourceLocation("waterplayer", "textures/player/play.png")).setCentered(false).build())
+                .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.play"), (e) -> AlinLib.MINECRAFT.setScreen(WaterPlayer.getControlScreen(PlaylistsScreen.build(parent)))).setIcon(getPlayOrPause(WaterPlayer.player.getAudioPlayer().isPaused())).setCentered(false).build())
                 //
                 .addWidget(new TextBox(140, 5, Component.translatable("waterplayer.playlists"), true));
         if(playlists.exists() && playlists.isDirectory()){

@@ -11,6 +11,7 @@ import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +20,7 @@ import org.lwjgl.glfw.GLFW;
 import org.meteordev.starscript.Starscript;
 import org.meteordev.starscript.value.Value;
 import org.meteordev.starscript.value.ValueMap;
+import org.spongepowered.asm.mixin.Interface;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.api.KeyMappingHelper;
@@ -26,6 +28,8 @@ import ru.kelcuprum.alinlib.api.events.alinlib.LocalizationEvents;
 import ru.kelcuprum.alinlib.api.events.client.*;
 import ru.kelcuprum.alinlib.config.Config;
 import ru.kelcuprum.alinlib.config.Localization;
+import ru.kelcuprum.alinlib.gui.GuiUtils;
+import ru.kelcuprum.alinlib.gui.Icons;
 import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
 import ru.kelcuprum.waterplayer.backend.KeyBind;
 import ru.kelcuprum.waterplayer.backend.MusicPlayer;
@@ -276,5 +280,30 @@ public class WaterPlayer implements ClientModInitializer {
 
             minecraft.setScreen(screen);
         }, link, true));
+    }
+    public interface Icons {
+        ResourceLocation REPEAT = GuiUtils.getResourceLocation("waterplayer", "textures/player/repeat.png");
+        ResourceLocation REPEAT_ONE = GuiUtils.getResourceLocation("waterplayer", "textures/player/one_repeat.png");
+        ResourceLocation REPEAT_NON = GuiUtils.getResourceLocation("waterplayer", "textures/player/non_repeat.png");
+        ResourceLocation PLAY = GuiUtils.getResourceLocation("waterplayer", "textures/player/play.png");
+        ResourceLocation PAUSE = GuiUtils.getResourceLocation("waterplayer", "textures/player/pause.png");
+        ResourceLocation RESET_QUEUE = GuiUtils.getResourceLocation("waterplayer", "textures/player/reset_queue.png");
+        ResourceLocation SKIP = GuiUtils.getResourceLocation("waterplayer", "textures/player/skip.png");
+        ResourceLocation SHUFFLE = GuiUtils.getResourceLocation("waterplayer", "textures/player/shuffle.png");
+
+        ResourceLocation VOLUME_MAX = GuiUtils.getResourceLocation("waterplayer", "textures/player/volume_max.png");
+        ResourceLocation VOLUME_OK = GuiUtils.getResourceLocation("waterplayer", "textures/player/volume_ok.png");
+        ResourceLocation VOLUME_LOW = GuiUtils.getResourceLocation("waterplayer", "textures/player/volume_low.png");
+        ResourceLocation VOLUME_MUTE = GuiUtils.getResourceLocation("waterplayer", "textures/player/volume_mute.png");
+
+        ResourceLocation FILE_ICON = GuiUtils.getResourceLocation("waterplayer", "textures/file_icon.png");
+        ResourceLocation MUSIC = GuiUtils.getResourceLocation("waterplayer", "textures/music.png");
+        ResourceLocation NO_ICON = GuiUtils.getResourceLocation("waterplayer", "textures/no_icon.png");
+        ResourceLocation SEARCH = GuiUtils.getResourceLocation("waterplayer", "textures/search.png");
+        ResourceLocation THINK = GuiUtils.getResourceLocation("waterplayer", "textures/think.png");
+
+        static ResourceLocation getPlayOrPause(boolean isPaused){
+            return isPaused ? PLAY : PAUSE;
+        }
     }
 }
