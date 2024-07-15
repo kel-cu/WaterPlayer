@@ -49,6 +49,9 @@ public class Music {
     public static String getSpeakerVolume(){
         return (getVolume() <= 0) ? "🔇" : (getVolume() <= 1) ? "🔈" : (getVolume() <= 70) ? "🔉" :  "🔊";
     }
+    public static ResourceLocation getSpeakerVolumeIcon(){
+        return GuiUtils.getResourceLocation("waterplayer", "textures/player/volume_"+((getVolume() <= 0) ? "mute" : (getVolume() <= 1) ? "low" : (getVolume() <= 70) ? "ok" :  "max")+".png");
+    }
     public static String getRepeatState(){
         return WaterPlayer.player.getTrackScheduler().getRepeatStatus() == 0 ? "" : WaterPlayer.player.getTrackScheduler().getRepeatStatus() == 1 ? " 🔁" : " 🔂";
     }

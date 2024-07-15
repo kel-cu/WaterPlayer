@@ -209,14 +209,6 @@ public class TrackScreen extends Screen {
         if (showPlaylist && scroller_panel != null) scroller_panel.onScroll.accept(scroller_panel);
         this.lyrics = LyricsHelper.getLyrics(track);
         this.lyricsEnable = lyrics != null && lyrics.getText() != null && !(lyrics instanceof SafeLyrics);
-//        if (this.backButton != null) {
-//            backButton.setWidth(lyricsEnable ? componentSize / 2 - 2 : componentSize);
-//            backButton.setX(lyricsEnable ? x + componentSize / 2 + 2 : x);
-//        }
-//        if (this.lyricsButton != null) {
-//            lyricsButton.setActive(lyricsEnable);
-//            lyricsButton.visible = lyricsEnable;
-//        }
         super.tick();
     }
 

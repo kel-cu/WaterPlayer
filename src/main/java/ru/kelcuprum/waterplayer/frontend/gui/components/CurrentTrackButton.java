@@ -83,9 +83,8 @@ public class CurrentTrackButton extends Button {
             } else {
                 ResourceLocation icon = Music.getThumbnail(track);
                 guiGraphics.blit(icon, getX() + 2, getY() + 2, 0.0F, 0.0F, 36, 36, 36, 36);
-                renderString(guiGraphics, Music.getTitle(track), getX() + 45, getY() + 8);
-                renderString(guiGraphics, Music.getAuthor(track), getX() + 45, getY() + height - getTimelineSize() - 8 - AlinLib.MINECRAFT.font.lineHeight);
-                if(isHovered() && mouseY > getY() + getHeight() - getTimelineSize() - 2) guiGraphics.renderTooltip(AlinLib.MINECRAFT.font, Component.literal(time), mouseX, mouseY);
+                renderString(guiGraphics, builder.toString(), getX() + 45, getY() + 8);
+                renderString(guiGraphics, time+" | "+Music.getServiceName(Music.getService(track)).getString(), getX() + 45, getY() + height - getTimelineSize() - 8 - AlinLib.MINECRAFT.font.lineHeight);
             }
             double state = track.getInfo().isStream ? 1 : ((double) track.getPosition() / track.getDuration());
             guiGraphics.fill(getX(), getY() + getHeight() - getTimelineSize(), getX() + getWidth(), getY() + getHeight(), color - 0xb2000000);

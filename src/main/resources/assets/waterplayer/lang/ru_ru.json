@@ -54,10 +54,11 @@
   "waterplayer.control.reset_queue": "Сбросить очередь",
 
   "waterplayer.control": "Управление",
+  "waterplayer.control.modern.notice": "Ух ты, новый дизайн! Если вдруг вам не нравится новый дизайн, вы всегда можете исменить параметр в настройках мода, либо сочитанием клавиш Shift + P",
   "waterplayer.load.current_track": "Текущий трек:",
   "waterplayer.load.load": "Загрузить",
   "waterplayer.load.volume": "Громкость",
-  "waterplayer.load.url": "Ссылка на музыку",
+  "waterplayer.load.url": "Ссылка",
   "waterplayer.load.url.copy": "Посл. запрос",
   "waterplayer.load.queue": "Очередь",
 
@@ -90,6 +91,7 @@
   "waterplayer.config.enable_keybind": "Включить бинды в меню",
   "waterplayer.config.screem.queue_cover_show": "Миниатюры треков в очереди",
   "waterplayer.config.control.enable_lyrics": "Тексты песен на экране управления",
+  "waterplayer.config.control.modern": "Современный стиль",
 
   "waterplayer.config.notice": "Уведомления",
   "waterplayer.config.enable_notice": "Уведомления контроля трека",

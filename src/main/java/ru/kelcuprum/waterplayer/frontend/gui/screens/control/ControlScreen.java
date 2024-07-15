@@ -41,7 +41,7 @@ public class ControlScreen extends Screen {
     private final Screen parent;
 
     public ControlScreen(Screen parent) {
-        super(Component.translatable("waterplayer.name"));
+        super(Component.translatable("waterplayer.control"));
         this.parent = parent;
     }
 
@@ -60,20 +60,20 @@ public class ControlScreen extends Screen {
     public void initPanel() {
         int x = 5;
         int size = 180;
-        addRenderableWidget(new TextBox(x, 15, size, 9, Component.translatable("waterplayer.control"), true));
+        addRenderableWidget(new TextBox(x, 15, size, 9, title, true));
         request = (EditBox) new EditBoxBuilder(Component.translatable("waterplayer.load.url")).setSize(size-25, 20).setPosition(x+25, 40).build();
         request.setMaxLength(Integer.MAX_VALUE);
         request.setResponder((s) ->  query = s);
         request.setValue(query);
         addRenderableWidget(request);
-        addRenderableWidget(new ButtonBuilder(Component.empty(), (buttonSprite) -> request.setValue(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", "")))
-                .setIcon(Icons.RESET)
+        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.load.url.copy"), (buttonSprite) -> request.setValue(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", "")))
+                .setSprite(Icons.RESET)
                 .setTextureSize(20, 20)
                 .setSize(20, 20)
                 .setPosition(x, 40)
                 .build());
         Button bws = (Button) new ButtonBuilder(Component.translatable("waterplayer.control.search"), (e) -> AlinLib.MINECRAFT.setScreen(new SearchScreen(this)))
-                .setIcon(GuiUtils.getResourceLocation("waterplayer", "textures/search.png"))
+                .setSprite(GuiUtils.getResourceLocation("waterplayer", "textures/search.png"))
                 .setTextureSize(20, 20)
                 .setPosition(x, 65).setSize(20, 20)
                 .build();
@@ -105,18 +105,18 @@ public class ControlScreen extends Screen {
                 .build());
         this.play = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control." + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause")), (e) -> {
             WaterPlayer.player.getAudioPlayer().setPaused(!WaterPlayer.player.getAudioPlayer().isPaused());
-            e.setMessage(Component.translatable("waterplayer.control." + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause")));
-            ((ButtonBuilder)e.builder).setIcon(GuiUtils.getResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"));
+            e.builder.setTitle(Component.translatable("waterplayer.control." + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause")));
+            ((ButtonBuilder)e.builder).setSprite(GuiUtils.getResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"));
         })
-                .setIcon(GuiUtils.getResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"))
+                .setSprite(GuiUtils.getResourceLocation("waterplayer", "textures/player/" + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause") + ".png"))
                 .setTextureSize(20, 20)
                 .setSize(20, 20)
                 .setPosition(x, height - 25).build());
         this.repeat = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control.repeat"), (e) -> {
             WaterPlayer.player.getTrackScheduler().changeRepeatStatus();
-            ((ButtonBuilder)e.builder).setIcon(WaterPlayer.player.getTrackScheduler().getRepeatIcon());
+            ((ButtonBuilder)e.builder).setSprite(WaterPlayer.player.getTrackScheduler().getRepeatIcon());
         })
-                .setIcon(WaterPlayer.player.getTrackScheduler().getRepeatIcon())
+                .setSprite(WaterPlayer.player.getTrackScheduler().getRepeatIcon())
                 .setTextureSize(20, 20)
                 .setSize(20, 20)
                 .setPosition(x + 100, height - 25).build());
@@ -126,7 +126,7 @@ public class ControlScreen extends Screen {
                 return;
             WaterPlayer.player.getTrackScheduler().nextTrack();
         })
-                .setIcon(GuiUtils.getResourceLocation("waterplayer", "textures/player/skip.png"))
+                .setSprite(GuiUtils.getResourceLocation("waterplayer", "textures/player/skip.png"))
                 .setTextureSize(20, 20)
                 .setSize(20, 20)
                 .setPosition(x + 25, height - 25)
@@ -138,14 +138,14 @@ public class ControlScreen extends Screen {
                 rebuildWidgetsList();
             }
         })
-                .setIcon(GuiUtils.getResourceLocation("waterplayer", "textures/player/shuffle.png"))
+                .setSprite(GuiUtils.getResourceLocation("waterplayer", "textures/player/shuffle.png"))
                 .setTextureSize(20, 20)
                 .setSize(20, 20)
                 .setPosition(x + 50, height - 25)
                 .build());
 
         addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control.reset_queue"), (e) -> WaterPlayer.player.getTrackScheduler().queue.clear())
-                .setIcon(GuiUtils.getResourceLocation("waterplayer", "textures/player/reset_queue.png"))
+                .setSprite(GuiUtils.getResourceLocation("waterplayer", "textures/player/reset_queue.png"))
                 .setTextureSize(20, 20)
                 .setSize(20, 20)
                 .setPosition(x + 75, height - 25)
@@ -231,12 +231,17 @@ public class ControlScreen extends Screen {
     }
 
     @Override
-    public boolean keyPressed(int i, int j, int k) {
-        if(getFocused() != null && getFocused() instanceof EditBox && i == GLFW.GLFW_KEY_ENTER){
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if(keyCode == GLFW.GLFW_KEY_P && (modifiers & GLFW.GLFW_MOD_SHIFT) != 0){
+            AlinLib.MINECRAFT.setScreen(new ModernControlScreen(parent));
+            WaterPlayer.config.setBoolean("CONTROL.MODERN", true);
+            return true;
+        }
+        if(getFocused() != null && getFocused() instanceof EditBox && keyCode == GLFW.GLFW_KEY_ENTER){
             load.onPress();
             return true;
         }
-        return super.keyPressed(i, j, k);
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override

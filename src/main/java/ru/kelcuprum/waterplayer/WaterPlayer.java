@@ -22,7 +22,6 @@ import org.meteordev.starscript.value.ValueMap;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.api.KeyMappingHelper;
-import ru.kelcuprum.alinlib.api.events.alinlib.AlinLibEvents;
 import ru.kelcuprum.alinlib.api.events.alinlib.LocalizationEvents;
 import ru.kelcuprum.alinlib.api.events.client.*;
 import ru.kelcuprum.alinlib.config.Config;
@@ -34,6 +33,7 @@ import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
 import ru.kelcuprum.waterplayer.backend.command.WaterPlayerCommand;
 import ru.kelcuprum.waterplayer.frontend.gui.TexturesHelper;
 import ru.kelcuprum.waterplayer.frontend.gui.overlays.SubtitlesHandler;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ModernControlScreen;
 import ru.kelcuprum.waterplayer.frontend.localization.Music;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.overlays.OverlayHandler;
@@ -172,7 +172,7 @@ public class WaterPlayer implements ClientModInitializer {
         ));
         keyBinds.add(new KeyBind(key1, () -> {
             if (!(AlinLib.MINECRAFT.screen instanceof ControlScreen)) {
-                AlinLib.MINECRAFT.setScreen(new ControlScreen(AlinLib.MINECRAFT.screen));
+                AlinLib.MINECRAFT.setScreen(getControlScreen(AlinLib.MINECRAFT.screen));
                 return true;
             } else return false;
         }));
@@ -250,6 +250,12 @@ public class WaterPlayer implements ClientModInitializer {
             config.save();
             return true;
         }));
+    }
+
+    //
+
+    public static Screen getControlScreen(Screen parent){
+        return WaterPlayer.config.getBoolean("CONTROL.MODERN", true) ? new ModernControlScreen(parent) : new ControlScreen(parent);
     }
 
     // Logger

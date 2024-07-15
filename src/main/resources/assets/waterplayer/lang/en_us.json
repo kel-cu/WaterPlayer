@@ -54,10 +54,11 @@
   "waterplayer.control.reset_queue": "Reset Queue",
 
   "waterplayer.control": "Control",
+  "waterplayer.control.modern.notice": "Wow, new design! If you don't like the new design, you can always change the parameter in the mod settings, or by pressing Shift + P",
   "waterplayer.load.current_track": "Current Track:",
   "waterplayer.load.load": "Load",
   "waterplayer.load.volume": "Volume",
-  "waterplayer.load.url": "Track URL",
+  "waterplayer.load.url": "URL",
   "waterplayer.load.url.copy": "Last Track URL",
   "waterplayer.load.queue": "Queue",
 
@@ -90,6 +91,7 @@
   "waterplayer.config.enable_keybind": "Key Bindings in the Menu",
   "waterplayer.config.screem.queue_cover_show": "Track Thumbnails in the Queue",
   "waterplayer.config.control.enable_lyrics": "Song Lyrics in the Control Screen",
+  "waterplayer.config.control.modern": "Modern Style",
 
   "waterplayer.config.notice": "Notice",
   "waterplayer.config.enable_notice": "Track Control Notices",
