@@ -20,7 +20,6 @@ import org.lwjgl.glfw.GLFW;
 import org.meteordev.starscript.Starscript;
 import org.meteordev.starscript.value.Value;
 import org.meteordev.starscript.value.ValueMap;
-import org.spongepowered.asm.mixin.Interface;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.api.KeyMappingHelper;
@@ -29,16 +28,15 @@ import ru.kelcuprum.alinlib.api.events.client.*;
 import ru.kelcuprum.alinlib.config.Config;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.GuiUtils;
-import ru.kelcuprum.alinlib.gui.Icons;
 import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
 import ru.kelcuprum.waterplayer.backend.KeyBind;
 import ru.kelcuprum.waterplayer.backend.MusicPlayer;
 import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
 import ru.kelcuprum.waterplayer.backend.command.WaterPlayerCommand;
-import ru.kelcuprum.waterplayer.frontend.gui.TexturesHelper;
+import ru.kelcuprum.waterplayer.frontend.gui.TextureHelper;
 import ru.kelcuprum.waterplayer.frontend.gui.overlays.SubtitlesHandler;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ModernControlScreen;
-import ru.kelcuprum.waterplayer.frontend.localization.Music;
+import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.overlays.OverlayHandler;
 
@@ -66,37 +64,36 @@ public class WaterPlayer implements ClientModInitializer {
             GuiRenderEvents.RENDER.register(hud);
             GuiRenderEvents.RENDER.register(sub);
             ClientTickEvents.START_CLIENT_TICK.register(hud);
-//            ClientTickEvents.START_CLIENT_TICK.register(sub);
         });
         ClientLifecycleEvents.CLIENT_STOPPING.register(e -> {
             player.getAudioPlayer().stopTrack();
-            TexturesHelper.saveMap();
+            TextureHelper.saveMap();
         });
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             for (KeyBind bind : keyBinds) {
                 if (bind.key().consumeClick()) bind.onExecute().run();
             }
         });
-        TextureManagerEvent.INIT.register(TexturesHelper::loadTextures);
+        TextureManagerEvent.INIT.register(TextureHelper::loadTextures);
         LocalizationEvents.DEFAULT_PARSER_INIT.register((starScript -> {
             Starscript ss = starScript.ss;
             ss.set("waterplayer", new ValueMap()
                     .set("player", new ValueMap()
-                            .set("volume", () -> Value.number(Music.getVolume()))
-                            .set("speaker_icon", () -> Value.string(Music.getSpeakerVolume()))
-                            .set("repeat_icon", () -> Value.string(Music.getRepeatState()))
-                            .set("pause_icon", () -> Value.string(Music.getPauseState()))
+                            .set("volume", () -> Value.number(MusicHelper.getVolume()))
+                            .set("speaker_icon", () -> Value.string(MusicHelper.getSpeakerVolume()))
+                            .set("repeat_icon", () -> Value.string(MusicHelper.getRepeatState()))
+                            .set("pause_icon", () -> Value.string(MusicHelper.getPauseState()))
                     ).set("format", new ValueMap()
-                            .set("time", () -> Value.string(Music.getIsLive() ? WaterPlayer.localization.getLocalization("format.live", true)
+                            .set("time", () -> Value.string(MusicHelper.getIsLive() ? WaterPlayer.localization.getLocalization("format.live", true)
                                     : WaterPlayer.localization.getLocalization("format.time", true)))
                             .set("title", () -> Value.string(WaterPlayer.localization.getLocalization("format.title", true)))
                             .set("author", () -> Value.string(WaterPlayer.localization.getLocalization("format.author", true)))
                     ).set("track", new ValueMap()
-                            .set("title", () -> Value.string(Music.getTitle()))
-                            .set("author", () -> Value.string(Music.getAuthor()))
+                            .set("title", () -> Value.string(MusicHelper.getTitle()))
+                            .set("author", () -> Value.string(MusicHelper.getAuthor()))
                             .set("time", new ValueMap()
-                                    .set("position", () -> Value.string(getTimestamp(Music.getPosition())))
-                                    .set("duration", () -> Value.string(getTimestamp(Music.getDuration())))
+                                    .set("position", () -> Value.string(getTimestamp(MusicHelper.getPosition())))
+                                    .set("duration", () -> Value.string(getTimestamp(MusicHelper.getDuration())))
                             )
                     )
             );

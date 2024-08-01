@@ -4,13 +4,13 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import ru.kelcuprum.waterplayer.WaterPlayer;
-import ru.kelcuprum.waterplayer.frontend.gui.TexturesHelper;
+import ru.kelcuprum.waterplayer.frontend.gui.TextureHelper;
 
 import java.io.File;
 
 import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.*;
 
-public class Music {
+public class MusicHelper {
     //
     public static boolean trackIsNull(){
         return trackIsNull(WaterPlayer.player.getAudioPlayer().getPlayingTrack());
@@ -69,7 +69,7 @@ public class Music {
         return trackIsNull() ? NO_ICON : getThumbnail(WaterPlayer.player.getAudioPlayer().getPlayingTrack());
     }
     public static ResourceLocation getThumbnail(AudioTrack info){
-        return trackIsNull(info) ? NO_ICON : info.getInfo().artworkUrl != null ? TexturesHelper.getTexture(info.getInfo().artworkUrl, (info.getSourceManager().getSourceName() + "_" + info.getInfo().identifier)) : Music.isFile(info) ? FILE_ICON : NO_ICON;
+        return trackIsNull(info) ? NO_ICON : info.getInfo().artworkUrl != null ? TextureHelper.getTexture(info.getInfo().artworkUrl, (info.getSourceManager().getSourceName() + "_" + info.getInfo().identifier)) : MusicHelper.isFile(info) ? FILE_ICON : NO_ICON;
     }
 
     public static boolean isFile(){

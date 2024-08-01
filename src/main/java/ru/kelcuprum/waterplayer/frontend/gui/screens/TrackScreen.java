@@ -22,7 +22,7 @@ import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 import ru.kelcuprum.waterplayer.frontend.gui.LyricsHelper;
 import ru.kelcuprum.waterplayer.frontend.gui.SafeLyrics;
 import ru.kelcuprum.waterplayer.frontend.gui.components.LyricsBox;
-import ru.kelcuprum.waterplayer.frontend.localization.Music;
+import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -118,13 +118,13 @@ public class TrackScreen extends Screen {
         backButton = (Button) addRenderableWidget(new ButtonBuilder(CommonComponents.GUI_BACK, (huy) -> onClose()).setWidth(track.getInfo().isStream ? componentSize : componentSize / 2 - 2).setPosition(track.getInfo().isStream ? x : x + componentSize / 2 + 2, y).build());
 
         int textY = height / 2 - 15 - iconSize + 5;
-        addRenderableWidget(new TextBox(x + iconSize + 5, textY, componentSize - (iconSize + 10), font.lineHeight, Component.literal(Music.getTitle(track)), false));
+        addRenderableWidget(new TextBox(x + iconSize + 5, textY, componentSize - (iconSize + 10), font.lineHeight, Component.literal(MusicHelper.getTitle(track)), false));
         textY += (font.lineHeight + 5);
-        if (!Music.getAuthor(track).isBlank()) {
-            addRenderableWidget(new TextBox(x + iconSize + 5, textY, componentSize - (iconSize + 10), font.lineHeight, Component.translatable("waterplayer.track.author", Music.getAuthor(track)), false));
+        if (!MusicHelper.getAuthor(track).isBlank()) {
+            addRenderableWidget(new TextBox(x + iconSize + 5, textY, componentSize - (iconSize + 10), font.lineHeight, Component.translatable("waterplayer.track.author", MusicHelper.getAuthor(track)), false));
             textY += (font.lineHeight + 5);
         }
-        addRenderableWidget(new TextBox(x + iconSize + 5, textY, componentSize - (iconSize + 10), font.lineHeight, Component.translatable("waterplayer.track.service", Music.getServiceName(Music.getService(track))), false));
+        addRenderableWidget(new TextBox(x + iconSize + 5, textY, componentSize - (iconSize + 10), font.lineHeight, Component.translatable("waterplayer.track.service", MusicHelper.getServiceName(MusicHelper.getService(track))), false));
     }
 
     private ConfigureScrolWidget scroller_panel;
@@ -190,7 +190,7 @@ public class TrackScreen extends Screen {
         //$$ renderBackground(guiGraphics);
         //#endif
         super.render(guiGraphics, i, j, f);
-        guiGraphics.blit(Music.getThumbnail(track), x, height / 2 - 15 - iconSize, 0.0F, 0.0F, iconSize, iconSize, iconSize, iconSize);
+        guiGraphics.blit(MusicHelper.getThumbnail(track), x, height / 2 - 15 - iconSize, 0.0F, 0.0F, iconSize, iconSize, iconSize, iconSize);
     }
 
     @Override

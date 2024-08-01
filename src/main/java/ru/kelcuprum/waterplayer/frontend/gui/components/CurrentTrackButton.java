@@ -14,7 +14,7 @@ import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
 import ru.kelcuprum.alinlib.gui.components.buttons.Button;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.TrackScreen;
-import ru.kelcuprum.waterplayer.frontend.localization.Music;
+import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
 import static ru.kelcuprum.waterplayer.WaterPlayer.getTimestamp;
 
@@ -49,8 +49,8 @@ public class CurrentTrackButton extends Button {
         if (isTrackEnable()) {
             AudioTrack track = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
             StringBuilder builder = new StringBuilder();
-            if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
-            builder.append(Music.getTitle(track)).append(" ").append(track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : getTimestamp(Music.getPosition(track)) + " / " + getTimestamp(Music.getDuration(track)));
+            if (!MusicHelper.isAuthorNull(track)) builder.append("«").append(MusicHelper.getAuthor(track)).append("» ");
+            builder.append(MusicHelper.getTitle(track)).append(" ").append(track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : getTimestamp(MusicHelper.getPosition(track)) + " / " + getTimestamp(MusicHelper.getDuration(track)));
             return Component.literal(builder.toString());
         } else return Component.translatable("waterplayer.command.now_playing.notPlaying");
     }
@@ -66,10 +66,10 @@ public class CurrentTrackButton extends Button {
             AudioTrack track = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
 
             StringBuilder builder = new StringBuilder();
-            if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
-            builder.append(Music.getTitle(track));
+            if (!MusicHelper.isAuthorNull(track)) builder.append("«").append(MusicHelper.getAuthor(track)).append("» ");
+            builder.append(MusicHelper.getTitle(track));
 
-            String time = track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : getTimestamp(Music.getPosition(track)) + " / " + getTimestamp(Music.getDuration(track));
+            String time = track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : getTimestamp(MusicHelper.getPosition(track)) + " / " + getTimestamp(MusicHelper.getDuration(track));
 
             int color = WaterPlayer.player.getAudioPlayer().isPaused() ? Colors.CLOWNFISH : track.getInfo().isStream ? Colors.GROUPIE : Colors.SEADRIVE;
             //
@@ -81,10 +81,10 @@ public class CurrentTrackButton extends Button {
                     guiGraphics.drawString(AlinLib.MINECRAFT.font, time, getX() + getWidth() - AlinLib.MINECRAFT.font.width(time) - ((getHeight() - 8) / 2), getY() + (getHeight() - 8) / 2, 0xffffff);
                 }
             } else {
-                ResourceLocation icon = Music.getThumbnail(track);
+                ResourceLocation icon = MusicHelper.getThumbnail(track);
                 guiGraphics.blit(icon, getX() + 2, getY() + 2, 0.0F, 0.0F, 36, 36, 36, 36);
                 renderString(guiGraphics, builder.toString(), getX() + 45, getY() + 8);
-                renderString(guiGraphics, time+" | "+Music.getServiceName(Music.getService(track)).getString(), getX() + 45, getY() + height - getTimelineSize() - 8 - AlinLib.MINECRAFT.font.lineHeight);
+                renderString(guiGraphics, time+" | "+ MusicHelper.getServiceName(MusicHelper.getService(track)).getString(), getX() + 45, getY() + height - getTimelineSize() - 8 - AlinLib.MINECRAFT.font.lineHeight);
             }
             double state = track.getInfo().isStream ? 1 : ((double) track.getPosition() / track.getDuration());
             guiGraphics.fill(getX(), getY() + getHeight() - getTimelineSize(), getX() + getWidth(), getY() + getHeight(), color - 0xb2000000);

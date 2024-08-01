@@ -12,7 +12,7 @@ import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
 import ru.kelcuprum.alinlib.gui.components.buttons.Button;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.TrackScreen;
-import ru.kelcuprum.waterplayer.frontend.localization.Music;
+import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
 import static ru.kelcuprum.waterplayer.WaterPlayer.getTimestamp;
 
@@ -22,8 +22,8 @@ public class TrackButton extends Button {
     public TrackButton(int x, int y, int width, AudioTrack track, Screen screen, boolean isShort) {
         super(new ButtonBuilder().setOnPress((s) -> AlinLib.MINECRAFT.setScreen(new TrackScreen(screen, track))).setTitle(Component.empty()).setStyle(GuiUtils.getSelected()).setSize(width, isShort ? 20 : 40).setPosition(x, y));
         StringBuilder builder = new StringBuilder();
-        if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
-        builder.append(Music.getTitle(track)).append(" ").append(getTimestamp(Music.getDuration(track)));
+        if (!MusicHelper.isAuthorNull(track)) builder.append("«").append(MusicHelper.getAuthor(track)).append("» ");
+        builder.append(MusicHelper.getTitle(track)).append(" ").append(getTimestamp(MusicHelper.getDuration(track)));
         setMessage(Component.literal(builder.toString()));
         this.isShort = isShort;
         this.track = track;
@@ -32,9 +32,9 @@ public class TrackButton extends Button {
     public void renderText(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         if (getY() < guiGraphics.guiHeight() && !(getY() <=-getHeight()) ) {
             StringBuilder builder = new StringBuilder();
-            if (!Music.isAuthorNull(track)) builder.append("«").append(Music.getAuthor(track)).append("» ");
-            builder.append(Music.getTitle(track));
-            String time = track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : getTimestamp(Music.getDuration(track));
+            if (!MusicHelper.isAuthorNull(track)) builder.append("«").append(MusicHelper.getAuthor(track)).append("» ");
+            builder.append(MusicHelper.getTitle(track));
+            String time = track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : getTimestamp(MusicHelper.getDuration(track));
             if (isShort) {
                 if(GuiUtils.isDoesNotFit(getMessage(), getWidth(), getHeight())){
                     this.renderScrollingString(guiGraphics, AlinLib.MINECRAFT.font, 2, 0xFFFFFF);
@@ -43,10 +43,10 @@ public class TrackButton extends Button {
                     guiGraphics.drawString(AlinLib.MINECRAFT.font, time, getX() + getWidth()-AlinLib.MINECRAFT.font.width(time)-((getHeight() - 8) / 2), getY() + (getHeight() - 8) / 2, 0xffffff);
                 }
             } else {
-                ResourceLocation icon = Music.getThumbnail(track);
+                ResourceLocation icon = MusicHelper.getThumbnail(track);
                 guiGraphics.blit(icon, getX() + 2, getY() + 2, 0.0F, 0.0F, 36, 36, 36, 36);
                 renderString(guiGraphics, builder.toString(), getX() + 45, getY() + 8);
-                renderString(guiGraphics, time+" | "+Music.getServiceName(Music.getService(track)).getString(), getX() + 45, getY() + height - 8 - AlinLib.MINECRAFT.font.lineHeight);
+                renderString(guiGraphics, time+" | "+ MusicHelper.getServiceName(MusicHelper.getService(track)).getString(), getX() + 45, getY() + height - 8 - AlinLib.MINECRAFT.font.lineHeight);
             }
         }
     }

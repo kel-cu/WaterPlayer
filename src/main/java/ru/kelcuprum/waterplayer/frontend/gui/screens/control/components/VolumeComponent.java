@@ -7,7 +7,7 @@ import net.minecraft.util.Mth;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.gui.GuiUtils;
 import ru.kelcuprum.waterplayer.WaterPlayer;
-import ru.kelcuprum.waterplayer.frontend.localization.Music;
+import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
 import static ru.kelcuprum.alinlib.gui.Colors.*;
 
@@ -23,7 +23,7 @@ public class VolumeComponent extends AbstractSliderButton {
         int y = getY()+(getHeight()/2)-(isHoveredOrFocused() ? AlinLib.MINECRAFT.font.lineHeight/2 : 7);
         String volumeString = WaterPlayer.player.getVolume()+"%";
         if(isHoveredOrFocused()) guiGraphics.drawString(AlinLib.MINECRAFT.font, volumeString, getX()-6-AlinLib.MINECRAFT.font.width(volumeString), y, -1);
-            else guiGraphics.blit(Music.getSpeakerVolumeIcon(), getX()-20, y, 0f, 0f, 14, 14, 14, 14);
+            else guiGraphics.blit(MusicHelper.getSpeakerVolumeIcon(), getX()-20, y, 0f, 0f, 14, 14, 14, 14);
     }
 
     @Override

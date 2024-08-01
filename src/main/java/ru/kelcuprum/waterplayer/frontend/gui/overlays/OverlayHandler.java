@@ -15,7 +15,7 @@ import ru.kelcuprum.alinlib.api.events.client.ClientTickEvents;
 import ru.kelcuprum.alinlib.api.events.client.ScreenEvents;
 import ru.kelcuprum.alinlib.api.events.client.GuiRenderEvents;
 import ru.kelcuprum.waterplayer.WaterPlayer;
-import ru.kelcuprum.waterplayer.frontend.localization.Music;
+import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
 import java.util.List;
 
@@ -43,14 +43,14 @@ public class OverlayHandler implements GuiRenderEvents, ClientTickEvents.StartTi
                 isPause = WaterPlayer.player.getAudioPlayer().isPaused();
                 v = isLive ? 1.0 : (double) WaterPlayer.player.getAudioPlayer().getPlayingTrack().getPosition() / WaterPlayer.player.getAudioPlayer().getPlayingTrack().getDuration();
                 //-=-=-=-
-                Component author = Component.literal(Music.getAuthor());
-                Component title = Component.literal(Music.getTitle());
+                Component author = Component.literal(MusicHelper.getAuthor());
+                Component title = Component.literal(MusicHelper.getTitle());
                 Component state = Component.literal(WaterPlayer.localization.getParsedText("{waterplayer.player.speaker_icon} {waterplayer.player.volume}% {waterplayer.format.time}{waterplayer.player.repeat_icon}"));
                 int pos = WaterPlayer.config.getNumber("OVERLAY.POSITION", 0).intValue();
                 int pos1 = WaterPlayer.config.getNumber("OVERLAY.POSITION", 0).intValue();
-                int maxWidth = Math.max(AlinLib.MINECRAFT.font.width(state), (bottom ? (pos == 0 || pos == 1) : (pos1 == 0 || pos1 == 1)) ? AlinLib.MINECRAFT.getWindow().getGuiScaledWidth() / 2 : ((AlinLib.MINECRAFT.getWindow().getGuiScaledWidth() - 280) / 2) - (WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().artworkUrl != null || Music.isFile() ? (AlinLib.MINECRAFT.font.lineHeight + 3) * 3 : 0));
+                int maxWidth = Math.max(AlinLib.MINECRAFT.font.width(state), (bottom ? (pos == 0 || pos == 1) : (pos1 == 0 || pos1 == 1)) ? AlinLib.MINECRAFT.getWindow().getGuiScaledWidth() / 2 : ((AlinLib.MINECRAFT.getWindow().getGuiScaledWidth() - 280) / 2) - (WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().artworkUrl != null || MusicHelper.isFile() ? (AlinLib.MINECRAFT.font.lineHeight + 3) * 3 : 0));
                 //-=-=-=-
-                if (!Music.isAuthorNull()) texts.addAll(AlinLib.MINECRAFT.font.split(author, maxWidth));
+                if (!MusicHelper.isAuthorNull()) texts.addAll(AlinLib.MINECRAFT.font.split(author, maxWidth));
                 texts.addAll(AlinLib.MINECRAFT.font.split(title, maxWidth));
                 texts.addAll(AlinLib.MINECRAFT.font.split(state, maxWidth));
             }
@@ -60,7 +60,7 @@ public class OverlayHandler implements GuiRenderEvents, ClientTickEvents.StartTi
     }
 
     public void render(GuiGraphics guiGraphics, int pos) {
-        if(AlinLib.MINECRAFT.options.hideGui) return;
+        if (AlinLib.MINECRAFT.options.hideGui) return;
         if (WaterPlayer.player.getAudioPlayer().getPlayingTrack() == null) return;
         try {
             if (!texts.isEmpty()) {
@@ -74,11 +74,9 @@ public class OverlayHandler implements GuiRenderEvents, ClientTickEvents.StartTi
                 boolean caverEnable = false;
                 int j = 0;
                 if (WaterPlayer.config.getBoolean("OVERLAY.ENABLE_CAVER", true)) {
-//                    if (WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().artworkUrl != null || Music.isFile()) {
-                        caverEnable = true;
-                        j = f * Math.min(texts.size(), 3);
-                        mx += j + 10;
-//                    }
+                    caverEnable = true;
+                    j = f * Math.min(texts.size(), 3);
+                    mx += j + 10;
                 }
 
                 boolean left = pos == 0 || pos == 2;
@@ -113,7 +111,7 @@ public class OverlayHandler implements GuiRenderEvents, ClientTickEvents.StartTi
                 }
                 if (caverEnable) {
                     AudioTrack track = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
-                    guiGraphics.blit(Music.getThumbnail(track), left ? 6 : guiGraphics.guiWidth() - 14 - mx, (top ? 6 : guiGraphics.guiHeight() - 5 + i1), 0.0F, 0.0F, j + 3, j + 3, j + 3, j + 3);
+                    guiGraphics.blit(MusicHelper.getThumbnail(track), left ? 6 : guiGraphics.guiWidth() - 14 - mx, (top ? 6 : guiGraphics.guiHeight() - 5 + i1), 0.0F, 0.0F, j + 3, j + 3, j + 3, j + 3);
                 }
             }
         } catch (Exception ex) {

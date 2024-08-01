@@ -8,7 +8,7 @@ import net.minecraft.util.Mth;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.gui.GuiUtils;
 import ru.kelcuprum.waterplayer.WaterPlayer;
-import ru.kelcuprum.waterplayer.frontend.localization.Music;
+import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
 import static ru.kelcuprum.alinlib.gui.Colors.*;
 import static ru.kelcuprum.waterplayer.WaterPlayer.getTimestamp;
@@ -39,7 +39,7 @@ public class TimelineComponent extends AbstractSliderButton {
                 String dur = WaterPlayer.getTimestamp(WaterPlayer.player.getAudioPlayer().getPlayingTrack().getDuration());
                 guiGraphics.drawString(AlinLib.MINECRAFT.font, dur, getX() + getWidth() - AlinLib.MINECRAFT.font.width(dur), getY() - 2 - AlinLib.MINECRAFT.font.lineHeight, -1);
             } else if(!showTime && isHovered()){
-                String time = track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : getTimestamp(Music.getPosition(track)) + " / " + getTimestamp(Music.getDuration(track));
+                String time = track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : getTimestamp(MusicHelper.getPosition(track)) + " / " + getTimestamp(MusicHelper.getDuration(track));
                 guiGraphics.renderTooltip(AlinLib.MINECRAFT.font, Component.literal(time), i, j);
             }
         }

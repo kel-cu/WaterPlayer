@@ -14,7 +14,6 @@ import net.minecraft.world.item.Items;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.glfw.GLFW;
 import ru.kelcuprum.alinlib.AlinLib;
-import ru.kelcuprum.alinlib.gui.GuiUtils;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
 import ru.kelcuprum.alinlib.gui.components.builder.editbox.EditBoxBuilder;
 import ru.kelcuprum.alinlib.gui.components.buttons.Button;
@@ -31,7 +30,7 @@ import ru.kelcuprum.waterplayer.frontend.gui.screens.control.components.Timeline
 import ru.kelcuprum.waterplayer.frontend.gui.screens.control.components.TrackIconButton;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.control.components.VolumeComponent;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.search.SearchScreen;
-import ru.kelcuprum.waterplayer.frontend.localization.Music;
+import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
 import java.time.Duration;
 import java.util.*;
@@ -261,13 +260,13 @@ public class ModernControlScreen extends Screen {
         guiGraphics.fill(x, y, x + width - 10, y + 40, BLACK_ALPHA);
 
         if (isTrackEnable()) {
-            guiGraphics.blit(Music.getThumbnail(), x + 3, y + 3, 0f, 0f, 34, 34, 34, 34);
+            guiGraphics.blit(MusicHelper.getThumbnail(), x + 3, y + 3, 0f, 0f, 34, 34, 34, 34);
             int size = width - 10;
             int x$Buttons = x + (size / 2) - ((25 * 5 - 5) / 2) - 6;
             int x$Timeline = x + (size / 2) - (Math.min(size / 3, 230) / 2) - 6;
             int maxX = Math.min(x$Buttons, x$Timeline);
-            renderString(guiGraphics, Music.getTitle(), x + 43, y + 8, maxX);
-            renderString(guiGraphics, Music.getAuthor(), x + 43, y + 40 - 8 - AlinLib.MINECRAFT.font.lineHeight, maxX);
+            renderString(guiGraphics, MusicHelper.getTitle(), x + 43, y + 8, maxX);
+            renderString(guiGraphics, MusicHelper.getAuthor(), x + 43, y + 40 - 8 - AlinLib.MINECRAFT.font.lineHeight, maxX);
         }
     }
 

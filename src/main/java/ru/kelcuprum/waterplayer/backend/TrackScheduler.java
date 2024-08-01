@@ -11,7 +11,7 @@ import net.minecraft.world.item.Items;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
-import ru.kelcuprum.waterplayer.frontend.localization.Music;
+import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -68,13 +68,13 @@ public class TrackScheduler extends AudioEventAdapter {
         }
         player.startTrack(queue.poll(), false);
         if(player.getPlayingTrack() != null) {
-            WaterPlayer.log("Starting Track: " + Music.getTitle(player.getPlayingTrack()));
+            WaterPlayer.log("Starting Track: " + MusicHelper.getTitle(player.getPlayingTrack()));
             if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true) && WaterPlayer.config.getBoolean("ENABLE_NOTICE.START_TRACK", true)) {
                 if (WaterPlayer.config.getBoolean("ENABLE_NOTICE.START_TRACK.CLEAR", false))
                     AlinLib.MINECRAFT.getToasts().clear();
-                ToastBuilder toast = WaterPlayer.getToast().setTitle(Music.isAuthorNull(player.getPlayingTrack()) ? Component.translatable("waterplayer.name") : Component.literal(Music.getAuthor(player.getPlayingTrack())))
-                        .setMessage(Component.literal(Music.getTitle(player.getPlayingTrack())));
-                if (Music.getAuthor(player.getPlayingTrack()).equals("YonKaGor")) toast.setIcon(getYonKaGorMoment(player.getPlayingTrack()));
+                ToastBuilder toast = WaterPlayer.getToast().setTitle(MusicHelper.isAuthorNull(player.getPlayingTrack()) ? Component.translatable("waterplayer.name") : Component.literal(MusicHelper.getAuthor(player.getPlayingTrack())))
+                        .setMessage(Component.literal(MusicHelper.getTitle(player.getPlayingTrack())));
+                if (MusicHelper.getAuthor(player.getPlayingTrack()).equals("YonKaGor")) toast.setIcon(getYonKaGorMoment(player.getPlayingTrack()));
                 else toast.setIcon(MUSIC);
                 toast.show(AlinLib.MINECRAFT.getToasts());
             }
@@ -123,8 +123,8 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
     protected Item getYonKaGorMoment(AudioTrack track) {
-        if (!Music.getAuthor(track).equals("YonKaGor")) return Items.MUSIC_DISC_STRAD;
-        return switch (Music.getTitle(track)) {
+        if (!MusicHelper.getAuthor(track).equals("YonKaGor")) return Items.MUSIC_DISC_STRAD;
+        return switch (MusicHelper.getTitle(track)) {
             case "I Forgot That You Exist", "I Forgot That You Exist. ¯\\_(ツ)_/¯" -> Items.MUSIC_DISC_WAIT;
             case "Top 10 Things to Do Before You Die", "Top 10 Things To Do Before You Die",
                  "[TW] Top 10 Things To Do Before You Die (Censored)" -> Items.LIGHT;

@@ -1,5 +1,8 @@
 package ru.kelcuprum.waterplayer.frontend.gui.screens.playlist;
 
+import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
+import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
+import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -23,16 +26,50 @@ import ru.kelcuprum.waterplayer.frontend.gui.components.TrackButton;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.kelcuprum.alinlib.gui.Icons.MUSIC;
+
 public class WebPlaylistScreen extends Screen {
     private final WebPlaylist playlist;
     private final Screen parent;
-    private List<AudioTrack> tracks = new ArrayList<>();
+    private List<AbstractWidget> trackWidgets = new ArrayList<>();
 
     public WebPlaylistScreen(Screen parent, WebPlaylist playlist) {
         super(Component.translatable("waterplayer.playlist"));
         this.parent = parent;
         this.playlist = playlist;
-        new Thread(() -> tracks = playlist.getTracks()).start();
+        new Thread(() -> trackWidgets = getTrackWidgets(playlist)).start();
+    }
+
+    public List<AbstractWidget> getTrackWidgets(WebPlaylist webplaylist){
+        List<AbstractWidget> trackWidgets = new ArrayList<>();
+        for (String url : webplaylist.playlist.urls) {
+            final Screen thisScreen = this;
+            WaterPlayer.player.getAudioPlayerManager().loadItemSync(url, new AudioLoadResultHandler() {
+                @Override
+                public void trackLoaded(AudioTrack track) {
+                    trackWidgets.add(new TrackButton(195, -50, width - 200, track, thisScreen, false));
+                }
+
+                @Override
+                public void playlistLoaded(AudioPlaylist playlist) {
+                    for(AudioTrack track : playlist.getTracks())
+                        trackWidgets.add(new TrackButton(195, -50, width - 200, track, thisScreen, false));
+                }
+
+                @Override
+                public void noMatches() {
+                    trackWidgets.add(new ButtonBuilder(Component.literal(url)).setOnPress((s) -> WaterPlayer.confirmLinkNow(thisScreen, url)).setCentered(false).setIcon(MUSIC).setPosition(195, -50).setWidth(width-200).build());
+                    WaterPlayer.log("Nothing Found by " + url, Level.WARN);
+                }
+
+                @Override
+                public void loadFailed(FriendlyException ex) {
+                    trackWidgets.add(new ButtonBuilder(Component.literal(url)).setOnPress((s) -> WaterPlayer.confirmLinkNow(thisScreen, url)).setCentered(false).setIcon(MUSIC).setPosition(195, -50).setWidth(width-200).build());
+                    WaterPlayer.log("ERROR: "+(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage()), Level.DEBUG);
+                }
+            });
+        }
+        return trackWidgets;
     }
 
     @Override
@@ -80,10 +117,11 @@ public class WebPlaylistScreen extends Screen {
         int x = 195;
         widgets.add(new TextBox(x, 5, width - 200, 20, Component.translatable("waterplayer.playlist.tracks"), true));
         int i = 30;
-        for (AudioTrack element : tracks) {
-            TrackButton trackButton = new TrackButton(x, -50, width - 200, element, this, false);
-            widgets.add(trackButton);
-            i += trackButton.getHeight() + 5;
+        for (AbstractWidget element : trackWidgets) {
+            element.setPosition(x, i);
+            element.setWidth(width-200);
+            widgets.add(element);
+            i += element.getHeight() + 5;
         }
         addRenderableWidgets(widgets);
     }
@@ -113,12 +151,12 @@ public class WebPlaylistScreen extends Screen {
     //$$ }
     //#endif
 
-    List<AudioTrack> lastTracks = new ArrayList<>();
+    List<AbstractWidget> lastTracks = new ArrayList<>();
     @Override
     public void tick() {
         if (scroller != null) scroller.onScroll.accept(scroller);
-        if (lastTracks != tracks){
-            lastTracks = tracks;
+        if (lastTracks != trackWidgets){
+            lastTracks = trackWidgets;
             rebuildWidgetsList();
         }
         super.tick();

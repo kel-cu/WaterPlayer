@@ -28,7 +28,7 @@ import java.util.HashMap;
 
 import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.NO_ICON;
 
-public class TexturesHelper {
+public class TextureHelper {
     public static HashMap<String, ResourceLocation> resourceLocationMap = new HashMap<>();
     public static HashMap<String, Boolean> urls = new HashMap<>();
     public static HashMap<String, DynamicTexture> urlsTextures = new HashMap<>();

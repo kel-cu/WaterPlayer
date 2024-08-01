@@ -9,10 +9,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandBuildContext;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.waterplayer.WaterPlayer;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.playlist.PlaylistScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.config.MainConfigsScreen;
-import ru.kelcuprum.waterplayer.frontend.localization.Music;
+import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,19 +35,19 @@ public class WaterPlayerCommand {
                         )
                         .executes(context -> {
                             Minecraft client = context.getSource().getClient();
-                            client.tell(() -> client.setScreen(new ControlScreen(client.screen)));
+                            WaterPlayer.player.loadMusic(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", ""), true);
                             return 1;
                         })
                 )
                 .then(literal("now-playing")
                         .executes(context -> {
-                            if (Music.trackIsNull()) {
+                            if (MusicHelper.trackIsNull()) {
                                 context.getSource().sendFeedback(Localization.getText("waterplayer.command.now_playing.notPlaying"));
                             } else {
                                 context.getSource().sendFeedback(Localization.getText("waterplayer.command.now_playing"));
-                                context.getSource().sendFeedback(Localization.toText(WaterPlayer.localization.getParsedText(
-                                        Music.isAuthorNull() ? "{track.title}" : "{format.author} {track.title}")));
-                                context.getSource().sendFeedback(Localization.toText(WaterPlayer.localization.getParsedText("{format.time}")));
+                                context.getSource().sendFeedback(Localization.toText(
+                                        MusicHelper.isAuthorNull() ? MusicHelper.getTitle() : MusicHelper.getAuthor() + " - " + MusicHelper.getTitle()));
+                                context.getSource().sendFeedback(Localization.toText(WaterPlayer.localization.getParsedText("{waterplayer.format.time}")));
                             }
                             return 1;
                         })
@@ -98,10 +97,10 @@ public class WaterPlayerCommand {
         for (AudioTrack track : WaterPlayer.player.getTrackScheduler().queue) {
             if (pos == size) break;
             StringBuilder builder = new StringBuilder();
-            if (Music.isAuthorNull(track)) builder.append(Music.getTitle(track)).append(" ");
+            if (MusicHelper.isAuthorNull(track)) builder.append(MusicHelper.getTitle(track)).append(" ");
             else
-                builder.append("«").append(Music.getAuthor(track)).append("» ").append(Music.getTitle(track)).append(" ");
-            builder.append(Music.getIsLive(track) ? WaterPlayer.localization.getLocalization("format.live") : getTimestamp(Music.getDuration(track)));
+                builder.append("«").append(MusicHelper.getAuthor(track)).append("» ").append(MusicHelper.getTitle(track)).append(" ");
+            builder.append(MusicHelper.getIsLive(track) ? WaterPlayer.localization.getLocalization("format.live") : getTimestamp(MusicHelper.getDuration(track)));
             list.add(builder.toString());
             pos++;
         }
