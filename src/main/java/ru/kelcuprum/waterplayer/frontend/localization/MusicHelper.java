@@ -3,9 +3,13 @@ package ru.kelcuprum.waterplayer.frontend.localization;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.gui.TextureHelper;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.*;
@@ -69,7 +73,8 @@ public class MusicHelper {
         return trackIsNull() ? NO_ICON : getThumbnail(WaterPlayer.player.getAudioPlayer().getPlayingTrack());
     }
     public static ResourceLocation getThumbnail(AudioTrack info){
-        return trackIsNull(info) ? NO_ICON : info.getInfo().artworkUrl != null ? TextureHelper.getTexture(info.getInfo().artworkUrl, (info.getSourceManager().getSourceName() + "_" + info.getInfo().identifier)) : MusicHelper.isFile(info) ? FILE_ICON : NO_ICON;
+        if(MusicHelper.isFile(info) && !TextureHelper.urlsTextures.containsKey(info.getInfo().uri)) return TextureHelper.getTexture$File(new File(info.getInfo().uri), (info.getSourceManager().getSourceName() + "_" + info.getInfo().identifier));
+        return trackIsNull(info) ? NO_ICON : TextureHelper.getTexture(info.getInfo().artworkUrl == null ? info.getInfo().uri : info.getInfo().artworkUrl, (info.getSourceManager().getSourceName() + "_" + info.getInfo().identifier));// : MusicHelper.isFile(info) ? FILE_ICON : NO_ICON;
     }
 
     public static boolean isFile(){

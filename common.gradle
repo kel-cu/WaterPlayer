@@ -80,6 +80,7 @@ dependencies {
     shade (implementation("com.github.topi314.lavasrc:lavasrc:${project.lavasrc}"))
     shade (implementation("com.github.topi314.lavasrc:lavasrc-protocol:${project.lavasrc_protocol}"))
     shade (implementation("com.github.topi314.lavalyrics:lavalyrics:${project.lavalyrics}"))
+    shade (implementation("net.jthink:jaudiotagger:3.0.1"))
 
     if (mod_brand == 'fabric') {
         modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"

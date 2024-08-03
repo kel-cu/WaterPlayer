@@ -32,6 +32,7 @@ import ru.kelcuprum.waterplayer.frontend.gui.screens.control.components.VolumeCo
 import ru.kelcuprum.waterplayer.frontend.gui.screens.search.SearchScreen;
 import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.*;
 
@@ -430,6 +431,12 @@ public class ModernControlScreen extends Screen {
     //$$     return scr;
     //$$ }
     //#endif
+
+    @Override
+    public void onFilesDrop(List<Path> list) {
+        if (list.size() == 1) editBox.setValue(list.get(0).toString());
+        else AlinLib.MINECRAFT.setScreen(new ConfirmLoadFiles(list, this));
+    }
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
