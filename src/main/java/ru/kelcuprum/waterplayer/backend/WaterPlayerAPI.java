@@ -30,7 +30,9 @@ public class WaterPlayerAPI {
         return getURL("/");
     }
     public static String getURL(String route){
-        return WaterPlayer.config.getString("API.URL", "https://api.waterplayer.ru") + route.replace(" ", "%20");
+        String url = WaterPlayer.config.getString("API.URL", "https://api.waterplayer.ru") + route;
+        url = url+(url.contains("?") ? "&" : "?")+"version=2.1";
+        return url;
     }
 
     @Async.Execute

@@ -1,0 +1,185 @@
+{
+  "waterplayer.name": "WaterPlayer",
+
+  "waterplayer.command.playlist.noName": "您沒有指定播放清單名稱",
+  "waterplayer.command.now_playing.notPlaying": "沒有播放任何東西。",
+  "waterplayer.command.now_playing": "當前曲目：",
+  "waterplayer.command.queue.blank": "佇列為空！",
+  "waterplayer.command.queue": "當前佇列：",
+
+  "waterplayer.playlist": "播放清單",
+  "waterplayer.playlist.add_files": "您確定要新增這些檔案嗎？",
+  "waterplayer.playlist.create": "建立／載入播放清單",
+  "waterplayer.playlist.create.filename": "播放清單名稱／網址：",
+  "waterplayer.playlist.reload": "重新載入",
+  "waterplayer.playlist.play": "播放播放清單",
+  "waterplayer.playlist.description": "播放： 播放清單: %s",
+  "waterplayer.playlist.remove": "移除播放清單",
+  "waterplayer.playlist.add": "新增網址",
+  "waterplayer.playlist.author": "作者",
+  "waterplayer.playlist.title": "標題",
+  "waterplayer.playlist.urls": "網址",
+  "waterplayer.playlist.tracks": "曲目",
+  "waterplayer.playlist.save": "儲存播放清單",
+
+  "waterplayer.playlist.upload": "分享",
+  "waterplayer.playlist.copy_link": "複製連結",
+  "waterplayer.playlist.uploaded": "已將播放清單連結複製到剪貼簿",
+  "waterplayer.playlist.link_copied": "連結已複製",
+
+  "waterplayer.key.pause": "切換暫停",
+  "waterplayer.key.volume.up": "提高音量",
+  "waterplayer.key.volume.down": "降低音量",
+  "waterplayer.key.control": "控制畫面",
+  "waterplayer.key.skip": "跳過曲目",
+  "waterplayer.key.reset": "重設佇列",
+  "waterplayer.key.shuffle": "隨機播放佇列",
+  "waterplayer.key.repeating": "切換重複",
+
+  "waterplayer.message.pause": "曲目已暫停",
+  "waterplayer.message.play": "曲目已繼續播放",
+  "waterplayer.message.repeat": "佇列重複 開啟",
+  "waterplayer.message.repeat.one": "曲目重複 開啟",
+  "waterplayer.message.repeat.no": "重複 關閉",
+  "waterplayer.message.reset": "佇列已重設",
+  "waterplayer.message.shuffle": "佇列已隨機播放",
+  "waterplayer.message.skip": "曲目已跳過",
+
+  "waterplayer.control.search": "搜尋...",
+  "waterplayer.control.pause": "暫停",
+  "waterplayer.control.play": "播放",
+  "waterplayer.control.repeat": "重複",
+  "waterplayer.control.shuffle": "隨機播放",
+  "waterplayer.control.skip": "跳過",
+  "waterplayer.control.reset_queue": "重設佇列",
+
+  "waterplayer.control": "控制",
+  "waterplayer.load.current_track": "當前曲目：",
+  "waterplayer.load.load": "載入",
+  "waterplayer.load.volume": "音量",
+  "waterplayer.load.url": "曲目網址",
+  "waterplayer.load.url.copy": "上一個曲目網址",
+  "waterplayer.load.queue": "佇列",
+
+  "waterplayer.load.load_files": "您確定要載入這些檔案嗎？",
+  "waterplayer.load.load_files.count_files": "以及其他 %s 個檔案...",
+
+  "waterplayer.load.add": "您的請求已發送",
+  "waterplayer.load.add.blank": "空白請求！",
+
+  "waterplayer.format.time": "{track.time.position} / {track.time.duration}",
+  "waterplayer.format.live": "（直播）",
+
+  "waterplayer.config": "組態",
+  "waterplayer.playlists": "播放清單",
+  "waterplayer.playlists.value": "%2$s 的 %1$s",
+  "waterplayer.play": "控制",
+
+  "waterplayer.config.overlay": "覆蓋",
+  "waterplayer.config.enable_overlay": "遊戲內覆蓋",
+  "waterplayer.config.overlay.position": "遊戲內覆蓋位置",
+  "waterplayer.config.overlay.enable_caver": "覆蓋中的曲目縮圖",
+  "waterplayer.config.overlay.position.top_left": "左上方",
+  "waterplayer.config.overlay.position.top_right": "右上方",
+  "waterplayer.config.overlay.position.bottom_left": "左下方",
+  "waterplayer.config.overlay.position.bottom_right": "右下方",
+
+  "waterplayer.config.menu": "選單",
+  "waterplayer.config.enable_menu_overlay": "主選單覆蓋",
+  "waterplayer.config.menu_overlay.position": "主選單覆蓋位置",
+  "waterplayer.config.enable_keybind": "選單中的按鍵綁定",
+  "waterplayer.config.screem.queue_cover_show": "佇列中的曲目縮圖",
+  "waterplayer.config.control.enable_lyrics": "控制畫面中的歌詞",
+
+  "waterplayer.config.notice": "通知",
+  "waterplayer.config.enable_notice": "曲目控制通知",
+  "waterplayer.config.enable_notice.start_track": "曲目標題通知",
+  "waterplayer.config.enable_notice.start_track.clear": "開始新曲目後清除通知",
+
+  "waterplayer.config.subtitles": "字幕",
+  "waterplayer.config.subtitles.indent_y": "縮排 Y",
+  "waterplayer.config.subtitles.back_alpha": "背景透明度",
+  "waterplayer.config.subtitles.text_color": "文字顏色",
+
+  "waterplayer.config.services": "服務",
+  "waterplayer.config.services.youtube": "YouTube",
+  "waterplayer.config.services.youtube_music": "YouTube Music",
+  "waterplayer.config.services.soundcloud": "SoundCloud",
+  "waterplayer.config.services.bandcamp": "Bandcamp",
+  "waterplayer.config.services.vimeo": "Vimeo",
+  "waterplayer.config.services.twitch": "Twitch",
+  "waterplayer.config.services.beam": "Beam",
+
+  "waterplayer.config.services.yandex": "Yandex Music",
+  "waterplayer.config.services.spotify": "Spotify",
+  "waterplayer.config.services.deezer": "Deezer",
+  "waterplayer.config.services.apple": "Apple Music",
+  "waterplayer.config.services.flowery": "Flowery TTS",
+  "waterplayer.config.services.http": "網際網路",
+  "waterplayer.config.services.local": "本機儲存空間",
+
+
+  "waterplayer.config.services.wp": "WP 播放清單",
+
+  "waterplayer.config.localization": "在地化",
+
+  "waterplayer.config.localization.title.formats": "格式",
+  "waterplayer.config.localization.format.time": "時間",
+  "waterplayer.config.localization.format.live": "直播",
+
+  "waterplayer.secret": "最高機密！",
+  "waterplayer.secret.how_to_get_tokens": "如何取得我的權杖？",
+  "waterplayer.secret.description": "變更資料後，您需要重新啟動！抱歉...",
+  "waterplayer.secret.title.tokens": "權杖",
+  "waterplayer.config.yandex_music_token": "Yandex Music 權杖",
+  "waterplayer.config.deezer_decryption_key": "Deezer 解密金鑰",
+  "waterplayer.config.flowery_tts_voice": "Flowery TTS 語音",
+
+  "waterplayer.secret.title.spotify": "Spotify",
+  "waterplayer.config.spotify_client_id": "用戶端 ID",
+  "waterplayer.config.spotify_client_secret": "用戶端密鑰",
+  "waterplayer.config.spotify_sp_dc": "SP DC Cookie",
+  "waterplayer.config.spotify_country_code": "國家／地區代碼",
+
+  "waterplayer.api": "WaterPlayer API",
+  "waterplayer.api.enable": "使用 API",
+  "waterplayer.api.url": "API 網址",
+  "waterplayer.api.update_configs": "更新 API 組態",
+  "waterplayer.api.config_updated": "組態已更新",
+
+
+  "waterplayer.secret.title.apple_music": "Apple Music",
+  "waterplayer.config.apple_music_media_api_token": "媒體 API 權杖",
+  "waterplayer.config.apple_music_country_code": "國家／地區代碼",
+
+  "waterplayer.track.author": "作者： %s",
+  "waterplayer.track.service": "服務： %s",
+
+  "waterplayer.track.lyrics": "顯示文字",
+  "waterplayer.track.hide_lyrics": "隱藏文字",
+  "waterplayer.track.lyrics.title": "曲目文字",
+  "waterplayer.track.lyrics.copy": "複製文字",
+  "waterplayer.track.lyrics.copy.toast": "文字已複製到剪貼簿",
+  "waterplayer.track.copy_link": "複製連結",
+  "waterplayer.track.open_link": "在瀏覽器中開啟",
+  "waterplayer.track.open_file": "開啟檔案",
+  "waterplayer.track.playlists": "播放清單",
+  "waterplayer.track.playlists.hide": "隱藏播放清單",
+  "waterplayer.track.playlists.added": "曲目已新增至「%s」播放清單",
+  "waterplayer.track.add_playlist": "新增至播放清單",
+  "waterplayer.track.play": "新增至佇列",
+
+
+  "waterplayer.search": "搜尋",
+  "waterplayer.search.query": "請求",
+  "waterplayer.search.service": "服務",
+  "waterplayer.search.result": "結果",
+  "waterplayer.search.last_query": "上一個請求",
+  "waterplayer.search.button": "尋找",
+  "waterplayer.search.not_found": "找不到 :(",
+
+
+  "waterplayer.web.what_data_is_sent": "Kel 正在取得什麼樣的資料？",
+
+  "modmenu.descriptionTranslation.waterplayer": "內建於用戶端的網際網路音樂播放器。"
+}
