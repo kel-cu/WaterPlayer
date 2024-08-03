@@ -30,7 +30,6 @@ public class WaterPlayerAPI {
     public static String getURL(String route){
         String url = WaterPlayer.config.getString("API.URL", "https://api.waterplayer.ru") + route;
         url = url+(url.contains("?") ? "&" : "?")+"version=2.0";
-        WaterPlayer.log(url);
         return url;
     }
 
