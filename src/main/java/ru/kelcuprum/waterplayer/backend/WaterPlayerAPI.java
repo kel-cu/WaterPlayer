@@ -164,7 +164,6 @@ public class WaterPlayerAPI {
                     .build();
         }
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-//        WaterPlayer.log(response.body());
         return response.body();
     }
     public static String getString(HttpRequest.Builder url) throws IOException, InterruptedException {
