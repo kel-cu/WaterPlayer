@@ -103,41 +103,59 @@ public class TextureHelper {
 
     public static ResourceLocation getTexture$File(File file, String id) {
         id = formatUrls$files(id.toLowerCase());
-        if (resourceLocationMap$file.containsKey(file)) return resourceLocationMap$file.get(file);
+        if (resourceLocationMap$file.containsKey(file)) {
+            return resourceLocationMap$file.get(file);
+        }
         else {
             if (!urls$file.getOrDefault(file, false)) {
                 urls$file.put(file, true);
                 String finalId = id;
-                new Thread(() -> registerTexture$File(file, AlinLib.MINECRAFT.getTextureManager(), GuiUtils.getResourceLocation("waterplayer", finalId))).start();
+                new Thread(() -> registerTexture$File(file, finalId, AlinLib.MINECRAFT.getTextureManager(), GuiUtils.getResourceLocation("waterplayer", finalId))).start();
             }
             return NO_ICON;
         }
     }
     @Async.Execute
-    public static void registerTexture$File(File file, TextureManager textureManager, ResourceLocation textureId) {
+    public static void registerTexture$File(File file, String id, TextureManager textureManager, ResourceLocation textureId) {
         WaterPlayer.log(String.format("REGISTER: %s", file.toPath()), Level.DEBUG);
         DynamicTexture texture;
         if(urlsTextures$file.containsKey(file)) {
+            JsonObject data = new JsonObject();
+            data.addProperty("url", file.toPath().toString());
+            data.addProperty("id", id);
+            if(!map.contains(data)) map.add(data);
             texture = urlsTextures$file.get(file);
         }
         else {
             NativeImage image;
             try {
-                AudioFile f = AudioFileIO.read(file);
-                if(!f.getTag().getArtworkList().isEmpty()){
-                    BufferedImage bufferedImage = (BufferedImage) f.getTag().getFirstArtwork().getImage();
-                    if (bufferedImage.getWidth() > bufferedImage.getHeight()) {
-                        int x = (bufferedImage.getWidth() - bufferedImage.getHeight()) / 2;
-                        bufferedImage = bufferedImage.getSubimage(x, 0, bufferedImage.getHeight(), bufferedImage.getHeight());
-                    }
-                    BufferedImage scaleImage = toBufferedImage(bufferedImage.getScaledInstance(128, 128, 2));
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    ImageIO.write(scaleImage, "png", byteArrayOutputStream);
-                    byte[] bytesOfImage = byteArrayOutputStream.toByteArray();
-                    image = NativeImage.read(bytesOfImage);
+                File textureFile = getTextureFile(id);
+                boolean isFileExists = textureFile.exists();
+                BufferedImage bufferedImage;
+                if(isFileExists){
+                    bufferedImage =  ImageIO.read(getTextureFile(id));
                 } else {
-                    resourceLocationMap$file.put(file, FILE_ICON);
-                    return;
+                    AudioFile f = AudioFileIO.read(file);
+                    if(!f.getTag().getArtworkList().isEmpty()){
+                        bufferedImage = (BufferedImage) f.getTag().getFirstArtwork().getImage();
+                    } else {
+                        resourceLocationMap$file.put(file, FILE_ICON);
+                        return;
+                    }
+                }
+                if (bufferedImage.getWidth() > bufferedImage.getHeight()) {
+                    int x = (bufferedImage.getWidth() - bufferedImage.getHeight()) / 2;
+                    bufferedImage = bufferedImage.getSubimage(x, 0, bufferedImage.getHeight(), bufferedImage.getHeight());
+                }
+                BufferedImage scaleImage = toBufferedImage(bufferedImage.getScaledInstance(128, 128, 2));
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                ImageIO.write(scaleImage, "png", byteArrayOutputStream);
+                byte[] bytesOfImage = byteArrayOutputStream.toByteArray();
+                image = NativeImage.read(bytesOfImage);
+
+                if(!isFileExists){
+                    Files.createDirectories(textureFile.toPath().getParent());
+                    Files.write(textureFile.toPath(), image.asByteArray());
                 }
             } catch (Exception e) {
                 WaterPlayer.log("Error loading image from URL: " + file.toPath() + " - " + e.getMessage());
@@ -148,6 +166,10 @@ public class TextureHelper {
         }
         textureManager.register(textureId, texture);
         resourceLocationMap$file.put(file, textureId);
+        JsonObject data = new JsonObject();
+        data.addProperty("url", file.toPath().toString());
+        data.addProperty("id", id);
+        if(!map.contains(data)) map.add(data);
     }
 
 
@@ -170,7 +192,9 @@ public class TextureHelper {
         for(JsonElement json : map){
             JsonObject data = json.getAsJsonObject();
             ResourceLocation l = GuiUtils.getResourceLocation("waterplayer", data.get("id").getAsString());
-            registerTexture(data.get("url").getAsString(), data.get("id").getAsString(), textureManager, l);
+            if(new File(data.get("url").getAsString()).exists())
+                registerTexture$File(new File(data.get("url").getAsString()), data.get("id").getAsString(), textureManager, l);
+            else registerTexture(data.get("url").getAsString(), data.get("id").getAsString(), textureManager, l);
         }
     }
 
@@ -190,11 +214,11 @@ public class TextureHelper {
         return url.toLowerCase().replaceAll("[^A-Za-z0-9]", "_");
     }
     public static String formatUrls$files(String url) {
-        return convertCyrilic(url).toLowerCase().replaceAll("[^A-Za-z0-9]", "_");
+        return convertCyrilic(url).toLowerCase().replaceAll("[^A-Za-z0-9_-]", "_");
     }
     public static String convertCyrilic(String message){
-        char[] abcCyr =   {' ','а','б','в','г','д','ѓ','е', 'ж','з','ѕ','и','ј','к','л','љ','м','н','њ','о','п','р','с','т', 'ќ','у', 'ф','х','ц','ч','џ','ш', 'А','Б','В','Г','Д','Ѓ','Е', 'Ж','З','Ѕ','И','Ј','К','Л','Љ','М','Н','Њ','О','П','Р','С','Т', 'Ќ', 'У','Ф', 'Х','Ц','Ч','Џ','Ш','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','1','2','3','4','5','6','7','8','9','/','-'};
-        String[] abcLat = {" ","a","b","v","g","d","]","e","zh","z","y","i","j","k","l","q","m","n","w","o","p","r","s","t","'","u","f","h", "c",";", "x","{","A","B","V","G","D","}","E","Zh","Z","Y","I","J","K","L","Q","M","N","W","O","P","R","S","T","KJ","U","F","H", "C",":", "X","{", "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","1","2","3","4","5","6","7","8","9","/","-"};
+        char[] abcCyr =   {'а','б','в','г','д','ѓ','е', 'ж','з','ѕ','и','ј','к','л','љ','м','н','њ','о','п','р','с','т','у', 'ф','х','ц','ч','џ','ш', 'А','Б','В','Г','Д','Ѓ','Е', 'Ж','З','Ѕ','И','Ј','К','Л','Љ','М','Н','Њ','О','П','Р','С','Т', 'Ќ', 'У','Ф', 'Х','Ц','Ч','Џ','Ш','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','1','2','3','4','5','6','7','8','9','/','-'};
+        String[] abcLat = {"a","b","v","g","d","]","e","zh","z","y","i","j","k","l","q","m","n","w","o","p","r","s","t","u","f","h", "c",";", "x","{","A","B","V","G","D","}","E","Zh","Z","Y","I","J","K","L","Q","M","N","W","O","P","R","S","T","KJ","U","F","H", "C",":", "X","{", "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","1","2","3","4","5","6","7","8","9","/","-"};
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < message.length(); i++) {
             for (int x = 0; x < abcCyr.length; x++ ) {
