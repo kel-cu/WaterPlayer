@@ -112,7 +112,7 @@ public class TextureHelper {
                 String finalId = id;
                 new Thread(() -> registerTexture$File(file, finalId, AlinLib.MINECRAFT.getTextureManager(), GuiUtils.getResourceLocation("waterplayer", finalId))).start();
             }
-            return NO_ICON;
+            return FILE_ICON;
         }
     }
     @Async.Execute
