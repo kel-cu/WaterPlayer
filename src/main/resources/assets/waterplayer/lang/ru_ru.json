@@ -22,6 +22,8 @@
   "waterplayer.playlist.tracks": "Треки",
   "waterplayer.playlist.save": "Сохранить плейлист",
 
+  "waterplayer.playlist.create.illegal_characters": "Некорректные символы!",
+
   "waterplayer.playlist.upload": "Поделится",
   "waterplayer.playlist.copy_link": "Скопировать ссылку",
   "waterplayer.playlist.uploaded": "Ссылка на плейлист скопирована в буфер обмена",

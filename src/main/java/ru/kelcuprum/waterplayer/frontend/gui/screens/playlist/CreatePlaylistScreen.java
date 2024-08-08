@@ -50,9 +50,15 @@ public class CreatePlaylistScreen extends Screen {
                 }
             }
             assert this.minecraft != null;
-            this.minecraft.setScreen(new PlaylistScreen(parent, fileName));
+            if(naturalSelectionSocieties(fileName)) this.minecraft.setScreen(new PlaylistScreen(parent, fileName));
+            else WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.playlist.create.illegal_characters")).setType(ToastBuilder.Type.ERROR).show(AlinLib.MINECRAFT.getToasts());
         })
                 .setPosition(x+5, y+15).setSize(145, 20).build());
+    }
+
+    public boolean naturalSelectionSocieties(String string){
+        String refactor = string.replaceAll("[<>:\"?|\\\\/*]", "");
+        return refactor.length() == string.length();
     }
 
     public void onClose() {

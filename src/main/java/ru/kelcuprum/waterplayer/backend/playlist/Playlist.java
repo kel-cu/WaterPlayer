@@ -20,6 +20,7 @@ public class Playlist {
     public JsonArray urlsJSON;
     public List<String> urls = new ArrayList<>();
     public Path path;
+    public String icon;
     public String fileName = "Unknown";
 
     public Playlist(String name) throws IOException {
@@ -37,6 +38,7 @@ public class Playlist {
         title = data.has("title") ? data.get("title").getAsString() : "Example title";
         author = data.has("author") ? data.get("author").getAsString() : Player.getName();
         urlsJSON = data.has("urls") ? data.get("urls").getAsJsonArray() : GsonHelper.parseArray("[\"https://www.youtube.com/watch?v=2bjBl-nX1oc\"]");
+        icon = data.has("icon") ? data.get("icon").getAsString() : null;
         for(int i = 0; i < urlsJSON.size(); i++){
             urls.add(urlsJSON.get(i).getAsString());
         }
@@ -66,13 +68,24 @@ public class Playlist {
         return this;
     }
 
+    public void setIcon(Path path){
+
+    }
+
     public JsonObject toJSON(){
         JsonObject data = new JsonObject();
         data.addProperty("title", title);
         data.addProperty("author", author);
+        if(icon != null) data.addProperty("icon", icon);
         data.add("urls", getUrlsJSON());
         return data;
     }
+
+    @Override
+    public String toString() {
+        return toJSON().toString();
+    }
+
     public JsonArray getUrlsJSON(){
         JsonArray array = new JsonArray();
         for(String url : urls){

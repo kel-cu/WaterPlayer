@@ -22,6 +22,8 @@
   "waterplayer.playlist.tracks": "Tracks",
   "waterplayer.playlist.save": "Save Playlist",
 
+  "waterplayer.playlist.create.illegal_characters": "Illegal Characters!",
+
   "waterplayer.playlist.upload": "Share",
   "waterplayer.playlist.copy_link": "Copy Link",
   "waterplayer.playlist.uploaded": "Playlist link is copied to clipboard",
