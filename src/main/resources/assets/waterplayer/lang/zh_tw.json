@@ -67,7 +67,7 @@
   "waterplayer.load.add": "您的請求已發送",
   "waterplayer.load.add.blank": "空白請求！",
 
-  "waterplayer.format.time": "{track.time.position} / {track.time.duration}",
+  "waterplayer.format.time": "{waterplayer.track.time.position} / {waterplayer.track.time.duration}",
   "waterplayer.format.live": "（直播）",
 
   "waterplayer.config": "組態",
