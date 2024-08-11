@@ -3,13 +3,9 @@ package ru.kelcuprum.waterplayer.frontend.localization;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import org.jaudiotagger.audio.AudioFile;
-import org.jaudiotagger.audio.AudioFileIO;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.gui.TextureHelper;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 
 import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.*;
@@ -24,7 +20,7 @@ public class MusicHelper {
     }
     //
     public static boolean isAuthorNull(AudioTrack info){
-        return trackIsNull(info) || info.getInfo().author.equals("Unknown artist");
+        return trackIsNull(info) || info.getInfo().author.isBlank() || info.getInfo().author.equals("Unknown artist");
     }
     public static boolean isAuthorNull() {return isAuthorNull(WaterPlayer.player.getAudioPlayer().getPlayingTrack());}
     //
@@ -36,7 +32,7 @@ public class MusicHelper {
     public static String getAuthor() {return getAuthor(WaterPlayer.player.getAudioPlayer().getPlayingTrack());}
     //
     public static boolean isTitleNull(AudioTrack info){
-        return trackIsNull(info) || info.getInfo().title.equals("Unknown title");
+        return trackIsNull(info) || info.getInfo().title.isBlank() || info.getInfo().title.equals("Unknown title");
     }
     //
     public static String getTitle(AudioTrack info){
