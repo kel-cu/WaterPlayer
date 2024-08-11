@@ -21,6 +21,7 @@ import ru.kelcuprum.alinlib.gui.components.ImageWidget;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
 import ru.kelcuprum.alinlib.gui.components.buttons.Button;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
+import ru.kelcuprum.alinlib.gui.screens.AbstractConfigScreen;
 import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.MusicPlayer;
@@ -30,6 +31,7 @@ import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 import ru.kelcuprum.waterplayer.backend.playlist.WebPlaylist;
 import ru.kelcuprum.waterplayer.frontend.gui.TextureHelper;
 import ru.kelcuprum.waterplayer.frontend.gui.components.TrackButton;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.config.PlaylistsScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -286,6 +288,7 @@ public class ViewPlaylistScreen extends Screen {
 
     // - Close
     public void onClose() {
+        if(parent instanceof AbstractConfigScreen) PlaylistsScreen.assetsSize = 0;
         assert this.minecraft != null;
         this.minecraft.setScreen(parent);
     }

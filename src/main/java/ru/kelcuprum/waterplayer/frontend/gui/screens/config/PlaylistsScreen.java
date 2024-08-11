@@ -26,8 +26,8 @@ import static ru.kelcuprum.alinlib.gui.Icons.*;
 import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.getPlayOrPause;
 
 public class PlaylistsScreen {
-    static int assetsSize = 0;
-    static boolean isLoaded = false;
+    public static int assetsSize = 0;
+    public static boolean isLoaded = false;
     public static Screen build(Screen parent) {
         assetsSize = 0;
         File playlists = AlinLib.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists").toFile();

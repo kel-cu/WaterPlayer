@@ -1,6 +1,5 @@
 package ru.kelcuprum.waterplayer.frontend.gui.components;
 
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -11,19 +10,15 @@ import ru.kelcuprum.alinlib.gui.GuiUtils;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
 import ru.kelcuprum.alinlib.gui.components.buttons.Button;
 import ru.kelcuprum.alinlib.gui.screens.AbstractConfigScreen;
-import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 import ru.kelcuprum.waterplayer.backend.playlist.WebPlaylist;
 import ru.kelcuprum.waterplayer.frontend.gui.TextureHelper;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.TrackScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.config.PlaylistsScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ModernControlScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.playlist.ViewPlaylistScreen;
-import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
 import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.NO_PLAYLIST_ICON;
-import static ru.kelcuprum.waterplayer.WaterPlayer.getTimestamp;
 
 public class PlaylistButton extends Button {
     protected final Playlist playlist;
