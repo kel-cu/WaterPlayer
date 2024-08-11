@@ -15,6 +15,9 @@ import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 import ru.kelcuprum.waterplayer.backend.playlist.WebPlaylist;
 import ru.kelcuprum.waterplayer.frontend.gui.TextureHelper;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.TrackScreen;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.config.PlaylistsScreen;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ModernControlScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.playlist.ViewPlaylistScreen;
 import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
@@ -32,8 +35,10 @@ public class PlaylistButton extends Button {
     public PlaylistButton(int x, int y, int width, Playlist playlist, Screen screen) {
         super(new ButtonBuilder().setTitle(Component.empty()).setStyle(GuiUtils.getSelected()).setSize(width, playlist.icon == null ? 20 : 40).setPosition(x, y));
         ((ButtonBuilder)this.builder).setOnPress((s) -> {
-            if(webPlaylist == null) AlinLib.MINECRAFT.setScreen(new ViewPlaylistScreen(screen, playlist));
-            else AlinLib.MINECRAFT.setScreen(new ViewPlaylistScreen(screen, webPlaylist));
+            Screen parent = screen;
+            if(screen instanceof ControlScreen || screen instanceof ModernControlScreen) parent = PlaylistsScreen.build(screen);
+            if(webPlaylist == null) AlinLib.MINECRAFT.setScreen(new ViewPlaylistScreen(parent, playlist));
+            else AlinLib.MINECRAFT.setScreen(new ViewPlaylistScreen(parent, webPlaylist));
         });
         this.playlist = playlist;
         StringBuilder builder = new StringBuilder();

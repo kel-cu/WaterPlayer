@@ -65,14 +65,13 @@ public class TextureHelper {
     public static void registerTexture(String url, String id, TextureManager textureManager, ResourceLocation textureId) {
         WaterPlayer.log(String.format("REGISTER: %s %s", url, id), Level.DEBUG);
         DynamicTexture texture;
-        if(urlsTextures.containsKey(url)) {
+        if (urlsTextures.containsKey(url)) {
             JsonObject data = new JsonObject();
             data.addProperty("url", url);
             data.addProperty("id", id);
-            if(!map.contains(data)) map.add(data);
+            if (!map.contains(data)) map.add(data);
             texture = urlsTextures.get(url);
-        }
-        else {
+        } else {
             NativeImage image;
             File textureFile = getTextureFile(id);
             boolean isFileExists = textureFile.exists();
@@ -87,7 +86,7 @@ public class TextureHelper {
                 ImageIO.write(scaleImage, "png", byteArrayOutputStream);
                 byte[] bytesOfImage = byteArrayOutputStream.toByteArray();
                 image = NativeImage.read(bytesOfImage);
-                if(!isFileExists){
+                if (!isFileExists) {
                     Files.createDirectories(textureFile.toPath().getParent());
                     Files.write(textureFile.toPath(), image.asByteArray());
                 }
@@ -98,12 +97,14 @@ public class TextureHelper {
             }
             texture = new DynamicTexture(image);
         }
-        textureManager.register(textureId, texture);
-        resourceLocationMap.put(id, textureId);
-        JsonObject data = new JsonObject();
-        data.addProperty("url", url);
-        data.addProperty("id", id);
-        if(!map.contains(data)) map.add(data);
+        if(textureManager != null) {
+            textureManager.register(textureId, texture);
+            resourceLocationMap.put(id, textureId);
+            JsonObject data = new JsonObject();
+            data.addProperty("url", url);
+            data.addProperty("id", id);
+            if (!map.contains(data)) map.add(data);
+        }
     }
 
 
@@ -111,8 +112,7 @@ public class TextureHelper {
         id = formatUrls$files(id.toLowerCase());
         if (resourceLocationMap$file.containsKey(file)) {
             return resourceLocationMap$file.get(file);
-        }
-        else {
+        } else {
             if (!urls$file.getOrDefault(file, false)) {
                 urls$file.put(file, true);
                 String finalId = id;
@@ -121,28 +121,28 @@ public class TextureHelper {
             return FILE_ICON;
         }
     }
+
     @Async.Execute
     public static void registerTexture$File(File file, String id, TextureManager textureManager, ResourceLocation textureId) {
         WaterPlayer.log(String.format("REGISTER: %s", file.toPath()), Level.DEBUG);
         DynamicTexture texture;
-        if(urlsTextures$file.containsKey(file)) {
+        if (urlsTextures$file.containsKey(file)) {
             JsonObject data = new JsonObject();
             data.addProperty("url", file.toPath().toString());
             data.addProperty("id", id);
-            if(!map.contains(data)) map.add(data);
+            if (!map.contains(data)) map.add(data);
             texture = urlsTextures$file.get(file);
-        }
-        else {
+        } else {
             NativeImage image;
             try {
                 File textureFile = getTextureFile(id);
                 boolean isFileExists = textureFile.exists();
                 BufferedImage bufferedImage;
-                if(isFileExists){
-                    bufferedImage =  ImageIO.read(getTextureFile(id));
+                if (isFileExists) {
+                    bufferedImage = ImageIO.read(getTextureFile(id));
                 } else {
                     AudioFile f = AudioFileIO.read(file);
-                    if(!f.getTag().getArtworkList().isEmpty()){
+                    if (!f.getTag().getArtworkList().isEmpty()) {
                         bufferedImage = (BufferedImage) f.getTag().getFirstArtwork().getImage();
                     } else {
                         resourceLocationMap$file.put(file, FILE_ICON);
@@ -159,7 +159,7 @@ public class TextureHelper {
                 byte[] bytesOfImage = byteArrayOutputStream.toByteArray();
                 image = NativeImage.read(bytesOfImage);
 
-                if(!isFileExists){
+                if (!isFileExists) {
                     Files.createDirectories(textureFile.toPath().getParent());
                     Files.write(textureFile.toPath(), image.asByteArray());
                 }
@@ -170,27 +170,29 @@ public class TextureHelper {
             }
             texture = new DynamicTexture(image);
         }
-        textureManager.register(textureId, texture);
-        resourceLocationMap$file.put(file, textureId);
-        JsonObject data = new JsonObject();
-        data.addProperty("url", file.toPath().toString());
-        data.addProperty("id", id);
-        if(!map.contains(data)) map.add(data);
+        if (textureManager != null) {
+            textureManager.register(textureId, texture);
+            resourceLocationMap$file.put(file, textureId);
+            JsonObject data = new JsonObject();
+            data.addProperty("url", file.toPath().toString());
+            data.addProperty("id", id);
+            if (!map.contains(data)) map.add(data);
+        }
     }
 
-    public static void remove$Base64(String id, String base){
-        if(base != null) urlsTextures$Base64.remove(base);
+    public static void remove$Base64(String id, String base) {
+        if (base != null) urlsTextures$Base64.remove(base);
         urls$Base64.remove(id);
         resourceLocationMap$Base64.remove(id);
         File file = getTextureFile(id);
-        if(file.exists()) file.delete();
+        if (file.exists()) file.delete();
     }
+
     public static ResourceLocation getTexture$Base64(String base, String id) {
         id = formatUrls$files(id.toLowerCase());
         if (resourceLocationMap$Base64.containsKey(id)) {
             return resourceLocationMap$Base64.get(id);
-        }
-        else {
+        } else {
             if (!urls$Base64.getOrDefault(id, false)) {
                 urls$Base64.put(id, true);
                 String finalId = id;
@@ -199,28 +201,28 @@ public class TextureHelper {
             return FILE_ICON;
         }
     }
+
     @Async.Execute
     public static void registerTexture$Base64(String base, String id, TextureManager textureManager, ResourceLocation textureId) {
         WaterPlayer.log(String.format("REGISTER: %s", id), Level.DEBUG);
         DynamicTexture texture;
-        if(urlsTextures$Base64.containsKey(base)) {
+        if (urlsTextures$Base64.containsKey(base)) {
             JsonObject data = new JsonObject();
             data.addProperty("url", String.format("base64:%s", base));
             data.addProperty("id", id);
-            if(!map.contains(data)) map.add(data);
+            if (!map.contains(data)) map.add(data);
             texture = urlsTextures$Base64.get(base);
-        }
-        else {
+        } else {
             NativeImage image;
             try {
                 File textureFile = getTextureFile(id);
                 boolean isFileExists = textureFile.exists();
                 BufferedImage bufferedImage;
-                if(isFileExists){
-                    bufferedImage =  ImageIO.read(getTextureFile(id));
+                if (isFileExists) {
+                    bufferedImage = ImageIO.read(getTextureFile(id));
                 } else {
                     byte[] imageBytes = parseBase64Binary(base);
-                    bufferedImage  = ImageIO.read(new ByteArrayInputStream(imageBytes));
+                    bufferedImage = ImageIO.read(new ByteArrayInputStream(imageBytes));
                 }
                 if (bufferedImage.getWidth() > bufferedImage.getHeight()) {
                     int x = (bufferedImage.getWidth() - bufferedImage.getHeight()) / 2;
@@ -232,7 +234,7 @@ public class TextureHelper {
                 byte[] bytesOfImage = byteArrayOutputStream.toByteArray();
                 image = NativeImage.read(bytesOfImage);
 
-                if(!isFileExists){
+                if (!isFileExists) {
                     Files.createDirectories(textureFile.toPath().getParent());
                     Files.write(textureFile.toPath(), image.asByteArray());
                 }
@@ -243,20 +245,22 @@ public class TextureHelper {
             }
             texture = new DynamicTexture(image);
         }
-        textureManager.register(textureId, texture);
-        resourceLocationMap$Base64.put(id, textureId);
-        JsonObject data = new JsonObject();
-        data.addProperty("url", String.format("base64:%s", base));
-        data.addProperty("id", id);
-        if(!map.contains(data)) map.add(data);
+        if (textureManager != null) {
+            textureManager.register(textureId, texture);
+            resourceLocationMap$Base64.put(id, textureId);
+            JsonObject data = new JsonObject();
+            data.addProperty("url", String.format("base64:%s", base));
+            data.addProperty("id", id);
+            if (!map.contains(data)) map.add(data);
+        }
     }
-
 
 
     public static File getTextureFile(String url) {
         return new File("config/waterplayer/textures/" + url + ".png");
     }
-    public static void saveMap(){
+
+    public static void saveMap() {
         try {
             Path path = new File("config/waterplayer/textures/map.json").toPath();
             Files.createDirectories(path.getParent());
@@ -266,24 +270,25 @@ public class TextureHelper {
         }
     }
 
-    public static void loadTextures(TextureManager textureManager){
+    public static void loadTextures(TextureManager textureManager) {
         loadMap();
-        for(JsonElement json : map){
+        for (JsonElement json : map) {
             JsonObject data = json.getAsJsonObject();
             ResourceLocation l = GuiUtils.getResourceLocation("waterplayer", data.get("id").getAsString());
-            if(new File(data.get("url").getAsString()).exists())
+            if (new File(data.get("url").getAsString()).exists())
                 registerTexture$File(new File(data.get("url").getAsString()), data.get("id").getAsString(), textureManager, l);
-            else if(data.get("url").getAsString().startsWith("base64:")) registerTexture$Base64(data.get("url").getAsString().split(":")[1], data.get("id").getAsString(), textureManager, l);
+            else if (data.get("url").getAsString().startsWith("base64:"))
+                registerTexture$Base64(data.get("url").getAsString().split(":")[1], data.get("id").getAsString(), textureManager, l);
             else registerTexture(data.get("url").getAsString(), data.get("id").getAsString(), textureManager, l);
         }
     }
 
-    public static void loadMap(){
+    public static void loadMap() {
         File mapFile = new File("config/waterplayer/textures/map.json");
-        if(mapFile.exists() && mapFile.isFile()){
+        if (mapFile.exists() && mapFile.isFile()) {
             try {
                 map = GsonHelper.parseArray(Files.readString(mapFile.toPath()));
-            } catch (Exception e){
+            } catch (Exception e) {
                 map = new JsonArray();
                 WaterPlayer.log(e.getMessage() == null ? e.getClass().getName() : e.getMessage(), Level.ERROR);
             }
@@ -293,15 +298,17 @@ public class TextureHelper {
     public static String formatUrls(String url) {
         return url.toLowerCase().replaceAll("[^A-Za-z0-9]", "_");
     }
+
     public static String formatUrls$files(String url) {
         return convertCyrilic(url).toLowerCase().replaceAll("[^A-Za-z0-9_-]", "_");
     }
-    public static String convertCyrilic(String message){
-        char[] abcCyr =   {'а','б','в','г','д','ѓ','е', 'ж','з','ѕ','и','ј','к','л','љ','м','н','њ','о','п','р','с','т','у', 'ф','х','ц','ч','џ','ш', 'А','Б','В','Г','Д','Ѓ','Е', 'Ж','З','Ѕ','И','Ј','К','Л','Љ','М','Н','Њ','О','П','Р','С','Т', 'Ќ', 'У','Ф', 'Х','Ц','Ч','Џ','Ш','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','1','2','3','4','5','6','7','8','9','/','-'};
-        String[] abcLat = {"a","b","v","g","d","]","e","zh","z","y","i","j","k","l","q","m","n","w","o","p","r","s","t","u","f","h", "c",";", "x","{","A","B","V","G","D","}","E","Zh","Z","Y","I","J","K","L","Q","M","N","W","O","P","R","S","T","KJ","U","F","H", "C",":", "X","{", "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","1","2","3","4","5","6","7","8","9","/","-"};
+
+    public static String convertCyrilic(String message) {
+        char[] abcCyr = {'а', 'б', 'в', 'г', 'д', 'ѓ', 'е', 'ж', 'з', 'ѕ', 'и', 'ј', 'к', 'л', 'љ', 'м', 'н', 'њ', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'џ', 'ш', 'А', 'Б', 'В', 'Г', 'Д', 'Ѓ', 'Е', 'Ж', 'З', 'Ѕ', 'И', 'Ј', 'К', 'Л', 'Љ', 'М', 'Н', 'Њ', 'О', 'П', 'Р', 'С', 'Т', 'Ќ', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Џ', 'Ш', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '/', '-'};
+        String[] abcLat = {"a", "b", "v", "g", "d", "]", "e", "zh", "z", "y", "i", "j", "k", "l", "q", "m", "n", "w", "o", "p", "r", "s", "t", "u", "f", "h", "c", ";", "x", "{", "A", "B", "V", "G", "D", "}", "E", "Zh", "Z", "Y", "I", "J", "K", "L", "Q", "M", "N", "W", "O", "P", "R", "S", "T", "KJ", "U", "F", "H", "C", ":", "X", "{", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "/", "-"};
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < message.length(); i++) {
-            for (int x = 0; x < abcCyr.length; x++ ) {
+            for (int x = 0; x < abcCyr.length; x++) {
                 if (message.charAt(i) == abcCyr[x]) {
                     builder.append(abcLat[x]);
                 }
