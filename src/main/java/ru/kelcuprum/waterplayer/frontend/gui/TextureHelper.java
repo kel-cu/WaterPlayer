@@ -20,6 +20,7 @@ import ru.kelcuprum.waterplayer.WaterPlayer;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -28,8 +29,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 
-import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.FILE_ICON;
-import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.NO_ICON;
+import static org.apache.logging.log4j.core.config.plugins.convert.Base64Converter.parseBase64Binary;
+import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.*;
 
 public class TextureHelper {
     public static HashMap<String, ResourceLocation> resourceLocationMap = new HashMap<>();
@@ -41,6 +42,11 @@ public class TextureHelper {
     public static HashMap<File, ResourceLocation> resourceLocationMap$file = new HashMap<>();
     public static HashMap<File, Boolean> urls$file = new HashMap<>();
     public static HashMap<File, DynamicTexture> urlsTextures$file = new HashMap<>();
+
+
+    public static HashMap<String, ResourceLocation> resourceLocationMap$Base64 = new HashMap<>();
+    public static HashMap<String, Boolean> urls$Base64 = new HashMap<>();
+    public static HashMap<String, DynamicTexture> urlsTextures$Base64 = new HashMap<>();
 
     public static ResourceLocation getTexture(String url, String id) {
         id = formatUrls(id.toLowerCase());
@@ -172,6 +178,79 @@ public class TextureHelper {
         if(!map.contains(data)) map.add(data);
     }
 
+    public static void remove$Base64(String id, String base){
+        if(base != null) urlsTextures$Base64.remove(base);
+        urls$Base64.remove(id);
+        resourceLocationMap$Base64.remove(id);
+        File file = getTextureFile(id);
+        if(file.exists()) file.delete();
+    }
+    public static ResourceLocation getTexture$Base64(String base, String id) {
+        id = formatUrls$files(id.toLowerCase());
+        if (resourceLocationMap$Base64.containsKey(id)) {
+            return resourceLocationMap$Base64.get(id);
+        }
+        else {
+            if (!urls$Base64.getOrDefault(id, false)) {
+                urls$Base64.put(id, true);
+                String finalId = id;
+                new Thread(() -> registerTexture$Base64(base, finalId, AlinLib.MINECRAFT.getTextureManager(), GuiUtils.getResourceLocation("waterplayer", finalId))).start();
+            }
+            return FILE_ICON;
+        }
+    }
+    @Async.Execute
+    public static void registerTexture$Base64(String base, String id, TextureManager textureManager, ResourceLocation textureId) {
+        WaterPlayer.log(String.format("REGISTER: %s", id), Level.DEBUG);
+        DynamicTexture texture;
+        if(urlsTextures$Base64.containsKey(base)) {
+            JsonObject data = new JsonObject();
+            data.addProperty("url", String.format("base64:%s", base));
+            data.addProperty("id", id);
+            if(!map.contains(data)) map.add(data);
+            texture = urlsTextures$Base64.get(base);
+        }
+        else {
+            NativeImage image;
+            try {
+                File textureFile = getTextureFile(id);
+                boolean isFileExists = textureFile.exists();
+                BufferedImage bufferedImage;
+                if(isFileExists){
+                    bufferedImage =  ImageIO.read(getTextureFile(id));
+                } else {
+                    byte[] imageBytes = parseBase64Binary(base);
+                    bufferedImage  = ImageIO.read(new ByteArrayInputStream(imageBytes));
+                }
+                if (bufferedImage.getWidth() > bufferedImage.getHeight()) {
+                    int x = (bufferedImage.getWidth() - bufferedImage.getHeight()) / 2;
+                    bufferedImage = bufferedImage.getSubimage(x, 0, bufferedImage.getHeight(), bufferedImage.getHeight());
+                }
+                BufferedImage scaleImage = toBufferedImage(bufferedImage.getScaledInstance(128, 128, 2));
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                ImageIO.write(scaleImage, "png", byteArrayOutputStream);
+                byte[] bytesOfImage = byteArrayOutputStream.toByteArray();
+                image = NativeImage.read(bytesOfImage);
+
+                if(!isFileExists){
+                    Files.createDirectories(textureFile.toPath().getParent());
+                    Files.write(textureFile.toPath(), image.asByteArray());
+                }
+            } catch (Exception e) {
+                WaterPlayer.log("Error loading image from URL: " + id + " - " + e.getMessage());
+                resourceLocationMap$Base64.put(id, NO_PLAYLIST_ICON);
+                return;
+            }
+            texture = new DynamicTexture(image);
+        }
+        textureManager.register(textureId, texture);
+        resourceLocationMap$Base64.put(id, textureId);
+        JsonObject data = new JsonObject();
+        data.addProperty("url", String.format("base64:%s", base));
+        data.addProperty("id", id);
+        if(!map.contains(data)) map.add(data);
+    }
+
 
 
     public static File getTextureFile(String url) {
@@ -194,6 +273,7 @@ public class TextureHelper {
             ResourceLocation l = GuiUtils.getResourceLocation("waterplayer", data.get("id").getAsString());
             if(new File(data.get("url").getAsString()).exists())
                 registerTexture$File(new File(data.get("url").getAsString()), data.get("id").getAsString(), textureManager, l);
+            else if(data.get("url").getAsString().startsWith("base64:")) registerTexture$Base64(data.get("url").getAsString().split(":")[1], data.get("id").getAsString(), textureManager, l);
             else registerTexture(data.get("url").getAsString(), data.get("id").getAsString(), textureManager, l);
         }
     }

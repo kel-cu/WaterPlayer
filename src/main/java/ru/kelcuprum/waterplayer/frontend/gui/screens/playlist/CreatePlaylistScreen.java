@@ -11,6 +11,9 @@ import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
+import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
+
+import java.io.IOException;
 
 public class CreatePlaylistScreen extends Screen {
     private final Screen parent;
@@ -50,7 +53,13 @@ public class CreatePlaylistScreen extends Screen {
                 }
             }
             assert this.minecraft != null;
-            if(naturalSelectionSocieties(fileName)) this.minecraft.setScreen(new PlaylistScreen(parent, fileName));
+            if(naturalSelectionSocieties(fileName)) {
+                try {
+                    this.minecraft.setScreen(new ViewPlaylistScreen(parent, new Playlist(fileName)));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             else WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.playlist.create.illegal_characters")).setType(ToastBuilder.Type.ERROR).show(AlinLib.MINECRAFT.getToasts());
         })
                 .setPosition(x+5, y+15).setSize(145, 20).build());

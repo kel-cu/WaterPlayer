@@ -24,14 +24,18 @@ import ru.kelcuprum.alinlib.gui.components.buttons.Button;
 import ru.kelcuprum.alinlib.gui.components.text.MessageBox;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.waterplayer.WaterPlayer;
+import ru.kelcuprum.waterplayer.backend.MusicPlayer;
 import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
 import ru.kelcuprum.waterplayer.backend.playlist.WebPlaylist;
+import ru.kelcuprum.waterplayer.frontend.gui.components.PlaylistButton;
 import ru.kelcuprum.waterplayer.frontend.gui.components.TrackButton;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.playlist.WebPlaylistScreen;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.config.PlaylistsScreen;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.playlist.ViewPlaylistScreen;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.kelcuprum.alinlib.gui.GuiUtils.DEFAULT_WIDTH;
 import static ru.kelcuprum.alinlib.gui.Icons.RESET;
 
 public class SearchScreen extends Screen {
@@ -148,7 +152,8 @@ public class SearchScreen extends Screen {
         widgets.add(new TextBox(x, 5, width-200, 20, Component.translatable("waterplayer.search.result"), true));
         if(services[searchService].startsWith("wpsearch:")){
             if(playlists.isEmpty()) widgets.add(new MessageBox(x, 20, width - 200, 20, Component.translatable("waterplayer.search.not_found"), true));
-            else for(WebPlaylist playlist : playlists) widgets.add(new ButtonBuilder(Component.translatable("waterplayer.playlists.value", playlist.playlist.title, playlist.playlist.author), Component.literal(playlist.url), (s) -> AlinLib.MINECRAFT.setScreen(new WebPlaylistScreen(this, playlist))).setPosition(x, 20).setSize(width - 200, 20).build());
+            else for(WebPlaylist playlist : playlists) widgets.add(new PlaylistButton(x, 20, DEFAULT_WIDTH(), playlist, this));
+                //widgets.add(new ButtonBuilder(Component.translatable("waterplayer.playlists.value", playlist.playlist.title, playlist.playlist.author), Component.literal(playlist.url), (s) -> AlinLib.MINECRAFT.setScreen(new ViewPlaylistScreen(this, playlist))).setPosition(x, 20).setSize(width - 200, 20).build());
         } else {
             if (list.isEmpty())
                 widgets.add(new MessageBox(x, 20, width - 200, 20, Component.translatable("waterplayer.search.not_found"), true));
@@ -174,9 +179,9 @@ public class SearchScreen extends Screen {
         }
     }
 
-
+    public static MusicPlayer searchPlayer = new MusicPlayer();
     public void load(String url){
-        WaterPlayer.player.getAudioPlayerManager().loadItemOrdered(WaterPlayer.player.getAudioPlayerManager(), url, new AudioLoadResultHandler() {
+        searchPlayer.getAudioPlayerManager().loadItemOrdered(WaterPlayer.player.getAudioPlayerManager(), url, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
                 list = new ArrayList<>();

@@ -7,12 +7,20 @@ import org.apache.logging.log4j.Level;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.info.Player;
 import ru.kelcuprum.waterplayer.WaterPlayer;
+import ru.kelcuprum.waterplayer.frontend.gui.TextureHelper;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+
+import static ru.kelcuprum.waterplayer.frontend.gui.TextureHelper.toBufferedImage;
 
 public class Playlist {
     public String title;
@@ -68,8 +76,33 @@ public class Playlist {
         return this;
     }
 
-    public void setIcon(Path path){
-
+    public void setIcon(File path){
+        try {
+            BufferedImage bufferedImage = ImageIO.read(path);
+            if (bufferedImage.getWidth() > bufferedImage.getHeight()) {
+                int x = (bufferedImage.getWidth() - bufferedImage.getHeight()) / 2;
+                bufferedImage = bufferedImage.getSubimage(x, 0, bufferedImage.getHeight(), bufferedImage.getHeight());
+            }
+            BufferedImage scaleImage = toBufferedImage(bufferedImage.getScaledInstance(128, 128, 2));
+            if(TextureHelper.resourceLocationMap$Base64.containsKey(String.format("playlist-%s", fileName))) TextureHelper.remove$Base64(String.format("playlist-%s", fileName), this.icon);
+            this.icon = encodeToString(scaleImage);
+            save();
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+    protected String encodeToString(BufferedImage image) {
+        String imageString = null;
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try {
+            ImageIO.write(image, "png", bos);
+            byte[] imageBytes = bos.toByteArray();
+            imageString = Base64.getEncoder().encodeToString(imageBytes);
+            bos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return imageString;
     }
 
     public JsonObject toJSON(){

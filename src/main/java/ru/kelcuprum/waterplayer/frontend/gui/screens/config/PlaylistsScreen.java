@@ -12,13 +12,14 @@ import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.alinlib.gui.screens.ConfigScreenBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
+import ru.kelcuprum.waterplayer.frontend.gui.components.PlaylistButton;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.playlist.CreatePlaylistScreen;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.playlist.PlaylistScreen;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.util.Objects;
 
+import static ru.kelcuprum.alinlib.gui.GuiUtils.DEFAULT_WIDTH;
 import static ru.kelcuprum.alinlib.gui.Icons.OPTIONS;
 import static ru.kelcuprum.alinlib.gui.Icons.WARNING;
 import static ru.kelcuprum.alinlib.gui.Icons.*;
@@ -62,7 +63,8 @@ public class PlaylistsScreen {
                     try {
                         Playlist playlistObject = new Playlist(playlist.toPath());
                         assetsSize++;
-                        builder.addWidget(new ButtonBuilder(Component.translatable("waterplayer.playlists.value", playlistObject.title, playlistObject.author), Component.literal(playlistObject.fileName), (s) -> AlinLib.MINECRAFT.setScreen(new PlaylistScreen(PlaylistsScreen.build(parent), playlistObject.fileName))).build());
+                        // new ButtonBuilder(Component.translatable("waterplayer.playlists.value", playlistObject.title, playlistObject.author), Component.literal(playlistObject.fileName), (s) -> AlinLib.MINECRAFT.setScreen(new ViewPlaylistScreen(PlaylistsScreen.build(parent), playlistObject))).build()
+                        builder.addWidget(new PlaylistButton(140, -50, DEFAULT_WIDTH(), playlistObject, AlinLib.MINECRAFT.screen));
                     } catch (Exception e){
                         WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);
                     }

@@ -8,6 +8,15 @@
   "waterplayer.command.queue": "Current Queue:",
 
   "waterplayer.playlist": "Playlist",
+  "waterplayer.playlist.web": "Search > Playlist",
+  "waterplayer.playlist.edit": "Playlist > Edit",
+
+  "waterplayer.playlist.edit.drag_and_drop": "Drag and drop the icon",
+  "waterplayer.playlist.edit.drag_and_drop.second": "to change the icon",
+
+  "waterplayer.playlist.edit.filedialog.title": "Please choose a PNG picture",
+  "waterplayer.playlist.edit.filedialog.filter_description": "Playlist icon",
+
   "waterplayer.playlist.add_files": "Are you sure you want to add these files?",
   "waterplayer.playlist.create": "Create/Load Playlist",
   "waterplayer.playlist.create.filename": "Playlist Name/URL:",
@@ -21,10 +30,12 @@
   "waterplayer.playlist.urls": "URLs",
   "waterplayer.playlist.tracks": "Tracks",
   "waterplayer.playlist.save": "Save Playlist",
+  "waterplayer.playlist.edit_button": "Edit Playlist",
 
   "waterplayer.playlist.create.illegal_characters": "Illegal Characters!",
 
   "waterplayer.playlist.upload": "Share",
+  "waterplayer.playlist.upload.unavailable": "Server unavailable",
   "waterplayer.playlist.copy_link": "Copy Link",
   "waterplayer.playlist.uploaded": "Playlist link is copied to clipboard",
   "waterplayer.playlist.link_copied": "Link copied",

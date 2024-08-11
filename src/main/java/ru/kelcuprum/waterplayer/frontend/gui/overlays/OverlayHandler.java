@@ -60,7 +60,14 @@ public class OverlayHandler implements GuiRenderEvents, ClientTickEvents.StartTi
     }
 
     public void render(GuiGraphics guiGraphics, int pos) {
-        if (AlinLib.MINECRAFT.options.hideGui) return;
+        if (AlinLib.MINECRAFT.options.hideGui ||
+
+                //#if MC >= 12002
+                AlinLib.MINECRAFT.gui.getDebugOverlay().showDebugScreen()
+            //#elseif MC < 12002
+            //$$ AlinLib.MINECRAFT.options.renderDebug
+            //#endif
+        ) return;
         if (WaterPlayer.player.getAudioPlayer().getPlayingTrack() == null) return;
         try {
             if (!texts.isEmpty()) {

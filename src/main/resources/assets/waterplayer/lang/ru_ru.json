@@ -8,6 +8,15 @@
   "waterplayer.command.queue": "Текущая очередь:",
 
   "waterplayer.playlist": "Плейлист",
+  "waterplayer.playlist.web": "Поиск > Плейлист",
+  "waterplayer.playlist.edit": "Плейлист > Редактирование",
+
+  "waterplayer.playlist.edit.drag_and_drop": "Перетащите картинку",
+  "waterplayer.playlist.edit.drag_and_drop.second": "чтобы изменить иконку",
+
+  "waterplayer.playlist.edit.filedialog.title": "Пожалуйста, выберите картинку в формате PNG",
+  "waterplayer.playlist.edit.filedialog.filter_description": "Иконка плейлиста",
+
   "waterplayer.playlist.add_files": "Вы уверены, что хотите добавить эти файлы?",
   "waterplayer.playlist.create": "Создать/Загрузить плейлист",
   "waterplayer.playlist.create.filename": "Название/Ссылка плейлиста:",
@@ -21,10 +30,12 @@
   "waterplayer.playlist.urls": "URLs",
   "waterplayer.playlist.tracks": "Треки",
   "waterplayer.playlist.save": "Сохранить плейлист",
+  "waterplayer.playlist.edit_button": "Редактировать плейлист",
 
   "waterplayer.playlist.create.illegal_characters": "Некорректные символы!",
 
   "waterplayer.playlist.upload": "Поделится",
+  "waterplayer.playlist.upload.unavailable": "Сервер недоступен",
   "waterplayer.playlist.copy_link": "Скопировать ссылку",
   "waterplayer.playlist.uploaded": "Ссылка на плейлист скопирована в буфер обмена",
   "waterplayer.playlist.link_copied": "Ссылка скопирована",

@@ -296,8 +296,10 @@ public class WaterPlayer implements ClientModInitializer {
         ResourceLocation FILE_ICON = GuiUtils.getResourceLocation("waterplayer", "textures/file_icon.png");
         ResourceLocation MUSIC = GuiUtils.getResourceLocation("waterplayer", "textures/music.png");
         ResourceLocation NO_ICON = GuiUtils.getResourceLocation("waterplayer", "textures/no_icon.png");
+        ResourceLocation NO_PLAYLIST_ICON = GuiUtils.getResourceLocation("waterplayer", "textures/no_playlist_icon.png");
         ResourceLocation SEARCH = GuiUtils.getResourceLocation("waterplayer", "textures/search.png");
         ResourceLocation THINK = GuiUtils.getResourceLocation("waterplayer", "textures/think.png");
+        ResourceLocation RECYCLE_BIN = GuiUtils.getResourceLocation("waterplayer", "textures/recycle_bin.png");
 
         static ResourceLocation getPlayOrPause(boolean isPaused){
             return isPaused ? PLAY : PAUSE;

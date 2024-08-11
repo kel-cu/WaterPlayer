@@ -17,7 +17,7 @@ public class ConfirmAddedFiles extends Screen {
     protected final Screen parent;
     protected final Playlist playlist;
 
-    protected ConfirmAddedFiles(List<Path> list, Screen parent, Playlist playlist) {
+    public ConfirmAddedFiles(List<Path> list, Screen parent, Playlist playlist) {
         super(Component.translatable("waterplayer.playlist.add_files"));
         this.list = list;
         this.parent = parent;

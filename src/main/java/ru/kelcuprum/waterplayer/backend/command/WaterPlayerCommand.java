@@ -9,10 +9,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandBuildContext;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.waterplayer.WaterPlayer;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.playlist.PlaylistScreen;
+import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.playlist.ViewPlaylistScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.config.MainConfigsScreen;
 import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +58,13 @@ public class WaterPlayerCommand {
                         .then(
                                 argument("name", greedyString()).executes(context -> {
                                     Minecraft client = context.getSource().getClient();
-                                    client.tell(() -> client.setScreen(new PlaylistScreen(client.screen, getString(context, "name"))));
+                                    client.tell(() -> {
+                                        try {
+                                            client.setScreen(new ViewPlaylistScreen(client.screen, new Playlist(getString(context, "name"))));
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                    });
                                     return 1;
                                 })
                         )
