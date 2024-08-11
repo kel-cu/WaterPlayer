@@ -244,6 +244,7 @@ public class EditPlaylistScreen extends Screen {
 
     // - Close
     public void onClose() {
+        playlist.save();
         assert this.minecraft != null;
         this.minecraft.setScreen(parent);
     }

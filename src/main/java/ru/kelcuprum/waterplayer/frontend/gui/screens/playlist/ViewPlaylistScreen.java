@@ -63,7 +63,6 @@ public class ViewPlaylistScreen extends Screen {
         super(Component.empty());
         this.playlist = playlist;
         this.parent = parent;
-        new Thread(() -> trackWidgets = getTrackWidgets(playlist)).start();
     }
 
     @Override
@@ -74,6 +73,7 @@ public class ViewPlaylistScreen extends Screen {
             isInit = true;
             if(isCreatedLink) isEnable = true;
             else new Thread(() -> isEnable = WaterPlayerAPI.isPlaylistUploadEnable()).start();
+            new Thread(() -> trackWidgets = getTrackWidgets(playlist)).start();
         }
     }
     public Button upload;
@@ -91,7 +91,6 @@ public class ViewPlaylistScreen extends Screen {
             addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.playlist.edit_button"), (e) -> {
                 isInit = isEnable = false;
                 trackWidgets = new ArrayList<>();
-                rebuildWidgetsList();
                 AlinLib.MINECRAFT.setScreen(new EditPlaylistScreen(this, playlist));
             }).setPosition(x, y).setSize(size, 20).build());
         } else {
@@ -169,7 +168,7 @@ public class ViewPlaylistScreen extends Screen {
         List<AbstractWidget> trackWidgets = new ArrayList<>();
         for (String url : playlist.urls) {
             final Screen thisScreen = this;
-            searchPlayer.getAudioPlayerManager().loadItemSync(url, new AudioLoadResultHandler() {
+            if(!url.isBlank()) searchPlayer.getAudioPlayerManager().loadItemSync(url, new AudioLoadResultHandler() {
                 @Override
                 public void trackLoaded(AudioTrack track) {
                     trackWidgets.add(new TrackButton(195, -50, width - 200, track, thisScreen, false));
