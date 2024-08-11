@@ -99,8 +99,8 @@ public class EditPlaylistScreen extends Screen {
         // x, y, 36, 36, getIcon(), 36, 36,
         icon = (Button) addRenderableWidget(new ButtonBuilder(Component.empty(), (s) -> showOpenFileDialog()).setSprite(getIcon()).setPosition(x, y).setSize(36, 36).build());
 
-        addRenderableWidget(new TextBox(x+41, y, size-41, 18, Component.translatable("waterplayer.playlist.edit.drag_and_drop"), false));
-        addRenderableWidget(new TextBox(x+41, y+18, size-41, 18, Component.translatable("waterplayer.playlist.edit.drag_and_drop.second"), false));
+        addRenderableWidget(new TextBox(x+41, y, size-41, 18, Component.translatable("waterplayer.playlist.edit.drag_and_drop"), false, (s) -> showOpenFileDialog()));
+        addRenderableWidget(new TextBox(x+41, y+18, size-41, 18, Component.translatable("waterplayer.playlist.edit.drag_and_drop.second"), false, (s) -> showOpenFileDialog()));
         y+=41;
         addRenderableWidget(new EditBoxBuilder(Component.translatable("waterplayer.playlist.title"), (s) -> {
             playlist.title = s;
