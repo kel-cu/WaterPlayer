@@ -10,6 +10,7 @@ import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.gui.GuiUtils;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
 import ru.kelcuprum.alinlib.gui.components.buttons.Button;
+import ru.kelcuprum.alinlib.gui.screens.AbstractConfigScreen;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 import ru.kelcuprum.waterplayer.backend.playlist.WebPlaylist;
@@ -36,7 +37,7 @@ public class PlaylistButton extends Button {
         super(new ButtonBuilder().setTitle(Component.empty()).setStyle(GuiUtils.getSelected()).setSize(width, playlist.icon == null ? 20 : 40).setPosition(x, y));
         ((ButtonBuilder)this.builder).setOnPress((s) -> {
             Screen parent = screen;
-            if(screen instanceof ControlScreen || screen instanceof ModernControlScreen) parent = PlaylistsScreen.build(screen);
+            if(screen instanceof ControlScreen || screen instanceof ModernControlScreen || screen instanceof AbstractConfigScreen) parent = PlaylistsScreen.build(screen);
             if(webPlaylist == null) AlinLib.MINECRAFT.setScreen(new ViewPlaylistScreen(parent, playlist));
             else AlinLib.MINECRAFT.setScreen(new ViewPlaylistScreen(parent, webPlaylist));
         });

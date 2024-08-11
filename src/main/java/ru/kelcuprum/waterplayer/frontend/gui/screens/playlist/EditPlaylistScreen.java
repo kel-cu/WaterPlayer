@@ -91,6 +91,7 @@ public class EditPlaylistScreen extends Screen {
         initTracks();
     }
     public Button icon;
+    public boolean isDeleted = false;
     public void initPanel(){
         int x = 5;
         int size = 210;
@@ -118,6 +119,7 @@ public class EditPlaylistScreen extends Screen {
             }).setPosition(x, y).setSize(size, 20).build());addRenderableWidget(new ButtonBuilder(CommonComponents.GUI_BACK, (e) -> onClose()).setPosition(x, height - 25).setSize(size-25, 20).build());
         addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.playlist.remove"), (s) -> {
             playlist.path.toFile().delete();
+            isDeleted = true;
             if(parent instanceof ViewPlaylistScreen){
                 this.parent = ((ViewPlaylistScreen) parent).parent;
                 onClose();
@@ -244,7 +246,7 @@ public class EditPlaylistScreen extends Screen {
 
     // - Close
     public void onClose() {
-        playlist.save();
+        if(!isDeleted) playlist.save();
         assert this.minecraft != null;
         this.minecraft.setScreen(parent);
     }

@@ -97,7 +97,7 @@ public class TextureHelper {
             }
             texture = new DynamicTexture(image);
         }
-        if(textureManager != null) {
+        if (textureManager != null) {
             textureManager.register(textureId, texture);
             resourceLocationMap.put(id, textureId);
             JsonObject data = new JsonObject();
@@ -186,6 +186,10 @@ public class TextureHelper {
         resourceLocationMap$Base64.remove(id);
         File file = getTextureFile(id);
         if (file.exists()) file.delete();
+        JsonObject data = new JsonObject();
+        data.addProperty("url", "base64");
+        data.addProperty("id", id);
+        map.remove(data);
     }
 
     public static ResourceLocation getTexture$Base64(String base, String id) {
@@ -208,7 +212,7 @@ public class TextureHelper {
         DynamicTexture texture;
         if (urlsTextures$Base64.containsKey(base)) {
             JsonObject data = new JsonObject();
-            data.addProperty("url", String.format("base64:%s", base));
+            data.addProperty("url", "base64");
             data.addProperty("id", id);
             if (!map.contains(data)) map.add(data);
             texture = urlsTextures$Base64.get(base);
@@ -249,7 +253,46 @@ public class TextureHelper {
             textureManager.register(textureId, texture);
             resourceLocationMap$Base64.put(id, textureId);
             JsonObject data = new JsonObject();
-            data.addProperty("url", String.format("base64:%s", base));
+            data.addProperty("url", "base64");
+            data.addProperty("id", id);
+            if (!map.contains(data)) map.add(data);
+        }
+    }
+
+    public static void registerTexture$Base64(String id, TextureManager textureManager, ResourceLocation textureId) {
+        WaterPlayer.log(String.format("REGISTER: %s", id), Level.DEBUG);
+        DynamicTexture texture;
+        NativeImage image;
+        try {
+            File textureFile = getTextureFile(id);
+            boolean isFileExists = textureFile.exists();
+            BufferedImage bufferedImage;
+            if (isFileExists) {
+                bufferedImage = ImageIO.read(getTextureFile(id));
+                if (bufferedImage.getWidth() > bufferedImage.getHeight()) {
+                    int x = (bufferedImage.getWidth() - bufferedImage.getHeight()) / 2;
+                    bufferedImage = bufferedImage.getSubimage(x, 0, bufferedImage.getHeight(), bufferedImage.getHeight());
+                }
+                BufferedImage scaleImage = toBufferedImage(bufferedImage.getScaledInstance(128, 128, 2));
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                ImageIO.write(scaleImage, "png", byteArrayOutputStream);
+                byte[] bytesOfImage = byteArrayOutputStream.toByteArray();
+                image = NativeImage.read(bytesOfImage);
+            } else {
+                resourceLocationMap$Base64.put(id, NO_PLAYLIST_ICON);
+                return;
+            }
+        } catch (Exception e) {
+            WaterPlayer.log("Error loading image from URL: " + id + " - " + e.getMessage());
+            resourceLocationMap$Base64.put(id, NO_PLAYLIST_ICON);
+            return;
+        }
+        texture = new DynamicTexture(image);
+        if (textureManager != null) {
+            textureManager.register(textureId, texture);
+            resourceLocationMap$Base64.put(id, textureId);
+            JsonObject data = new JsonObject();
+            data.addProperty("url", "base64");
             data.addProperty("id", id);
             if (!map.contains(data)) map.add(data);
         }
@@ -272,14 +315,21 @@ public class TextureHelper {
 
     public static void loadTextures(TextureManager textureManager) {
         loadMap();
-        for (JsonElement json : map) {
-            JsonObject data = json.getAsJsonObject();
-            ResourceLocation l = GuiUtils.getResourceLocation("waterplayer", data.get("id").getAsString());
-            if (new File(data.get("url").getAsString()).exists())
-                registerTexture$File(new File(data.get("url").getAsString()), data.get("id").getAsString(), textureManager, l);
-            else if (data.get("url").getAsString().startsWith("base64:"))
-                registerTexture$Base64(data.get("url").getAsString().split(":")[1], data.get("id").getAsString(), textureManager, l);
-            else registerTexture(data.get("url").getAsString(), data.get("id").getAsString(), textureManager, l);
+        try {
+            final JsonArray finalMap = map;
+            for (JsonElement json : finalMap) {
+                JsonObject data = json.getAsJsonObject();
+                ResourceLocation l = GuiUtils.getResourceLocation("waterplayer", data.get("id").getAsString());
+                if (new File(data.get("url").getAsString()).exists())
+                    registerTexture$File(new File(data.get("url").getAsString()), data.get("id").getAsString(), textureManager, l);
+                else if (data.get("url").getAsString().startsWith("base64:")) {
+                    // data.get("url").getAsString().substring(7),
+                    registerTexture$Base64(data.get("id").getAsString(), textureManager, l);
+                } else registerTexture(data.get("url").getAsString(), data.get("id").getAsString(), textureManager, l);
+            }
+        } catch (Exception e){
+            WaterPlayer.log("MAP ERROR!", Level.ERROR);
+            e.printStackTrace();
         }
     }
 
