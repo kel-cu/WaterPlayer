@@ -267,6 +267,9 @@ public class WaterPlayer implements ClientModInitializer {
     public static void log(String message, Level level) {
         LOG.log(level, "[" + LOG.getName() + "] " + message);
     }
+    public static String parseFileSystem(String name){
+        return name.replaceAll("[<>:\"?|\\\\/*]", "_");
+    }
 
     public static void confirmLinkNow(Screen screen, String link) {
         Minecraft minecraft = Minecraft.getInstance();

@@ -41,7 +41,7 @@ public class LyricsHelper {
     }
 
     public static void saveSRT(AudioTrack track, String text) {
-        String id = track.getSourceManager().getSourceName() + "_" + track.getIdentifier();
+        String id = WaterPlayer.parseFileSystem(track.getSourceManager().getSourceName() + "_" + track.getIdentifier());
         File srt = new File("./config/WaterPlayer/Lyrics/" + id + ".srt");
         AudioLyrics lyrics = getLyrics(track);
         StringBuilder builder = new StringBuilder();
@@ -70,7 +70,7 @@ public class LyricsHelper {
     }
 
     public static void saveWPLF(AudioTrack track, String text) {
-        String id = track.getSourceManager().getSourceName() + "_" + track.getIdentifier();
+        String id = WaterPlayer.parseFileSystem(track.getSourceManager().getSourceName() + "_" + track.getIdentifier());
         File json = new File("./config/WaterPlayer/Lyrics/" + id + ".wplf");
         AudioLyrics lyrics = getLyrics(track);
         JsonArray array = new JsonArray();
