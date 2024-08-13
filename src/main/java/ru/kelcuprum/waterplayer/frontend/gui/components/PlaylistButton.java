@@ -64,7 +64,7 @@ public class PlaylistButton extends Button {
     }
     public ResourceLocation getIcon(){
         if(playlist == null) return NO_PLAYLIST_ICON;
-        return playlist.icon == null ? NO_PLAYLIST_ICON : TextureHelper.getTexture$Base64(playlist.icon, String.format("playlist-%s", playlist.fileName));
+        return playlist.icon == null ? NO_PLAYLIST_ICON : TextureHelper.getTexture$Base64(playlist.icon, webPlaylist == null ? String.format("playlist-%s", playlist.fileName) : String.format("webplaylist-%s", webPlaylist.url));
     }
 
     protected void renderScrollingString(GuiGraphics guiGraphics, Font font, Component message, int x, int y, int color) {

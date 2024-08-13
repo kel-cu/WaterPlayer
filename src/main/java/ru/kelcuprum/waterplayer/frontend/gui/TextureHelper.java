@@ -322,10 +322,8 @@ public class TextureHelper {
                 ResourceLocation l = GuiUtils.getResourceLocation("waterplayer", data.get("id").getAsString());
                 if (new File(data.get("url").getAsString()).exists())
                     registerTexture$File(new File(data.get("url").getAsString()), data.get("id").getAsString(), textureManager, l);
-                else if (data.get("url").getAsString().startsWith("base64:")) {
-                    // data.get("url").getAsString().substring(7),
-                    registerTexture$Base64(data.get("id").getAsString(), textureManager, l);
-                } else registerTexture(data.get("url").getAsString(), data.get("id").getAsString(), textureManager, l);
+                else if (data.get("url").getAsString().startsWith("base64")) registerTexture$Base64(data.get("id").getAsString(), textureManager, l);
+                else registerTexture(data.get("url").getAsString(), data.get("id").getAsString(), textureManager, l);
             }
         } catch (Exception e){
             WaterPlayer.log("MAP ERROR!", Level.ERROR);

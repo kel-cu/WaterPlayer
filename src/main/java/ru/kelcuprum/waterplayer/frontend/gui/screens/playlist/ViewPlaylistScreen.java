@@ -55,12 +55,13 @@ public class ViewPlaylistScreen extends Screen {
     boolean isEnable = false;
     boolean isInit = false;
 
-    public ViewPlaylistScreen(Screen parent, WebPlaylist webPlaylist){
+    public ViewPlaylistScreen(Screen parent, WebPlaylist webPlaylist) {
         this(parent, webPlaylist.playlist);
         this.webPlaylist = webPlaylist;
         this.isCreatedLink = true;
         this.link = String.format(WaterPlayerAPI.config.getString("PLAYLIST_URL", WaterPlayerAPI.getURL("/playlist/%s")), webPlaylist.url);
     }
+
     public ViewPlaylistScreen(Screen parent, @NotNull Playlist playlist) {
         super(Component.empty());
         this.playlist = playlist;
@@ -71,25 +72,27 @@ public class ViewPlaylistScreen extends Screen {
     protected void init() {
         initPanel();
         initTracks();
-        if(!isInit) {
+        if (!isInit) {
             isInit = true;
-            if(isCreatedLink) isEnable = true;
+            if (isCreatedLink) isEnable = true;
             else new Thread(() -> isEnable = WaterPlayerAPI.isPlaylistUploadEnable()).start();
             new Thread(() -> trackWidgets = getTrackWidgets(playlist)).start();
         }
     }
+
     public Button upload;
     public ImageWidget icon;
-    public void initPanel(){
+
+    public void initPanel() {
         int x = 5;
         int size = 210;
         addRenderableWidget(new TextBox(x, 15, size, 9, Component.translatable(webPlaylist == null ? "waterplayer.playlist" : "waterplayer.playlist.web"), true));
         int y = 40;
         icon = addRenderableWidget(new ImageWidget(x, y, 36, 36, getIcon(), 36, 36, Component.empty()));
-        addRenderableWidget(new TextBox(x+41, y, size-41, 18, Component.literal(playlist.title), false));
-        addRenderableWidget(new TextBox(x+41, y+18, size-41, 18, Component.literal(playlist.author), false));
-        y+=41;
-        if(webPlaylist == null){
+        addRenderableWidget(new TextBox(x + 41, y, size - 41, 18, Component.literal(playlist.title), false));
+        addRenderableWidget(new TextBox(x + 41, y + 18, size - 41, 18, Component.literal(playlist.author), false));
+        y += 41;
+        if (webPlaylist == null) {
             addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.playlist.edit_button"), (e) -> {
                 isInit = isEnable = false;
                 trackWidgets = new ArrayList<>();
@@ -106,7 +109,7 @@ public class ViewPlaylistScreen extends Screen {
                 AlinLib.MINECRAFT.setScreen(new ViewPlaylistScreen(parent, playlist));
             }).setPosition(x, y).setSize(size, 20).build());
         }
-        y+=25;
+        y += 25;
         upload = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable(isCreatedLink ? "waterplayer.playlist.copy_link" : "waterplayer.playlist.upload"), (e) -> {
             if (isCreatedLink) {
                 AlinLib.MINECRAFT.keyboardHandler.setClipboard(link);
@@ -119,10 +122,8 @@ public class ViewPlaylistScreen extends Screen {
                     WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.playlist.uploaded")).show(AlinLib.MINECRAFT.getToasts());
                     e.builder.setTitle(Component.translatable("waterplayer.playlist.copy_link"));
                 } catch (Exception ex) {
-                    if(ex instanceof RuntimeException) {
-                        isEnable = false;
-                        e.builder.setTitle(Component.translatable("waterplayer.playlist.upload.unavailable"));
-                    }
+                    isEnable = false;
+                    e.builder.setTitle(Component.translatable("waterplayer.playlist.upload.unavailable"));
                     String msg = ex.getMessage() == null ? e.getClass().getName() : ex.getMessage();
                     WaterPlayer.getToast().setMessage(Component.literal(msg)).setType(ToastBuilder.Type.ERROR).setIcon(DONT).show(AlinLib.MINECRAFT.getToasts());
                     WaterPlayer.log(msg, Level.ERROR);
@@ -130,13 +131,14 @@ public class ViewPlaylistScreen extends Screen {
             }
         }).setPosition(x, y).setSize(size, 20).setActive(false).build());
 
-        addRenderableWidget(new ButtonBuilder(CommonComponents.GUI_BACK, (e) -> onClose()).setPosition(x, height - 25).setSize(size-25, 20).build());
-        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.playlist.play"), (s) -> WaterPlayer.player.loadMusic(webPlaylist == null ? String.format("playlist:%s", playlist.fileName) : String.format("wplayer:%s", webPlaylist.url), false)).setSprite(PLAY).setPosition(x+size-20, height-25).setSize(20, 20).build());
+        addRenderableWidget(new ButtonBuilder(CommonComponents.GUI_BACK, (e) -> onClose()).setPosition(x, height - 25).setSize(size - 25, 20).build());
+        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.playlist.play"), (s) -> WaterPlayer.player.loadMusic(webPlaylist == null ? String.format("playlist:%s", playlist.fileName) : String.format("wplayer:%s", webPlaylist.url), false)).setSprite(PLAY).setPosition(x + size - 20, height - 25).setSize(20, 20).build());
     }
 
     private ConfigureScrolWidget scroller;
     private List<AbstractWidget> widgets = new ArrayList<>();
-    public void initTracks(){
+
+    public void initTracks() {
         widgets = new ArrayList<>();
         this.scroller = addRenderableWidget(new ConfigureScrolWidget(this.width - 8, 0, 4, this.height, Component.empty(), scroller -> {
             scroller.innerHeight = 5;
@@ -152,7 +154,7 @@ public class ViewPlaylistScreen extends Screen {
         int i = 30;
         for (AbstractWidget element : trackWidgets) {
             element.setPosition(x, i);
-            element.setWidth(width-230);
+            element.setWidth(width - 230);
             widgets.add(element);
             i += element.getHeight() + 5;
         }
@@ -166,11 +168,12 @@ public class ViewPlaylistScreen extends Screen {
     }
 
     public static MusicPlayer searchPlayer = new MusicPlayer();
-    public List<AbstractWidget> getTrackWidgets(Playlist playlist){
+
+    public List<AbstractWidget> getTrackWidgets(Playlist playlist) {
         List<AbstractWidget> trackWidgets = new ArrayList<>();
         for (String url : playlist.urls) {
             final Screen thisScreen = this;
-            if(!url.isBlank()) searchPlayer.getAudioPlayerManager().loadItemSync(url, new AudioLoadResultHandler() {
+            if (!url.isBlank()) searchPlayer.getAudioPlayerManager().loadItemSync(url, new AudioLoadResultHandler() {
                 @Override
                 public void trackLoaded(AudioTrack track) {
                     trackWidgets.add(new TrackButton(195, -50, width - 200, track, thisScreen, false));
@@ -178,20 +181,20 @@ public class ViewPlaylistScreen extends Screen {
 
                 @Override
                 public void playlistLoaded(AudioPlaylist playlist) {
-                    for(AudioTrack track : playlist.getTracks())
+                    for (AudioTrack track : playlist.getTracks())
                         trackWidgets.add(new TrackButton(195, -50, width - 200, track, thisScreen, false));
                 }
 
                 @Override
                 public void noMatches() {
-                    trackWidgets.add(new ButtonBuilder(Component.literal(url)).setOnPress((s) -> WaterPlayer.confirmLinkNow(thisScreen, url)).setCentered(false).setIcon(MUSIC).setPosition(195, -50).setWidth(width-200).build());
+                    trackWidgets.add(new ButtonBuilder(Component.literal(url)).setOnPress((s) -> WaterPlayer.confirmLinkNow(thisScreen, url)).setCentered(false).setIcon(MUSIC).setPosition(195, -50).setWidth(width - 200).build());
                     WaterPlayer.log("Nothing Found by " + url, Level.WARN);
                 }
 
                 @Override
                 public void loadFailed(FriendlyException ex) {
-                    trackWidgets.add(new ButtonBuilder(Component.literal(url)).setOnPress((s) -> WaterPlayer.confirmLinkNow(thisScreen, url)).setCentered(false).setIcon(MUSIC).setPosition(195, -50).setWidth(width-200).build());
-                    WaterPlayer.log("ERROR: "+(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage()), Level.DEBUG);
+                    trackWidgets.add(new ButtonBuilder(Component.literal(url)).setOnPress((s) -> WaterPlayer.confirmLinkNow(thisScreen, url)).setCentered(false).setIcon(MUSIC).setPosition(195, -50).setWidth(width - 200).build());
+                    WaterPlayer.log("ERROR: " + (ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage()), Level.DEBUG);
                 }
             });
         }
@@ -200,32 +203,32 @@ public class ViewPlaylistScreen extends Screen {
 
     // - icon
 
-    public ResourceLocation getIcon(){
-        if(playlist == null) return NO_PLAYLIST_ICON;
-        return playlist.icon == null ? NO_PLAYLIST_ICON : TextureHelper.getTexture$Base64(playlist.icon, String.format("playlist-%s", (webPlaylist == null ?  playlist.fileName : webPlaylist.url)));
+    public ResourceLocation getIcon() {
+        if (playlist == null) return NO_PLAYLIST_ICON;
+        return playlist.icon == null ? NO_PLAYLIST_ICON : TextureHelper.getTexture$Base64(playlist.icon, webPlaylist == null ? String.format("playlist-%s", playlist.fileName) : String.format("webplaylist-%s", webPlaylist.url));
     }
 
     // - Tick
     public ResourceLocation lastIcon = getIcon();
     List<AbstractWidget> lastTracks = new ArrayList<>();
     private int lastSize = 0;
+
     @Override
     public void tick() {
-        if(lastIcon != getIcon()){
+        if (lastIcon != getIcon()) {
             lastIcon = getIcon();
             removeWidget(icon);
             icon = addRenderableWidget(new ImageWidget(5, 40, 36, 36, getIcon(), 36, 36, Component.empty()));
         }
         if (scroller != null) scroller.onScroll.accept(scroller);
-        if(isEnable) {
+        if (isEnable) {
             upload.setActive(true);
             upload.setMessage(Component.translatable(isCreatedLink ? "waterplayer.playlist.copy_link" : "waterplayer.playlist.upload"));
-        }
-        else {
+        } else {
             upload.setActive(false);
             upload.setMessage(Component.translatable("waterplayer.playlist.upload.unavailable"));
         }
-        if (lastTracks != trackWidgets){
+        if (lastTracks != trackWidgets) {
             lastTracks = trackWidgets;
             rebuildWidgetsList();
         }
@@ -288,10 +291,11 @@ public class ViewPlaylistScreen extends Screen {
 
     // - Close
     public void onClose() {
-        if(parent instanceof AbstractConfigScreen) PlaylistsScreen.assetsSize = 0;
+        if (parent instanceof AbstractConfigScreen) PlaylistsScreen.assetsSize = 0;
         assert this.minecraft != null;
         this.minecraft.setScreen(parent);
     }
+
     @Override
     public boolean keyPressed(int i, int j, int k) {
         if (i == GLFW.GLFW_KEY_ESCAPE) {
