@@ -1,14 +1,13 @@
 package ru.kelcuprum.waterplayer.frontend.gui;
 
 import com.github.topi314.lavalyrics.lyrics.AudioLyrics;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Async;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Objects;
@@ -40,7 +39,7 @@ public class LyricsHelper {
         lyricsHashMap.put(track.getInfo().uri, audioLyrics);
     }
 
-    public static void saveSRT(AudioTrack track, String text) {
+    public static String saveSRT(AudioTrack track, String text) throws IOException {
         String id = WaterPlayer.parseFileSystem(track.getSourceManager().getSourceName() + "_" + track.getIdentifier());
         File srt = new File("./config/WaterPlayer/Lyrics/" + id + ".srt");
         AudioLyrics lyrics = getLyrics(track);
@@ -61,46 +60,9 @@ public class LyricsHelper {
                 i++;
             }
         }
-        try {
-            Files.createDirectories(srt.toPath().getParent());
-            Files.writeString(srt.toPath(), builder.toString());
-        } catch (Exception ex) {
-            WaterPlayer.log(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage(), Level.ERROR);
-        }
-    }
-
-    public static void saveWPLF(AudioTrack track, String text) {
-        String id = WaterPlayer.parseFileSystem(track.getSourceManager().getSourceName() + "_" + track.getIdentifier());
-        File json = new File("./config/WaterPlayer/Lyrics/" + id + ".wplf");
-        AudioLyrics lyrics = getLyrics(track);
-        JsonArray array = new JsonArray();
-        JsonObject builder = new JsonObject();
-        builder.addProperty("text", text);
-        if (lyrics == null || lyrics.getLines() == null || lyrics.getLines().isEmpty()) {
-            String[] lines = text.split("\n");
-            for (String line : lines) {
-                JsonObject data = new JsonObject();
-                data.addProperty("millisecond", 0);
-                data.addProperty("duration", track.getDuration());
-                data.addProperty("line", line);
-                array.add(data);
-            }
-        } else {
-            for(AudioLyrics.Line line : lyrics.getLines()){
-                JsonObject data = new JsonObject();
-                data.addProperty("millisecond", line.getTimestamp().toMillis());
-                data.addProperty("duration", line.getDuration() == null ? 0 : line.getDuration().toMillis());
-                data.addProperty("line", line.getLine());
-                array.add(data);
-            }
-        }
-        builder.add("lines", array);
-        try {
-            Files.createDirectories(json.toPath().getParent());
-            Files.writeString(json.toPath(), builder.toString());
-        } catch (Exception ex) {
-            WaterPlayer.log(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage(), Level.ERROR);
-        }
+        Files.createDirectories(srt.toPath().getParent());
+        Files.writeString(srt.toPath(), builder.toString());
+        return srt.getPath();
     }
 
     public static String formatTimeToSRT(long milliseconds) {

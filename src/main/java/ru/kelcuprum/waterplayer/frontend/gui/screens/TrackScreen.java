@@ -17,6 +17,7 @@ import ru.kelcuprum.alinlib.gui.components.ConfigureScrolWidget;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
 import ru.kelcuprum.alinlib.gui.components.buttons.Button;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
+import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 import ru.kelcuprum.waterplayer.frontend.gui.LyricsHelper;
@@ -28,6 +29,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static ru.kelcuprum.alinlib.gui.Icons.DONT;
 
 public class TrackScreen extends Screen {
     protected final Screen parent;
@@ -78,18 +81,15 @@ public class TrackScreen extends Screen {
                 WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.lyrics.copy.toast")).show(AlinLib.MINECRAFT.getToasts());
             }).setPosition(5, height - 25).setSize(lyricsSize - 10, 20).build());
 
-            String id = track.getSourceManager().getSourceName() + "_" + track.getIdentifier();
+            String id = WaterPlayer.parseFileSystem(track.getSourceManager().getSourceName() + "_" + track.getIdentifier());
             addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.track.lyrics.create_srt"), (onPress) -> {
-                LyricsHelper.saveSRT(track, lyricsEnable ? lyrics.getText() != null ? lyrics.getText().replace("\r", "") : "Example text" : "Example text");
-                Util.getPlatform().openFile(new File("./config/WaterPlayer/Lyrics/"+id+".srt"));
-                WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.lyrics.created_srt")).show(AlinLib.MINECRAFT.getToasts());
-            }).setPosition(5+(lyricsSize-8) / 2, height - (lyricsEnable ? 50 : 25)).setSize((lyricsSize - 14)/2, 20).build());
-
-            addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.track.lyrics.create_wplf"), (onPress) -> {
-                LyricsHelper.saveWPLF(track, lyricsEnable ? lyrics.getText() != null ? lyrics.getText().replace("\r", "") : "Example text" : "Example text");
-                Util.getPlatform().openFile(new File("./config/WaterPlayer/Lyrics/"+id+".wplf"));
-                WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.lyrics.created_wplf")).show(AlinLib.MINECRAFT.getToasts());
-            }).setPosition(5, height - (lyricsEnable ? 50 : 25)).setSize((lyricsSize - 14)/2, 20).build());
+                try{
+                    Util.getPlatform().openFile(new File(LyricsHelper.saveSRT(track, lyricsEnable ? lyrics.getText() != null ? lyrics.getText().replace("\r", "") : "Example text" : "Example text")));
+                    WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.lyrics.created_srt")).show(AlinLib.MINECRAFT.getToasts());
+                } catch (Exception e){
+                    WaterPlayer.getToast().setMessage(Component.literal(e.getMessage() == null ? e.getClass().getName() : e.getMessage())).setType(ToastBuilder.Type.ERROR).setIcon(DONT).show(AlinLib.MINECRAFT.getToasts());
+                }
+            }).setPosition(5, height - (lyricsEnable ? 50 : 25)).setSize(lyricsSize - 10, 20).build());
         }
         addRenderableWidget(new ButtonBuilder(Component.translatable(isFile ? "waterplayer.track.open_file" : "waterplayer.track.open_link"), (huy) -> {
             if (isFile) Util.getPlatform().openFile(new File(track.getInfo().uri));

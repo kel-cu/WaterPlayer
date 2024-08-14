@@ -13,15 +13,12 @@ import net.minecraft.util.GsonHelper;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.system.Platform;
-import org.lwjgl.util.tinyfd.TinyFileDialogs;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
 import ru.kelcuprum.waterplayer.backend.exception.WebPlaylistException;
 import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 import ru.kelcuprum.waterplayer.backend.sources.waterplayer.lyrics.SRTLyricsFormat;
-import ru.kelcuprum.waterplayer.backend.sources.waterplayer.lyrics.WPLyricsFormat;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -82,17 +79,8 @@ public class WaterPlayerSource implements AudioSourceManager, AudioLyricsManager
     public @Nullable AudioLyrics loadLyrics(AudioTrack track) {
         String id = track.getSourceManager().getSourceName() + "_" + track.getIdentifier();
         WaterPlayer.log(id);
-        File json = new File("./config/WaterPlayer/Lyrics/"+id+".wplf");
         File srt = new File("./config/WaterPlayer/Lyrics/"+id+".srt");
-        if(json.exists() && json.isFile()){
-            try {
-                JsonObject data = GsonHelper.parse(Files.readString(json.toPath()));
-                return new WPLyricsFormat(track, data);
-            } catch (Exception ex){
-                WaterPlayer.log(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage(), Level.ERROR);
-                return null;
-            }
-        } else if(srt.exists() && srt.isFile()){
+        if(srt.exists() && srt.isFile()){
             try {
                 return new SRTLyricsFormat(track, Files.readString(srt.toPath()));
             } catch (Exception ex){
