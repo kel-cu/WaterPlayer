@@ -78,7 +78,7 @@ public class WaterPlayerSource implements AudioSourceManager, AudioLyricsManager
     @Override
     public @Nullable AudioLyrics loadLyrics(AudioTrack track) {
         String id = track.getSourceManager().getSourceName() + "_" + track.getIdentifier();
-        WaterPlayer.log(id);
+        WaterPlayer.log("[Lyrics] " + id);
         File srt = new File("./config/WaterPlayer/Lyrics/"+id+".srt");
         if(srt.exists() && srt.isFile()){
             try {
