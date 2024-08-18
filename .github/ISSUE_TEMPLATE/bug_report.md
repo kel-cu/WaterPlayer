@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help us improve. If you have problems with YouTube, and you are not from the Russian Federation, please refer to separate Issue #0
+about: Create a report to help us improve. If you have problems with YouTube, and you are not from the Russian Federation, please refer to separate Issue #30
 title: "[BUG] Template"
 labels: ''
 assignees: ''
