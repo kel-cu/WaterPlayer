@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help us improve. If you have problems with YouTube, and you are not from the Russian Federation, please refer to separate Issue #30
+about: Create a report to help us improve. If you have problems with YouTube, and you are not from the Russian Federation, please refer to separate Issue https://github.com/kel-cu/WaterPlayer/issues/30
 title: "[BUG] Template"
 labels: ''
 assignees: ''
