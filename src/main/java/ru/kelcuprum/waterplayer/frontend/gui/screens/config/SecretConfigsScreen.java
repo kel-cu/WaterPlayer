@@ -15,8 +15,7 @@ import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
 
 import static ru.kelcuprum.alinlib.gui.Icons.*;
-import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.THINK;
-import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.getPlayOrPause;
+import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.*;
 
 public class SecretConfigsScreen {
     public static Screen build(Screen parent) {
@@ -24,7 +23,8 @@ public class SecretConfigsScreen {
                 .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.config"), (e) -> AlinLib.MINECRAFT.setScreen(MainConfigsScreen.build(parent))).setIcon(OPTIONS).setCentered(false).build())
                 .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.config.localization"), (e) -> AlinLib.MINECRAFT.setScreen(LocalizationConfigsScreen.build(parent))).setIcon(Icons.LIST).setCentered(false).build())
                 .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.secret"), (e) -> AlinLib.MINECRAFT.setScreen(SecretConfigsScreen.build(parent))).setIcon(WARNING).setCentered(false).build())
-                .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.playlists"), (e) -> AlinLib.MINECRAFT.setScreen(PlaylistsScreen.build(parent))).setIcon(Icons.LIST).setCentered(false).build())
+                .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.playlists"), (e) -> AlinLib.MINECRAFT.setScreen(PlaylistsScreen.build(parent))).setIcon(LIST).setCentered(false).build())
+                .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.additional"), (e) -> AlinLib.MINECRAFT.setScreen(AdditionalScreen.build(parent))).setIcon(VOLUME_MAX).setCentered(false).build())
                 .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.play"), (e) -> AlinLib.MINECRAFT.setScreen(WaterPlayer.getControlScreen(SecretConfigsScreen.build(parent)))).setIcon(getPlayOrPause(WaterPlayer.player.getAudioPlayer().isPaused())).setCentered(false).build())
 
                 .addWidget(new TextBox(Component.translatable("waterplayer.secret"), true))
@@ -44,15 +44,6 @@ public class SecretConfigsScreen {
                 .addWidget(new CategoryBox(Component.translatable("waterplayer.secret.title.apple_music"))
                         .addValue(new EditBoxBuilder(Component.translatable("waterplayer.config.apple_music_media_api_token")).setValue("").setConfig(WaterPlayer.config, "APPLE_MUSIC_MEDIA_API_TOKEN").setSecret(true).build())
                         .addValue(new EditBoxBuilder(Component.translatable("waterplayer.config.apple_music_country_code")).setValue("US").setConfig(WaterPlayer.config, "APPLE_MUSIC_COUNTRY_CODE").build())
-                )
-                .addWidget(new CategoryBox(Component.translatable("waterplayer.api"))
-                        .addValue(new ButtonBuilder(Component.translatable("waterplayer.web.what_data_is_sent"), (e) -> WaterPlayer.confirmLinkNow(SecretConfigsScreen.build(parent), AlinLib.MINECRAFT.options.languageCode.equals("ru_ru") ? "https://waterplayer.ru/data" : "https://waterplayer.ru/data/en_us")).setIcon(THINK).build())
-                        .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.api.enable"), true).setConfig(WaterPlayer.config, "API.ENABLE").build())
-                        .addValue(new EditBoxBuilder(Component.translatable("waterplayer.api.url")).setValue("https://api.waterplayer.ru").setConfig(WaterPlayer.config, "API.URL").build())
-                        .addValue(new ButtonBuilder(Component.translatable("waterplayer.api.update_configs"), (e) -> {
-                            WaterPlayerAPI.loadConfig();
-                            WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.api.config_updated")).show(AlinLib.MINECRAFT.getToasts());
-                        }).setIcon(RESET).build())
                 )
                 .build();
     }

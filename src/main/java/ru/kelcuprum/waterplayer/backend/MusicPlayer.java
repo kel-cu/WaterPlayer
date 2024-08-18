@@ -1,5 +1,6 @@
 package ru.kelcuprum.waterplayer.backend;
 
+import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import com.github.topi314.lavalyrics.AudioLyricsManager;
 import com.github.topi314.lavalyrics.LyricsManager;
 import com.github.topi314.lavasearch.AudioSearchManager;
@@ -52,6 +53,8 @@ public class MusicPlayer {
     private final LyricsManager lyricsManager;
 
     public final LocalAudioSourceManager localAudioSourceManager = new LocalAudioSourceManager();
+    public double speed = WaterPlayer.config.getNumber("CURRENT_MUSIC_SPEED", 1).doubleValue();
+    public double pitch = WaterPlayer.config.getNumber("CURRENT_MUSIC_PITCH", 2).doubleValue();
 
     public MusicPlayer() {
         audioPlayerManager = new DefaultAudioPlayerManager();
@@ -63,7 +66,12 @@ public class MusicPlayer {
         trackScheduler = new TrackScheduler(audioPlayer);
         musicManager = new MusicManager(audioPlayer, trackScheduler);
         audioPlayer.setVolume(WaterPlayer.config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue());
-
+//        audioPlayer.setFilterFactory(((track, format, output) -> {
+//            final TimescalePcmAudioFilter filter = new TimescalePcmAudioFilter(output, format.channelCount, format.sampleRate);
+//            filter.setSpeed(speed);
+//            filter.setPitch(pitch);
+//            return Collections.singletonList(filter);
+//        }));
         audioPlayerManager.setFrameBufferDuration(1000);
         audioPlayerManager.setPlayerCleanupThreshold(Long.MAX_VALUE);
 
@@ -198,6 +206,9 @@ public class MusicPlayer {
 
     public TrackScheduler getTrackScheduler() {
         return trackScheduler;
+    }
+    public AudioOutput getAudioOutput() {
+        return audioOutput;
     }
 
     public void startAudioOutput() {

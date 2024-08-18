@@ -18,11 +18,15 @@ import com.sedmelluq.discord.lavaplayer.format.AudioDataFormat;
 import com.sedmelluq.discord.lavaplayer.format.AudioDataFormatTools;
 import com.sedmelluq.discord.lavaplayer.format.AudioPlayerInputStream;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import net.minecraft.network.chat.Component;
 import org.apache.logging.log4j.Level;
+import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.MusicPlayer;
 
 import javax.sound.sampled.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AudioOutput extends Thread {
 
@@ -39,7 +43,7 @@ public class AudioOutput extends Thread {
         this.musicPlayer = musicPlayer;
         format = AudioDataFormatTools.toAudioFormat(musicPlayer.getAudioDataFormat());
         speakerInfo = new DataLine.Info(SourceDataLine.class, format);
-        setMixer("");
+        setMixer(WaterPlayer.config.getString("SPEAKER", ""));
     }
 
     @Override
@@ -112,6 +116,21 @@ public class AudioOutput extends Thread {
             sourceLine.stop();
             sourceLine.close();
         }
+    }
+
+    public String[] getAudioDevices(){
+        List<String> devicesList = getAudioDevicesList();
+        String[] devices = new String[devicesList.size()];
+        for(int i = 0; i<devicesList.size(); i++) devices[i] = devicesList.get(i);
+        return devices;
+    }
+    public List<String> getAudioDevicesList(){
+        List<String> devicesList = new ArrayList<>();
+        for (final Mixer.Info mixerInfo : AudioSystem.getMixerInfo()) {
+            final Mixer mixer = AudioSystem.getMixer(mixerInfo);
+            if (mixer.isLineSupported(speakerInfo)) devicesList.add(mixerInfo.getName());
+        }
+        return devicesList;
     }
 
     private Mixer findMixer(String name, Line.Info lineInfo) {

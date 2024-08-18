@@ -64,6 +64,7 @@ public class WaterPlayer implements ClientModInitializer {
             GuiRenderEvents.RENDER.register(hud);
             GuiRenderEvents.RENDER.register(sub);
             ClientTickEvents.START_CLIENT_TICK.register(hud);
+//            log(AlinLib.MINECRAFT.options.soundDevice().get());
         });
         ClientLifecycleEvents.CLIENT_STOPPING.register(e -> {
             player.getAudioPlayer().stopTrack();
