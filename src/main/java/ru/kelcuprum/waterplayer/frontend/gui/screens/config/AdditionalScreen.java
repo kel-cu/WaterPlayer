@@ -13,6 +13,8 @@ import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.alinlib.gui.screens.ConfigScreenBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
+import ru.kelcuprum.waterplayer.frontend.gui.LyricsHelper;
+import ru.kelcuprum.waterplayer.frontend.gui.TextureHelper;
 
 import java.io.File;
 import static ru.kelcuprum.alinlib.gui.Icons.*;
@@ -30,7 +32,7 @@ public class AdditionalScreen {
                 .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.config.localization"), (e) -> AlinLib.MINECRAFT.setScreen(LocalizationConfigsScreen.build(parent))).setIcon(Icons.LIST).setCentered(false).build())
                 .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.secret"), (e) -> AlinLib.MINECRAFT.setScreen(SecretConfigsScreen.build(parent))).setIcon(WARNING).setCentered(false).build())
                 .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.playlists"), (e) -> AlinLib.MINECRAFT.setScreen(PlaylistsScreen.build(parent))).setIcon(Icons.LIST).setCentered(false).build())
-                .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.additional"), (e) -> AlinLib.MINECRAFT.setScreen(AdditionalScreen.build(parent))).setIcon(VOLUME_MAX).setCentered(false).build())
+                .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.additional"), (e) -> AlinLib.MINECRAFT.setScreen(AdditionalScreen.build(parent))).setIcon(OPTIONS).setCentered(false).build())
                 .addPanelWidget(new ButtonBuilder(Component.translatable("waterplayer.play"), (e) -> AlinLib.MINECRAFT.setScreen(WaterPlayer.getControlScreen(AdditionalScreen.build(parent)))).setIcon(getPlayOrPause(WaterPlayer.player.getAudioPlayer().isPaused())).setCentered(false).build())
                 //
                 .addWidget(new TextBox(140, 5, Component.translatable("waterplayer.additional"), true));
@@ -53,6 +55,19 @@ public class AdditionalScreen {
                             })
             );
         }
+        builder.addWidget(new CategoryBox(Component.translatable("waterplayer.cache"))
+                .addValue(new ButtonBuilder(Component.translatable("waterplayer.cache.icons.size"), Component.literal(TextureHelper.getParsedSize(TextureHelper.getSize()))).setActive(false))
+                .addValue(new ButtonBuilder(Component.translatable("waterplayer.cache.icons.reset.tracks")).setOnPress((s) -> {
+                    TextureHelper.removeTracksCache();
+                    AlinLib.MINECRAFT.setScreen(AdditionalScreen.build(parent));
+                }))
+                .addValue(new ButtonBuilder(Component.translatable("waterplayer.cache.icons.reset.playlists")).setOnPress((s) -> {
+                    TextureHelper.removePlaylistsIconCache();
+                    AlinLib.MINECRAFT.setScreen(AdditionalScreen.build(parent));
+                }))
+                .addValue(new ButtonBuilder(Component.translatable("waterplayer.cache.lyrics.reset")).setOnPress((s) -> LyricsHelper.clear()))
+        );
+
         builder.addWidget(new CategoryBox(Component.translatable("waterplayer.api"))
                 .addValue(new ButtonBuilder(Component.translatable("waterplayer.web.what_data_is_sent"), (e) -> WaterPlayer.confirmLinkNow(SecretConfigsScreen.build(parent), AlinLib.MINECRAFT.options.languageCode.equals("ru_ru") ? "https://waterplayer.ru/data" : "https://waterplayer.ru/data/en_us")).setIcon(THINK).build())
                 .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.api.enable"), true).setConfig(WaterPlayer.config, "API.ENABLE").build())

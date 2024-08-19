@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 
 import static org.apache.logging.log4j.core.config.plugins.convert.Base64Converter.parseBase64Binary;
@@ -378,5 +380,77 @@ public class TextureHelper {
         // Return the buffered image
         return bimage;
     }
-
+    // -=-=-=-=-=-=-=-=-=- //
+    public static void removePlaylistsIconCache(){
+        File directory = new File("config/waterplayer/textures");
+        resourceLocationMap$Base64.clear();
+        urls$Base64.clear();
+        urlsTextures$Base64.clear();
+        List<JsonElement> removed = new ArrayList<>();
+        for(JsonElement element : map){
+            JsonObject jsonObject = element.getAsJsonObject();
+            if(jsonObject.get("url").getAsString().equals("base64")) removed.add(element);
+        }
+        for(JsonElement element : removed) map.remove(element);
+        for(File file : directory.listFiles()){
+            if(file.getName().startsWith("playlist") || file.getName().startsWith("webplaylist")) file.delete();
+        }
+        saveMap();
+    }
+    public static void removeTracksCache(){
+        File directory = new File("config/waterplayer/textures");
+        resourceLocationMap.clear();
+        urls.clear();
+        urlsTextures.clear();
+        resourceLocationMap$file.clear();
+        urls$file.clear();
+        urlsTextures$file.clear();
+        List<JsonElement> removed = new ArrayList<>();
+        for(JsonElement element : map){
+            JsonObject jsonObject = element.getAsJsonObject();
+            if(!jsonObject.get("url").getAsString().equals("base64")) removed.add(element);
+        }
+        for(JsonElement element : removed) map.remove(element);
+        for(File file : directory.listFiles()){
+            if((!file.getName().startsWith("playlist") && !file.getName().startsWith("webplaylist")) && !file.getName().equals("map.json")) file.delete();
+        }
+        saveMap();
+    }
+    // -=-=-=-=-=-=-=-=-=- //
+    public static long getSize(){
+        return getSize(new File("config/waterplayer/textures"));
+    }
+    public static long getSize(File directory){
+        long length = 0;
+        for (File file : directory.listFiles()) {
+            if (file.isFile())
+                length += file.length();
+            else
+                length += getSize(file);
+        }
+        return length;
+    }
+    static long kilo = 1024;
+    static long mega = kilo * kilo;
+    static long giga = mega * kilo;
+    static long tera = giga * kilo;
+    public static String getParsedSize(long size) {
+        String s = "";
+        double kb = (double)size / kilo;
+        double mb = kb / kilo;
+        double gb = mb / kilo;
+        double tb = gb / kilo;
+        if(size < kilo) {
+            s = size + " Bytes";
+        } else if(size >= kilo && size < mega) {
+            s =  String.format("%.2f", kb) + " KB";
+        } else if(size >= mega && size < giga) {
+            s = String.format("%.2f", mb) + " MB";
+        } else if(size >= giga && size < tera) {
+            s = String.format("%.2f", gb) + " GB";
+        } else {
+            s = String.format("%.2f", tb) + " TB";
+        }
+        return s;
+    }
 }

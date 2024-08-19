@@ -167,6 +167,15 @@
   "waterplayer.config.apple_music_media_api_token": "Media API Token",
   "waterplayer.config.apple_music_country_code": "Country Code",
 
+  "waterplayer.additional": "Additional",
+  "waterplayer.config.speaker": "Output",
+
+  "waterplayer.cache": "Cache",
+  "waterplayer.cache.icons.size": "Icon cache size",
+  "waterplayer.cache.icons.reset.tracks": "Reset track icon cache",
+  "waterplayer.cache.icons.reset.playlists": "Reset playlist icons cache",
+  "waterplayer.cache.lyrics.reset": "Reset lyrics cache",
+
   "waterplayer.track.author": "Author: %s",
   "waterplayer.track.service": "Service: %s",
 

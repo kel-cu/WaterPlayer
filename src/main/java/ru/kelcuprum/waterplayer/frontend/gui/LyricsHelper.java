@@ -16,6 +16,11 @@ public class LyricsHelper {
     public static HashMap<String, AudioLyrics> lyricsHashMap = new HashMap<>();
     public static HashMap<AudioTrack, Boolean> urls = new HashMap<>();
 
+    public static void clear(){
+        lyricsHashMap.clear();
+        urls.clear();
+    }
+
     public static AudioLyrics getLyrics(AudioTrack track) {
         if (lyricsHashMap.containsKey(track.getInfo().uri)) return lyricsHashMap.get(track.getInfo().uri);
         else {

@@ -166,6 +166,15 @@
   "waterplayer.api.update_configs": "Обновить конфиги API",
   "waterplayer.api.config_updated": "Конфиги обновлены",
 
+  "waterplayer.additional": "Дополнительно",
+  "waterplayer.config.speaker": "Экстренный выход звука",
+
+  "waterplayer.cache": "Кэш",
+  "waterplayer.cache.icons.size": "Размер кэша иконок",
+  "waterplayer.cache.icons.reset.tracks": "Сбросить кэш иконок треков",
+  "waterplayer.cache.icons.reset.playlists": "Сбросить кэш иконок плейлистов",
+  "waterplayer.cache.lyrics.reset": "Сбросить кэш текстов",
+
   "waterplayer.track.author": "Автор: %s",
   "waterplayer.track.service": "Сервис: %s",
 
