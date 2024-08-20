@@ -31,6 +31,7 @@ repositories {
     maven { url = "https://maven.lavalink.dev/snapshots" }
     maven { url = "https://maven.neoforged.net/releases/" } // NEOFORGE
     maven { url = "https://maven.terraformersmc.com/releases" } // MODMENU
+    maven { url = "https://s01.oss.sonatype.org/content/repositories/releases" }
     ////
     maven { url = "https://repo.kelcuprum.ru/releases" }
     maven { url = "https://repo.kelcuprum.ru/snapshots" }
@@ -82,6 +83,7 @@ dependencies {
     shade (implementation("com.github.topi314.lavasrc:lavasrc-protocol:${project.lavasrc_protocol}"))
     shade (implementation("com.github.topi314.lavalyrics:lavalyrics:${project.lavalyrics}"))
     shade (implementation("net.jthink:jaudiotagger:3.0.1"))
+    shade (implementation("io.github.CDAGaming:DiscordIPC:0.10.0"))
 
     if (mod_brand == 'fabric') {
         modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"

@@ -39,6 +39,7 @@ import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ModernControlScreen
 import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.overlays.OverlayHandler;
+import ru.kelcuprum.waterplayer.frontend.rpc.DiscordIntegration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,12 +49,14 @@ public class WaterPlayer implements ClientModInitializer {
     public static final Logger LOG = LogManager.getLogger("WaterPlayer");
     public static MusicPlayer player;
     public static Localization localization = new Localization("waterplayer", "config/WaterPlayer/lang");
+    public static DiscordIntegration discordIntegration;
 
     @Override
     public void onInitializeClient() {
         log("Hello, world! UwU");
         WaterPlayerAPI.loadConfig();
         player = new MusicPlayer();
+        discordIntegration = new DiscordIntegration();
         registerBinds();
         ClientCommandRegistrationCallback.EVENT.register(WaterPlayerCommand::register);
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
@@ -64,13 +67,14 @@ public class WaterPlayer implements ClientModInitializer {
             GuiRenderEvents.RENDER.register(hud);
             GuiRenderEvents.RENDER.register(sub);
             ClientTickEvents.START_CLIENT_TICK.register(hud);
-//            log(AlinLib.MINECRAFT.options.soundDevice().get());
         });
         ClientLifecycleEvents.CLIENT_STOPPING.register(e -> {
             player.getAudioPlayer().stopTrack();
+            discordIntegration.exitApplication();
             TextureHelper.saveMap();
         });
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            discordIntegration.update();
             for (KeyBind bind : keyBinds) {
                 if (bind.key().consumeClick()) bind.onExecute().run();
             }

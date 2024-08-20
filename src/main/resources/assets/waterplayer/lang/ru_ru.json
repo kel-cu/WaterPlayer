@@ -168,6 +168,7 @@
 
   "waterplayer.additional": "Дополнительно",
   "waterplayer.config.speaker": "Экстренный выход звука",
+  "waterplayer.config.discord": "Интеграция Discord",
 
   "waterplayer.cache": "Кэш",
   "waterplayer.cache.icons.size": "Размер кэша иконок",

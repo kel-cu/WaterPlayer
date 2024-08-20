@@ -146,6 +146,7 @@ public class TrackScheduler extends AudioEventAdapter {
             case "Silly Plans ~ Revisit" -> Items.FILLED_MAP;
             case "Another Mistake" -> Items.BARRIER;
             case "Memory Merge" -> Items.FLINT_AND_STEEL;
+            case "Waterland", "Waterland (Lyric video)" -> Items.WATER_BUCKET;
             case "Artificial Abandonment", "(Original Song) Artificial Abandonment" -> Items.MOSSY_COBBLESTONE;
             default -> Items.MUSIC_DISC_STRAD;
         };

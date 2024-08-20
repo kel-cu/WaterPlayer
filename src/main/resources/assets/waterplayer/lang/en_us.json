@@ -169,6 +169,7 @@
 
   "waterplayer.additional": "Additional",
   "waterplayer.config.speaker": "Output",
+  "waterplayer.config.discord": "Discord Integration",
 
   "waterplayer.cache": "Cache",
   "waterplayer.cache.icons.size": "Icon cache size",
