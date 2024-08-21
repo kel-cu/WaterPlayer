@@ -177,7 +177,7 @@ public class WaterPlayer implements ClientModInitializer {
                 "waterplayer.name"
         ));
         keyBinds.add(new KeyBind(key1, () -> {
-            if (!(AlinLib.MINECRAFT.screen instanceof ControlScreen)) {
+            if (!(AlinLib.MINECRAFT.screen instanceof ControlScreen || AlinLib.MINECRAFT.screen instanceof ModernControlScreen)) {
                 AlinLib.MINECRAFT.setScreen(getControlScreen(AlinLib.MINECRAFT.screen));
                 return true;
             } else return false;
@@ -253,7 +253,7 @@ public class WaterPlayer implements ClientModInitializer {
             return true;
         }));
         keyBinds.add(new KeyBind(key7, () -> {
-            if (player.getAudioPlayer().getPlayingTrack() == null || AlinLib.MINECRAFT.screen instanceof ControlScreen)
+            if (player.getAudioPlayer().getPlayingTrack() == null || AlinLib.MINECRAFT.screen instanceof ControlScreen || AlinLib.MINECRAFT.screen instanceof ModernControlScreen)
                 return false;
             int current = config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue() + config.getNumber("SELECT_MUSIC_VOLUME", 1).intValue();
             if (current >= 100) current = 100;
@@ -263,7 +263,7 @@ public class WaterPlayer implements ClientModInitializer {
             return true;
         }));
         keyBinds.add(new KeyBind(key8, () -> {
-            if (player.getAudioPlayer().getPlayingTrack() == null || AlinLib.MINECRAFT.screen instanceof ControlScreen)
+            if (player.getAudioPlayer().getPlayingTrack() == null || AlinLib.MINECRAFT.screen instanceof ControlScreen || AlinLib.MINECRAFT.screen instanceof ModernControlScreen)
                 return false;
             int current = config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue() - config.getNumber("SELECT_MUSIC_VOLUME", 1).intValue();
             if (current <= 0) current = 0;
