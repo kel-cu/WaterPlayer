@@ -71,12 +71,14 @@ public class MusicPlayer {
         trackScheduler = new TrackScheduler(audioPlayer);
         musicManager = new MusicManager(audioPlayer, trackScheduler);
         audioPlayer.setVolume(WaterPlayer.config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue());
-        audioPlayer.setFilterFactory(((track, format, output) -> {
-            final TimescalePcmAudioFilter filter = new TimescalePcmAudioFilter(output, format.channelCount, format.sampleRate);
-            filter.setSpeed(speed);
-            filter.setPitch(pitch);
-            return Collections.singletonList(filter);
-        }));
+        if(WaterPlayer.config.getBoolean("EXPERIMENT.FILTERS", false)) {
+            audioPlayer.setFilterFactory(((track, format, output) -> {
+                final TimescalePcmAudioFilter filter = new TimescalePcmAudioFilter(output, format.channelCount, format.sampleRate);
+                filter.setSpeed(speed);
+                filter.setPitch(pitch);
+                return Collections.singletonList(filter);
+            }));
+        }
 
         audioPlayerManager.getConfiguration().setFrameBufferFactory((bufferDuration, format, stopping) -> new AllocatingAudioFrameBuffer(bufferDuration, format, stopping) {
             @Override
@@ -104,6 +106,7 @@ public class MusicPlayer {
         registerSources();
     }
     public void updateFilter(){
+        if(!WaterPlayer.config.getBoolean("EXPERIMENT.FILTERS", false)) return;
         audioPlayer.setFilterFactory((track, format, output) -> {
             final TimescalePcmAudioFilter filter = new TimescalePcmAudioFilter(output, format.channelCount, format.sampleRate);
             filter.setSpeed(speed);

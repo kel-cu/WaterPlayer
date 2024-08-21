@@ -19,7 +19,6 @@ import ru.kelcuprum.alinlib.gui.components.builder.editbox.EditBoxBuilder;
 import ru.kelcuprum.alinlib.gui.components.builder.selector.SelectorBuilder;
 import ru.kelcuprum.alinlib.gui.components.buttons.Button;
 import ru.kelcuprum.alinlib.gui.components.editbox.EditBox;
-import ru.kelcuprum.alinlib.gui.components.selector.SelectorButton;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.gui.LyricsHelper;
@@ -144,7 +143,7 @@ public class ModernControlScreen extends Screen {
     // - Player panel
     public Button clear;
     public Button shuffle;
-    public Button playOrPause;
+    public Button play;
     public Button skip;
     public Button repeat;
 
@@ -182,7 +181,7 @@ public class ModernControlScreen extends Screen {
                 .setPosition(x$Buttons, y + 3)
                 .build());
         x$Buttons += 25;
-        playOrPause = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control." + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause")), (e) -> {
+        play = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control." + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause")), (e) -> {
             WaterPlayer.player.getAudioPlayer().setPaused(!WaterPlayer.player.getAudioPlayer().isPaused());
             e.builder.setTitle(Component.translatable("waterplayer.control." + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause")));
             ((ButtonBuilder) e.builder).setSprite(getPlayOrPause(WaterPlayer.player.getAudioPlayer().isPaused()));

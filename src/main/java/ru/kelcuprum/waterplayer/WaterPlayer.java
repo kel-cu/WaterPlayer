@@ -106,7 +106,7 @@ public class WaterPlayer implements ClientModInitializer {
 
         ScreenEvents.KEY_PRESS.register((Screen screen, int code, int scan, int modifiers, CallbackInfoReturnable<Boolean> var5) -> {
             if (!WaterPlayer.config.getBoolean("ENABLE_KEYBINDS", false)) return;
-            if (screen instanceof TitleScreen || screen instanceof PauseScreen || screen instanceof ControlScreen) {
+            if (screen instanceof TitleScreen || screen instanceof PauseScreen || screen instanceof ControlScreen || screen instanceof ModernControlScreen) {
                 for (KeyBind bind : keyBinds) {
                     if ((bind.key().matches(code, scan) || bind.key().matchesMouse(code)) && bind.onExecute().run()) {
                         var5.setReturnValue(true);
@@ -182,10 +182,14 @@ public class WaterPlayer implements ClientModInitializer {
                 return true;
             } else return false;
         }));
+
         keyBinds.add(new KeyBind(key2, () -> {
             if (AlinLib.MINECRAFT.screen instanceof ControlScreen) {
                 if (AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
                 ((ControlScreen) AlinLib.MINECRAFT.screen).play.onPress();
+            } else if (AlinLib.MINECRAFT.screen instanceof ModernControlScreen) {
+                if (AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
+                ((ModernControlScreen) AlinLib.MINECRAFT.screen).play.onPress();
             } else {
                 player.getAudioPlayer().setPaused(!player.getAudioPlayer().isPaused());
             }
@@ -194,6 +198,7 @@ public class WaterPlayer implements ClientModInitializer {
                         .show(AlinLib.MINECRAFT.getToasts());
             return true;
         }));
+
         keyBinds.add(new KeyBind(key3, () -> {
             if (player.getTrackScheduler().queue.isEmpty() && player.getAudioPlayer().getPlayingTrack() == null)
                 return false;
@@ -215,7 +220,15 @@ public class WaterPlayer implements ClientModInitializer {
         }));
         keyBinds.add(new KeyBind(key5, () -> {
             if (player.getTrackScheduler().queue.size() >= 2) {
-                player.getTrackScheduler().shuffle();
+                if (AlinLib.MINECRAFT.screen instanceof ControlScreen) {
+                    if (AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
+                    ((ControlScreen) AlinLib.MINECRAFT.screen).shuffle.onPress();
+                } else if (AlinLib.MINECRAFT.screen instanceof ModernControlScreen) {
+                    if (AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
+                    ((ModernControlScreen) AlinLib.MINECRAFT.screen).shuffle.onPress();
+                } else {
+                    player.getTrackScheduler().shuffle();
+                }
                 if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true))
                     getToast().setMessage(Localization.getText("waterplayer.message.shuffle"))
                             .show(AlinLib.MINECRAFT.getToasts());
@@ -227,6 +240,9 @@ public class WaterPlayer implements ClientModInitializer {
             if (AlinLib.MINECRAFT.screen instanceof ControlScreen) {
                 if (AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
                 ((ControlScreen) AlinLib.MINECRAFT.screen).repeat.onPress();
+            } else if (AlinLib.MINECRAFT.screen instanceof ModernControlScreen) {
+                if (AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
+                ((ModernControlScreen) AlinLib.MINECRAFT.screen).repeat.onPress();
             } else {
                 player.getTrackScheduler().changeRepeatStatus();
             }

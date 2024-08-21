@@ -36,7 +36,7 @@ public class TimelineComponent extends AbstractSliderButton {
         if(isActive()) {
             guiGraphics.fill(getX(), getY(), (int) (getX()+(getWidth()*value)), getY()+getHeight(), WaterPlayer.player.getAudioPlayer().isPaused() ? CLOWNFISH : track.getInfo().isStream ? GROUPIE : SEADRIVE);
             if(showTime && !track.getInfo().isStream) {
-                guiGraphics.drawString(AlinLib.MINECRAFT.font, WaterPlayer.getTimestamp(track.getPosition()), getX(), getY() - 2 - AlinLib.MINECRAFT.font.lineHeight, -1);
+                guiGraphics.drawString(AlinLib.MINECRAFT.font, WaterPlayer.getTimestamp(MusicHelper.getPosition(track)), getX(), getY() - 2 - AlinLib.MINECRAFT.font.lineHeight, -1);
                 String dur = WaterPlayer.getTimestamp(WaterPlayer.player.getAudioPlayer().getPlayingTrack().getDuration());
                 guiGraphics.drawString(AlinLib.MINECRAFT.font, dur, getX() + getWidth() - AlinLib.MINECRAFT.font.width(dur), getY() - 2 - AlinLib.MINECRAFT.font.lineHeight, -1);
             } else if(!showTime && isHovered()){

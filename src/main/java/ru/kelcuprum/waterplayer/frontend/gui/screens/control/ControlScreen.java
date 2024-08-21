@@ -53,9 +53,11 @@ public class ControlScreen extends Screen {
 
     protected EditBox request;
     LyricsBox lyrics;
+
     public Button play;
     public Button repeat;
     public Button load;
+    public Button shuffle;
     public String query = "";
     public void initPanel() {
         int x = 5;
@@ -131,7 +133,7 @@ public class ControlScreen extends Screen {
                 .setPosition(x + 25, height - 25)
                 .build());
 
-        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control.shuffle"), (e) -> {
+        this.shuffle = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control.shuffle"), (e) -> {
             if (!WaterPlayer.player.getTrackScheduler().queue.isEmpty()) {
                 WaterPlayer.player.getTrackScheduler().shuffle();
                 rebuildWidgetsList();

@@ -4,6 +4,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import ru.kelcuprum.waterplayer.WaterPlayer;
+import ru.kelcuprum.waterplayer.backend.TrackScheduler;
 import ru.kelcuprum.waterplayer.frontend.gui.TextureHelper;
 
 import java.io.File;
@@ -78,9 +79,12 @@ public class MusicHelper {
     }
     //
     public static long getPosition(AudioTrack track){
-        return trackIsNull() ? 0 : track.getPosition();
+        if(WaterPlayer.config.getBoolean("EXPERIMENT.FILTERS", false) && TrackScheduler.trackSpeed != 1.0 && WaterPlayer.player.getAudioPlayer().getPlayingTrack() == track) return TrackScheduler.trackPosition;
+        return trackIsNull(track) ? 0 : track.getPosition();
     }
-    public static long getPosition() {return getPosition(WaterPlayer.player.getAudioPlayer().getPlayingTrack());}
+    public static long getPosition() {
+        return getPosition(WaterPlayer.player.getAudioPlayer().getPlayingTrack());
+    }
     //
     public static long getDuration(AudioTrack track){
         return trackIsNull(track) ? 0 : track.getDuration();
