@@ -8,6 +8,7 @@ import net.minecraft.util.Mth;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.gui.GuiUtils;
 import ru.kelcuprum.waterplayer.WaterPlayer;
+import ru.kelcuprum.waterplayer.backend.TrackScheduler;
 import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
 import static ru.kelcuprum.alinlib.gui.Colors.*;
@@ -16,7 +17,7 @@ import static ru.kelcuprum.waterplayer.WaterPlayer.getTimestamp;
 public class TimelineComponent extends AbstractSliderButton {
     public boolean showTime;
     public TimelineComponent(int x, int y, int width, int height, boolean showTime) {
-        super(x, y, width, height, Component.empty(),  WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null ? (double) WaterPlayer.player.getAudioPlayer().getPlayingTrack().getPosition() /WaterPlayer.player.getAudioPlayer().getPlayingTrack().getDuration() : 0);
+        super(x, y, width, height, Component.empty(),  WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null ? (double) TrackScheduler.trackPosition /WaterPlayer.player.getAudioPlayer().getPlayingTrack().getDuration() : 0);
         this.showTime = showTime;
     }
 
@@ -29,7 +30,7 @@ public class TimelineComponent extends AbstractSliderButton {
         }
         else {
             this.active = true;
-            value = WaterPlayer.player.getAudioPlayer().getPlayingTrack ().getInfo().isStream ? 1 : (double) track.getPosition() / track.getDuration();
+            value = WaterPlayer.player.getAudioPlayer().getPlayingTrack ().getInfo().isStream ? 1 : (double) TrackScheduler.trackPosition / track.getDuration();
         }
         GuiUtils.getSelected().renderBackground$widget(guiGraphics, getX(), getY(), getWidth(), getHeight(), isActive(), isHoveredOrFocused());
         if(isActive()) {
@@ -75,7 +76,7 @@ public class TimelineComponent extends AbstractSliderButton {
     @Override
     protected void applyValue() {
         if(WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null){
-            WaterPlayer.player.getAudioPlayer().getPlayingTrack().setPosition((long) (WaterPlayer.player.getAudioPlayer().getPlayingTrack().getDuration()*value));
+            WaterPlayer.player.setPosition((long) (WaterPlayer.player.getAudioPlayer().getPlayingTrack().getDuration()*value));
         }
     }
 }

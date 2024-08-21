@@ -16,8 +16,10 @@ import org.lwjgl.glfw.GLFW;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
 import ru.kelcuprum.alinlib.gui.components.builder.editbox.EditBoxBuilder;
+import ru.kelcuprum.alinlib.gui.components.builder.selector.SelectorBuilder;
 import ru.kelcuprum.alinlib.gui.components.buttons.Button;
 import ru.kelcuprum.alinlib.gui.components.editbox.EditBox;
+import ru.kelcuprum.alinlib.gui.components.selector.SelectorButton;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.gui.LyricsHelper;
@@ -25,10 +27,7 @@ import ru.kelcuprum.waterplayer.frontend.gui.components.LyricsBox;
 import ru.kelcuprum.waterplayer.frontend.gui.components.TrackButton;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.TrackScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.config.PlaylistsScreen;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.control.components.ConfigureScrolWidget;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.control.components.TimelineComponent;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.control.components.TrackIconButton;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.control.components.VolumeComponent;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.control.components.*;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.search.SearchScreen;
 import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
@@ -54,7 +53,7 @@ public class ModernControlScreen extends Screen {
 
     @Override
     protected void init() {
-        if(WaterPlayer.config.getBoolean("CONTROL.MODERN.FIRST_RUN", true)) {
+        if (WaterPlayer.config.getBoolean("CONTROL.MODERN.FIRST_RUN", true)) {
             WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.control.modern.notice")).setDisplayTime(15000).setIcon(Items.NETHER_STAR).show(AlinLib.MINECRAFT.getToasts());
             WaterPlayer.config.setBoolean("CONTROL.MODERN.FIRST_RUN", false);
         }
@@ -100,6 +99,44 @@ public class ModernControlScreen extends Screen {
                 .setSize(cWidth, 20).setPosition(x, y)
                 .build());
         y += 22;
+        if(WaterPlayer.config.getBoolean("EXPERIMENT.FILTERS", false)){
+            String[] speed = {"0.25x", "0.5x", "0.75x", "1x", "1.5x", "2x", "2.5x", "3x", "3.5x", "4x", "4.5x", "5x"};
+            List<Double> speedD = List.of(0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0);
+            int pos = speedD.indexOf(WaterPlayer.player.speed);
+            if(pos < 0){
+                pos = 3;
+                WaterPlayer.player.speed = speedD.get(pos);
+                WaterPlayer.config.setNumber("CURRENT_MUSIC_SPEED", WaterPlayer.player.speed);
+                WaterPlayer.player.updateFilter();
+            }
+            addRenderableWidget(new SelectorBuilder(Component.translatable("waterplayer.control.speed")).setList(speed).setValue(pos)
+                    .setOnPress((s) -> {
+                        WaterPlayer.player.speed = speedD.get(s.getPosition());
+                        WaterPlayer.config.setNumber("CURRENT_MUSIC_SPEED", WaterPlayer.player.speed);
+                        WaterPlayer.player.updateFilter();
+                    }).setPosition(x, y).setWidth(cWidth).build());
+
+            y += 22;
+
+            String[] pitch = {"0.25", "0.5", "0.75", "1", "1.25", "1.5", "1.75", "2"};
+            List<Double> pitchD = List.of(0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0);
+            int ppos = pitchD.indexOf(WaterPlayer.player.pitch);
+            if(ppos < 0){
+                ppos = 3;
+                WaterPlayer.player.pitch = speedD.get(ppos);
+                WaterPlayer.config.setNumber("CURRENT_MUSIC_PITCH", WaterPlayer.player.pitch);
+                WaterPlayer.player.updateFilter();
+            }
+            addRenderableWidget(new SelectorBuilder(Component.translatable("waterplayer.control.pitch")).setList(pitch).setValue(ppos)
+                    .setOnPress((s) -> {
+                        WaterPlayer.player.pitch = pitchD.get(s.getPosition());
+                        WaterPlayer.config.setNumber("CURRENT_MUSIC_SPEED", WaterPlayer.player.speed);
+                        WaterPlayer.player.updateFilter();
+                    }).setPosition(x, y).setWidth(cWidth).build());
+
+            y += 22;
+        }
+
         lyricsBox = addRenderableWidget(new LyricsBox(x, y, cWidth, height - y - 55, Component.empty()));
         this.lyricsBox.visible = false;
     }
@@ -118,10 +155,10 @@ public class ModernControlScreen extends Screen {
         int y = height - 45;
         int size = width - 10;
         // - Left
-        trackIcon = addRenderableWidget(new TrackIconButton(new ButtonBuilder(Component.empty(), (s)-> {
+        trackIcon = addRenderableWidget(new TrackIconButton(new ButtonBuilder(Component.empty(), (s) -> {
             AudioTrack track = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
-            if(track != null) AlinLib.MINECRAFT.setScreen(new TrackScreen(this, track));
-        }).setSize(34, 34).setPosition(x+3, y+3)));
+            if (track != null) AlinLib.MINECRAFT.setScreen(new TrackScreen(this, track));
+        }).setSize(34, 34).setPosition(x + 3, y + 3)));
 
         trackIcon.visible = trackIcon.active = WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null;
 
@@ -194,16 +231,17 @@ public class ModernControlScreen extends Screen {
             for (AbstractWidget widget : scroller.widgets) {
                 if (widget.visible) {
                     widget.setWidth(queueWidth);
-                    widget.setY((int) (scroller.getY()+scroller.innerHeight - scroller.scrollAmount()));
+                    widget.setY((int) (scroller.getY() + scroller.innerHeight - scroller.scrollAmount()));
                     scroller.innerHeight += (widget.getHeight() + 5);
                 } else widget.setY(-widget.getHeight());
             }
-            scroller.innerHeight-=13;
+            scroller.innerHeight -= 13;
         }));
         addQueue();
     }
 
     public Queue<AudioTrack> queueTracks = WaterPlayer.player.getTrackScheduler().queue;
+
     public void addQueue() {
         int queueWidth = width - 15 - controlPanelWidth;
         List<AbstractWidget> widgets = new ArrayList<>();
@@ -240,12 +278,12 @@ public class ModernControlScreen extends Screen {
 
     @Override
     public void render(GuiGraphics guiGraphics, int i, int j, float f) {
-    //#if MC < 12002
-    //$$     renderBackground(guiGraphics);
-    //#endif
+        //#if MC < 12002
+        //$$     renderBackground(guiGraphics);
+        //#endif
         super.render(guiGraphics, i, j, f);
-        guiGraphics.enableScissor(10 + controlPanelWidth, 30, 10 + controlPanelWidth+ (width - 15 - controlPanelWidth), this.height - 50);
-        if(queue != null) for (AbstractWidget widget : queue.widgets) widget.render(guiGraphics, i, j, f);
+        guiGraphics.enableScissor(10 + controlPanelWidth, 30, 10 + controlPanelWidth + (width - 15 - controlPanelWidth), this.height - 50);
+        if (queue != null) for (AbstractWidget widget : queue.widgets) widget.render(guiGraphics, i, j, f);
         guiGraphics.disableScissor();
     }
 
@@ -341,16 +379,16 @@ public class ModernControlScreen extends Screen {
     public boolean mouseClicked(double d, double e, int i) {
         boolean st = true;
         GuiEventListener selected = null;
-        for(GuiEventListener guiEventListener : this.children()){
-            if(queue != null && queue.widgets.contains(guiEventListener)){
-                if((d >= 10+controlPanelWidth && d <= width-5) && (e >= 30 && e <= height-50)){
-                    if(guiEventListener.mouseClicked(d, e, i)){
+        for (GuiEventListener guiEventListener : this.children()) {
+            if (queue != null && queue.widgets.contains(guiEventListener)) {
+                if ((d >= 10 + controlPanelWidth && d <= width - 5) && (e >= 30 && e <= height - 50)) {
+                    if (guiEventListener.mouseClicked(d, e, i)) {
                         st = false;
                         selected = guiEventListener;
                         break;
                     }
                 }
-            }else if(guiEventListener.mouseClicked(d, e, i)){
+            } else if (guiEventListener.mouseClicked(d, e, i)) {
                 st = false;
                 selected = guiEventListener;
                 break;
@@ -408,13 +446,14 @@ public class ModernControlScreen extends Screen {
         }
         super.tick();
     }
+
     //#if MC >=12002
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
         boolean scr = super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
         int queueWidth = width - 15 - controlPanelWidth;
-        if ((mouseX >= lyricsBox.getX() && mouseX <= lyricsBox.getX()+lyricsBox.getWidth()) && (mouseY >= lyricsBox.getY() && mouseY <= lyricsBox.getY()+lyricsBox.getHeight())) {
+        if ((mouseX >= lyricsBox.getX() && mouseX <= lyricsBox.getX() + lyricsBox.getWidth()) && (mouseY >= lyricsBox.getY() && mouseY <= lyricsBox.getY() + lyricsBox.getHeight())) {
             scr = lyricsBox.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
-        } else if (!scr && queue != null && (mouseX >= queue.getX()-queueWidth && mouseX <= queue.getX()+queue.getWidth()) && (mouseY >= queue.getY() && mouseY <= queue.getY()+queue.getHeight())) {
+        } else if (!scr && queue != null && (mouseX >= queue.getX() - queueWidth && mouseX <= queue.getX() + queue.getWidth()) && (mouseY >= queue.getY() && mouseY <= queue.getY() + queue.getHeight())) {
             scr = queue.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
         }
         return scr;

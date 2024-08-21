@@ -13,6 +13,7 @@ import ru.kelcuprum.alinlib.gui.GuiUtils;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
 import ru.kelcuprum.alinlib.gui.components.buttons.Button;
 import ru.kelcuprum.waterplayer.WaterPlayer;
+import ru.kelcuprum.waterplayer.backend.TrackScheduler;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.TrackScreen;
 import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
@@ -86,7 +87,7 @@ public class CurrentTrackButton extends Button {
                 renderString(guiGraphics, builder.toString(), getX() + 45, getY() + 8);
                 renderString(guiGraphics, time+" | "+ MusicHelper.getServiceName(MusicHelper.getService(track)).getString(), getX() + 45, getY() + height - getTimelineSize() - 8 - AlinLib.MINECRAFT.font.lineHeight);
             }
-            double state = track.getInfo().isStream ? 1 : ((double) track.getPosition() / track.getDuration());
+            double state = track.getInfo().isStream ? 1 : ((double) TrackScheduler.trackPosition / track.getDuration());
             guiGraphics.fill(getX(), getY() + getHeight() - getTimelineSize(), getX() + getWidth(), getY() + getHeight(), color - 0xb2000000);
             guiGraphics.fill(getX(), getY() + getHeight() - getTimelineSize(), (int) (getX() + (getWidth() * state)), getY() + getHeight(), color - 1291845632);
         } else {
@@ -114,7 +115,7 @@ public class CurrentTrackButton extends Button {
         if (isDragble()) {
             double pos = ((d - (double) (this.getX() + 2)) / (double) (this.getWidth() - 4));
             long dur = WaterPlayer.player.getAudioPlayer().getPlayingTrack().getDuration();
-            WaterPlayer.player.getAudioPlayer().getPlayingTrack().setPosition((long) (dur * pos));
+            WaterPlayer.player.setPosition((long) (dur * pos));
         }
     }
 

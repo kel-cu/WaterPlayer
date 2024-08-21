@@ -94,9 +94,11 @@ public class TrackScheduler extends AudioEventAdapter {
 
     }
     public static long trackPosition = 0;
+    public static double trackSpeed = 0;
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
         trackPosition = track.getPosition();
+        trackSpeed = WaterPlayer.player.speed;
     }
 
     public int getRepeatStatus() {

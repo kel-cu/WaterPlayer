@@ -56,6 +56,7 @@ public class AdditionalScreen {
             );
         }
         builder.addWidget(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.discord"), false).setConfig(WaterPlayer.config, "DISCORD"));
+        builder.addWidget(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.experiment.filters"), false).setConfig(WaterPlayer.config, "EXPERIMENT.FILTERS"));
         builder.addWidget(new CategoryBox(Component.translatable("waterplayer.cache"))
                 .addValue(new ButtonBuilder(Component.translatable("waterplayer.cache.icons.size"), Component.literal(TextureHelper.getParsedSize(TextureHelper.getSize()))).setActive(false))
                 .addValue(new ButtonBuilder(Component.translatable("waterplayer.cache.icons.reset.tracks")).setOnPress((s) -> {

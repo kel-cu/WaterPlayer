@@ -66,6 +66,9 @@
   "waterplayer.control.skip": "Пропустить",
   "waterplayer.control.reset_queue": "Сбросить очередь",
 
+  "waterplayer.control.speed": "Скорость",
+  "waterplayer.control.pitch": "Питч",
+
   "waterplayer.control": "Управление",
   "waterplayer.control.modern.notice": "Ух ты, новый дизайн! Если вдруг вам не нравится новый дизайн, вы всегда можете исменить параметр в настройках мода, либо сочитанием клавиш Shift + P",
   "waterplayer.load.current_track": "Текущий трек:",
@@ -167,8 +170,9 @@
   "waterplayer.api.config_updated": "Конфиги обновлены",
 
   "waterplayer.additional": "Дополнительно",
-  "waterplayer.config.speaker": "Экстренный выход звука",
+  "waterplayer.config.speaker": "Вывод звука",
   "waterplayer.config.discord": "Интеграция Discord",
+  "waterplayer.config.experiment.filters": "(РУБРИКА ЭЭЭЭЭЭЭЭЭКСПЕРИМЕНТЫ!) Фильтры трека",
 
   "waterplayer.cache": "Кэш",
   "waterplayer.cache.icons.size": "Размер кэша иконок",

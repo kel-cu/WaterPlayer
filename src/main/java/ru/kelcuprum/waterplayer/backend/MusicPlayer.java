@@ -28,6 +28,8 @@ import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.playback.AllocatingAudioFrameBuffer;
+import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
 import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import dev.lavalink.youtube.clients.*;
 import org.apache.logging.log4j.Level;
@@ -39,7 +41,10 @@ import ru.kelcuprum.waterplayer.backend.output.AudioOutput;
 import ru.kelcuprum.waterplayer.backend.sources.directory.DirectoriesSource;
 import ru.kelcuprum.waterplayer.backend.sources.waterplayer.WaterPlayerSource;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class MusicPlayer {
 
@@ -54,7 +59,7 @@ public class MusicPlayer {
 
     public final LocalAudioSourceManager localAudioSourceManager = new LocalAudioSourceManager();
     public double speed = WaterPlayer.config.getNumber("CURRENT_MUSIC_SPEED", 1).doubleValue();
-    public double pitch = WaterPlayer.config.getNumber("CURRENT_MUSIC_PITCH", 2).doubleValue();
+    public double pitch = WaterPlayer.config.getNumber("CURRENT_MUSIC_PITCH", 1).doubleValue();
 
     public MusicPlayer() {
         audioPlayerManager = new DefaultAudioPlayerManager();
@@ -66,12 +71,29 @@ public class MusicPlayer {
         trackScheduler = new TrackScheduler(audioPlayer);
         musicManager = new MusicManager(audioPlayer, trackScheduler);
         audioPlayer.setVolume(WaterPlayer.config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue());
-//        audioPlayer.setFilterFactory(((track, format, output) -> {
-//            final TimescalePcmAudioFilter filter = new TimescalePcmAudioFilter(output, format.channelCount, format.sampleRate);
-//            filter.setSpeed(speed);
-//            filter.setPitch(pitch);
-//            return Collections.singletonList(filter);
-//        }));
+        audioPlayer.setFilterFactory(((track, format, output) -> {
+            final TimescalePcmAudioFilter filter = new TimescalePcmAudioFilter(output, format.channelCount, format.sampleRate);
+            filter.setSpeed(speed);
+            filter.setPitch(pitch);
+            return Collections.singletonList(filter);
+        }));
+
+        audioPlayerManager.getConfiguration().setFrameBufferFactory((bufferDuration, format, stopping) -> new AllocatingAudioFrameBuffer(bufferDuration, format, stopping) {
+            @Override
+            public AudioFrame provide() {
+                AudioFrame frame = super.provide();
+                if (frame != null && !frame.isTerminator()) TrackScheduler.trackPosition += (long) (frame.getFormat().frameDuration() * TrackScheduler.trackSpeed);
+                return frame;
+            }
+
+            @Override
+            public AudioFrame provide(long timeout, TimeUnit unit) throws TimeoutException, InterruptedException {
+                AudioFrame frame = super.provide(timeout, unit);
+                if (frame != null && !frame.isTerminator()) TrackScheduler.trackPosition += (long) (frame.getFormat().frameDuration() * TrackScheduler.trackSpeed);
+                return frame;
+            }
+        });
+
         audioPlayerManager.setFrameBufferDuration(1000);
         audioPlayerManager.setPlayerCleanupThreshold(Long.MAX_VALUE);
 
@@ -80,6 +102,14 @@ public class MusicPlayer {
         audioPlayerManager.getConfiguration().setOutputFormat(audioDataFormat);
 
         registerSources();
+    }
+    public void updateFilter(){
+        audioPlayer.setFilterFactory((track, format, output) -> {
+            final TimescalePcmAudioFilter filter = new TimescalePcmAudioFilter(output, format.channelCount, format.sampleRate);
+            filter.setSpeed(speed);
+            filter.setPitch(pitch);
+            return Collections.singletonList(filter);
+        });
     }
 
     private void registerSources() {
@@ -144,6 +174,11 @@ public class MusicPlayer {
         audioPlayerManager.registerSourceManager(new HttpAudioSourceManager());
         audioPlayerManager.registerSourceManager(localAudioSourceManager);
         audioPlayerManager.registerSourceManager(wps);
+    }
+    public void setPosition(long position){
+        if(getAudioPlayer().getPlayingTrack() == null) return;
+        TrackScheduler.trackPosition = position;
+        getAudioPlayer().getPlayingTrack().setPosition(position);
     }
 
     //

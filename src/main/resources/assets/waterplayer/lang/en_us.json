@@ -66,6 +66,9 @@
   "waterplayer.control.skip": "Skip",
   "waterplayer.control.reset_queue": "Reset Queue",
 
+  "waterplayer.control.speed": "Speed",
+  "waterplayer.control.pitch": "Pitch",
+
   "waterplayer.control": "Control",
   "waterplayer.control.modern.notice": "Wow, new design! If you don't like the new design, you can always change the parameter in the mod settings, or by pressing Shift + P",
   "waterplayer.load.current_track": "Current Track:",
@@ -170,6 +173,7 @@
   "waterplayer.additional": "Additional",
   "waterplayer.config.speaker": "Output",
   "waterplayer.config.discord": "Discord Integration",
+  "waterplayer.config.experiment.filters": "(EXPERIMENT) Track filters",
 
   "waterplayer.cache": "Cache",
   "waterplayer.cache.icons.size": "Icon cache size",
