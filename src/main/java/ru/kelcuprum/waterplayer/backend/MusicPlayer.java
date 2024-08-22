@@ -188,13 +188,25 @@ public class MusicPlayer {
     public void loadMusic(String url, boolean isFirstLoadMusic) {
         if (url.isBlank()) {
             if (isFirstLoadMusic)
-                WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add.blank")).show(AlinLib.MINECRAFT.getToasts());
+                WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add.blank")).show(AlinLib.MINECRAFT
+                                        //#if MC >= 12102
+                                        .getToastManager()
+                                //#elseif MC < 12102
+                                //$$.getToasts()
+                                //#endif
+                        );
             return;
         }
         if (isFirstLoadMusic) WaterPlayer.config.setString("LAST_REQUEST_MUSIC", url);
         loadTracks(url);
         if (isFirstLoadMusic)
-            WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add")).show(AlinLib.MINECRAFT.getToasts());
+            WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add")).show(AlinLib.MINECRAFT
+                                        //#if MC >= 12102
+                                        .getToastManager()
+                                //#elseif MC < 12102
+                                //$$.getToasts()
+                                //#endif
+                        );
     }
 
     private void loadTracks(String url) {

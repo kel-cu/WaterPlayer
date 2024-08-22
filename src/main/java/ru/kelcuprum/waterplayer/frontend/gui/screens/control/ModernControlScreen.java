@@ -8,6 +8,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Items;
@@ -53,7 +54,13 @@ public class ModernControlScreen extends Screen {
     @Override
     protected void init() {
         if (WaterPlayer.config.getBoolean("CONTROL.MODERN.FIRST_RUN", true)) {
-            WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.control.modern.notice")).setDisplayTime(15000).setIcon(Items.NETHER_STAR).show(AlinLib.MINECRAFT.getToasts());
+            WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.control.modern.notice")).setDisplayTime(15000).setIcon(Items.NETHER_STAR).show(AlinLib.MINECRAFT
+                                        //#if MC >= 12102
+                                        .getToastManager()
+                                //#elseif MC < 12102
+                                //$$.getToasts()
+                                //#endif
+                        );
             WaterPlayer.config.setBoolean("CONTROL.MODERN.FIRST_RUN", false);
         }
         if (showControlPanel) initControlPanel();
@@ -298,7 +305,11 @@ public class ModernControlScreen extends Screen {
         guiGraphics.fill(x, y, x + width - 10, y + 40, BLACK_ALPHA);
 
         if (isTrackEnable()) {
-            guiGraphics.blit(MusicHelper.getThumbnail(), x + 3, y + 3, 0f, 0f, 34, 34, 34, 34);
+            guiGraphics.blit(
+                    //if MC >= 12102
+                    RenderType::guiTextured,
+                    //#endif
+                    MusicHelper.getThumbnail(), x + 3, y + 3, 0f, 0f, 34, 34, 34, 34);
             int size = width - 10;
             int x$Buttons = x + (size / 2) - ((25 * 5 - 5) / 2) - 6;
             int x$Timeline = x + (size / 2) - (Math.min(size / 3, 230) / 2) - 6;

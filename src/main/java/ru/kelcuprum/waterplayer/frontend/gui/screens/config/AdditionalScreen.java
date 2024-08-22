@@ -76,7 +76,13 @@ public class AdditionalScreen {
                 .addValue(new EditBoxBuilder(Component.translatable("waterplayer.api.url")).setValue("https://api.waterplayer.ru").setConfig(WaterPlayer.config, "API.URL").build())
                 .addValue(new ButtonBuilder(Component.translatable("waterplayer.api.update_configs"), (e) -> {
                     WaterPlayerAPI.loadConfig();
-                    WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.api.config_updated")).show(AlinLib.MINECRAFT.getToasts());
+                    WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.api.config_updated")).show(AlinLib.MINECRAFT
+                                        //#if MC >= 12102
+                                        .getToastManager()
+                                //#elseif MC < 12102
+                                //$$.getToasts()
+                                //#endif
+                        );
                 }).setIcon(RESET).build())
         );
         return builder.build();

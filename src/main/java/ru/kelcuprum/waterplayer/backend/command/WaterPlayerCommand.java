@@ -76,7 +76,13 @@ public class WaterPlayerCommand {
                         .executes(context -> {
                             if (!(WaterPlayer.player.getTrackScheduler().queue.isEmpty() && WaterPlayer.player.getAudioPlayer().getPlayingTrack() == null)) {
                                 WaterPlayer.player.getTrackScheduler().nextTrack();
-                                WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.message.skip")).show(context.getSource().getClient().getToasts());
+                                WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.message.skip")).show(context.getSource().getClient()
+                                        //#if MC >= 12102
+                                        .getToastManager()
+                                //#elseif MC < 12102
+                                //$$.getToasts()
+                                //#endif
+                        );
                             }
                             return 1;
                         }))

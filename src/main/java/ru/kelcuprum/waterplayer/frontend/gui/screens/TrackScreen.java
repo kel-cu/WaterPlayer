@@ -6,6 +6,7 @@ import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import org.apache.logging.log4j.Level;
@@ -78,16 +79,34 @@ public class TrackScreen extends Screen {
             lyricsBox = addRenderableWidget(new LyricsBox(5, 40, lyricsSize - 10, height - (lyricsEnable ? 95 : 70), Component.empty())).setLyrics(Component.literal(lyricsEnable ? lyrics.getText() != null ? lyrics.getText().replace("\r", "") : "404: Not found" : "404: Not found"));
             if(lyricsEnable) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.track.lyrics.copy"), (onPress) -> {
                 AlinLib.MINECRAFT.keyboardHandler.setClipboard(lyrics.getText() == null ? "" : lyrics.getText());
-                WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.lyrics.copy.toast")).show(AlinLib.MINECRAFT.getToasts());
+                WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.lyrics.copy.toast")).show(AlinLib.MINECRAFT
+                                //#if MC >= 12102
+                                .getToastManager()
+                        //#elseif MC < 12102
+                        //$$.getToasts()
+                        //#endif
+                );
             }).setPosition(5, height - 25).setSize(lyricsSize - 10, 20).build());
 
             String id = WaterPlayer.parseFileSystem(track.getSourceManager().getSourceName() + "_" + track.getIdentifier());
             addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.track.lyrics.create_srt"), (onPress) -> {
                 try{
                     Util.getPlatform().openFile(new File(LyricsHelper.saveSRT(track, lyricsEnable ? lyrics.getText() != null ? lyrics.getText().replace("\r", "") : "Example text" : "Example text")));
-                    WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.lyrics.created_srt")).show(AlinLib.MINECRAFT.getToasts());
+                    WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.lyrics.created_srt")).show(AlinLib.MINECRAFT
+                                    //#if MC >= 12102
+                                    .getToastManager()
+                            //#elseif MC < 12102
+                            //$$.getToasts()
+                            //#endif
+                    );
                 } catch (Exception e){
-                    WaterPlayer.getToast().setMessage(Component.literal(e.getMessage() == null ? e.getClass().getName() : e.getMessage())).setType(ToastBuilder.Type.ERROR).setIcon(DONT).show(AlinLib.MINECRAFT.getToasts());
+                    WaterPlayer.getToast().setMessage(Component.literal(e.getMessage() == null ? e.getClass().getName() : e.getMessage())).setType(ToastBuilder.Type.ERROR).setIcon(DONT).show(AlinLib.MINECRAFT
+                                    //#if MC >= 12102
+                                    .getToastManager()
+                            //#elseif MC < 12102
+                            //$$.getToasts()
+                            //#endif
+                    );
                 }
             }).setPosition(5, height - (lyricsEnable ? 50 : 25)).setSize(lyricsSize - 10, 20).build());
         }
@@ -148,7 +167,13 @@ public class TrackScreen extends Screen {
                         Playlist playlistObject = new Playlist(playlist.toPath());
                         playlists.add(new ButtonBuilder(Component.translatable("waterplayer.playlists.value", playlistObject.title, playlistObject.author), (s) -> {
                             playlistObject.addUrl(track.getInfo().uri);
-                            WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.playlists.added", playlistObject.title)).show(AlinLib.MINECRAFT.getToasts());
+                            WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.playlists.added", playlistObject.title)).show(AlinLib.MINECRAFT
+                                            //#if MC >= 12102
+                                            .getToastManager()
+                                    //#elseif MC < 12102
+                                    //$$.getToasts()
+                                    //#endif
+                            );
                             onClose();
                         }).setSize(lyricsSize - 10, 20).setPosition(5, yP).build());
                         yP += 25;
@@ -190,7 +215,11 @@ public class TrackScreen extends Screen {
         //$$ renderBackground(guiGraphics);
         //#endif
         super.render(guiGraphics, i, j, f);
-        guiGraphics.blit(MusicHelper.getThumbnail(track), x, height / 2 - 15 - iconSize, 0.0F, 0.0F, iconSize, iconSize, iconSize, iconSize);
+        guiGraphics.blit(
+                //if MC >= 12102
+                RenderType::guiTextured,
+                //#endif
+                MusicHelper.getThumbnail(track), x, height / 2 - 15 - iconSize, 0.0F, 0.0F, iconSize, iconSize, iconSize, iconSize);
     }
 
     @Override

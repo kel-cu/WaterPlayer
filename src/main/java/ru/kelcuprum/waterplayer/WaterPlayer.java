@@ -195,7 +195,13 @@ public class WaterPlayer implements ClientModInitializer {
             }
             if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true))
                 getToast().setMessage(Localization.getText(player.getAudioPlayer().isPaused() ? "waterplayer.message.pause" : "waterplayer.message.play"))
-                        .show(AlinLib.MINECRAFT.getToasts());
+                        .show(AlinLib.MINECRAFT
+                                //#if MC >= 12102
+                                .getToastManager()
+                                //#elseif MC < 12102
+                                //$$.getToasts()
+                                //#endif
+                        );
             return true;
         }));
 
@@ -205,7 +211,13 @@ public class WaterPlayer implements ClientModInitializer {
             player.getTrackScheduler().nextTrack();
             if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true))
                 getToast().setMessage(Localization.getText("waterplayer.message.skip"))
-                        .show(AlinLib.MINECRAFT.getToasts());
+                        .show(AlinLib.MINECRAFT
+                                        //#if MC >= 12102
+                                        .getToastManager()
+                                //#elseif MC < 12102
+                                //$$.getToasts()
+                                //#endif
+                        );
             return true;
         }));
         keyBinds.add(new KeyBind(key4, () -> {
@@ -214,7 +226,13 @@ public class WaterPlayer implements ClientModInitializer {
                 player.getTrackScheduler().queue.clear();
                 if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true))
                     getToast().setMessage(Localization.getText("waterplayer.message.reset"))
-                            .show(AlinLib.MINECRAFT.getToasts());
+                            .show(AlinLib.MINECRAFT
+                                            //#if MC >= 12102
+                                            .getToastManager()
+                                    //#elseif MC < 12102
+                                    //$$.getToasts()
+                                    //#endif
+                            );
             }
             return true;
         }));
@@ -231,7 +249,13 @@ public class WaterPlayer implements ClientModInitializer {
                 }
                 if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true))
                     getToast().setMessage(Localization.getText("waterplayer.message.shuffle"))
-                            .show(AlinLib.MINECRAFT.getToasts());
+                            .show(AlinLib.MINECRAFT
+                                            //#if MC >= 12102
+                                            .getToastManager()
+                                    //#elseif MC < 12102
+                                    //$$.getToasts()
+                                    //#endif
+                            );
             }
             return true;
         }));
@@ -249,7 +273,13 @@ public class WaterPlayer implements ClientModInitializer {
             if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true))
                 getToast().setIcon(player.getTrackScheduler().getRepeatIcon())
                         .setMessage(Localization.getText(player.getTrackScheduler().getRepeatStatus() == 0 ? "waterplayer.message.repeat.no" : player.getTrackScheduler().getRepeatStatus() == 1 ? "waterplayer.message.repeat" : "waterplayer.message.repeat.one"))
-                        .show(AlinLib.MINECRAFT.getToasts());
+                        .show(AlinLib.MINECRAFT
+                                        //#if MC >= 12102
+                                        .getToastManager()
+                                //#elseif MC < 12102
+                                //$$.getToasts()
+                                //#endif
+                        );
             return true;
         }));
         keyBinds.add(new KeyBind(key7, () -> {

@@ -90,7 +90,7 @@ public class TextureHelper {
                 image = NativeImage.read(bytesOfImage);
                 if (!isFileExists) {
                     Files.createDirectories(textureFile.toPath().getParent());
-                    Files.write(textureFile.toPath(), image.asByteArray());
+                    Files.write(textureFile.toPath(), bytesOfImage);
                 }
             } catch (Exception e) {
                 WaterPlayer.log("Error loading image from URL: " + url + " - " + e.getMessage());
@@ -163,7 +163,7 @@ public class TextureHelper {
 
                 if (!isFileExists) {
                     Files.createDirectories(textureFile.toPath().getParent());
-                    Files.write(textureFile.toPath(), image.asByteArray());
+                    Files.write(textureFile.toPath(), bytesOfImage);
                 }
             } catch (Exception e) {
                 WaterPlayer.log("Error loading image from URL: " + file.toPath() + " - " + e.getMessage());
@@ -242,7 +242,7 @@ public class TextureHelper {
 
                 if (!isFileExists) {
                     Files.createDirectories(textureFile.toPath().getParent());
-                    Files.write(textureFile.toPath(), image.asByteArray());
+                    Files.write(textureFile.toPath(), bytesOfImage);
                 }
             } catch (Exception e) {
                 WaterPlayer.log("Error loading image from URL: " + id + " - " + e.getMessage());

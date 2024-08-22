@@ -3,6 +3,7 @@ package ru.kelcuprum.waterplayer.frontend.gui.components;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import ru.kelcuprum.alinlib.AlinLib;
@@ -56,7 +57,11 @@ public class PlaylistButton extends Button {
                     guiGraphics.drawString(AlinLib.MINECRAFT.font, type, getX() + getWidth()-AlinLib.MINECRAFT.font.width(type)-((getHeight() - 8) / 2), getY() + (getHeight() - 8) / 2, 0xffffff);
                 }
             } else {
-                guiGraphics.blit(getIcon(), getX() + 2, getY() + 2, 0.0F, 0.0F, 36, 36, 36, 36);
+                guiGraphics.blit(
+                        //if MC >= 12102
+                        RenderType::guiTextured,
+                        //#endif
+                        getIcon(), getX() + 2, getY() + 2, 0.0F, 0.0F, 36, 36, 36, 36);
                 renderString(guiGraphics, builder.toString(), getX() + 45, getY() + 8);
                 renderString(guiGraphics, type, getX() + 45, getY() + height - 8 - AlinLib.MINECRAFT.font.lineHeight);
             }
