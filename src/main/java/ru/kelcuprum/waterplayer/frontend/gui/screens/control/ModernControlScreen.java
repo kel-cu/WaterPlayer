@@ -306,7 +306,7 @@ public class ModernControlScreen extends Screen {
 
         if (isTrackEnable()) {
             guiGraphics.blit(
-                    //if MC >= 12102
+                    //#if MC >= 12102
                     RenderType::guiTextured,
                     //#endif
                     MusicHelper.getThumbnail(), x + 3, y + 3, 0f, 0f, 34, 34, 34, 34);

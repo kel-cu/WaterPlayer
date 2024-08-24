@@ -25,7 +25,7 @@ public class VolumeComponent extends AbstractSliderButton {
         String volumeString = WaterPlayer.player.getVolume()+"%";
         if(isHoveredOrFocused()) guiGraphics.drawString(AlinLib.MINECRAFT.font, volumeString, getX()-6-AlinLib.MINECRAFT.font.width(volumeString), y, -1);
             else guiGraphics.blit(
-                //if MC >= 12102
+                //#if MC >= 12102
                 RenderType::guiTextured,
                 //#endif
                     MusicHelper.getSpeakerVolumeIcon(), getX()-20, y, 0f, 0f, 14, 14, 14, 14);

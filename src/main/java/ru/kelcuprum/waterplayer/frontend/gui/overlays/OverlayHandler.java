@@ -120,7 +120,7 @@ public class OverlayHandler implements GuiRenderEvents, ClientTickEvents.StartTi
                 if (caverEnable) {
                     AudioTrack track = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
                     guiGraphics.blit(
-                            //if MC >= 12102
+                            //#if MC >= 12102
                             RenderType::guiTextured,
                             //#endif
                             MusicHelper.getThumbnail(track), left ? 6 : guiGraphics.guiWidth() - 14 - mx, (top ? 6 : guiGraphics.guiHeight() - 5 + i1), 0.0F, 0.0F, j + 3, j + 3, j + 3, j + 3);

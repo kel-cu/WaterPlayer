@@ -98,7 +98,6 @@ public class SearchScreen extends Screen {
                 .setPosition(x, 40)
                 .setSize(20, 20)
                 .build());
-        // x, 40, 20, 20, RESET, Component.translatable("waterplayer.search.last_query"), (e) -> request.setValue(WaterPlayer.config.getString("SEARCH.LAST", ""))
         this.search = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.search.button"), (e) -> {
             if (!services[searchService].startsWith("wpsearch:") && requestValue.isBlank()) {
                 WaterPlayer.getToast().setMessage(Localization.getText("waterplayer.load.add.blank")).show(AlinLib.MINECRAFT

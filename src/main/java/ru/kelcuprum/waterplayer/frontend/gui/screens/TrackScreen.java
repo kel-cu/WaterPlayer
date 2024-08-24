@@ -216,7 +216,7 @@ public class TrackScreen extends Screen {
         //#endif
         super.render(guiGraphics, i, j, f);
         guiGraphics.blit(
-                //if MC >= 12102
+                //#if MC >= 12102
                 RenderType::guiTextured,
                 //#endif
                 MusicHelper.getThumbnail(track), x, height / 2 - 15 - iconSize, 0.0F, 0.0F, iconSize, iconSize, iconSize, iconSize);
