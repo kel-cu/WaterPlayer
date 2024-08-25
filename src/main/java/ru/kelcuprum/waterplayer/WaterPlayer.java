@@ -61,6 +61,9 @@ public class WaterPlayer implements ClientModInitializer {
         ClientCommandRegistrationCallback.EVENT.register(WaterPlayerCommand::register);
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
             player.startAudioOutput();
+            //#if WALTER == 1
+            //$$ player.loadMusic("https://wf.kelcu.ru/mods/Dave%20Porter%20-%20Breaking%20Bad%20Main%20Title%20Theme%20(Extended).mp3", false);
+            //#endif
             OverlayHandler hud = new OverlayHandler();
             SubtitlesHandler sub = new SubtitlesHandler();
             ScreenEvents.SCREEN_RENDER.register(hud);
