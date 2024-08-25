@@ -16,10 +16,12 @@ preprocess {
     def mc1201_fabric = createNode('1.20.1-fabric', 1_20_01, '')
     def mc1202_fabric = createNode('1.20.2-fabric', 1_20_02, '')
     def mc1212_fabric = createNode('1.21.2-fabric', 1_21_02, '')
+    def walter = createNode('Walter', 1_21_02, '')
 
     mc1201_fabric.link(mc1202_fabric, null)
     mc1202_fabric.link(mc1212_fabric, null)
     mc1212_fabric.link(mc1212_fabric, null)
+    walter.link(mc1212_fabric, null)
 }
 
 publishing {

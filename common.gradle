@@ -6,14 +6,14 @@ apply plugin: 'io.github.goooler.shadow'
 
 def mod_brand = project.name.endsWith("-common") ? 'common' : (loom.platform.get() as String).toLowerCase()
 assert mod_brand in ['fabric', 'forge', 'neoforge', 'common']
-archivesBaseName = rootProject.archives_base_name + "-" + mod_brand
+archivesBaseName = (project.archives_base_name == null ? rootProject.archives_base_name : project.archives_base_name) + "-" + mod_brand
 group = rootProject.maven_group
 
 int mcVersion = 1
 preprocess {
     mcVersion = vars.get()["MC"] as int
     tabIndentation = true
-
+    vars.put("WALTER", archivesBaseName.startsWith("Walter") ? 1 : 0)
     vars.put("MC", mcVersion)
     vars.put("FABRIC", mod_brand == 'fabric' ? 1 : 0)
     vars.put("FORGE", mod_brand == 'forge' ? 1 : 0)

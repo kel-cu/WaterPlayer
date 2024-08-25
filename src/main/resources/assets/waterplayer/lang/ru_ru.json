@@ -1,5 +1,10 @@
 {
+  //#if WALTER == 0
   "waterplayer.name": "WaterPlayer",
+  //#else
+  //$$ "waterplayer.name": "Уолтерплеер",
+  //$$ "modmenu.nameTranslation.waterplayer": "Уолтерплеер",
+  //#endif
 
   "waterplayer.command.playlist.noName": "Вы не указали название плейлиста",
   "waterplayer.command.now_playing.notPlaying": "Ничего не играет.",

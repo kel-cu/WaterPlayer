@@ -20,7 +20,13 @@ public class DiscordIntegration {
     public static boolean EMPTY = true;
 
     public void registerApplication(){
-        client = new IPCClient(1197963953695903794L);
+        client = new IPCClient(
+                //#if WALTER == 0
+                1197963953695903794L
+                //#else
+                //$$ 1277205430275145758L
+                //#endif
+        );
         setupListener();
         try {
             client.connect();
@@ -99,8 +105,7 @@ public class DiscordIntegration {
         }
     }
     public long parseSeconds(long mills){
-        long shit = mills % 1000;
-        return (mills-shit) /1000;
+        return (mills-(mills % 1000)) /1000;
     }
 
     public void send(RichPresence presence){
