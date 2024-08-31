@@ -23,7 +23,6 @@ import static ru.kelcuprum.alinlib.gui.GuiUtils.DEFAULT_WIDTH;
 import static ru.kelcuprum.alinlib.gui.Icons.OPTIONS;
 import static ru.kelcuprum.alinlib.gui.Icons.WARNING;
 import static ru.kelcuprum.alinlib.gui.Icons.*;
-import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.VOLUME_MAX;
 import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.getPlayOrPause;
 
 public class PlaylistsScreen {
@@ -31,7 +30,7 @@ public class PlaylistsScreen {
     public static boolean isLoaded = false;
     public static Screen build(Screen parent) {
         assetsSize = 0;
-        File playlists = AlinLib.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists").toFile();
+        File playlists = AlinLib.MINECRAFT.gameDirectory.toPath().resolve(WaterPlayer.getPath()+"/playlists").toFile();
 
         ConfigScreenBuilder builder = new ConfigScreenBuilder(parent, Component.translatable("waterplayer.name"))
                 .setOnTick((s) -> {

@@ -30,9 +30,9 @@ public class WebPlaylist {
     }
 
     public WebPlaylist save() throws WebPlaylistException {
-        Path path = AlinLib.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/" + id + ".json");
+        Path path = AlinLib.MINECRAFT.gameDirectory.toPath().resolve(WaterPlayer.getPath()+"/playlists/" + id + ".json");
         if (path.toFile().exists())
-            path = AlinLib.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/" + url + ".json");
+            path = AlinLib.MINECRAFT.gameDirectory.toPath().resolve(WaterPlayer.getPath()+"/playlists/" + url + ".json");
         try {
             Files.createDirectories(path.getParent());
             Files.writeString(path, playlist.toJSON().toString());

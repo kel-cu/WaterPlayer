@@ -39,6 +39,7 @@ import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.output.AudioOutput;
 import ru.kelcuprum.waterplayer.backend.sources.directory.DirectoriesSource;
+import ru.kelcuprum.waterplayer.backend.sources.waterplayer.LyricsWithoutException;
 import ru.kelcuprum.waterplayer.backend.sources.waterplayer.WaterPlayerSource;
 
 import java.util.Collections;
@@ -125,19 +126,19 @@ public class MusicPlayer {
             youtube.setPlaylistPageCount(100);
             audioPlayerManager.registerSourceManager(youtube);
             AudioSearchManager ytSearch = new YoutubeSearchManager(() -> audioPlayerManager, "US");
-            lyricsManager.registerLyricsManager((AudioLyricsManager) ytSearch);
+            lyricsManager.registerLyricsManager(new LyricsWithoutException((AudioLyricsManager) ytSearch));
         }
         if (!config.getString("YANDEX_MUSIC_TOKEN", "").isBlank()) {
             YandexMusicSourceManager ym = new YandexMusicSourceManager(config.getString("YANDEX_MUSIC_TOKEN", ""));
             audioPlayerManager.registerSourceManager(ym);
-            lyricsManager.registerLyricsManager(ym);
+            lyricsManager.registerLyricsManager(new LyricsWithoutException(ym));
         }
         if (!config.getString("FLOWERY_TTS_VOICE", "Alena").isBlank())
             audioPlayerManager.registerSourceManager(new FloweryTTSSourceManager(config.getString("FLOWERY_TTS_VOICE", "Alena")));
         if (!config.getString("DEEZER_DECRYPTION_KEY", "").isBlank()) {
             DeezerAudioSourceManager deezerAudioSourceManager = new DeezerAudioSourceManager(config.getString("DEEZER_DECRYPTION_KEY", ""));
             audioPlayerManager.registerSourceManager(deezerAudioSourceManager);
-            lyricsManager.registerLyricsManager(deezerAudioSourceManager);
+            lyricsManager.registerLyricsManager(new LyricsWithoutException(deezerAudioSourceManager));
         }
         if (!config.getString("APPLE_MUSIC_MEDIA_API_TOKEN", "").isBlank() && !config.getString("APPLE_MUSIC_COUNTRY_CODE", "us").isBlank()) {
             AppleMusicSourceManager appleMusicSourceManager = new AppleMusicSourceManager(null, config.getString("APPLE_MUSIC_MEDIA_API_TOKEN", ""), config.getString("APPLE_MUSIC_COUNTRY_CODE", "us"), audioPlayerManager);
@@ -149,7 +150,7 @@ public class MusicPlayer {
                 spotifySourceManager = new SpotifySourceManager(null, config.getString("SPOTIFY_CLIENT_ID", ""), config.getString("SPOTIFY_CLIENT_SECRET", ""), config.getString("SPOTIFY_COUNTRY_CODE", "US"), audioPlayerManager);
             else {
                 spotifySourceManager = new SpotifySourceManager(config.getString("SPOTIFY_CLIENT_ID", ""), config.getString("SPOTIFY_CLIENT_SECRET", ""), config.getString("SPOTIFY_SP_DC", ""), config.getString("SPOTIFY_COUNTRY_CODE", "US"), unused -> audioPlayerManager, new DefaultMirroringAudioTrackResolver(null));
-                lyricsManager.registerLyricsManager(spotifySourceManager);
+                lyricsManager.registerLyricsManager(new LyricsWithoutException(spotifySourceManager));
             }
             audioPlayerManager.registerSourceManager(spotifySourceManager);
         }

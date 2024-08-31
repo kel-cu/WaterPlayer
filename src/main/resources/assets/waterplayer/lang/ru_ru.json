@@ -177,13 +177,21 @@
   "waterplayer.additional": "Дополнительно",
   "waterplayer.config.speaker": "Вывод звука",
   "waterplayer.config.discord": "Интеграция Discord",
-  "waterplayer.config.experiment.filters": "(РУБРИКА ЭЭЭЭЭЭЭЭЭКСПЕРИМЕНТЫ!) Фильтры трека",
 
   "waterplayer.cache": "Кэш",
   "waterplayer.cache.icons.size": "Размер кэша иконок",
   "waterplayer.cache.icons.reset.tracks": "Сбросить кэш иконок треков",
   "waterplayer.cache.icons.reset.playlists": "Сбросить кэш иконок плейлистов",
   "waterplayer.cache.lyrics.reset": "Сбросить кэш текстов",
+
+
+  "waterplayer.config.experiments": "РУБРИКА ЭЭЭЭЭЭЭЭЭКСПЕРИМЕНТЫ!",
+  "waterplayer.config.experiment.filters": "Фильтры трека",
+  "waterplayer.config.data": "Данные",
+  "waterplayer.config.data.use_global": "Использовать общую папку для всех клиентов",
+  "waterplayer.config.data.path": "Папка",
+  "waterplayer.config.data.move": "Переместить конфиги в общую папку",
+  "waterplayer.config.data.update_config": "Обновить конфиги",
 
   "waterplayer.track.author": "Автор: %s",
   "waterplayer.track.service": "Сервис: %s",

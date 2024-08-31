@@ -3,7 +3,6 @@ package ru.kelcuprum.waterplayer.frontend.gui.screens.config;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import ru.kelcuprum.alinlib.AlinLib;
-import ru.kelcuprum.alinlib.gui.Icons;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
 import ru.kelcuprum.alinlib.gui.components.builder.editbox.EditBoxBuilder;
 import ru.kelcuprum.alinlib.gui.components.text.CategoryBox;
@@ -12,7 +11,6 @@ import ru.kelcuprum.alinlib.gui.screens.ConfigScreenBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 
 import static ru.kelcuprum.alinlib.gui.Icons.*;
-import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.VOLUME_MAX;
 import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.getPlayOrPause;
 
 public class LocalizationConfigsScreen {

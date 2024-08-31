@@ -46,7 +46,7 @@ public class WaterPlayerSource implements AudioSourceManager, AudioLyricsManager
                     WaterPlayer.log("ERROR: "+(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage()), Level.DEBUG);
                 }
             } else {
-                final Path configFile = AlinLib.MINECRAFT.gameDirectory.toPath().resolve("config/WaterPlayer/playlists/" + name + ".json");
+                final Path configFile = AlinLib.MINECRAFT.gameDirectory.toPath().resolve(WaterPlayer.getPath()+"/playlists/" + name + ".json");
                 try {
                     JsonObject jsonPlaylist = GsonHelper.parse(Files.readString(configFile));
                     return new WaterPlayerPlaylist(new Playlist(jsonPlaylist));
@@ -79,7 +79,7 @@ public class WaterPlayerSource implements AudioSourceManager, AudioLyricsManager
     public @Nullable AudioLyrics loadLyrics(AudioTrack track) {
         String id = WaterPlayer.parseFileSystem(track.getSourceManager().getSourceName() + "_" + track.getIdentifier());
         WaterPlayer.log("[Lyrics] " + id);
-        File srt = new File("./config/WaterPlayer/Lyrics/"+id+".srt");
+        File srt = new File(WaterPlayer.getPath()+"/Lyrics/"+id+".srt");
         if(srt.exists() && srt.isFile()){
             try {
                 return new SRTLyricsFormat(track, Files.readString(srt.toPath()));

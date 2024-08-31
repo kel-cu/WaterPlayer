@@ -46,7 +46,7 @@ public class LyricsHelper {
 
     public static String saveSRT(AudioTrack track, String text) throws IOException {
         String id = WaterPlayer.parseFileSystem(track.getSourceManager().getSourceName() + "_" + track.getIdentifier());
-        File srt = new File("./config/WaterPlayer/Lyrics/" + id + ".srt");
+        File srt = new File(WaterPlayer.getPath()+"/lyrics/" + id + ".srt");
         AudioLyrics lyrics = getLyrics(track);
         StringBuilder builder = new StringBuilder();
         if (lyrics == null || lyrics.getLines() == null || lyrics.getLines().isEmpty()) {

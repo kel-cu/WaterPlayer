@@ -177,13 +177,20 @@
   "waterplayer.additional": "Additional",
   "waterplayer.config.speaker": "Output",
   "waterplayer.config.discord": "Discord Integration",
-  "waterplayer.config.experiment.filters": "(EXPERIMENT) Track filters",
 
   "waterplayer.cache": "Cache",
   "waterplayer.cache.icons.size": "Icon cache size",
   "waterplayer.cache.icons.reset.tracks": "Reset track icon cache",
   "waterplayer.cache.icons.reset.playlists": "Reset playlist icons cache",
   "waterplayer.cache.lyrics.reset": "Reset lyrics cache",
+
+  "waterplayer.config.experiments": "Experiments",
+  "waterplayer.config.experiment.filters": "Track filters",
+  "waterplayer.config.data": "Data",
+  "waterplayer.config.data.use_global": "Use a common folder for all clients",
+  "waterplayer.config.data.path": "Folder",
+  "waterplayer.config.data.move": "Move configs to common folder",
+  "waterplayer.config.data.update_config": "Update configs",
 
   "waterplayer.track.author": "Author: %s",
   "waterplayer.track.service": "Service: %s",

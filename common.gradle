@@ -36,6 +36,7 @@ repositories {
     maven { url = "https://repo.kelcuprum.ru/releases" }
     maven { url = "https://repo.kelcuprum.ru/snapshots" }
     maven { url = "https://repo.kelcuprum.ru/forks" }
+    maven { url = "https://maven.topi.wtf/snapshots" }
     maven { url = "https://repo.kelcuprum.ru/test" }
 }
 configurations {

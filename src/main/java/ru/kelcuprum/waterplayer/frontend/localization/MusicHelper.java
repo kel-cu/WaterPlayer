@@ -8,6 +8,7 @@ import ru.kelcuprum.waterplayer.backend.TrackScheduler;
 import ru.kelcuprum.waterplayer.frontend.gui.TextureHelper;
 
 import java.io.File;
+import java.util.HashMap;
 
 import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.*;
 
@@ -60,10 +61,16 @@ public class MusicHelper {
     public static String getPauseState(){
         return WaterPlayer.player.getAudioPlayer().isPaused() ? "⏸" : "▶";
     }
+    private static final HashMap<String, Boolean> noFiles /*?*/ = new HashMap<>();
     public static boolean isFile(AudioTrack info){
         if(trackIsNull(info)) return false;
-        File track = new File(info.getInfo().uri);
-        return track.exists() && track.isFile();
+        if(noFiles.containsKey(info.getInfo().uri)) return noFiles.getOrDefault(info.getInfo().uri, false);
+        else {
+            File track = new File(info.getInfo().uri);
+            boolean state = track.exists() && track.isFile();
+            noFiles.put(info.getInfo().uri, state);
+            return state;
+        }
     }
 
     public static ResourceLocation getThumbnail(){

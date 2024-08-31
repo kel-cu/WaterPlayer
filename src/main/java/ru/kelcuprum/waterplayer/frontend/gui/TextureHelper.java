@@ -111,7 +111,7 @@ public class TextureHelper {
 
 
     public static ResourceLocation getTexture$File(File file, String id) {
-        id = formatUrls$files(id.toLowerCase());
+        id = formatUrls(id.toLowerCase());
         if (resourceLocationMap$file.containsKey(file)) {
             return resourceLocationMap$file.get(file);
         } else {
@@ -195,7 +195,7 @@ public class TextureHelper {
     }
 
     public static ResourceLocation getTexture$Base64(String base, String id) {
-        id = formatUrls$files(id.toLowerCase());
+        id = formatUrls(id.toLowerCase());
         if (resourceLocationMap$Base64.containsKey(id)) {
             return resourceLocationMap$Base64.get(id);
         } else {
@@ -302,12 +302,12 @@ public class TextureHelper {
 
 
     public static File getTextureFile(String url) {
-        return new File("config/waterplayer/textures/" + url + ".png");
+        return new File(WaterPlayer.getPath()+"/textures/" + url + ".png");
     }
 
     public static void saveMap() {
         try {
-            Path path = new File("config/waterplayer/textures/map.json").toPath();
+            Path path = new File(WaterPlayer.getPath()+"/textures/map.json").toPath();
             Files.createDirectories(path.getParent());
             Files.writeString(path, map.toString());
         } catch (IOException e) {
@@ -334,7 +334,7 @@ public class TextureHelper {
     }
 
     public static void loadMap() {
-        File mapFile = new File("config/waterplayer/textures/map.json");
+        File mapFile = new File(WaterPlayer.getPath()+"/textures/map.json");
         if (mapFile.exists() && mapFile.isFile()) {
             try {
                 map = GsonHelper.parseArray(Files.readString(mapFile.toPath()));
@@ -347,24 +347,6 @@ public class TextureHelper {
 
     public static String formatUrls(String url) {
         return url.toLowerCase().replaceAll(" ", "-").replaceAll("[^A-Za-z0-9_-]", "_");
-    }
-
-    public static String formatUrls$files(String url) {
-        return convertCyrilic(url).toLowerCase().replaceAll(" ", "-").replaceAll("[^A-Za-z0-9_-]", "_");
-    }
-
-    public static String convertCyrilic(String message) {
-        char[] abcCyr = {'а', 'б', 'в', 'г', 'д', 'ѓ', 'е', 'ж', 'з', 'ѕ', 'и', 'ј', 'к', 'л', 'љ', 'м', 'н', 'њ', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'џ', 'ш', 'А', 'Б', 'В', 'Г', 'Д', 'Ѓ', 'Е', 'Ж', 'З', 'Ѕ', 'И', 'Ј', 'К', 'Л', 'Љ', 'М', 'Н', 'Њ', 'О', 'П', 'Р', 'С', 'Т', 'Ќ', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Џ', 'Ш', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '/', '\\', '-', '_', ' '};
-        String[] abcLat = {"a", "b", "v", "g", "d", "]", "e", "zh", "z", "y", "i", "j", "k", "l", "q", "m", "n", "w", "o", "p", "r", "s", "t", "u", "f", "h", "c", ";", "x", "{", "A", "B", "V", "G", "D", "}", "E", "Zh", "Z", "Y", "I", "J", "K", "L", "Q", "M", "N", "W", "O", "P", "R", "S", "T", "KJ", "U", "F", "H", "C", ":", "X", "{", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "/", "\\", "-", "_", " "};
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < message.length(); i++) {
-            for (int x = 0; x < abcCyr.length; x++) {
-                if (message.charAt(i) == abcCyr[x]) {
-                    builder.append(abcLat[x]);
-                }
-            }
-        }
-        return builder.toString();
     }
 
     public static BufferedImage toBufferedImage(Image img) {
@@ -382,7 +364,7 @@ public class TextureHelper {
     }
     // -=-=-=-=-=-=-=-=-=- //
     public static void removePlaylistsIconCache(){
-        File directory = new File("config/waterplayer/textures");
+        File directory = new File(WaterPlayer.getPath()+"/textures");
         resourceLocationMap$Base64.clear();
         urls$Base64.clear();
         urlsTextures$Base64.clear();
@@ -398,7 +380,7 @@ public class TextureHelper {
         saveMap();
     }
     public static void removeTracksCache(){
-        File directory = new File("config/waterplayer/textures");
+        File directory = new File(WaterPlayer.getPath()+"/textures");
         resourceLocationMap.clear();
         urls.clear();
         urlsTextures.clear();
@@ -418,7 +400,7 @@ public class TextureHelper {
     }
     // -=-=-=-=-=-=-=-=-=- //
     public static long getSize(){
-        return getSize(new File("config/waterplayer/textures"));
+        return getSize(new File(WaterPlayer.getPath()+"/textures"));
     }
     public static long getSize(File directory){
         long length = 0;

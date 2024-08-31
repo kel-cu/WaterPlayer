@@ -45,11 +45,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WaterPlayer implements ClientModInitializer {
-    public static Config config = new Config("config/WaterPlayer/config.json");
+    public static Config pathConfig = new Config("config/WaterPlayer/path.json");
+    public static Config config = new Config(getPath()+"/config.json");
     public static final Logger LOG = LogManager.getLogger("WaterPlayer");
     public static MusicPlayer player;
-    public static Localization localization = new Localization("waterplayer", "config/WaterPlayer/lang");
+    public static Localization localization = new Localization("waterplayer", WaterPlayer.getPath()+"/lang");
     public static DiscordIntegration discordIntegration;
+
+    public static String getPath(){
+        String path = pathConfig.getBoolean("USE_GLOBAL", false) ? pathConfig.getString("PATH", "{HOME}/WaterPlayer") : "config/WaterPlayer";
+        path = path.replace("{HOME}", System.getProperty("user.home"));
+        return path;
+    }
 
     @Override
     public void onInitializeClient() {
@@ -77,7 +84,6 @@ public class WaterPlayer implements ClientModInitializer {
             TextureHelper.saveMap();
         });
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            discordIntegration.update();
             for (KeyBind bind : keyBinds) {
                 if (bind.key().consumeClick()) bind.onExecute().run();
             }

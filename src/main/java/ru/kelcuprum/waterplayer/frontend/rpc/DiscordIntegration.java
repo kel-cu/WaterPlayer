@@ -9,20 +9,42 @@ import com.jagrosh.discordipc.entities.Packet;
 import com.jagrosh.discordipc.entities.RichPresence;
 import com.jagrosh.discordipc.entities.User;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import org.apache.logging.log4j.Level;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
-import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class DiscordIntegration {
     public static IPCClient client;
     public static RichPresence lastPresence;
     public static boolean CONNECTED = false;
     public static boolean EMPTY = true;
+    private static final Timer TIMER = new Timer();
+    private static String lastException;
+
+    public DiscordIntegration(){
+        TIMER.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                try{
+                    update();
+                } catch (Exception ex) {
+                    if (lastException == null || !lastException.equals(ex.getMessage())) {
+                        lastException = ex.getMessage();
+                        WaterPlayer.log(ex.getLocalizedMessage(), Level.ERROR);
+                        RichPresence.Builder presence = new RichPresence.Builder()
+                                .setActivityType(ActivityType.Competing)
+                                .setDetails("There was an error")
+                                .setState("Check the logs & send a report")
+                                .setLargeImage("https://wf.kelcu.ru/mods/waterplayer/icons/seadrive.gif");
+                        if(CONNECTED) send(presence.build());
+                    }
+                }
+            }
+        }, 250, 250);
+    }
 
     public void registerApplication(){
         client = new IPCClient(
@@ -100,7 +122,7 @@ public class DiscordIntegration {
             builder.setLargeImage(icon, MusicHelper.getServiceName(MusicHelper.getService(track)).getString())
                     .setDetails(MusicHelper.getTitle())
                     .setState(MusicHelper.getAuthor());
-            getYonKaGorMoment(track, builder, icon);
+            getYonKaGorMoment(track, builder);
             long start = System.currentTimeMillis() - MusicHelper.getPosition();
             if(WaterPlayer.player.getAudioPlayer().isPaused()) builder.setSmallImage("paused");
             else {
@@ -138,20 +160,20 @@ public class DiscordIntegration {
             }
         }
     }
-    protected void getYonKaGorMoment(AudioTrack track, RichPresence.Builder builder, String icon) {
+    protected void getYonKaGorMoment(AudioTrack track, RichPresence.Builder builder) {
         if (!MusicHelper.getAuthor(track).equals("YonKaGor")) return;
         switch (MusicHelper.getTitle(track)) {
 //            case "I Forgot That You Exist", "I Forgot That You Exist. ¯\\_(ツ)_/¯" -> Items.MUSIC_DISC_WAIT;
             case "Top 10 Things to Do Before You Die", "Top 10 Things To Do Before You Die",
-                 "[TW] Top 10 Things To Do Before You Die (Censored)" -> {
-                builder.setLargeImage("https://wf.kelcu.ru/mods/waterplayer/icons/seadrive.gif", "HowTo");
-            }
+                 "[TW] Top 10 Things To Do Before You Die (Censored)" ->
+                    builder.setLargeImage("https://wf.kelcu.ru/mods/waterplayer/icons/seadrive.gif", "HowTo");
 //            case "Trash Talkin'", "kennyoung & YonKaGor - Trash Talkin'" -> Items.MUSIC_DISC_OTHERSIDE;
 //            case "Fallacy" -> Items.MUSIC_DISC_PIGSTEP;
-//            case "You're Just Like Pop Music" -> Items.MUSIC_DISC_MELLOHI;
+            case "You're Just Like Pop Music" ->
+                    builder.setLargeImage("https://wf.kelcu.ru/mods/waterplayer/icons/tetra.gif", MusicHelper.getServiceName(MusicHelper.getService(track)).getString());
 //            case "Dandelion", "Dandelion \uD83C\uDF3C (Full Song)" -> Items.DANDELION;
 //            case "Mr. Sunfish", "Good Morning, Mr. Sunfish!", "Fish ! (Original)" -> Items.TROPICAL_FISH;
-//            case "You'll Be Gone" -> Items.MUSIC_DISC_MALL;
+//            case "You'll Be Gone" ->
 //            case "It's Normal", "It's Normal [TW]" -> Items.MUSIC_DISC_11;
 //            case "Circus Hop", "Circus Hop [TW]" -> Items.MUSIC_DISC_CHIRP;
 //            case "Paper Alibis", "Paper Alibis (Full Song)" -> Items.PAPER;
