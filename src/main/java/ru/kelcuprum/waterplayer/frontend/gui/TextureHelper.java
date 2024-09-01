@@ -398,41 +398,4 @@ public class TextureHelper {
         }
         saveMap();
     }
-    // -=-=-=-=-=-=-=-=-=- //
-    public static long getSize(){
-        return getSize(new File(WaterPlayer.getPath()+"/textures"));
-    }
-    public static long getSize(File directory){
-        long length = 0;
-        for (File file : directory.listFiles()) {
-            if (file.isFile())
-                length += file.length();
-            else
-                length += getSize(file);
-        }
-        return length;
-    }
-    static long kilo = 1024;
-    static long mega = kilo * kilo;
-    static long giga = mega * kilo;
-    static long tera = giga * kilo;
-    public static String getParsedSize(long size) {
-        String s = "";
-        double kb = (double)size / kilo;
-        double mb = kb / kilo;
-        double gb = mb / kilo;
-        double tb = gb / kilo;
-        if(size < kilo) {
-            s = size + " Bytes";
-        } else if(size >= kilo && size < mega) {
-            s =  String.format("%.2f", kb) + " KB";
-        } else if(size >= mega && size < giga) {
-            s = String.format("%.2f", mb) + " MB";
-        } else if(size >= giga && size < tera) {
-            s = String.format("%.2f", gb) + " GB";
-        } else {
-            s = String.format("%.2f", tb) + " TB";
-        }
-        return s;
-    }
 }

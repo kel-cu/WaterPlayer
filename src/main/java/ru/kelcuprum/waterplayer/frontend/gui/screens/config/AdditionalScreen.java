@@ -4,6 +4,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.apache.logging.log4j.Level;
 import ru.kelcuprum.alinlib.AlinLib;
+import ru.kelcuprum.alinlib.CommonUtils;
 import ru.kelcuprum.alinlib.config.Config;
 import ru.kelcuprum.alinlib.gui.Icons;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBooleanBuilder;
@@ -61,7 +62,7 @@ public class AdditionalScreen {
         }
         builder.addWidget(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.discord"), false).setConfig(WaterPlayer.config, "DISCORD"));
         builder.addWidget(new CategoryBox(Component.translatable("waterplayer.cache"))
-                .addValue(new ButtonBuilder(Component.translatable("waterplayer.cache.icons.size"), Component.literal(TextureHelper.getParsedSize(TextureHelper.getSize()))).setActive(false))
+                .addValue(new ButtonBuilder(Component.translatable("waterplayer.cache.icons.size"), Component.literal(CommonUtils.getParsedFileSize(new File(WaterPlayer.getPath()+"/textures")))).setActive(false))
                 .addValue(new ButtonBuilder(Component.translatable("waterplayer.cache.icons.reset.tracks")).setOnPress((s) -> {
                     TextureHelper.removeTracksCache();
                     AlinLib.MINECRAFT.setScreen(AdditionalScreen.build(parent));
