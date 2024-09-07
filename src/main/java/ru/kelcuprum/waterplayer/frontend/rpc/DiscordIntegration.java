@@ -63,7 +63,7 @@ public class DiscordIntegration {
     }
 
     public void exitApplication(){
-        client.close();
+        if(CONNECTED) client.close();
     }
 
     public void setupListener() {
@@ -163,26 +163,12 @@ public class DiscordIntegration {
     protected void getYonKaGorMoment(AudioTrack track, RichPresence.Builder builder) {
         if (!MusicHelper.getAuthor(track).equals("YonKaGor")) return;
         switch (MusicHelper.getTitle(track)) {
-//            case "I Forgot That You Exist", "I Forgot That You Exist. ¯\\_(ツ)_/¯" -> Items.MUSIC_DISC_WAIT;
             case "Top 10 Things to Do Before You Die", "Top 10 Things To Do Before You Die",
                  "[TW] Top 10 Things To Do Before You Die (Censored)" ->
                     builder.setLargeImage("https://wf.kelcu.ru/mods/waterplayer/icons/seadrive.gif", "HowTo");
-//            case "Trash Talkin'", "kennyoung & YonKaGor - Trash Talkin'" -> Items.MUSIC_DISC_OTHERSIDE;
-//            case "Fallacy" -> Items.MUSIC_DISC_PIGSTEP;
             case "You're Just Like Pop Music" ->
                     builder.setLargeImage("https://wf.kelcu.ru/mods/waterplayer/icons/tetra.gif", MusicHelper.getServiceName(MusicHelper.getService(track)).getString());
-//            case "Dandelion", "Dandelion \uD83C\uDF3C (Full Song)" -> Items.DANDELION;
-//            case "Mr. Sunfish", "Good Morning, Mr. Sunfish!", "Fish ! (Original)" -> Items.TROPICAL_FISH;
-//            case "You'll Be Gone" ->
-//            case "It's Normal", "It's Normal [TW]" -> Items.MUSIC_DISC_11;
-//            case "Circus Hop", "Circus Hop [TW]" -> Items.MUSIC_DISC_CHIRP;
-//            case "Paper Alibis", "Paper Alibis (Full Song)" -> Items.PAPER;
-//            case "Silly Plans" -> Items.LIGHT_BLUE_BED;
-//            case "Silly Plans ~ Revisit" -> Items.FILLED_MAP;
-//            case "Another Mistake" -> Items.BARRIER;
-//            case "Memory Merge" -> Items.FLINT_AND_STEEL;
-//            case "Waterland", "Waterland (Lyric video)" -> Items.WATER_BUCKET;
-//            case "Artificial Abandonment", "(Original Song) Artificial Abandonment" -> Items.MOSSY_COBBLESTONE;
+            case "Circus Hop", "Circus Hop [TW]" -> builder.setLargeImage("https://wf.kelcu.ru/mods/waterplayer/icons/clownfish.png", MusicHelper.getServiceName(MusicHelper.getService(track)).getString());
         };
     }
 }
