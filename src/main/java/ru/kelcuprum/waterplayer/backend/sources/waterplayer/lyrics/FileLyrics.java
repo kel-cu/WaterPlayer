@@ -23,7 +23,7 @@ public class FileLyrics implements AudioLyrics {
                 SRTLyricsFormat srt = new SRTLyricsFormat(track, text);
                 this.lines = srt.lines;
                 this.text = srt.text.toString();
-            }
+            } else this.text = text;
         }
     }
 
