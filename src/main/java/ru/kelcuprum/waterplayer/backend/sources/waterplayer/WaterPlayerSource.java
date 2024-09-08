@@ -101,9 +101,7 @@ public class WaterPlayerSource implements AudioSourceManager, AudioLyricsManager
         } else if(MusicHelper.isFile(track)){
             try {
                 AudioFile f = AudioFileIO.read(new File(track.getInfo().uri));
-                String text = f.getTag().getFirst(FieldKey.LYRICS);
-                WaterPlayer.log(text);
-                return new FileLyrics(track, text);
+                return new FileLyrics(track, f.getTag().getFirst(FieldKey.LYRICS));
             } catch (Exception e){
                 e.printStackTrace();
             }

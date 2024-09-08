@@ -2,13 +2,8 @@ package ru.kelcuprum.waterplayer.backend.sources.waterplayer.lyrics;
 
 import com.github.topi314.lavalyrics.lyrics.AudioLyrics;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.kelcuprum.waterplayer.WaterPlayer;
-
-import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Double.parseDouble;
