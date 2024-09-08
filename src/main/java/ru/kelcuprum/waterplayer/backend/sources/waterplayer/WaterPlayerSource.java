@@ -83,7 +83,6 @@ public class WaterPlayerSource implements AudioSourceManager, AudioLyricsManager
     @Override
     public @Nullable AudioLyrics loadLyrics(AudioTrack track) {
         String id = WaterPlayer.parseFileSystem(track.getSourceManager().getSourceName() + "_" + track.getIdentifier());
-//        WaterPlayer.log("[Lyrics] " + id);
         File srt = new File(WaterPlayer.getPath()+"/Lyrics/"+id+".srt");
         File lrc = new File(WaterPlayer.getPath()+"/Lyrics/"+id+".lrc");
         if(srt.exists() && srt.isFile()){
@@ -101,7 +100,8 @@ public class WaterPlayerSource implements AudioSourceManager, AudioLyricsManager
         } else if(MusicHelper.isFile(track)){
             try {
                 AudioFile f = AudioFileIO.read(new File(track.getInfo().uri));
-                return new FileLyrics(track, f.getTag().getFirst(FieldKey.LYRICS));
+                String text = f.getTag().getFirst(FieldKey.LYRICS);
+                if(!text.isBlank()) return new FileLyrics(track, text);
             } catch (Exception e){
                 e.printStackTrace();
             }
