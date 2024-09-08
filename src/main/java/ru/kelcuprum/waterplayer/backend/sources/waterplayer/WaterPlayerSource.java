@@ -11,6 +11,9 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.minecraft.util.GsonHelper;
 import org.apache.logging.log4j.Level;
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.kelcuprum.alinlib.AlinLib;
@@ -18,7 +21,9 @@ import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
 import ru.kelcuprum.waterplayer.backend.exception.WebPlaylistException;
 import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
+import ru.kelcuprum.waterplayer.backend.sources.waterplayer.lyrics.FileLyrics;
 import ru.kelcuprum.waterplayer.backend.sources.waterplayer.lyrics.SRTLyricsFormat;
+import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -78,16 +83,32 @@ public class WaterPlayerSource implements AudioSourceManager, AudioLyricsManager
     @Override
     public @Nullable AudioLyrics loadLyrics(AudioTrack track) {
         String id = WaterPlayer.parseFileSystem(track.getSourceManager().getSourceName() + "_" + track.getIdentifier());
-        WaterPlayer.log("[Lyrics] " + id);
+//        WaterPlayer.log("[Lyrics] " + id);
         File srt = new File(WaterPlayer.getPath()+"/Lyrics/"+id+".srt");
+        File lrc = new File(WaterPlayer.getPath()+"/Lyrics/"+id+".lrc");
         if(srt.exists() && srt.isFile()){
             try {
                 return new SRTLyricsFormat(track, Files.readString(srt.toPath()));
             } catch (Exception ex){
                 WaterPlayer.log(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage(), Level.ERROR);
-                return null;
             }
-        } else return null;
+        } else if(lrc.exists() && lrc.isFile()){
+            try {
+                return new SRTLyricsFormat(track, Files.readString(srt.toPath()));
+            } catch (Exception ex){
+                WaterPlayer.log(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage(), Level.ERROR);
+            }
+        } else if(MusicHelper.isFile(track)){
+            try {
+                AudioFile f = AudioFileIO.read(new File(track.getInfo().uri));
+                String text = f.getTag().getFirst(FieldKey.LYRICS);
+                WaterPlayer.log(text);
+                return new FileLyrics(track, text);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     @Override

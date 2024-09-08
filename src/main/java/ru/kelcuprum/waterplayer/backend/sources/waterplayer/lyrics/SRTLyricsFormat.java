@@ -18,6 +18,10 @@ public class SRTLyricsFormat implements AudioLyrics {
     List<Line> lines = new ArrayList<>();
     StringBuilder text = new StringBuilder();
 
+    public static boolean isSrtFormat(String text){
+        return text.replaceAll("\\d*:\\d*:\\d*,?\\d* --> \\d*:\\d*:\\d*,?\\d*", "").length() < text.length();
+    }
+
     public SRTLyricsFormat(AudioTrack track, String data){
         this.track = track;
         String[] pepe = data.split("\n");
