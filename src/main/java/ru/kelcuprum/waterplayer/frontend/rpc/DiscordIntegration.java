@@ -13,6 +13,8 @@ import org.apache.logging.log4j.Level;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,11 +26,11 @@ public class DiscordIntegration {
     private static final Timer TIMER = new Timer();
     private static String lastException;
 
-    public DiscordIntegration(){
+    public DiscordIntegration() {
         TIMER.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                try{
+                try {
                     update();
                 } catch (Exception ex) {
                     if (lastException == null || !lastException.equals(ex.getMessage())) {
@@ -39,14 +41,14 @@ public class DiscordIntegration {
                                 .setDetails("There was an error")
                                 .setState("Check the logs & send a report")
                                 .setLargeImage("https://wf.kelcu.ru/mods/waterplayer/icons/seadrive.gif");
-                        if(CONNECTED) send(presence.build());
+                        if (CONNECTED) send(presence.build());
                     }
                 }
             }
         }, 250, 250);
     }
 
-    public void registerApplication(){
+    public void registerApplication() {
         client = new IPCClient(
                 //#if WALTER == 0
                 1197963953695903794L
@@ -62,8 +64,8 @@ public class DiscordIntegration {
         }
     }
 
-    public void exitApplication(){
-        if(CONNECTED) client.close();
+    public void exitApplication() {
+        if (CONNECTED) client.close();
     }
 
     public void setupListener() {
@@ -113,23 +115,38 @@ public class DiscordIntegration {
         });
     }
 
-    public void update(){
+    public void update() {
         AudioTrack track = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
-        if(track == null || !WaterPlayer.config.getBoolean("DISCORD", false)) send(null);
+        if (track == null || !WaterPlayer.config.getBoolean("DISCORD", false)) send(null);
         else {
             RichPresence.Builder builder = new RichPresence.Builder().setActivityType(ActivityType.Listening);
             String icon = MusicHelper.isFile() ? "file" : (track.getInfo().artworkUrl == null || track.getInfo().artworkUrl.isBlank()) ? "no_icon" : track.getInfo().artworkUrl;
+            if (!MusicHelper.isAuthorNull(track) && !MusicHelper.isTitleNull(track) && MusicHelper.isFile(track)) {
+                String author = MusicHelper.getAuthor(track);
+                if(author.split(",").length > 1) author = author.split(",")[0];
+                else if(author.split(";").length > 1) author = author.split(";")[0];
+                else if(author.split("/").length > 1) author = author.split("/")[0];
+                icon = String.format("https://api.waterplayer.ru/v2/artwork?author=%1$s&album=%2$s", uriEncode(author), uriEncode(MusicHelper.getTitle(track)));
+            }
             builder.setLargeImage(icon, MusicHelper.getServiceName(MusicHelper.getService(track)).getString())
                     .setDetails(MusicHelper.getTitle())
                     .setState(MusicHelper.getAuthor());
             getYonKaGorMoment(track, builder);
             long start = System.currentTimeMillis() - MusicHelper.getPosition();
-            if(WaterPlayer.player.getAudioPlayer().isPaused()) builder.setSmallImage("paused");
+            if (WaterPlayer.player.getAudioPlayer().isPaused()) builder.setSmallImage("paused");
             else {
+                if (!MusicHelper.isAuthorNull(track)) {
+
+                    String author = MusicHelper.getAuthor(track);
+                    if(author.split(",").length > 1) author = author.split(",")[0];
+                    else if(author.split(";").length > 1) author = author.split(";")[0];
+                    else if(author.split("/").length > 1) author = author.split("/")[0];
+                    builder.setSmallImage(String.format("https://wplayer.ru/v2/artwork?author=%1$s", uriEncode(author)), MusicHelper.getAuthor(track));
+                }
                 builder.setStartTimestamp(parseSeconds(start));
-                if(!MusicHelper.getIsLive()) builder.setEndTimestamp(parseSeconds(start+MusicHelper.getDuration()));
+                if (!MusicHelper.getIsLive()) builder.setEndTimestamp(parseSeconds(start + MusicHelper.getDuration()));
             }
-            if(track.getInfo().uri.startsWith("https://") || track.getInfo().uri.startsWith("http://")){
+            if (!MusicHelper.isFile(track)) {
                 JsonArray buttons = new JsonArray();
                 JsonObject button = new JsonObject();
                 button.addProperty("label", MusicHelper.getServiceName(MusicHelper.getService(track)).getString());
@@ -140,17 +157,18 @@ public class DiscordIntegration {
             send(builder.build());
         }
     }
-    public long parseSeconds(long mills){
-        return (mills-(mills % 1000)) /1000;
+
+    public long parseSeconds(long mills) {
+        return (mills - (mills % 1000)) / 1000;
     }
 
-    public void send(RichPresence presence){
-        if(!EMPTY && CONNECTED && presence == null) {
-            if(lastPresence != null) exitApplication();
+    public void send(RichPresence presence) {
+        if (!EMPTY && CONNECTED && presence == null) {
+            if (lastPresence != null) exitApplication();
             lastPresence = null;
             EMPTY = true;
-        } else if(presence != null && (lastPresence == null || (!lastPresence.toJson().toString().equalsIgnoreCase(presence.toJson().toString())))){
-            if(EMPTY) registerApplication();
+        } else if (presence != null && (lastPresence == null || (!lastPresence.toJson().toString().equalsIgnoreCase(presence.toJson().toString())))) {
+            if (EMPTY) registerApplication();
             EMPTY = false;
             try {
                 if (CONNECTED) client.sendRichPresence(presence);
@@ -160,6 +178,7 @@ public class DiscordIntegration {
             }
         }
     }
+
     protected void getYonKaGorMoment(AudioTrack track, RichPresence.Builder builder) {
         if (!MusicHelper.getAuthor(track).equals("YonKaGor")) return;
         switch (MusicHelper.getTitle(track)) {
@@ -168,7 +187,12 @@ public class DiscordIntegration {
                     builder.setLargeImage("https://wf.kelcu.ru/mods/waterplayer/icons/seadrive.gif", "HowTo");
             case "You're Just Like Pop Music" ->
                     builder.setLargeImage("https://wf.kelcu.ru/mods/waterplayer/icons/tetra.gif", MusicHelper.getServiceName(MusicHelper.getService(track)).getString());
-            case "Circus Hop", "Circus Hop [TW]" -> builder.setLargeImage("https://wf.kelcu.ru/mods/waterplayer/icons/clownfish.png", MusicHelper.getServiceName(MusicHelper.getService(track)).getString());
-        };
+            case "Circus Hop", "Circus Hop [TW]" ->
+                    builder.setLargeImage("https://wf.kelcu.ru/mods/waterplayer/icons/clownfish.png", MusicHelper.getServiceName(MusicHelper.getService(track)).getString());
+        }
+        ;
+    }
+    protected String uriEncode(String uri){
+        return URLEncoder.encode(uri, StandardCharsets.UTF_8);
     }
 }
