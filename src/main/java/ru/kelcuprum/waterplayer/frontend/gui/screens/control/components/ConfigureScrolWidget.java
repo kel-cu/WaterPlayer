@@ -74,17 +74,7 @@ public class ConfigureScrolWidget extends AbstractScrollWidget {
             RenderSystem.disableBlend();
         }
     }
-//    @Override
-//    public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
-//        if (this.visible) {
-//            this.renderBackground(guiGraphics);
-//            guiGraphics.enableScissor(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height);
-//            this.renderContents(guiGraphics, i, j, f);
-//            guiGraphics.disableScissor();
-//            this.renderDecorations(guiGraphics);
-//        }
-//    }
-//
+
     @Override
     protected void renderContents(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
     }
