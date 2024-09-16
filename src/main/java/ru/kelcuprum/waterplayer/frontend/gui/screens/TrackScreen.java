@@ -79,34 +79,17 @@ public class TrackScreen extends Screen {
             lyricsBox = addRenderableWidget(new LyricsBox(5, 40, lyricsSize - 10, height - (lyricsEnable ? 95 : 70), Component.empty())).setLyrics(Component.literal(lyricsEnable ? lyrics.getText() != null ? lyrics.getText().replace("\r", "") : "404: Not found" : "404: Not found"));
             if(lyricsEnable) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.track.lyrics.copy"), (onPress) -> {
                 AlinLib.MINECRAFT.keyboardHandler.setClipboard(lyrics.getText() == null ? "" : lyrics.getText());
-                WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.lyrics.copy.toast")).show(AlinLib.MINECRAFT
-                                //#if MC >= 12102
-                                .getToastManager()
-                        //#elseif MC < 12102
-                        //$$.getToasts()
-                        //#endif
-                );
+                WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.lyrics.copy.toast")).buildAndShow();
             }).setPosition(5, height - 25).setSize(lyricsSize - 10, 20).build());
 
             String id = WaterPlayer.parseFileSystem(track.getSourceManager().getSourceName() + "_" + track.getIdentifier());
             addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.track.lyrics.create_srt"), (onPress) -> {
                 try{
                     Util.getPlatform().openFile(new File(LyricsHelper.saveSRT(track, lyricsEnable ? lyrics.getText() != null ? lyrics.getText().replace("\r", "") : "Example text" : "Example text")));
-                    WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.lyrics.created_srt")).show(AlinLib.MINECRAFT
-                                    //#if MC >= 12102
-                                    .getToastManager()
-                            //#elseif MC < 12102
-                            //$$.getToasts()
-                            //#endif
-                    );
+                    WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.lyrics.created_srt")).buildAndShow();
                 } catch (Exception e){
-                    WaterPlayer.getToast().setMessage(Component.literal(e.getMessage() == null ? e.getClass().getName() : e.getMessage())).setType(ToastBuilder.Type.ERROR).setIcon(DONT).show(AlinLib.MINECRAFT
-                                    //#if MC >= 12102
-                                    .getToastManager()
-                            //#elseif MC < 12102
-                            //$$.getToasts()
-                            //#endif
-                    );
+                    WaterPlayer.getToast().setMessage(Component.literal(e.getMessage() == null ? e.getClass().getName() : e.getMessage()))
+                            .setType(ToastBuilder.Type.ERROR).setIcon(DONT).buildAndShow();
                 }
             }).setPosition(5, height - (lyricsEnable ? 50 : 25)).setSize(lyricsSize - 10, 20).build());
         }
@@ -167,13 +150,7 @@ public class TrackScreen extends Screen {
                         Playlist playlistObject = new Playlist(playlist.toPath());
                         playlists.add(new ButtonBuilder(Component.translatable("waterplayer.playlists.value", playlistObject.title, playlistObject.author), (s) -> {
                             playlistObject.addUrl(track.getInfo().uri);
-                            WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.playlists.added", playlistObject.title)).show(AlinLib.MINECRAFT
-                                            //#if MC >= 12102
-                                            .getToastManager()
-                                    //#elseif MC < 12102
-                                    //$$.getToasts()
-                                    //#endif
-                            );
+                            WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.playlists.added", playlistObject.title)).buildAndShow();
                             onClose();
                         }).setSize(lyricsSize - 10, 20).setPosition(5, yP).build());
                         yP += 25;

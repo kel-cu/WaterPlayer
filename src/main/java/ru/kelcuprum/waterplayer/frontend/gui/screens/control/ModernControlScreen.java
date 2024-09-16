@@ -54,13 +54,8 @@ public class ModernControlScreen extends Screen {
     @Override
     protected void init() {
         if (WaterPlayer.config.getBoolean("CONTROL.MODERN.FIRST_RUN", true)) {
-            WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.control.modern.notice")).setDisplayTime(15000).setIcon(Items.NETHER_STAR).show(AlinLib.MINECRAFT
-                                        //#if MC >= 12102
-                                        .getToastManager()
-                                //#elseif MC < 12102
-                                //$$.getToasts()
-                                //#endif
-                        );
+            WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.control.modern.notice"))
+                    .setDisplayTime(15000).setIcon(Items.NETHER_STAR).buildAndShow();
             WaterPlayer.config.setBoolean("CONTROL.MODERN.FIRST_RUN", false);
         }
         if (showControlPanel) initControlPanel();

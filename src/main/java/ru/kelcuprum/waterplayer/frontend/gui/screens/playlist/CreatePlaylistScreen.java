@@ -48,13 +48,7 @@ public class CreatePlaylistScreen extends Screen {
                     fileName = WaterPlayerAPI.getPlaylist(fileName, true).fileName;
                 } catch (Exception e){
                     WaterPlayer.log(e.getMessage() == null ? e.getClass().getName() : e.getMessage(), Level.ERROR);
-                    WaterPlayer.getToast().setMessage(Component.literal(e.getMessage() == null ? e.getClass().getName() : e.getMessage())).setType(ToastBuilder.Type.ERROR).show(AlinLib.MINECRAFT
-                                        //#if MC >= 12102
-                                        .getToastManager()
-                                //#elseif MC < 12102
-                                //$$.getToasts()
-                                //#endif
-                        );
+                    WaterPlayer.getToast().setMessage(Component.literal(e.getMessage() == null ? e.getClass().getName() : e.getMessage())).setType(ToastBuilder.Type.ERROR).buildAndShow();
                     return;
                 }
             }
@@ -66,13 +60,8 @@ public class CreatePlaylistScreen extends Screen {
                     e.printStackTrace();
                 }
             }
-            else WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.playlist.create.illegal_characters")).setType(ToastBuilder.Type.ERROR).show(AlinLib.MINECRAFT
-                                        //#if MC >= 12102
-                                        .getToastManager()
-                                //#elseif MC < 12102
-                                //$$.getToasts()
-                                //#endif
-                        );
+            else WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.playlist.create.illegal_characters"))
+                    .setType(ToastBuilder.Type.ERROR).buildAndShow();
         })
                 .setPosition(x+5, y+15).setSize(145, 20).build());
     }

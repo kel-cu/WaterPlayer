@@ -104,13 +104,8 @@ public class ViewPlaylistScreen extends Screen {
                     webPlaylist.save();
                 } catch (WebPlaylistException e) {
                     e.printStackTrace();
-                    WaterPlayer.getToast().setMessage(Component.literal(e.getMessage() == null ? e.getClass().getName() : e.getMessage())).setType(ToastBuilder.Type.ERROR).show(AlinLib.MINECRAFT
-                                        //#if MC >= 12102
-                                        .getToastManager()
-                                //#elseif MC < 12102
-                                //$$.getToasts()
-                                //#endif
-                        );
+                    WaterPlayer.getToast().setMessage(Component.literal(e.getMessage() == null ? e.getClass().getName() : e.getMessage()))
+                            .setType(ToastBuilder.Type.ERROR).buildAndShow();
                 }
                 AlinLib.MINECRAFT.setScreen(new ViewPlaylistScreen(parent, playlist));
             }).setPosition(x, y).setSize(size, 20).build());
@@ -119,37 +114,19 @@ public class ViewPlaylistScreen extends Screen {
         upload = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable(isCreatedLink ? "waterplayer.playlist.copy_link" : "waterplayer.playlist.upload"), (e) -> {
             if (isCreatedLink) {
                 AlinLib.MINECRAFT.keyboardHandler.setClipboard(link);
-                WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.playlist.link_copied")).show(AlinLib.MINECRAFT
-                                        //#if MC >= 12102
-                                        .getToastManager()
-                                //#elseif MC < 12102
-                                //$$.getToasts()
-                                //#endif
-                        );
+                WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.playlist.link_copied")).buildAndShow();
             } else {
                 try {
                     link = WaterPlayerAPI.uploadPlaylist(playlist, playlist.fileName);
                     AlinLib.MINECRAFT.keyboardHandler.setClipboard(link);
                     isCreatedLink = true;
-                    WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.playlist.uploaded")).show(AlinLib.MINECRAFT
-                                        //#if MC >= 12102
-                                        .getToastManager()
-                                //#elseif MC < 12102
-                                //$$.getToasts()
-                                //#endif
-                        );
+                    WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.playlist.uploaded")).buildAndShow();
                     e.builder.setTitle(Component.translatable("waterplayer.playlist.copy_link"));
                 } catch (Exception ex) {
                     isEnable = false;
                     e.builder.setTitle(Component.translatable("waterplayer.playlist.upload.unavailable"));
                     String msg = ex.getMessage() == null ? e.getClass().getName() : ex.getMessage();
-                    WaterPlayer.getToast().setMessage(Component.literal(msg)).setType(ToastBuilder.Type.ERROR).setIcon(DONT).show(AlinLib.MINECRAFT
-                                        //#if MC >= 12102
-                                        .getToastManager()
-                                //#elseif MC < 12102
-                                //$$.getToasts()
-                                //#endif
-                        );
+                    WaterPlayer.getToast().setMessage(Component.literal(msg)).setType(ToastBuilder.Type.ERROR).setIcon(DONT).buildAndShow();
                     WaterPlayer.log(msg, Level.ERROR);
                 }
             }

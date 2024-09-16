@@ -82,13 +82,7 @@ public class TrackScheduler extends AudioEventAdapter {
                         .setMessage(Component.literal(MusicHelper.getTitle(player.getPlayingTrack())));
                 if (MusicHelper.getAuthor(player.getPlayingTrack()).equals("YonKaGor")) toast.setIcon(getYonKaGorMoment(player.getPlayingTrack()));
                 else toast.setIcon(MUSIC);
-                toast.show(AlinLib.MINECRAFT
-                                        //#if MC >= 12102
-                                        .getToastManager()
-                                //#elseif MC < 12102
-                                //$$.getToasts()
-                                //#endif
-                        );
+                toast.buildAndShow();
             }
         }
     }
