@@ -51,7 +51,7 @@ public class CurrentTrackButton extends Button {
         if (isTrackEnable()) {
             AudioTrack track = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
             StringBuilder builder = new StringBuilder();
-            if (!MusicHelper.isAuthorNull(track)) builder.append("«").append(MusicHelper.getAuthor(track)).append("» ");
+            if (!MusicHelper.isAuthorNull(track)) builder.append(MusicHelper.getAuthor(track)).append(" - ");
             builder.append(MusicHelper.getTitle(track)).append(" ").append(track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : getTimestamp(MusicHelper.getPosition(track)) + " / " + getTimestamp(MusicHelper.getDuration(track)));
             return Component.literal(builder.toString());
         } else return Component.translatable("waterplayer.command.now_playing.notPlaying");
@@ -68,7 +68,7 @@ public class CurrentTrackButton extends Button {
             AudioTrack track = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
 
             StringBuilder builder = new StringBuilder();
-            if (!MusicHelper.isAuthorNull(track)) builder.append("«").append(MusicHelper.getAuthor(track)).append("» ");
+            if (!MusicHelper.isAuthorNull(track)) builder.append(MusicHelper.getAuthor(track)).append(" - ");
             builder.append(MusicHelper.getTitle(track));
 
             String time = track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : getTimestamp(MusicHelper.getPosition(track)) + " / " + getTimestamp(MusicHelper.getDuration(track));

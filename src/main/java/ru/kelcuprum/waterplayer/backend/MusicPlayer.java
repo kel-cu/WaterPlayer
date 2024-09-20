@@ -9,6 +9,7 @@ import com.github.topi314.lavasrc.deezer.DeezerAudioSourceManager;
 import com.github.topi314.lavasrc.flowerytts.FloweryTTSSourceManager;
 import com.github.topi314.lavasrc.mirror.DefaultMirroringAudioTrackResolver;
 import com.github.topi314.lavasrc.spotify.SpotifySourceManager;
+import com.github.topi314.lavasrc.vkmusic.VkMusicSourceManager;
 import com.github.topi314.lavasrc.yandexmusic.YandexMusicSourceManager;
 import com.github.topi314.lavasrc.youtube.YoutubeSearchManager;
 import com.sedmelluq.discord.lavaplayer.format.AudioDataFormat;
@@ -32,6 +33,8 @@ import com.sedmelluq.discord.lavaplayer.track.playback.AllocatingAudioFrameBuffe
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
 import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import dev.lavalink.youtube.clients.*;
+import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
 import org.apache.logging.log4j.Level;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.config.Config;
@@ -127,6 +130,16 @@ public class MusicPlayer {
             audioPlayerManager.registerSourceManager(youtube);
             AudioSearchManager ytSearch = new YoutubeSearchManager(() -> audioPlayerManager, "US");
             lyricsManager.registerLyricsManager(new LyricsWithoutException((AudioLyricsManager) ytSearch));
+        }
+        if (!config.getString("VK_MUSIC_TOKEN", "").isBlank() && config.getBoolean("ENABLE_VK_MUSIC", false)) {
+            //#if WALTER == 1
+            //$$ Util.getPlatform().openUri("https://www.youtube.com/watch?v=PkT0PJwy8mI");
+            //$$ throw new RuntimeException("Don't use VK Group products, please, I don't want you to eat shit.");
+            //#else
+            VkMusicSourceManager vk = new VkMusicSourceManager(config.getString("VK_MUSIC_TOKEN", ""));
+            audioPlayerManager.registerSourceManager(vk);
+            lyricsManager.registerLyricsManager(new LyricsWithoutException(vk));
+            //#endif
         }
         if (!config.getString("YANDEX_MUSIC_TOKEN", "").isBlank()) {
             YandexMusicSourceManager ym = new YandexMusicSourceManager(config.getString("YANDEX_MUSIC_TOKEN", ""));
@@ -230,6 +243,16 @@ public class MusicPlayer {
     //
     public AudioDataFormat getAudioDataFormat() {
         return audioDataFormat;
+    }
+    public boolean isPaused(){
+        return audioPlayer.isPaused();
+    }
+    public boolean changePaused(){
+        return changePaused(!isPaused());
+    }
+    public boolean changePaused(boolean pause){
+        audioPlayer.setPaused(pause);
+        return isPaused();
     }
 
     public AudioPlayer getAudioPlayer() {

@@ -27,6 +27,7 @@ repositories {
     maven { url = "https://maven.shedaniel.me/" }
     maven { url = "https://api.modrinth.com/maven" }
     maven { url = "https://maven.topi.wtf/releases" }
+    maven { url = "https://maven.topi.wtf/snapshots" }
     maven { url = "https://maven.lavalink.dev/releases" }
     maven { url = "https://maven.lavalink.dev/snapshots" }
     maven { url = "https://maven.neoforged.net/releases/" } // NEOFORGE
@@ -36,7 +37,6 @@ repositories {
     maven { url = "https://repo.kelcuprum.ru/releases" }
     maven { url = "https://repo.kelcuprum.ru/snapshots" }
     maven { url = "https://repo.kelcuprum.ru/forks" }
-    maven { url = "https://maven.topi.wtf/snapshots" }
     maven { url = "https://repo.kelcuprum.ru/test" }
 }
 configurations {
@@ -91,12 +91,6 @@ dependencies {
         modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
         modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
         modImplementation "ru.kelcuprum.alinlib:AlinLib-fabric:${rootProject.alinlib}+mc${project.minecraft_version}"
-    } else if (mod_brand == 'neoforge') {
-        neoForge "net.neoforged:neoforge:${project.forge_version}"
-        modImplementation "ru.kelcuprum.alinlib:AlinLib-neoforge:${rootProject.alinlib}+mc${project.minecraft_version}"
-    } else {
-        forge "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
-        modImplementation "ru.kelcuprum.alinlib:AlinLib-forge:${rootProject.alinlib}+mc${project.minecraft_version}"
     }
 
     subprojects.each {

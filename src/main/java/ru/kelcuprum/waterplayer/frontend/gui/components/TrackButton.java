@@ -23,7 +23,7 @@ public class TrackButton extends Button {
     public TrackButton(int x, int y, int width, AudioTrack track, Screen screen, boolean isShort) {
         super(new ButtonBuilder().setOnPress((s) -> AlinLib.MINECRAFT.setScreen(new TrackScreen(screen, track))).setTitle(Component.empty()).setStyle(GuiUtils.getSelected()).setSize(width, isShort ? 20 : 40).setPosition(x, y));
         StringBuilder builder = new StringBuilder();
-        if (!MusicHelper.isAuthorNull(track)) builder.append("«").append(MusicHelper.getAuthor(track)).append("» ");
+        if (!MusicHelper.isAuthorNull(track)) builder.append(MusicHelper.getAuthor(track)).append(" - ");
         builder.append(MusicHelper.getTitle(track)).append(" ").append(getTimestamp(MusicHelper.getDuration(track)));
         setMessage(Component.literal(builder.toString()));
         this.isShort = isShort;
@@ -33,7 +33,7 @@ public class TrackButton extends Button {
     public void renderText(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         if (getY() < guiGraphics.guiHeight() && !(getY() <=-getHeight()) ) {
             StringBuilder builder = new StringBuilder();
-            if (!MusicHelper.isAuthorNull(track)) builder.append("«").append(MusicHelper.getAuthor(track)).append("» ");
+            if (!MusicHelper.isAuthorNull(track)) builder.append(MusicHelper.getAuthor(track)).append(" - ");
             builder.append(MusicHelper.getTitle(track));
             String time = track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : getTimestamp(MusicHelper.getDuration(track));
             if (isShort) {

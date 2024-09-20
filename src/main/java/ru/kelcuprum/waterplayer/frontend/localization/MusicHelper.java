@@ -22,7 +22,7 @@ public class MusicHelper {
     }
     //
     public static boolean isAuthorNull(AudioTrack info){
-        return trackIsNull(info) || info.getInfo().author.isBlank() || info.getInfo().author.equals("Unknown artist");
+        return trackIsNull(info) || info.getInfo().author.isBlank() || info.getInfo().author.equals("Unknown artist") || info.getInfo().author.equals("Unknown");
     }
     public static boolean isAuthorNull() {return isAuthorNull(WaterPlayer.player.getAudioPlayer().getPlayingTrack());}
     //
@@ -59,7 +59,7 @@ public class MusicHelper {
         return WaterPlayer.player.getTrackScheduler().getRepeatStatus() == 0 ? "" : WaterPlayer.player.getTrackScheduler().getRepeatStatus() == 1 ? " 🔁" : " 🔂";
     }
     public static String getPauseState(){
-        return WaterPlayer.player.getAudioPlayer().isPaused() ? "⏸" : "▶";
+        return WaterPlayer.player.isPaused() ? "⏸" : "▶";
     }
     private static final HashMap<String, Boolean> noFiles /*?*/ = new HashMap<>();
     public static boolean isFile(AudioTrack info){
@@ -113,6 +113,7 @@ public class MusicHelper {
             case "vimeo" -> Component.translatable("waterplayer.config.services.vimeo");
             case "twitch" -> Component.translatable("waterplayer.config.services.twitch");
             case "beam.pro" -> Component.translatable("waterplayer.config.services.beam");
+            case "vkmusic" -> Component.translatable("waterplayer.config.services.vk");
 
             case "yandexmusic" -> Component.translatable("waterplayer.config.services.yandex");
             case "spotify" -> Component.translatable("waterplayer.config.services.spotify");

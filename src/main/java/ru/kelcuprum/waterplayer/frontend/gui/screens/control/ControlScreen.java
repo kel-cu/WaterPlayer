@@ -105,11 +105,11 @@ public class ControlScreen extends Screen {
                 .setSize(size, 20).setPosition(x, height-50)
                 .build());
         this.play = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control." + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause")), (e) -> {
-            WaterPlayer.player.getAudioPlayer().setPaused(!WaterPlayer.player.getAudioPlayer().isPaused());
-            e.builder.setTitle(Component.translatable("waterplayer.control." + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause")));
-            ((ButtonBuilder)e.builder).setSprite(getPlayOrPause(WaterPlayer.player.getAudioPlayer().isPaused()));
+            WaterPlayer.player.changePaused();
+            e.builder.setTitle(Component.translatable("waterplayer.control." + (WaterPlayer.player.isPaused() ? "play" : "pause")));
+            ((ButtonBuilder)e.builder).setSprite(getPlayOrPause(WaterPlayer.player.isPaused()));
         })
-                .setSprite(getPlayOrPause(WaterPlayer.player.getAudioPlayer().isPaused()))
+                .setSprite(getPlayOrPause(WaterPlayer.player.isPaused()))
                 .setTextureSize(20, 20)
                 .setSize(20, 20)
                 .setPosition(x, height - 25).build());
@@ -234,7 +234,7 @@ public class ControlScreen extends Screen {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if(keyCode == GLFW.GLFW_KEY_P && (modifiers & GLFW.GLFW_MOD_SHIFT) != 0){
-            AlinLib.MINECRAFT.setScreen(new ModernControlScreen(parent));
+            AlinLib.MINECRAFT.setScreen(new ControlScreen$Modern(parent));
             WaterPlayer.config.setBoolean("CONTROL.MODERN", true);
             return true;
         }
@@ -258,8 +258,17 @@ public class ControlScreen extends Screen {
                     StringBuilder builder = new StringBuilder();
                     for (AudioLyrics.Line line : list) {
                         if (!(line.getDuration() == null)) {
+                            int type = WaterPlayer.config.getNumber("CONTROL.LYRICS.TYPE", 0).intValue();
                             Duration pos = Duration.ofMillis(track.getPosition());
-                            if ((pos.toMillis() <= line.getTimestamp().toMillis()) || (pos.toMillis() >= line.getTimestamp().toMillis() && pos.toMillis() <= line.getTimestamp().toMillis() + line.getDuration().toMillis())) {
+                            if (type == 0) {
+                                if (pos.toMillis() >= line.getTimestamp().toMillis() && pos.toMillis() <= line.getTimestamp().toMillis() + line.getDuration().toMillis())
+                                    // l
+                                    builder.append(line.getLine().replace("\r", "")).append("\n");
+                                else builder.append("§7").append(line.getLine().replace("\r", "")).append("§r\n");
+                            } else if (type == 1) {
+                                if ((pos.toMillis() <= line.getTimestamp().toMillis()) || (pos.toMillis() >= line.getTimestamp().toMillis() && pos.toMillis() <= line.getTimestamp().toMillis() + line.getDuration().toMillis()))
+                                    builder.append(line.getLine().replace("\r", "")).append("\n");
+                            } else {
                                 builder.append(line.getLine().replace("\r", "")).append("\n");
                             }
                         }

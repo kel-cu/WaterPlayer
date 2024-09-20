@@ -112,6 +112,10 @@
   "waterplayer.config.enable_keybind": "Включить бинды в меню",
   "waterplayer.config.screem.queue_cover_show": "Миниатюры треков в очереди",
   "waterplayer.config.control.enable_lyrics": "Тексты песен на экране управления",
+  "waterplayer.config.control.lyrics.type": "Тип вывода текста",
+  "waterplayer.config.control.lyrics.type.line": "Выделение",
+  "waterplayer.config.control.lyrics.type.cute": "Сокращение",
+  "waterplayer.config.control.lyrics.type.none": "Без активности",
   "waterplayer.config.control.modern": "Современный стиль",
 
   "waterplayer.config.notice": "Уведомления",
@@ -132,6 +136,7 @@
   "waterplayer.config.services.vimeo": "Vimeo",
   "waterplayer.config.services.twitch": "Твитч",
   "waterplayer.config.services.beam": "Beam",
+  "waterplayer.config.services.vk": "Дуров, где стена?",
 
   "waterplayer.config.services.yandex": "Яндекс Музыка",
   "waterplayer.config.services.spotify": "Spotify",
@@ -155,6 +160,7 @@
   "waterplayer.secret.description": "После смены данных необходимо перезапустить игру! Извините...",
   "waterplayer.secret.title.tokens": "Токены",
   "waterplayer.config.yandex_music_token": "Токен Яндекс.Музыки",
+  "waterplayer.config.vk_music_token": "Токен ВК",
   "waterplayer.config.deezer_decryption_key": "Deezer Decryption Key",
   "waterplayer.config.flowery_tts_voice": "Голос Flowery TTS",
 

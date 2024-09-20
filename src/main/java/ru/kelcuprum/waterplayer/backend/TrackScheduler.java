@@ -8,67 +8,42 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import org.apache.logging.log4j.Level;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.*;
 
-/**
- * This class schedules tracks for the audio player. It contains the queue of tracks.
- */
 public class TrackScheduler extends AudioEventAdapter {
     public boolean skiping = false;
     final AudioPlayer player;
     public final Queue<AudioTrack> queue;
     public AudioTrack lastTrack;
 
-    /**
-     * @param player The audio player this scheduler uses
-     */
     public TrackScheduler(AudioPlayer player) {
         this.player = player;
         this.queue = new LinkedList<>();
     }
-
-    /**
-     * Add the next track to queue or play right away if nothing is in the queue.
-     *
-     * @param track The track to play or add to queue.
-     */
     public void queue(AudioTrack track) {
-
-        // Calling startTrack with the noInterrupt set to true will start the track only if nothing is currently playing. If
-        // something is playing, it returns false and does nothing. In that case the player was already playing so this
-        // track goes to the queue instead.
         if (track == null) return;
-        if (!player.startTrack(track, true)) {
-            queue.offer(track);
-        }
+        if (!player.startTrack(track, true)) queue.offer(track);
     }
 
-    /**
-     * Start the next track, stopping the current one if it is playing.
-     */
     public void nextTrack() {
-        // Start the next track, regardless of if something is already playing or not. In case queue was empty, we are
-        // giving null to startTrack, which is a valid argument and will simply stop the player.
         if(getRepeatStatus() == 1 && !queue.isEmpty()) {
             AudioTrack track = player.getPlayingTrack() != null ? player.getPlayingTrack().makeClone() : lastTrack != null ? lastTrack.makeClone() : null;
-            if(track == null) WaterPlayer.log("There's nothing to add to the queue");
-            else {
-                queue.add(track.makeClone());
-            }
+            if(track == null) WaterPlayer.log("There's nothing to add to the queue", Level.DEBUG);
+            else queue.add(track.makeClone());
         }
         player.startTrack(queue.poll(), false);
         if(player.getPlayingTrack() != null) {
-            WaterPlayer.log("Starting Track: " + MusicHelper.getTitle(player.getPlayingTrack()));
+            WaterPlayer.log("----------");
+            WaterPlayer.log("Starting Track: " + (MusicHelper.isAuthorNull() ? "" : (MusicHelper.getAuthor(player.getPlayingTrack()) + " - ")) + MusicHelper.getTitle(player.getPlayingTrack()));
+            WaterPlayer.log("Address: "+player.getPlayingTrack().getInfo().uri);
             if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true) && WaterPlayer.config.getBoolean("ENABLE_NOTICE.START_TRACK", true)) {
                 if (WaterPlayer.config.getBoolean("ENABLE_NOTICE.START_TRACK.CLEAR", false))
                     AlinLib.MINECRAFT
@@ -90,12 +65,9 @@ public class TrackScheduler extends AudioEventAdapter {
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         this.lastTrack = track;
-        // Only start the next track if the end reason is suitable for it (FINISHED or LOAD_FAILED)
         if (endReason.mayStartNext) {
-            if (getRepeatStatus() == 2)
-                player.startTrack(lastTrack.makeClone(), false);
-            else
-                nextTrack();
+            if (getRepeatStatus() == 2) player.startTrack(lastTrack.makeClone(), false);
+            else nextTrack();
         }
 
     }
@@ -125,8 +97,7 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
     public void setRepeatStatus(int i){
-        if(i>2) i = 0;
-        else if(i<0) i =2;
+        i = i > 2 ? 0 : i < 0 ? 2 : i;
         WaterPlayer.config.setNumber("REPEAT_STATUS", i);
         repeatStatus = i;
     }

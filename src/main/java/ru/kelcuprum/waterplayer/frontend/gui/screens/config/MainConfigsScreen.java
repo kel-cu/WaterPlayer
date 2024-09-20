@@ -44,6 +44,11 @@ public class MainConfigsScreen {
                         .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.enable_keybind"), false).setConfig(WaterPlayer.config, "ENABLE_KEYBINDS").build())
                         .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.screem.queue_cover_show"), true).setConfig(WaterPlayer.config, "SCREEN.QUEUE_COVER_SHOW").build())
                         .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.control.enable_lyrics"), true).setConfig(WaterPlayer.config, "CONTROL.ENABLE_LYRICS").build())
+                        .addValue(new SelectorBuilder(Component.translatable("waterplayer.config.control.lyrics.type")).setList(new String[]{
+                                Component.translatable("waterplayer.config.control.lyrics.type.line").getString(),
+                                Component.translatable("waterplayer.config.control.lyrics.type.cute").getString(),
+                                Component.translatable("waterplayer.config.control.lyrics.type.none").getString()
+                        }).setConfig(WaterPlayer.config, "CONTROL.LYRICS.TYPE").setValue(0).build())
                         .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.control.modern"), true).setConfig(WaterPlayer.config, "CONTROL.MODERN").build())
                 )
                 .addWidget(new CategoryBox(Component.translatable("waterplayer.config.notice"))
@@ -64,6 +69,7 @@ public class MainConfigsScreen {
                         .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.services.vimeo"), true).setConfig(WaterPlayer.config, "ENABLE_VIMEO").build())
                         .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.services.twitch"), false).setConfig(WaterPlayer.config, "ENABLE_TWITCH").build())
                         .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.services.beam"), true).setConfig(WaterPlayer.config, "ENABLE_BEAM").build())
+                        .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.services.vk"), false).setConfig(WaterPlayer.config, "ENABLE_VK_MUSIC").build())
                 )
                 .build();
     }

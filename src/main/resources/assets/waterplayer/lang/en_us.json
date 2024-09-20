@@ -111,6 +111,10 @@
   "waterplayer.config.enable_keybind": "Key Bindings in the Menu",
   "waterplayer.config.screem.queue_cover_show": "Track Thumbnails in the Queue",
   "waterplayer.config.control.enable_lyrics": "Song Lyrics in the Control Screen",
+  "waterplayer.config.control.lyrics.type": "Lyrics Output Type",
+  "waterplayer.config.control.lyrics.type.line": "Highlight",
+  "waterplayer.config.control.lyrics.type.cute": "Cute",
+  "waterplayer.config.control.lyrics.type.none": "Not active",
   "waterplayer.config.control.modern": "Modern Style",
 
   "waterplayer.config.notice": "Notice",
@@ -131,6 +135,7 @@
   "waterplayer.config.services.vimeo": "Vimeo",
   "waterplayer.config.services.twitch": "Twitch",
   "waterplayer.config.services.beam": "Beam",
+  "waterplayer.config.services.vk": "VK Music",
 
   "waterplayer.config.services.yandex": "Yandex Music",
   "waterplayer.config.services.spotify": "Spotify",
@@ -154,6 +159,7 @@
   "waterplayer.secret.description": "After changing the data, you'll need to re-launch! Sorry...",
   "waterplayer.secret.title.tokens": "Tokens",
   "waterplayer.config.yandex_music_token": "Yandex Music Token",
+  "waterplayer.config.vk_music_token": "VK Token",
   "waterplayer.config.deezer_decryption_key": "Deezer Decryption Key",
   "waterplayer.config.flowery_tts_voice": "Flowery TTS Voice",
 

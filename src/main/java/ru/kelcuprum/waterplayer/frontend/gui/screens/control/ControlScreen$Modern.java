@@ -39,10 +39,10 @@ import static ru.kelcuprum.alinlib.gui.Colors.BLACK_ALPHA;
 import static ru.kelcuprum.alinlib.gui.Icons.*;
 import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.*;
 
-public class ModernControlScreen extends Screen {
+public class ControlScreen$Modern extends Screen {
     private final Screen parent;
 
-    public ModernControlScreen(Screen parent) {
+    public ControlScreen$Modern(Screen parent) {
         super(Component.translatable("waterplayer.control"));
         this.parent = parent;
     }
@@ -100,11 +100,11 @@ public class ModernControlScreen extends Screen {
                 .setSize(cWidth, 20).setPosition(x, y)
                 .build());
         y += 22;
-        if(WaterPlayer.config.getBoolean("EXPERIMENT.FILTERS", false)){
+        if (WaterPlayer.config.getBoolean("EXPERIMENT.FILTERS", false)) {
             String[] speed = {"0.25x", "0.5x", "0.75x", "1x", "1.5x", "2x", "2.5x", "3x", "3.5x", "4x", "4.5x", "5x"};
             List<Double> speedD = List.of(0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0);
             int pos = speedD.indexOf(WaterPlayer.player.speed);
-            if(pos < 0){
+            if (pos < 0) {
                 pos = 3;
                 WaterPlayer.player.speed = speedD.get(pos);
                 WaterPlayer.config.setNumber("CURRENT_MUSIC_SPEED", WaterPlayer.player.speed);
@@ -122,7 +122,7 @@ public class ModernControlScreen extends Screen {
             String[] pitch = {"0.25", "0.5", "0.75", "1", "1.25", "1.5", "1.75", "2"};
             List<Double> pitchD = List.of(0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0);
             int ppos = pitchD.indexOf(WaterPlayer.player.pitch);
-            if(ppos < 0){
+            if (ppos < 0) {
                 ppos = 3;
                 WaterPlayer.player.pitch = speedD.get(ppos);
                 WaterPlayer.config.setNumber("CURRENT_MUSIC_PITCH", WaterPlayer.player.pitch);
@@ -184,11 +184,11 @@ public class ModernControlScreen extends Screen {
                 .build());
         x$Buttons += 25;
         play = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control." + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause")), (e) -> {
-            WaterPlayer.player.getAudioPlayer().setPaused(!WaterPlayer.player.getAudioPlayer().isPaused());
-            e.builder.setTitle(Component.translatable("waterplayer.control." + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause")));
-            ((ButtonBuilder) e.builder).setSprite(getPlayOrPause(WaterPlayer.player.getAudioPlayer().isPaused()));
+            WaterPlayer.player.changePaused();
+            e.builder.setTitle(Component.translatable("waterplayer.control." + (WaterPlayer.player.isPaused() ? "play" : "pause")));
+            ((ButtonBuilder) e.builder).setSprite(getPlayOrPause(WaterPlayer.player.isPaused()));
         })
-                .setSprite(getPlayOrPause(WaterPlayer.player.getAudioPlayer().isPaused()))
+                .setSprite(getPlayOrPause(WaterPlayer.player.isPaused()))
                 .setSize(20, 20)
                 .setPosition(x$Buttons, y + 3)
                 .build());
@@ -422,8 +422,17 @@ public class ModernControlScreen extends Screen {
                     StringBuilder builder = new StringBuilder();
                     for (AudioLyrics.Line line : list) {
                         if (!(line.getDuration() == null)) {
+                            int type = WaterPlayer.config.getNumber("CONTROL.LYRICS.TYPE", 0).intValue();
                             Duration pos = Duration.ofMillis(track.getPosition());
-                            if ((pos.toMillis() <= line.getTimestamp().toMillis()) || (pos.toMillis() >= line.getTimestamp().toMillis() && pos.toMillis() <= line.getTimestamp().toMillis() + line.getDuration().toMillis())) {
+                            if (type == 0) {
+                                if (pos.toMillis() >= line.getTimestamp().toMillis() && pos.toMillis() <= line.getTimestamp().toMillis() + line.getDuration().toMillis())
+                                    // l
+                                    builder.append(line.getLine().replace("\r", "")).append("\n");
+                                else builder.append("§7").append(line.getLine().replace("\r", "")).append("§r\n");
+                            } else if (type == 1) {
+                                if ((pos.toMillis() <= line.getTimestamp().toMillis()) || (pos.toMillis() >= line.getTimestamp().toMillis() && pos.toMillis() <= line.getTimestamp().toMillis() + line.getDuration().toMillis()))
+                                    builder.append(line.getLine().replace("\r", "")).append("\n");
+                            } else {
                                 builder.append(line.getLine().replace("\r", "")).append("\n");
                             }
                         }

@@ -30,6 +30,7 @@ public class SecretConfigsScreen {
                 .addWidget(new MessageBox(Component.translatable("waterplayer.secret.description")))
                 .addWidget(new CategoryBox(Component.translatable("waterplayer.secret.title.tokens"))
                         .addValue(new EditBoxBuilder(Component.translatable("waterplayer.config.yandex_music_token")).setValue("").setConfig(WaterPlayer.config, "YANDEX_MUSIC_TOKEN").setSecret(true).build())
+                        .addValue(new EditBoxBuilder(Component.translatable("waterplayer.config.vk_music_token")).setValue("").setConfig(WaterPlayer.config, "VK_MUSIC_TOKEN").setSecret(true).build())
                         .addValue(new EditBoxBuilder(Component.translatable("waterplayer.config.deezer_decryption_key")).setValue("").setConfig(WaterPlayer.config, "DEEZER_DECRYPTION_KEY").setSecret(true).build())
                         .addValue(new EditBoxBuilder(Component.translatable("waterplayer.config.flowery_tts_voice")).setValue("").setConfig(WaterPlayer.config, "FLOWERY_TTS_VOICE").build())
                 )

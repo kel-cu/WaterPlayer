@@ -35,7 +35,7 @@ import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
 import ru.kelcuprum.waterplayer.backend.command.WaterPlayerCommand;
 import ru.kelcuprum.waterplayer.frontend.gui.TextureHelper;
 import ru.kelcuprum.waterplayer.frontend.gui.overlays.SubtitlesHandler;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ModernControlScreen;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen$Modern;
 import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.overlays.OverlayHandler;
@@ -115,7 +115,7 @@ public class WaterPlayer implements ClientModInitializer {
 
         ScreenEvents.KEY_PRESS.register((Screen screen, int code, int scan, int modifiers, CallbackInfoReturnable<Boolean> var5) -> {
             if (!WaterPlayer.config.getBoolean("ENABLE_KEYBINDS", false)) return;
-            if (screen instanceof TitleScreen || screen instanceof PauseScreen || screen instanceof ControlScreen || screen instanceof ModernControlScreen) {
+            if (screen instanceof TitleScreen || screen instanceof PauseScreen || screen instanceof ControlScreen || screen instanceof ControlScreen$Modern) {
                 for (KeyBind bind : keyBinds) {
                     if ((bind.key().matches(code, scan) || bind.key().matchesMouse(code)) && bind.onExecute().run()) {
                         var5.setReturnValue(true);
@@ -186,7 +186,7 @@ public class WaterPlayer implements ClientModInitializer {
                 "waterplayer.name"
         ));
         keyBinds.add(new KeyBind(key1, () -> {
-            if (!(AlinLib.MINECRAFT.screen instanceof ControlScreen || AlinLib.MINECRAFT.screen instanceof ModernControlScreen)) {
+            if (!(AlinLib.MINECRAFT.screen instanceof ControlScreen || AlinLib.MINECRAFT.screen instanceof ControlScreen$Modern)) {
                 AlinLib.MINECRAFT.setScreen(getControlScreen(AlinLib.MINECRAFT.screen));
                 return true;
             } else return false;
@@ -196,14 +196,14 @@ public class WaterPlayer implements ClientModInitializer {
             if (AlinLib.MINECRAFT.screen instanceof ControlScreen) {
                 if (AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
                 ((ControlScreen) AlinLib.MINECRAFT.screen).play.onPress();
-            } else if (AlinLib.MINECRAFT.screen instanceof ModernControlScreen) {
+            } else if (AlinLib.MINECRAFT.screen instanceof ControlScreen$Modern) {
                 if (AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
-                ((ModernControlScreen) AlinLib.MINECRAFT.screen).play.onPress();
+                ((ControlScreen$Modern) AlinLib.MINECRAFT.screen).play.onPress();
             } else {
-                player.getAudioPlayer().setPaused(!player.getAudioPlayer().isPaused());
+                player.changePaused();
             }
             if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true))
-                getToast().setMessage(Localization.getText(player.getAudioPlayer().isPaused() ? "waterplayer.message.pause" : "waterplayer.message.play"))
+                getToast().setMessage(Localization.getText(player.isPaused() ? "waterplayer.message.pause" : "waterplayer.message.play"))
                         .buildAndShow();
             return true;
         }));
@@ -232,9 +232,9 @@ public class WaterPlayer implements ClientModInitializer {
                 if (AlinLib.MINECRAFT.screen instanceof ControlScreen) {
                     if (AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
                     ((ControlScreen) AlinLib.MINECRAFT.screen).shuffle.onPress();
-                } else if (AlinLib.MINECRAFT.screen instanceof ModernControlScreen) {
+                } else if (AlinLib.MINECRAFT.screen instanceof ControlScreen$Modern) {
                     if (AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
-                    ((ModernControlScreen) AlinLib.MINECRAFT.screen).shuffle.onPress();
+                    ((ControlScreen$Modern) AlinLib.MINECRAFT.screen).shuffle.onPress();
                 } else {
                     player.getTrackScheduler().shuffle();
                 }
@@ -249,9 +249,9 @@ public class WaterPlayer implements ClientModInitializer {
             if (AlinLib.MINECRAFT.screen instanceof ControlScreen) {
                 if (AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
                 ((ControlScreen) AlinLib.MINECRAFT.screen).repeat.onPress();
-            } else if (AlinLib.MINECRAFT.screen instanceof ModernControlScreen) {
+            } else if (AlinLib.MINECRAFT.screen instanceof ControlScreen$Modern) {
                 if (AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
-                ((ModernControlScreen) AlinLib.MINECRAFT.screen).repeat.onPress();
+                ((ControlScreen$Modern) AlinLib.MINECRAFT.screen).repeat.onPress();
             } else {
                 player.getTrackScheduler().changeRepeatStatus();
             }
@@ -262,7 +262,7 @@ public class WaterPlayer implements ClientModInitializer {
             return true;
         }));
         keyBinds.add(new KeyBind(key7, () -> {
-            if (player.getAudioPlayer().getPlayingTrack() == null || AlinLib.MINECRAFT.screen instanceof ControlScreen || AlinLib.MINECRAFT.screen instanceof ModernControlScreen)
+            if (player.getAudioPlayer().getPlayingTrack() == null || AlinLib.MINECRAFT.screen instanceof ControlScreen || AlinLib.MINECRAFT.screen instanceof ControlScreen$Modern)
                 return false;
             int current = config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue() + config.getNumber("SELECT_MUSIC_VOLUME", 1).intValue();
             if (current >= 100) current = 100;
@@ -272,7 +272,7 @@ public class WaterPlayer implements ClientModInitializer {
             return true;
         }));
         keyBinds.add(new KeyBind(key8, () -> {
-            if (player.getAudioPlayer().getPlayingTrack() == null || AlinLib.MINECRAFT.screen instanceof ControlScreen || AlinLib.MINECRAFT.screen instanceof ModernControlScreen)
+            if (player.getAudioPlayer().getPlayingTrack() == null || AlinLib.MINECRAFT.screen instanceof ControlScreen || AlinLib.MINECRAFT.screen instanceof ControlScreen$Modern)
                 return false;
             int current = config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue() - config.getNumber("SELECT_MUSIC_VOLUME", 1).intValue();
             if (current <= 0) current = 0;
@@ -286,7 +286,7 @@ public class WaterPlayer implements ClientModInitializer {
     //
 
     public static Screen getControlScreen(Screen parent){
-        return WaterPlayer.config.getBoolean("CONTROL.MODERN", true) ? new ModernControlScreen(parent) : new ControlScreen(parent);
+        return WaterPlayer.config.getBoolean("CONTROL.MODERN", true) ? new ControlScreen$Modern(parent) : new ControlScreen(parent);
     }
 
     // Logger
