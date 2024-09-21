@@ -133,6 +133,7 @@ public class MusicPlayer {
         }
         if (!config.getString("VK_MUSIC_TOKEN", "").isBlank() && config.getBoolean("ENABLE_VK_MUSIC", false)) {
             //#if WALTER == 1
+            //$$ config.setBoolean("ENABLE_VK_MUSIC", false);
             //$$ Util.getPlatform().openUri("https://www.youtube.com/watch?v=PkT0PJwy8mI");
             //$$ throw new RuntimeException("Don't use VK Group products, please, I don't want you to eat shit.");
             //#else
