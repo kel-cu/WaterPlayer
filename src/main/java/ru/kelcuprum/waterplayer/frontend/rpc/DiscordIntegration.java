@@ -22,8 +22,8 @@ import java.util.TimerTask;
 public class DiscordIntegration {
     public static IPCClient client;
     public static RichPresence lastPresence;
-    public static boolean CONNECTED = false;
-    public static boolean EMPTY = true;
+    public static boolean connected = false;
+    public static boolean empty = true;
     private static final Timer TIMER = new Timer();
     private static String lastException;
 
@@ -42,7 +42,7 @@ public class DiscordIntegration {
                                 .setDetails("There was an error")
                                 .setState("Check the logs & send a report")
                                 .setLargeImage("https://wf.kelcu.ru/mods/waterplayer/icons/seadrive.gif");
-                        if (CONNECTED) send(presence.build());
+                        if (connected) send(presence.build());
                     }
                 }
             }
@@ -66,7 +66,7 @@ public class DiscordIntegration {
     }
 
     public void exitApplication() {
-        if (CONNECTED) client.close();
+        if (connected) client.close();
     }
 
     public void setupListener() {
@@ -99,19 +99,19 @@ public class DiscordIntegration {
             @Override
             public void onReady(IPCClient client) {
                 WaterPlayer.log("The mod has been connected to Discord", Level.DEBUG);
-                CONNECTED = true;
+                connected = true;
             }
 
             @Override
             public void onClose(IPCClient ipcClient, JsonObject jsonObject) {
-                CONNECTED = false;
+                connected = false;
             }
 
             @Override
             public void onDisconnect(IPCClient ipcClient, Throwable throwable) {
                 WaterPlayer.log("The mod has been pulled from Discord", Level.DEBUG);
                 WaterPlayer.log(String.format("Reason: %s", throwable.getLocalizedMessage()), Level.DEBUG);
-                CONNECTED = false;
+                connected = false;
             }
         });
     }
@@ -177,15 +177,15 @@ public class DiscordIntegration {
     }
 
     public void send(RichPresence presence) {
-        if (!EMPTY && CONNECTED && presence == null) {
+        if (!empty && connected && presence == null) {
             if (lastPresence != null) exitApplication();
             lastPresence = null;
-            EMPTY = true;
+            empty = true;
         } else if (presence != null && (lastPresence == null || (!lastPresence.toJson().toString().equalsIgnoreCase(presence.toJson().toString())))) {
-            if (EMPTY) registerApplication();
-            EMPTY = false;
+            if (empty) registerApplication();
+            empty = false;
             try {
-                if (CONNECTED) client.sendRichPresence(presence);
+                if (connected) client.sendRichPresence(presence);
                 lastPresence = presence;
             } catch (Exception ex) {
                 WaterPlayer.log(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage(), Level.ERROR);
