@@ -113,7 +113,7 @@
   "waterplayer.config.control.enable_lyrics": "Song Lyrics in the Control Screen",
   "waterplayer.config.control.lyrics.type": "Lyrics Output Type",
   "waterplayer.config.control.lyrics.type.line": "Highlight",
-  "waterplayer.config.control.lyrics.type.cute": "Cute",
+  "waterplayer.config.control.lyrics.type.cute": "Cut",
   "waterplayer.config.control.lyrics.type.none": "Not active",
   "waterplayer.config.control.modern": "Modern Style",
 
