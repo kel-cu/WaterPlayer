@@ -16,6 +16,7 @@ import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -115,7 +116,7 @@ public class DiscordIntegration {
             }
         });
     }
-
+    public HashMap<String, JsonObject> urls = new HashMap<>();
     public void update() {
         AudioTrack track = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
         if (track == null || !WaterPlayer.config.getBoolean("DISCORD", false)) send(null);
@@ -128,7 +129,10 @@ public class DiscordIntegration {
                 else if(author.split(";").length > 1) author = author.split(";")[0];
                 else if(author.split("/").length > 1) author = author.split("/")[0];
                 try{
-                    JsonObject authorInfo = WebAPI.getJsonObject(String.format("https://wplayer.ru/v2/info?author=%1$s&album=%2$s", uriEncode(author), uriEncode(MusicHelper.getTitle(track))));
+                    JsonObject authorInfo;
+                    String url = String.format("https://wplayer.ru/v2/info?author=%1$s&album=%2$s", uriEncode(author), uriEncode(MusicHelper.getTitle(track)));
+                    if(urls.containsKey(url)) authorInfo = urls.get(url);
+                    else authorInfo = WebAPI.getJsonObject(url);
                     if(authorInfo.has("error")) throw new RuntimeException(authorInfo.getAsJsonObject("error").get("message").getAsString());
                     else if(authorInfo.getAsJsonObject("track").has("artwork"))
                         icon = authorInfo.getAsJsonObject("track").get("artwork").getAsString();
@@ -149,7 +153,10 @@ public class DiscordIntegration {
                     else if(author.split(";").length > 1) author = author.split(";")[0];
                     else if(author.split("/").length > 1) author = author.split("/")[0];
                     try{
-                        JsonObject authorInfo = WebAPI.getJsonObject(String.format("https://wplayer.ru/v2/info?author=%1$s", uriEncode(author)));
+                        JsonObject authorInfo;
+                        String url = String.format("https://wplayer.ru/v2/info?author=%1$s", uriEncode(author));
+                        if(urls.containsKey(url)) authorInfo = urls.get(url);
+                        else authorInfo = WebAPI.getJsonObject(url);
                         if(authorInfo.has("error")) throw new RuntimeException(authorInfo.getAsJsonObject("error").get("message").getAsString());
                         else if(authorInfo.getAsJsonObject("author").has("artwork"))
                             builder.setSmallImage(authorInfo.getAsJsonObject("author").get("artwork").getAsString(), MusicHelper.getAuthor(track));
