@@ -211,7 +211,6 @@ public class DiscordIntegration {
             case "Circus Hop", "Circus Hop [TW]" ->
                     builder.setLargeImage("https://wf.kelcu.ru/mods/waterplayer/icons/clownfish.png", MusicHelper.getServiceName(MusicHelper.getService(track)).getString());
         }
-        ;
     }
     protected String uriEncode(String uri){
         return URLEncoder.encode(uri, StandardCharsets.UTF_8);
