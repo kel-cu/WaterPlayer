@@ -73,9 +73,8 @@ public class ControlScreen$Modern extends Screen {
     public void initControlPanel() {
         int cWidth = controlPanelWidth - 10;
         int x = 10;
-        int y = 10;
-        addRenderableWidget(new TextBox(x, y, cWidth, 20, title, true));
-        y += 22;
+        int y = 35;
+        addRenderableWidget(new TextBox(5, 5, cWidth, 20, title, true));
         addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.load.url.copy"), (s) -> editBox.setValue(WaterPlayer.config.getString("LAST_REQUEST_MUSIC", "")))
                 .setSprite(RESET)
                 .setSize(20, 20)
@@ -291,7 +290,9 @@ public class ControlScreen$Modern extends Screen {
     public void renderControlPanel(GuiGraphics guiGraphics) {
         int x = 5;
         int y = 5;
-        guiGraphics.fill(x, y, x + controlPanelWidth, height - 50, BLACK_ALPHA);
+
+        guiGraphics.fill(x, y+25, x + controlPanelWidth, height - 50, BLACK_ALPHA);
+        guiGraphics.fill(x, y, x + controlPanelWidth, 25, BLACK_ALPHA);
     }
 
     public void renderPlayerPanel(GuiGraphics guiGraphics) {

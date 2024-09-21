@@ -60,7 +60,14 @@ public class AdditionalScreen {
                             })
             );
         }
-        builder.addWidget(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.discord"), false).setConfig(WaterPlayer.config, "DISCORD"));
+        builder.addWidget(new CategoryBox(Component.translatable("waterplayer.config.discord"))
+                .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.discord.enable"), false).setConfig(WaterPlayer.config, "DISCORD"))
+                .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.discord.service"), true).setConfig(WaterPlayer.config, "DISCORD.SERVICE"))
+                .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.discord.author_avatar"), true).setConfig(WaterPlayer.config, "DISCORD.AUTHOR_AVATAR"))
+                .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.discord.time"), true).setConfig(WaterPlayer.config, "DISCORD.TIME"))
+                .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.discord.button"), true).setConfig(WaterPlayer.config, "DISCORD.BUTTON"))
+                .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.discord.hide_in_pause"), false).setConfig(WaterPlayer.config, "DISCORD.HIDE_IN_PAUSE"))
+        );
         builder.addWidget(new CategoryBox(Component.translatable("waterplayer.cache"))
                 .addValue(new ButtonBuilder(Component.translatable("waterplayer.cache.icons.size"), Component.literal(CommonUtils.getParsedFileSize(new File(WaterPlayer.getPath()+"/textures")))).setActive(false))
                 .addValue(new ButtonBuilder(Component.translatable("waterplayer.cache.icons.reset.tracks")).setOnPress((s) -> {

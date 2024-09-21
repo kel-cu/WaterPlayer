@@ -183,6 +183,12 @@
   "waterplayer.additional": "Additional",
   "waterplayer.config.speaker": "Output",
   "waterplayer.config.discord": "Discord Integration",
+  "waterplayer.config.discord.enable": "Enable",
+  "waterplayer.config.discord.service": "Show Service",
+  "waterplayer.config.discord.author_avatar": "Show Author Avatar",
+  "waterplayer.config.discord.time": "Show Time",
+  "waterplayer.config.discord.button": "Enable Button",
+  "waterplayer.config.discord.hide_in_pause": "Hide Paused Status",
 
   "waterplayer.cache": "Cache",
   "waterplayer.cache.icons.size": "Icon cache size",

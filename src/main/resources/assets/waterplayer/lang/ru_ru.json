@@ -183,6 +183,12 @@
   "waterplayer.additional": "Дополнительно",
   "waterplayer.config.speaker": "Вывод звука",
   "waterplayer.config.discord": "Интеграция Discord",
+  "waterplayer.config.discord.enable": "Включить",
+  "waterplayer.config.discord.service": "Показывать сервис",
+  "waterplayer.config.discord.author_avatar": "Показывать аватарку автора",
+  "waterplayer.config.discord.time": "Показывать время",
+  "waterplayer.config.discord.button": "Включить кнопки",
+  "waterplayer.config.discord.hide_in_pause": "Скрыть при паузе",
 
   "waterplayer.cache": "Кэш",
   "waterplayer.cache.icons.size": "Размер кэша иконок",

@@ -119,7 +119,7 @@ public class DiscordIntegration {
     public HashMap<String, JsonObject> urls = new HashMap<>();
     public void update() {
         AudioTrack track = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
-        if (track == null || !WaterPlayer.config.getBoolean("DISCORD", false)) send(null);
+        if (track == null || !WaterPlayer.config.getBoolean("DISCORD", false) || (WaterPlayer.player.getAudioPlayer().isPaused() && WaterPlayer.config.getBoolean("DISCORD.HIDE_IN_PAUSE", false))) send(null);
         else {
             RichPresence.Builder builder = new RichPresence.Builder().setActivityType(ActivityType.Listening);
             String icon = MusicHelper.isFile() ? "file" : (track.getInfo().artworkUrl == null || track.getInfo().artworkUrl.isBlank()) ? "no_icon" : track.getInfo().artworkUrl;
@@ -143,14 +143,14 @@ public class DiscordIntegration {
                     WaterPlayer.log(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage(), Level.DEBUG);
                 }
             }
-            builder.setLargeImage(icon, MusicHelper.getServiceName(MusicHelper.getService(track)).getString())
+            builder.setLargeImage(icon, WaterPlayer.config.getBoolean("DISCORD.SERVICE", true) ? MusicHelper.getServiceName(MusicHelper.getService(track)).getString() : "")
                     .setDetails(MusicHelper.getTitle())
                     .setState(MusicHelper.getAuthor());
             getYonKaGorMoment(track, builder);
             long start = System.currentTimeMillis() - MusicHelper.getPosition();
             if (WaterPlayer.player.getAudioPlayer().isPaused()) builder.setSmallImage("paused");
             else {
-                if (!MusicHelper.isAuthorNull(track)) {
+                if (!MusicHelper.isAuthorNull(track) && WaterPlayer.config.getBoolean("DISCORD.AUTHOR_AVATAR", true)) {
                     String author = MusicHelper.getAuthor(track);
                     if(author.split(",").length > 1) author = author.split(",")[0];
                     else if(author.split(";").length > 1) author = author.split(";")[0];
@@ -170,10 +170,12 @@ public class DiscordIntegration {
                         WaterPlayer.log(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage(), Level.DEBUG);
                     }
                 }
-                builder.setStartTimestamp(parseSeconds(start));
-                if (!MusicHelper.getIsLive()) builder.setEndTimestamp(parseSeconds(start + MusicHelper.getDuration()));
+                if(WaterPlayer.config.getBoolean("DISCORD.TIME", true)){
+                    builder.setStartTimestamp(parseSeconds(start));
+                    if (!MusicHelper.getIsLive()) builder.setEndTimestamp(parseSeconds(start + MusicHelper.getDuration()));
+                }
             }
-            if (!MusicHelper.isFile(track)) {
+            if (!MusicHelper.isFile(track) && WaterPlayer.config.getBoolean("DISCORD.BUTTON", true)) {
                 JsonArray buttons = new JsonArray();
                 JsonObject button = new JsonObject();
                 button.addProperty("label", MusicHelper.getServiceName(MusicHelper.getService(track)).getString());
