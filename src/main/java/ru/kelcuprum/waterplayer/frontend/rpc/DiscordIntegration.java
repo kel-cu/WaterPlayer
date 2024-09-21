@@ -10,6 +10,7 @@ import com.jagrosh.discordipc.entities.RichPresence;
 import com.jagrosh.discordipc.entities.User;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import org.apache.logging.log4j.Level;
+import ru.kelcuprum.alinlib.WebAPI;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
@@ -126,7 +127,14 @@ public class DiscordIntegration {
                 if(author.split(",").length > 1) author = author.split(",")[0];
                 else if(author.split(";").length > 1) author = author.split(";")[0];
                 else if(author.split("/").length > 1) author = author.split("/")[0];
-                icon = String.format("https://api.waterplayer.ru/v2/artwork?author=%1$s&album=%2$s", uriEncode(author), uriEncode(MusicHelper.getTitle(track)));
+                try{
+                    JsonObject authorInfo = WebAPI.getJsonObject(String.format("https://wplayer.ru/v2/info?author=%1$s&album=%2$s", uriEncode(author), uriEncode(MusicHelper.getTitle(track))));
+                    if(authorInfo.has("error")) throw new RuntimeException(authorInfo.getAsJsonObject("error").get("message").getAsString());
+                    else if(authorInfo.getAsJsonObject("track").has("artwork"))
+                        icon = authorInfo.getAsJsonObject("track").get("artwork").getAsString();
+                } catch (Exception ex){
+                    WaterPlayer.log(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage(), Level.DEBUG);
+                }
             }
             builder.setLargeImage(icon, MusicHelper.getServiceName(MusicHelper.getService(track)).getString())
                     .setDetails(MusicHelper.getTitle())
@@ -136,12 +144,18 @@ public class DiscordIntegration {
             if (WaterPlayer.player.getAudioPlayer().isPaused()) builder.setSmallImage("paused");
             else {
                 if (!MusicHelper.isAuthorNull(track)) {
-
                     String author = MusicHelper.getAuthor(track);
                     if(author.split(",").length > 1) author = author.split(",")[0];
                     else if(author.split(";").length > 1) author = author.split(";")[0];
                     else if(author.split("/").length > 1) author = author.split("/")[0];
-                    builder.setSmallImage(String.format("https://wplayer.ru/v2/artwork?author=%1$s", uriEncode(author)), MusicHelper.getAuthor(track));
+                    try{
+                        JsonObject authorInfo = WebAPI.getJsonObject(String.format("https://wplayer.ru/v2/info?author=%1$s", uriEncode(author)));
+                        if(authorInfo.has("error")) throw new RuntimeException(authorInfo.getAsJsonObject("error").get("message").getAsString());
+                        else if(authorInfo.getAsJsonObject("author").has("artwork"))
+                            builder.setSmallImage(authorInfo.getAsJsonObject("author").get("artwork").getAsString(), MusicHelper.getAuthor(track));
+                    } catch (Exception ex){
+                        WaterPlayer.log(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage(), Level.DEBUG);
+                    }
                 }
                 builder.setStartTimestamp(parseSeconds(start));
                 if (!MusicHelper.getIsLive()) builder.setEndTimestamp(parseSeconds(start + MusicHelper.getDuration()));

@@ -426,7 +426,6 @@ public class ControlScreen$Modern extends Screen {
                             Duration pos = Duration.ofMillis(track.getPosition());
                             if (type == 0) {
                                 if (pos.toMillis() >= line.getTimestamp().toMillis() && pos.toMillis() <= line.getTimestamp().toMillis() + line.getDuration().toMillis())
-                                    // l
                                     builder.append(line.getLine().replace("\r", "")).append("\n");
                                 else builder.append("§7").append(line.getLine().replace("\r", "")).append("§r\n");
                             } else if (type == 1) {
