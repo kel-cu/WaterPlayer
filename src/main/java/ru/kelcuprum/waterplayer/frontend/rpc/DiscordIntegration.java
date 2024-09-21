@@ -132,7 +132,10 @@ public class DiscordIntegration {
                     JsonObject authorInfo;
                     String url = String.format("https://wplayer.ru/v2/info?author=%1$s&album=%2$s", uriEncode(author), uriEncode(MusicHelper.getTitle(track)));
                     if(urls.containsKey(url)) authorInfo = urls.get(url);
-                    else authorInfo = WebAPI.getJsonObject(url);
+                    else {
+                        authorInfo = WebAPI.getJsonObject(url);
+                        urls.put(url, authorInfo);
+                    }
                     if(authorInfo.has("error")) throw new RuntimeException(authorInfo.getAsJsonObject("error").get("message").getAsString());
                     else if(authorInfo.getAsJsonObject("track").has("artwork"))
                         icon = authorInfo.getAsJsonObject("track").get("artwork").getAsString();
@@ -155,7 +158,10 @@ public class DiscordIntegration {
                     try{
                         JsonObject authorInfo;
                         String url = String.format("https://wplayer.ru/v2/info?author=%1$s", uriEncode(author));
-                        if(urls.containsKey(url)) authorInfo = urls.get(url);
+                        if(urls.containsKey(url)) {
+                            authorInfo = WebAPI.getJsonObject(url);
+                            urls.put(url, authorInfo);
+                        }
                         else authorInfo = WebAPI.getJsonObject(url);
                         if(authorInfo.has("error")) throw new RuntimeException(authorInfo.getAsJsonObject("error").get("message").getAsString());
                         else if(authorInfo.getAsJsonObject("author").has("artwork"))
