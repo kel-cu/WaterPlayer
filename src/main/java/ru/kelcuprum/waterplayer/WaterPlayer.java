@@ -202,7 +202,7 @@ public class WaterPlayer implements ClientModInitializer {
             } else {
                 player.changePaused();
             }
-            if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true))
+            if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", false))
                 getToast().setMessage(Localization.getText(player.isPaused() ? "waterplayer.message.pause" : "waterplayer.message.play"))
                         .buildAndShow();
             return true;
@@ -212,7 +212,7 @@ public class WaterPlayer implements ClientModInitializer {
             if (player.getTrackScheduler().queue.isEmpty() && player.getAudioPlayer().getPlayingTrack() == null)
                 return false;
             player.getTrackScheduler().nextTrack();
-            if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true))
+            if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", false))
                 getToast().setMessage(Localization.getText("waterplayer.message.skip"))
                         .buildAndShow();
             return true;
@@ -221,7 +221,7 @@ public class WaterPlayer implements ClientModInitializer {
             player.getTrackScheduler().skiping = false;
             if (!player.getTrackScheduler().queue.isEmpty()) {
                 player.getTrackScheduler().queue.clear();
-                if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true))
+                if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", false))
                     getToast().setMessage(Localization.getText("waterplayer.message.reset"))
                             .buildAndShow();
             }
@@ -238,7 +238,7 @@ public class WaterPlayer implements ClientModInitializer {
                 } else {
                     player.getTrackScheduler().shuffle();
                 }
-                if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true))
+                if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", false))
                     getToast().setMessage(Localization.getText("waterplayer.message.shuffle"))
                             .buildAndShow();
             }
@@ -255,7 +255,7 @@ public class WaterPlayer implements ClientModInitializer {
             } else {
                 player.getTrackScheduler().changeRepeatStatus();
             }
-            if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true))
+            if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", false))
                 getToast().setIcon(player.getTrackScheduler().getRepeatIcon())
                         .setMessage(Localization.getText(player.getTrackScheduler().getRepeatStatus() == 0 ? "waterplayer.message.repeat.no" : player.getTrackScheduler().getRepeatStatus() == 1 ? "waterplayer.message.repeat" : "waterplayer.message.repeat.one"))
                         .buildAndShow();

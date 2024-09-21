@@ -44,15 +44,7 @@ public class TrackScheduler extends AudioEventAdapter {
             WaterPlayer.log("----------");
             WaterPlayer.log("Starting Track: " + (MusicHelper.isAuthorNull() ? "" : (MusicHelper.getAuthor(player.getPlayingTrack()) + " - ")) + MusicHelper.getTitle(player.getPlayingTrack()));
             WaterPlayer.log("Address: "+player.getPlayingTrack().getInfo().uri);
-            if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", true) && WaterPlayer.config.getBoolean("ENABLE_NOTICE.START_TRACK", true)) {
-                if (WaterPlayer.config.getBoolean("ENABLE_NOTICE.START_TRACK.CLEAR", false))
-                    AlinLib.MINECRAFT
-                                        //#if MC >= 12102
-                                        .getToastManager()
-                                //#elseif MC < 12102
-                                //$$.getToasts()
-                                //#endif
-                        .clear();
+            if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", false) && WaterPlayer.config.getBoolean("ENABLE_NOTICE.START_TRACK", false)) {
                 ToastBuilder toast = WaterPlayer.getToast().setTitle(MusicHelper.isAuthorNull(player.getPlayingTrack()) ? Component.translatable("waterplayer.name") : Component.literal(MusicHelper.getAuthor(player.getPlayingTrack())))
                         .setMessage(Component.literal(MusicHelper.getTitle(player.getPlayingTrack())));
                 if (MusicHelper.getAuthor(player.getPlayingTrack()).equals("YonKaGor")) toast.setIcon(getYonKaGorMoment(player.getPlayingTrack()));
