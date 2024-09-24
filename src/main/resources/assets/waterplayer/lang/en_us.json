@@ -38,7 +38,7 @@
 
   "waterplayer.playlist.create.illegal_characters": "Illegal Characters!",
 
-  "waterplayer.playlist.upload": "Share",
+  "waterplayer.playlist.upload": "Publish a playlist",
   "waterplayer.playlist.upload.unavailable": "Server unavailable",
   "waterplayer.playlist.copy_link": "Copy Link",
   "waterplayer.playlist.uploaded": "Playlist link is copied to clipboard",

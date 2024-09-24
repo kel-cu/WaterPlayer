@@ -26,7 +26,7 @@
   "waterplayer.playlist.create": "Создать/Загрузить плейлист",
   "waterplayer.playlist.create.filename": "Название/Ссылка плейлиста:",
   "waterplayer.playlist.reload": "Перезагрузить",
-  "waterplayer.playlist.play": "Загрузить плейлист",
+  "waterplayer.playlist.play": "Воспроизвести плейлист",
   "waterplayer.playlist.description": "Воспроизвести: playlist:%s",
   "waterplayer.playlist.remove": "Удалить плейлист",
   "waterplayer.playlist.add": "Добавить ссылку",
@@ -39,7 +39,7 @@
 
   "waterplayer.playlist.create.illegal_characters": "Некорректные символы!",
 
-  "waterplayer.playlist.upload": "Поделится",
+  "waterplayer.playlist.upload": "Опубликовать плейлист",
   "waterplayer.playlist.upload.unavailable": "Сервер недоступен",
   "waterplayer.playlist.copy_link": "Скопировать ссылку",
   "waterplayer.playlist.uploaded": "Ссылка на плейлист скопирована в буфер обмена",
