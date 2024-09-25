@@ -16,7 +16,10 @@ import net.minecraft.world.item.Items;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.PointerBuffer;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.system.MemoryStack;
+import org.lwjgl.util.tinyfd.TinyFileDialogs;
 import org.meteordev.starscript.Starscript;
 import org.meteordev.starscript.value.Value;
 import org.meteordev.starscript.value.ValueMap;
@@ -35,13 +38,17 @@ import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
 import ru.kelcuprum.waterplayer.frontend.gui.TextureHelper;
 import ru.kelcuprum.waterplayer.frontend.gui.overlays.SubtitlesHandler;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen$Modern;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.editor.TrackEditorScreen;
 import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.overlays.OverlayHandler;
 import ru.kelcuprum.waterplayer.frontend.rpc.DiscordIntegration;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static ru.kelcuprum.alinlib.gui.Icons.DONT;
 
 public class WaterPlayer implements ClientModInitializer {
     public static Config pathConfig = new Config("config/WaterPlayer/path.json");
@@ -123,6 +130,35 @@ public class WaterPlayer implements ClientModInitializer {
                 }
             }
         });
+    }
+
+    public static void openTrackEditor(){
+        MemoryStack stack = MemoryStack.stackPush();
+        PointerBuffer filters = stack.mallocPointer(8);
+        filters.put(stack.UTF8("*.mp3"));
+        filters.put(stack.UTF8("*.mp4"));
+        filters.put(stack.UTF8("*.ogg"));
+        filters.put(stack.UTF8("*.flac"));
+        filters.put(stack.UTF8("*.wav"));
+        filters.put(stack.UTF8("*.aif"));
+        filters.put(stack.UTF8("*.dsf"));
+        filters.put(stack.UTF8("*.wma"));
+
+        filters.flip();
+        File defaultPath = new File(getPath()).getAbsoluteFile();
+        String defaultString = defaultPath.getAbsolutePath();
+        if(defaultPath.isDirectory() && !defaultString.endsWith(File.separator)){
+            defaultString += File.separator;
+        }
+
+        String result = TinyFileDialogs.tinyfd_openFileDialog(Component.translatable("waterplayer.editor.selector").getString(), defaultString, filters, Component.translatable("waterplayer.editor.selector.filter_description").getString(), false);
+        if(result == null) return;
+        File file = new File(result);
+        if(file.exists()) openTrackEditor(file);
+        else WaterPlayer.getToast().setIcon(DONT).setType(ToastBuilder.Type.ERROR).setMessage(Component.translatable("waterplayer.editor.file_not_exist")).buildAndShow();
+    }
+    public static void openTrackEditor(File file){
+        AlinLib.MINECRAFT.setScreen(new TrackEditorScreen(AlinLib.MINECRAFT.screen, file));
     }
 
     public static String getTimestamp(long milliseconds) {

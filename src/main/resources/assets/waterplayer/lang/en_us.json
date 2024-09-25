@@ -237,6 +237,21 @@
   "waterplayer.search.button": "Find",
   "waterplayer.search.not_found": "Not Found :(",
 
+  "waterplayer.editor": "Audio Editor",
+  "waterplayer.editor.file": "File: %s",
+  "waterplayer.editor.selector": "Please choose a Audio File",
+  "waterplayer.editor.selector.icon": "Please choose a Audio Artwork",
+  "waterplayer.editor.selector.icon.filter_description": "Audio Artwork",
+  "waterplayer.editor.selector.lyrics": "Please choose a Lyrics",
+  "waterplayer.editor.selector.lyrics.filter_description": "Lyrics",
+  "waterplayer.editor.selector.filter_description": "Audio File",
+  "waterplayer.editor.lyrics": "Lyrics",
+  "waterplayer.editor.lyrics.no": "No Lyrics?",
+  "waterplayer.editor.save": "Save Audio File",
+  "waterplayer.editor.upload_text": "To load text, drag and drop the text file",
+  "waterplayer.editor.error": "Oops... Error :(",
+  "waterplayer.editor.dont_open": "Couldn't open the file",
+
 
   "waterplayer.web.what_data_is_sent": "What kind of data is Kel getting?",
 

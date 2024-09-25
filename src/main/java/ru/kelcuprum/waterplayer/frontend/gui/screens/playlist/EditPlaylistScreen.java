@@ -232,17 +232,13 @@ public class EditPlaylistScreen extends Screen {
     //#if MC >=12002
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
         boolean scr = super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
-        if (!scr && scroller != null) {
-            scr = scroller.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
-        }
+        if (!scr && scroller != null) scr = scroller.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
         return scr;
     }
     //#elseif MC < 12002
     //$$ public boolean mouseScrolled(double mouseX, double mouseY, double scrollY) {
     //$$     boolean scr = super.mouseScrolled(mouseX, mouseY, scrollY);
-    //$$     if (!scr && scroller != null) {
-    //$$         scr = scroller.mouseScrolled(mouseX, mouseY, scrollY);
-    //$$     }
+    //$$     if (!scr && scroller != null) scr = scroller.mouseScrolled(mouseX, mouseY, scrollY);
     //$$     return scr;
     //$$ }
     //#endif

@@ -123,7 +123,21 @@ public class TextureHelper {
             return FILE_ICON;
         }
     }
-
+    public static void removeTexture$File(File file){
+        String id = formatUrls("local_"+file.getAbsolutePath());
+        if(urlsTextures$file.containsKey(file))
+            urlsTextures$file.remove(file);
+        if(resourceLocationMap$file.containsKey(file))
+            resourceLocationMap$file.remove(file);
+        if(urls$file.containsKey(file))
+            urls$file.remove(file);
+        File fileIcon = getTextureFile(id);
+        if(fileIcon.exists()) fileIcon.delete();
+        JsonObject data = new JsonObject();
+        data.addProperty("url", file.toPath().toString());
+        data.addProperty("id", id);
+        if (map.contains(data)) map.remove(data);
+    }
     @Async.Execute
     public static void registerTexture$File(File file, String id, TextureManager textureManager, ResourceLocation textureId) {
         WaterPlayer.log(String.format("REGISTER: %s", file.toPath()), Level.DEBUG);

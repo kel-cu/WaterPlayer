@@ -232,6 +232,21 @@
   "waterplayer.search.not_found": "Ничего не найдено :(",
 
 
+  "waterplayer.editor": "Редактор аудио",
+  "waterplayer.editor.file": "Файл: %s",
+  "waterplayer.editor.selector": "Пожалуйста, выберете аудиофайл",
+  "waterplayer.editor.selector.filter_description": "Аудиофайл",
+  "waterplayer.editor.selector.icon": "Пожалуйста, выберете обложку",
+  "waterplayer.editor.selector.icon.filter_description": "Обложка",
+  "waterplayer.editor.selector.lyrics": "Пожалуйста, выберете текст",
+  "waterplayer.editor.selector.lyrics.filter_description": "Текст",
+  "waterplayer.editor.lyrics": "Текст",
+  "waterplayer.editor.lyrics.no": "а вот текста нет :)",
+  "waterplayer.editor.save": "Сохранить аудиофайл",
+  "waterplayer.editor.upload_text": "Чтобы загрузить текст, перетащите его сюда",
+  "waterplayer.editor.error": "Ой... Ошибка :(",
+  "waterplayer.editor.dont_open": "Не удалось открыть файл",
+
   "waterplayer.web.what_data_is_sent": "Какие данные получает Кел?",
 
   "modmenu.descriptionTranslation.waterplayer": "Встроенный в клиент музыкальный интернет-плеер."

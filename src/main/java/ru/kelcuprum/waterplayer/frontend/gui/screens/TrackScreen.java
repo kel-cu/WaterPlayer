@@ -118,7 +118,8 @@ public class TrackScreen extends Screen {
             }).setWidth(componentSize / 2 - 2).setPosition(x, y).build());
         }
         backButton = (Button) addRenderableWidget(new ButtonBuilder(CommonComponents.GUI_BACK, (huy) -> onClose()).setWidth(track.getInfo().isStream ? componentSize : componentSize / 2 - 2).setPosition(track.getInfo().isStream ? x : x + componentSize / 2 + 2, y).build());
-
+        y+=25;
+        if(MusicHelper.isFile(track)) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.editor"), (huy) -> WaterPlayer.openTrackEditor(new File(track.getInfo().uri))).setWidth(componentSize).build()).setPosition(x, y);
         int textY = height / 2 - 15 - iconSize + 5;
         addRenderableWidget(new TextBox(x + iconSize + 5, textY, componentSize - (iconSize + 10), font.lineHeight, Component.literal(MusicHelper.getTitle(track)), false));
         textY += (font.lineHeight + 5);
