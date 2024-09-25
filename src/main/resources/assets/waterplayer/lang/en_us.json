@@ -35,6 +35,7 @@
   "waterplayer.playlist.tracks": "Tracks",
   "waterplayer.playlist.save": "Save Playlist",
   "waterplayer.playlist.edit_button": "Edit Playlist",
+  "waterplayer.playlist.is_empty": "<--- HEY! You have an empty playlist! Fix it!",
 
   "waterplayer.playlist.create.illegal_characters": "Illegal Characters!",
 

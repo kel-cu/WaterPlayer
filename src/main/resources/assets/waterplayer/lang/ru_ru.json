@@ -36,6 +36,7 @@
   "waterplayer.playlist.tracks": "Треки",
   "waterplayer.playlist.save": "Сохранить плейлист",
   "waterplayer.playlist.edit_button": "Редактировать плейлист",
+  "waterplayer.playlist.is_empty": "<--- ХЕЙ! У вас пустой плейлист! Исправьте это!",
 
   "waterplayer.playlist.create.illegal_characters": "Некорректные символы!",
 

@@ -75,8 +75,8 @@ public class TrackScreen extends Screen {
         if (showPlaylist) {
             initPlaylist();
         } else if (showLyrics) {
-            addRenderableWidget(new TextBox(5, 15, lyricsSize - 10, 9, Localization.getText("waterplayer.track.lyrics.title"), true));
-            lyricsBox = addRenderableWidget(new LyricsBox(5, 40, lyricsSize - 10, height - (lyricsEnable ? 95 : 70), Component.empty())).setLyrics(Component.literal(lyricsEnable ? lyrics.getText() != null ? lyrics.getText().replace("\r", "") : "404: Not found" : "404: Not found"));
+            addRenderableWidget(new TextBox(5, 5, lyricsSize - 10, 20, Localization.getText("waterplayer.track.lyrics.title"), true));
+            lyricsBox = addRenderableWidget(new LyricsBox(10, 35, lyricsSize - 20, height - (lyricsEnable ? 95 : 70), Component.empty())).setLyrics(Component.literal(lyricsEnable ? lyrics.getText() != null ? lyrics.getText().replace("\r", "") : "404: Not found" : "404: Not found"));
             if(lyricsEnable) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.track.lyrics.copy"), (onPress) -> {
                 AlinLib.MINECRAFT.keyboardHandler.setClipboard(lyrics.getText() == null ? "" : lyrics.getText());
                 WaterPlayer.getToast().setMessage(Component.translatable("waterplayer.track.lyrics.copy.toast")).buildAndShow();
@@ -207,7 +207,10 @@ public class TrackScreen extends Screen {
         //$$ public void renderBackground(GuiGraphics guiGraphics) {
         //$$         super.renderBackground(guiGraphics);
         //#endif
-        if (showLyrics || showPlaylist) guiGraphics.fill(0, 0, lyricsSize, height, Colors.BLACK_ALPHA);
+        if (showLyrics || showPlaylist) {
+            guiGraphics.fill(5, 5, lyricsSize-5, 25, Colors.BLACK_ALPHA);
+            guiGraphics.fill(5, 30, lyricsSize-5, height-(lyricsEnable ? 55 : 30), Colors.BLACK_ALPHA);
+        }
     }
 
     @Override
@@ -225,9 +228,8 @@ public class TrackScreen extends Screen {
         if (showPlaylist) {
             if (mouseX <= 200) scr = scroller_panel.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
         } else if (showLyrics) {
-            if ((mouseX >= 5 && mouseX <= 195) && (mouseY >= 40 && mouseY <= height - 30)) {
+            if ((mouseX >= 5 && mouseX <= 195) && (mouseY >= 40 && mouseY <= height - 30))
                 scr = lyricsBox.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
-            }
         }
         return scr;
     }

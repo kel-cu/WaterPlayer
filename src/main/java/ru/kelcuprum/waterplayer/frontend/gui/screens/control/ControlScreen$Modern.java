@@ -291,7 +291,7 @@ public class ControlScreen$Modern extends Screen {
         int x = 5;
         int y = 5;
 
-        guiGraphics.fill(x, y+25, x + controlPanelWidth, height - 50, BLACK_ALPHA);
+        guiGraphics.fill(x, y+25, x + controlPanelWidth, (lyricsBox.visible ? height - 50 : (WaterPlayer.config.getBoolean("EXPERIMENT.FILTERS", false) ? 148 : 104)), BLACK_ALPHA);
         guiGraphics.fill(x, y, x + controlPanelWidth, 25, BLACK_ALPHA);
     }
 

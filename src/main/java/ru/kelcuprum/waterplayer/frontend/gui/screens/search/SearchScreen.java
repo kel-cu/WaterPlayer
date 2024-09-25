@@ -51,7 +51,8 @@ public class SearchScreen extends Screen {
         //$$ public void renderBackground(GuiGraphics guiGraphics) {
         //$$         super.renderBackground(guiGraphics);
         //#endif
-        guiGraphics.fill(0, 0, 190, height, Colors.BLACK_ALPHA);
+        guiGraphics.fill(5, 5, 215, 25, Colors.BLACK_ALPHA);
+        guiGraphics.fill(5, 30, 215, 135, Colors.BLACK_ALPHA);
     }
 
     @Override
@@ -82,11 +83,11 @@ public class SearchScreen extends Screen {
     protected int searchService = WaterPlayer.config.getNumber("SEARCH.LAST_SERVICE", 1).intValue();
     @Override
     protected void init() {
-        int x = 5;
-        int size = 180;
-        addRenderableWidget(new TextBox(x, 15, size, 9, title, true));
+        int x = 10;
+        int size = 200;
+        addRenderableWidget(new TextBox(x, 5, size, 20, title, true));
 
-        request = (EditBox) new EditBoxBuilder(Component.translatable("waterplayer.search.query")).setPosition(x+25, 40).setSize(size-25, 20).build();
+        request = (EditBox) new EditBoxBuilder(Component.translatable("waterplayer.search.query")).setPosition(x+25, 35).setSize(size-25, 20).build();
 //                new EditString(x + 25, 40, size - 25, 20, Component.translatable("waterplayer.search.query"));
         request.setValue(requestValue);
         request.setResponder((s) -> requestValue = s);
@@ -95,7 +96,7 @@ public class SearchScreen extends Screen {
         addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.search.last_query"))
                 .setOnPress((e) -> request.setValue(WaterPlayer.config.getString("SEARCH.LAST", "")))
                 .setIcon(RESET)
-                .setPosition(x, 40)
+                .setPosition(x, 35)
                 .setSize(20, 20)
                 .build());
         this.search = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.search.button"), (e) -> {
@@ -111,7 +112,7 @@ public class SearchScreen extends Screen {
                 String value = services[searchService] + requestValue;
                 load(value);
             }
-        }).setPosition(x, 65).setSize(size, 20).build());
+        }).setPosition(x, 60).setSize(size, 20).build());
         addRenderableWidget(new SelectorBuilder(Component.translatable("waterplayer.search.service")).setValue(searchService).setList(new String[]{
                 Component.translatable("waterplayer.config.services.youtube").getString(),
                 Component.translatable("waterplayer.config.services.youtube_music").getString(),
@@ -124,9 +125,9 @@ public class SearchScreen extends Screen {
         }).setOnPress((e) -> {
             searchService = e.getPosition();
             WaterPlayer.config.setNumber("SEARCH.LAST_SERVICE", searchService);
-        }).setPosition(x, 90).setSize(size, 20).build());
+        }).setPosition(x, 85).setSize(size, 20).build());
 
-        addRenderableWidget(new ButtonBuilder(CommonComponents.GUI_BACK, (e) -> onClose()).setPosition(x, height-25).setSize(size, 20).build());
+        addRenderableWidget(new ButtonBuilder(CommonComponents.GUI_BACK, (e) -> onClose()).setPosition(x, 110).setSize(size, 20).build());
         initList();
     }
     private ConfigureScrolWidget scroller;
@@ -135,25 +136,25 @@ public class SearchScreen extends Screen {
     List<WebPlaylist> playlists = new ArrayList<>();
     public void initList(){
         widgets = new ArrayList<>();
-        int x = 195;
+        int x = 220;
         this.scroller = addRenderableWidget(new ConfigureScrolWidget(this.width - 8, 0, 4, this.height, Component.empty(), scroller -> {
             scroller.innerHeight = 5;
             for(AbstractWidget widget : widgets){
                 if(widget.visible){
-                    widget.setWidth(width-200);
+                    widget.setWidth(width-225);
                     widget.setPosition(x, ((int) (scroller.innerHeight - scroller.scrollAmount())));
                     scroller.innerHeight += (widget.getHeight()+5);
                 } else widget.setY(-widget.getHeight());
             }
         }));
-        widgets.add(new TextBox(x, 5, width-200, 20, Component.translatable("waterplayer.search.result"), true));
+        widgets.add(new TextBox(x, 5, width-220, 20, Component.translatable("waterplayer.search.result"), true));
         if(services[searchService].startsWith("wpsearch:")){
-            if(playlists.isEmpty()) widgets.add(new MessageBox(x, 20, width - 200, 20, Component.translatable("waterplayer.search.not_found"), true));
-            else for(WebPlaylist playlist : playlists) widgets.add(new PlaylistButton(x, 20, DEFAULT_WIDTH(), playlist, this));
+            if(playlists.isEmpty()) widgets.add(new MessageBox(x, 20, width - 225, 20, Component.translatable("waterplayer.search.not_found"), true));
+            else for(WebPlaylist playlist : playlists) widgets.add(new PlaylistButton(x, 20, 220, playlist, this));
         } else {
             if (list.isEmpty())
-                widgets.add(new MessageBox(x, 20, width - 200, 20, Component.translatable("waterplayer.search.not_found"), true));
-            else for (AudioTrack track : list) widgets.add(new TrackButton(x, 20, width - 200, track, this, false));
+                widgets.add(new MessageBox(x, 20, width - 220, 20, Component.translatable("waterplayer.search.not_found"), true));
+            else for (AudioTrack track : list) widgets.add(new TrackButton(x, 20, width - 220, track, this, false));
         }
 
         int i = 0;
@@ -210,17 +211,13 @@ public class SearchScreen extends Screen {
     //#if MC >=12002
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
         boolean scr = super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
-        if (!scr && scroller != null) {
-            scr = scroller.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
-        }
+        if (!scr && scroller != null) scr = scroller.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
         return scr;
     }
     //#elseif MC < 12002
     //$$ public boolean mouseScrolled(double mouseX, double mouseY, double scrollY) {
     //$$     boolean scr = super.mouseScrolled(mouseX, mouseY, scrollY);
-    //$$     if (!scr && scroller != null) {
-    //$$         scr = scroller.mouseScrolled(mouseX, mouseY, scrollY);
-    //$$     }
+    //$$     if (!scr && scroller != null)  scr = scroller.mouseScrolled(mouseX, mouseY, scrollY);
     //$$     return scr;
     //$$ }
     //#endif

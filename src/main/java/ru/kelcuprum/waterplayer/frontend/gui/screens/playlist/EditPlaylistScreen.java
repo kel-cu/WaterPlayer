@@ -93,10 +93,10 @@ public class EditPlaylistScreen extends Screen {
     public Button icon;
     public boolean isDeleted = false;
     public void initPanel(){
-        int x = 5;
-        int size = 210;
-        addRenderableWidget(new TextBox(x, 15, size, 9, Component.translatable("waterplayer.playlist.edit"), true));
-        int y = 40;
+        int x = 10;
+        int size = 200;
+        addRenderableWidget(new TextBox(x, 5, size, 20, Component.translatable("waterplayer.playlist.edit"), true));
+        int y = 35;
         // x, y, 36, 36, getIcon(), 36, 36,
         icon = (Button) addRenderableWidget(new ButtonBuilder(Component.empty(), (s) -> showOpenFileDialog()).setSprite(getIcon()).setPosition(x, y).setSize(36, 36).build());
 
@@ -116,7 +116,9 @@ public class EditPlaylistScreen extends Screen {
             addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.playlist.save"), (s) -> {
                 playlist.save();
                 onClose();
-            }).setPosition(x, y).setSize(size, 20).build());addRenderableWidget(new ButtonBuilder(CommonComponents.GUI_BACK, (e) -> onClose()).setPosition(x, height - 25).setSize(size-25, 20).build());
+            }).setPosition(x, y).setSize(size, 20).build());
+        y+=25;
+            addRenderableWidget(new ButtonBuilder(CommonComponents.GUI_BACK, (e) -> onClose()).setPosition(x, y).setSize(size-25, 20).build());
         addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.playlist.remove"), (s) -> {
             playlist.path.toFile().delete();
             isDeleted = true;
@@ -124,7 +126,7 @@ public class EditPlaylistScreen extends Screen {
                 this.parent = ((ViewPlaylistScreen) parent).parent;
                 onClose();
             }
-        }).setSprite(RECYCLE_BIN).setPosition(x+size-20, height-25).setSize(20, 20).build());
+        }).setSprite(RECYCLE_BIN).setPosition(x+size-20, y).setSize(20, 20).build());
     }
 
     private ConfigureScrolWidget scroller;
@@ -140,8 +142,8 @@ public class EditPlaylistScreen extends Screen {
                 } else widget.setY(-widget.getHeight());
             }
         }));
-        int x = 225;
-        widgets.add(new TextBox(x, 5, width - 200, 20, Component.translatable("waterplayer.playlist.urls"), true));
+        int x = 220;
+        widgets.add(new TextBox(x, 5, width - 225, 20, Component.translatable("waterplayer.playlist.urls"), true));
         int i = 0;
         for (JsonElement element : playlist.getUrlsJSON()) {
             String url = element.getAsString();
@@ -160,7 +162,7 @@ public class EditPlaylistScreen extends Screen {
         widgets.add(new ButtonBuilder(Component.translatable("waterplayer.playlist.add"), (e) -> {
             playlist.urls.add("https://youtube.com/");
             playlist.save();
-        }).setIcon(ADD).setPosition(x, -20).setSize(width - 230, 20).build());
+        }).setIcon(ADD).setPosition(x, -20).setSize(width - 225, 20).build());
         addRenderableWidgets(widgets);
     }
 
@@ -185,7 +187,7 @@ public class EditPlaylistScreen extends Screen {
         if(lastIcon != getIcon()){
             lastIcon = getIcon();
             removeWidget(icon);
-            icon = (Button) addRenderableWidget(new ButtonBuilder(Component.empty(), (s) -> showOpenFileDialog()).setSprite(getIcon()).setPosition(5, 40).setSize(36, 36).build());
+            icon = (Button) addRenderableWidget(new ButtonBuilder(Component.empty(), (s) -> showOpenFileDialog()).setSprite(getIcon()).setPosition(10, 35).setSize(36, 36).build());
         }
         if (scroller != null) scroller.onScroll.accept(scroller);
         if (lastSize != playlist.getUrlsJSON().size()) {
@@ -215,7 +217,8 @@ public class EditPlaylistScreen extends Screen {
         //$$ public void renderBackground(GuiGraphics guiGraphics) {
         //$$         super.renderBackground(guiGraphics);
         //#endif
-        guiGraphics.fill(0, 0, 220, height, Colors.BLACK_ALPHA);
+        guiGraphics.fill(5, 5, 215, 25, Colors.BLACK_ALPHA);
+        guiGraphics.fill(5, 30, 215, 176, Colors.BLACK_ALPHA);
     }
 
     //#if MC < 12002

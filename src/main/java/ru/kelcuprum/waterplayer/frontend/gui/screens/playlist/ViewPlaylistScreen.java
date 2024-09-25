@@ -8,6 +8,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -36,8 +37,7 @@ import ru.kelcuprum.waterplayer.frontend.gui.screens.config.PlaylistsScreen;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.kelcuprum.alinlib.gui.Icons.DONT;
-import static ru.kelcuprum.alinlib.gui.Icons.MUSIC;
+import static ru.kelcuprum.alinlib.gui.Icons.*;
 import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.NO_PLAYLIST_ICON;
 import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.PLAY;
 
@@ -84,10 +84,10 @@ public class ViewPlaylistScreen extends Screen {
     public ImageWidget icon;
 
     public void initPanel() {
-        int x = 5;
-        int size = 210;
-        addRenderableWidget(new TextBox(x, 15, size, 9, Component.translatable(webPlaylist == null ? "waterplayer.playlist" : "waterplayer.playlist.web"), true));
-        int y = 40;
+        int x = 10;
+        int size = 200;
+        addRenderableWidget(new TextBox(x, 5, size, 20, Component.translatable(webPlaylist == null ? "waterplayer.playlist" : "waterplayer.playlist.web"), true));
+        int y = 35;
         icon = addRenderableWidget(new ImageWidget(x, y, 36, 36, getIcon(), 36, 36, Component.empty()));
         addRenderableWidget(new TextBox(x + 41, y, size - 41, 18, Component.literal(playlist.title), false));
         addRenderableWidget(new TextBox(x + 41, y + 18, size - 41, 18, Component.literal(playlist.author), false));
@@ -131,14 +131,16 @@ public class ViewPlaylistScreen extends Screen {
                 }
             }
         }).setPosition(x, y).setSize(size, 20).setActive(false).build());
+        y += 25;
 
-        addRenderableWidget(new ButtonBuilder(CommonComponents.GUI_BACK, (e) -> onClose()).setPosition(x, height - 25).setSize(size - 25, 20).build());
-        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.playlist.play"), (s) -> WaterPlayer.player.loadMusic(webPlaylist == null ? String.format("playlist:%s", playlist.fileName) : String.format("wplayer:%s", webPlaylist.url), false)).setSprite(PLAY).setPosition(x + size - 20, height - 25).setSize(20, 20).build());
+        addRenderableWidget(new ButtonBuilder(CommonComponents.GUI_BACK, (e) -> onClose()).setPosition(x, y).setSize(size - 25, 20).build());
+        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.playlist.play"), (s) -> WaterPlayer.player.loadMusic(webPlaylist == null ? String.format("playlist:%s", playlist.fileName) : String.format("wplayer:%s", webPlaylist.url), false))
+                .setSprite(PLAY).setPosition(x + size - 20, y).setSize(20, 20).build());
     }
 
     private ConfigureScrolWidget scroller;
     private List<AbstractWidget> widgets = new ArrayList<>();
-
+    private TextBox emptyTracks;
     public void initTracks() {
         widgets = new ArrayList<>();
         this.scroller = addRenderableWidget(new ConfigureScrolWidget(this.width - 8, 0, 4, this.height, Component.empty(), scroller -> {
@@ -150,15 +152,18 @@ public class ViewPlaylistScreen extends Screen {
                 } else widget.setY(-widget.getHeight());
             }
         }));
-        int x = 225;
-        widgets.add(new TextBox(x, 5, width - 230, 20, Component.translatable("waterplayer.playlist.tracks"), true));
+        int x = 220;
+        widgets.add(new TextBox(x, 5, width - 225, 20, Component.translatable("waterplayer.playlist.tracks"), true));
         int i = 30;
         for (AbstractWidget element : trackWidgets) {
             element.setPosition(x, i);
-            element.setWidth(width - 230);
+            element.setWidth(width - 225);
             widgets.add(element);
             i += element.getHeight() + 5;
         }
+        emptyTracks = addWidget(new TextBox(x, 76, width-225, 20, Component.translatable("waterplayer.playlist.is_empty"), false));
+        emptyTracks.setActive(false);
+        emptyTracks.visible = isClownfishMoment();
         addRenderableWidgets(widgets);
     }
 
@@ -166,6 +171,9 @@ public class ViewPlaylistScreen extends Screen {
         for (AbstractWidget widget : widgets) {
             this.addRenderableWidget(widget);
         }
+    }
+    public boolean isClownfishMoment(){
+        return trackWidgets.isEmpty() && webPlaylist == null && isInit;
     }
 
     public static MusicPlayer searchPlayer = new MusicPlayer();
@@ -216,10 +224,11 @@ public class ViewPlaylistScreen extends Screen {
 
     @Override
     public void tick() {
+        emptyTracks.setActive(isClownfishMoment());
         if (lastIcon != getIcon()) {
             lastIcon = getIcon();
             removeWidget(icon);
-            icon = addRenderableWidget(new ImageWidget(5, 40, 36, 36, getIcon(), 36, 36, Component.empty()));
+            icon = addRenderableWidget(new ImageWidget(10, 35, 36, 36, getIcon(), 36, 36, Component.empty()));
         }
         if (scroller != null) scroller.onScroll.accept(scroller);
         if (isEnable) {
@@ -261,16 +270,28 @@ public class ViewPlaylistScreen extends Screen {
         //$$ public void renderBackground(GuiGraphics guiGraphics) {
         //$$         super.renderBackground(guiGraphics);
         //#endif
-        guiGraphics.fill(0, 0, 220, height, Colors.BLACK_ALPHA);
+        if(isClownfishMoment()){
+            int clownfishSize = Math.min(height-96, width-230);
+            guiGraphics.blit(
+                    //#if MC >= 12102
+                    RenderType::guiTextured,
+                    //#endif
+                    CLOWNFISH, 220, height-clownfishSize, 0.0f, 0.0f, clownfishSize, clownfishSize, clownfishSize, clownfishSize
+            );
+        }
+        guiGraphics.fill(5, 5, 215, 25, Colors.BLACK_ALPHA);
+        guiGraphics.fill(5, 30, 215, 151, Colors.BLACK_ALPHA);
     }
 
+
+    @Override
+    public void render(GuiGraphics guiGraphics, int i, int j, float f) {
     //#if MC < 12002
-    //$$ @Override
-    //$$ public void render(GuiGraphics guiGraphics, int i, int j, float f) {
     //$$     renderBackground(guiGraphics);
-    //$$     super.render(guiGraphics, i, j, f);
-    //$$ }
     //#endif
+        super.render(guiGraphics, i, j, f);
+        if(isClownfishMoment()) emptyTracks.render(guiGraphics, i, j, f);
+    }
 
     //#if MC >=12002
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {

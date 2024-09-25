@@ -32,7 +32,6 @@ import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
 import ru.kelcuprum.waterplayer.backend.KeyBind;
 import ru.kelcuprum.waterplayer.backend.MusicPlayer;
 import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
-import ru.kelcuprum.waterplayer.backend.command.WaterPlayerCommand;
 import ru.kelcuprum.waterplayer.frontend.gui.TextureHelper;
 import ru.kelcuprum.waterplayer.frontend.gui.overlays.SubtitlesHandler;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen$Modern;
@@ -65,7 +64,6 @@ public class WaterPlayer implements ClientModInitializer {
         player = new MusicPlayer();
         discordIntegration = new DiscordIntegration();
         registerBinds();
-        ClientCommandRegistrationCallback.EVENT.register(WaterPlayerCommand::register);
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
             player.startAudioOutput();
             //#if WALTER == 1

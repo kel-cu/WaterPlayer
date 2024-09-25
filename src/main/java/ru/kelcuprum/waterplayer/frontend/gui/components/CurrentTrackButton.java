@@ -76,9 +76,9 @@ public class CurrentTrackButton extends Button {
             int color = WaterPlayer.player.getAudioPlayer().isPaused() ? Colors.CLOWNFISH : track.getInfo().isStream ? Colors.GROUPIE : Colors.SEADRIVE;
             //
             if (isShort) {
-                if (GuiUtils.isDoesNotFit(getMessage(), getWidth(), getHeight())) {
+                if (GuiUtils.isDoesNotFit(getMessage(), getWidth(), getHeight()))
                     this.renderScrollingString(guiGraphics, AlinLib.MINECRAFT.font, 2, 0xFFFFFF);
-                } else {
+                else {
                     guiGraphics.drawString(AlinLib.MINECRAFT.font, builder.toString(), getX() + (getHeight() - 8) / 2, getY() + (getHeight() - 8) / 2, 0xffffff);
                     guiGraphics.drawString(AlinLib.MINECRAFT.font, time, getX() + getWidth() - AlinLib.MINECRAFT.font.width(time) - ((getHeight() - 8) / 2), getY() + (getHeight() - 8) / 2, 0xffffff);
                 }
@@ -102,11 +102,9 @@ public class CurrentTrackButton extends Button {
     }
 
     protected void renderString(GuiGraphics guiGraphics, String text, int x, int y) {
-        if (getWidth() - 50 < AlinLib.MINECRAFT.font.width(text)) {
+        if (getWidth() - 50 < AlinLib.MINECRAFT.font.width(text))
             renderScrollingString(guiGraphics, AlinLib.MINECRAFT.font, Component.literal(text), 5, y-1, -1);
-        } else {
-            guiGraphics.drawString(AlinLib.MINECRAFT.font, text, x, y, -1);
-        }
+        else guiGraphics.drawString(AlinLib.MINECRAFT.font, text, x, y, -1);
     }
 
     protected void renderScrollingString(GuiGraphics guiGraphics, Font font, Component message, int x, int y, int color) {
