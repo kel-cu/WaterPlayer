@@ -21,6 +21,7 @@ import ru.kelcuprum.alinlib.gui.components.buttons.Button;
 import ru.kelcuprum.alinlib.gui.components.editbox.EditBox;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.waterplayer.WaterPlayer;
+import ru.kelcuprum.waterplayer.backend.queue.AbstractQueue;
 import ru.kelcuprum.waterplayer.frontend.gui.LyricsHelper;
 import ru.kelcuprum.waterplayer.frontend.gui.components.CurrentTrackButton;
 import ru.kelcuprum.waterplayer.frontend.gui.components.LyricsBox;
@@ -32,7 +33,6 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 import static ru.kelcuprum.alinlib.gui.Icons.LIST;
 import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.*;
@@ -123,8 +123,6 @@ public class ControlScreen extends Screen {
                 .setPosition(x + 100, height - 25).build());
 
         addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control.skip"), (e) -> {
-            if (WaterPlayer.player.getTrackScheduler().queue.isEmpty() && WaterPlayer.player.getAudioPlayer().getPlayingTrack() == null)
-                return;
             WaterPlayer.player.getTrackScheduler().nextTrack();
         })
                 .setSprite(SKIP)
@@ -134,7 +132,7 @@ public class ControlScreen extends Screen {
                 .build());
 
         this.shuffle = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control.shuffle"), (e) -> {
-            if (!WaterPlayer.player.getTrackScheduler().queue.isEmpty()) {
+            if (!WaterPlayer.player.getTrackScheduler().queue.getQueue().isEmpty()) {
                 WaterPlayer.player.getTrackScheduler().shuffle();
                 rebuildWidgetsList();
             }
@@ -145,7 +143,7 @@ public class ControlScreen extends Screen {
                 .setPosition(x + 50, height - 25)
                 .build());
 
-        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control.reset_queue"), (e) -> WaterPlayer.player.getTrackScheduler().queue.clear())
+        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control.reset_queue"), (e) -> WaterPlayer.player.getTrackScheduler().reset())
                 .setSprite(RESET_QUEUE)
                 .setTextureSize(20, 20)
                 .setSize(20, 20)
@@ -171,15 +169,15 @@ public class ControlScreen extends Screen {
             }
         }));
 
-        Queue<AudioTrack> queue = WaterPlayer.player.getTrackScheduler().queue;
+        AbstractQueue queue = WaterPlayer.player.getTrackScheduler().queue;
         widgets.add(new TextBox(x, -20, width - 200, 20, Component.translatable("waterplayer.load.current_track"), true));
         widgets.add(new CurrentTrackButton(x, -42, width - 200, !WaterPlayer.config.getBoolean("SCREEN.QUEUE_COVER_SHOW", true), this));
-        widgets.add(new TextBox(x, -20, width - 200, 20, Component.translatable(queue.isEmpty() ? "waterplayer.command.queue.blank" : "waterplayer.command.queue"), true));
+        widgets.add(new TextBox(x, -20, width - 200, 20, Component.translatable(queue.getQueue().isEmpty() ? "waterplayer.command.queue.blank" : "waterplayer.command.queue"), true));
 
 
         try {
-            if (!queue.isEmpty()) {
-                for (AudioTrack track : WaterPlayer.player.getTrackScheduler().queue) {
+            if (!queue.getQueue().isEmpty()) {
+                for (AudioTrack track : WaterPlayer.player.getTrackScheduler().queue.getQueue()) {
                     widgets.add(new TrackButton(x, -40, width - 200, track, this, !WaterPlayer.config.getBoolean("SCREEN.QUEUE_COVER_SHOW", true)));
                 }
             }
@@ -222,7 +220,7 @@ public class ControlScreen extends Screen {
     //$$ }
     //#endif
 
-    int lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.size();
+    int lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.getQueue().size();
     AudioTrack lastTrack = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
     AudioLyrics audioLyrics;
     long lastCheck = System.currentTimeMillis();
@@ -281,10 +279,10 @@ public class ControlScreen extends Screen {
                 } else this.lyrics.visible = false;
             } else this.lyrics.visible = false;
         } else this.lyrics.visible = false;
-        if (lastCountQueue != WaterPlayer.player.getTrackScheduler().queue.size()) {
+        if (lastCountQueue != WaterPlayer.player.getTrackScheduler().queue.getQueue().size()) {
             if (System.currentTimeMillis() - lastCheck >= 1500) {
                 lastCheck = System.currentTimeMillis();
-                this.lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.size();
+                this.lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.getQueue().size();
                 this.lastTrack = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
                 rebuildWidgetsList();
             }
@@ -292,10 +290,12 @@ public class ControlScreen extends Screen {
             if (System.currentTimeMillis() - lastCheck >= 1500) {
                 lastCheck = System.currentTimeMillis();
                 this.lastTrack = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
-                this.lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.size();
+                this.lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.getQueue().size();
                 rebuildWidgetsList();
             }
         }
+//        load.setActive(WaterPlayer.player.getTrackScheduler().queue.addTrackAvailable());
+//        request.active = (WaterPlayer.player.getTrackScheduler().queue.addTrackAvailable());
         super.tick();
     }
 

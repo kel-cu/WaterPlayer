@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Level;
 import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.info.Player;
 import ru.kelcuprum.waterplayer.WaterPlayer;
+import ru.kelcuprum.waterplayer.backend.sources.waterplayer.WaterPlayerPlaylist;
 import ru.kelcuprum.waterplayer.frontend.gui.TextureHelper;
 
 import javax.imageio.ImageIO;
@@ -113,7 +114,9 @@ public class Playlist {
         data.add("urls", getUrlsJSON());
         return data;
     }
-
+    public WaterPlayerPlaylist getLavaplayerPlaylist(){
+        return new WaterPlayerPlaylist(this);
+    }
     @Override
     public String toString() {
         return toJSON().toString();

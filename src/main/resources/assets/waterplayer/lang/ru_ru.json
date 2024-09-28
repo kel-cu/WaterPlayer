@@ -51,6 +51,7 @@
   "waterplayer.key.volume.down": "Уменьшить громкость",
   "waterplayer.key.control": "Экран управления",
   "waterplayer.key.skip": "Пропустить трек",
+  "waterplayer.key.back": "Предыдущий трек",
   "waterplayer.key.reset": "Сброс очереди",
   "waterplayer.key.shuffle": "Перемешать очередь",
   "waterplayer.key.repeating": "Повтор",
@@ -63,6 +64,7 @@
   "waterplayer.message.reset": "Очередь сброшена",
   "waterplayer.message.shuffle": "Очередь перемешана",
   "waterplayer.message.skip": "Трек пропущен",
+  "waterplayer.message.back": "Трек возвращен",
 
   "waterplayer.control.search": "Поиск...",
   "waterplayer.control.pause": "Пауза",
@@ -70,6 +72,8 @@
   "waterplayer.control.repeat": "Повтор",
   "waterplayer.control.shuffle": "Перемешать",
   "waterplayer.control.skip": "Пропустить",
+  "waterplayer.control.back": "Назад",
+  "waterplayer.control.playing_playlist": "Плейлист: %s",
   "waterplayer.control.reset_queue": "Сбросить очередь",
 
   "waterplayer.control.speed": "Скорость",
@@ -246,6 +250,7 @@
   "waterplayer.editor.upload_text": "Чтобы загрузить текст, перетащите его сюда",
   "waterplayer.editor.error": "Ой... Ошибка :(",
   "waterplayer.editor.dont_open": "Не удалось открыть файл",
+  "waterplayer.editor.file_not_exist": "Тайлера нет, он уехал :(",
 
   "waterplayer.web.what_data_is_sent": "Какие данные получает Кел?",
 

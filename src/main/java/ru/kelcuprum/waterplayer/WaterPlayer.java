@@ -1,7 +1,6 @@
 package ru.kelcuprum.waterplayer;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.Util;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -191,7 +190,12 @@ public class WaterPlayer implements ClientModInitializer {
         ));
         KeyMapping key3 = KeyMappingHelper.register(new KeyMapping(
                 "waterplayer.key.skip",
-                GLFW.GLFW_KEY_X, // The keycode of the key
+                GLFW.GLFW_KEY_N, // The keycode of the key
+                "waterplayer.name"
+        ));
+        KeyMapping key9 = KeyMappingHelper.register(new KeyMapping(
+                "waterplayer.key.back",
+                GLFW.GLFW_KEY_B, // The keycode of the key
                 "waterplayer.name"
         ));
         KeyMapping key4 = KeyMappingHelper.register(new KeyMapping(
@@ -243,7 +247,7 @@ public class WaterPlayer implements ClientModInitializer {
         }));
 
         keyBinds.add(new KeyBind(key3, () -> {
-            if (player.getTrackScheduler().queue.isEmpty() && player.getAudioPlayer().getPlayingTrack() == null)
+            if (player.getTrackScheduler().queue.getQueue().isEmpty() && player.getAudioPlayer().getPlayingTrack() == null)
                 return false;
             player.getTrackScheduler().nextTrack();
             if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", false))
@@ -251,10 +255,19 @@ public class WaterPlayer implements ClientModInitializer {
                         .buildAndShow();
             return true;
         }));
+        keyBinds.add(new KeyBind(key9, () -> {
+            if (player.getTrackScheduler().queue.getQueue().isEmpty() && player.getAudioPlayer().getPlayingTrack() == null)
+                return false;
+            player.getTrackScheduler().backTrack();
+            if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", false))
+                getToast().setMessage(Localization.getText("waterplayer.message.back"))
+                        .buildAndShow();
+            return true;
+        }));
         keyBinds.add(new KeyBind(key4, () -> {
             player.getTrackScheduler().skiping = false;
-            if (!player.getTrackScheduler().queue.isEmpty()) {
-                player.getTrackScheduler().queue.clear();
+            if (!player.getTrackScheduler().queue.getQueue().isEmpty()) {
+                player.getTrackScheduler().reset();
                 if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", false))
                     getToast().setMessage(Localization.getText("waterplayer.message.reset"))
                             .buildAndShow();
@@ -262,7 +275,7 @@ public class WaterPlayer implements ClientModInitializer {
             return true;
         }));
         keyBinds.add(new KeyBind(key5, () -> {
-            if (player.getTrackScheduler().queue.size() >= 2) {
+            if (player.getTrackScheduler().queue.getQueue().size() >= 2) {
                 if (AlinLib.MINECRAFT.screen instanceof ControlScreen) {
                     if (AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
                     ((ControlScreen) AlinLib.MINECRAFT.screen).shuffle.onPress();
@@ -353,6 +366,7 @@ public class WaterPlayer implements ClientModInitializer {
         ResourceLocation PAUSE = GuiUtils.getResourceLocation("waterplayer", "textures/player/pause.png");
         ResourceLocation RESET_QUEUE = GuiUtils.getResourceLocation("waterplayer", "textures/player/reset_queue.png");
         ResourceLocation SKIP = GuiUtils.getResourceLocation("waterplayer", "textures/player/skip.png");
+        ResourceLocation BACK = GuiUtils.getResourceLocation("waterplayer", "textures/player/back.png");
         ResourceLocation SHUFFLE = GuiUtils.getResourceLocation("waterplayer", "textures/player/shuffle.png");
 
         ResourceLocation VOLUME_MAX = GuiUtils.getResourceLocation("waterplayer", "textures/player/volume_max.png");

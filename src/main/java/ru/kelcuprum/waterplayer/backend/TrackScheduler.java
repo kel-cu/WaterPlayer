@@ -9,37 +9,48 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import org.apache.logging.log4j.Level;
-import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
+import ru.kelcuprum.waterplayer.backend.queue.AbstractQueue;
+import ru.kelcuprum.waterplayer.backend.queue.PlaylistQueue;
+import ru.kelcuprum.waterplayer.backend.queue.Queue;
 import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
-import java.util.*;
+//import java.util.*;
 
 import static ru.kelcuprum.waterplayer.WaterPlayer.Icons.*;
 
 public class TrackScheduler extends AudioEventAdapter {
     public boolean skiping = false;
     final AudioPlayer player;
-    public final Queue<AudioTrack> queue;
+    public AbstractQueue queue = new Queue();
     public AudioTrack lastTrack;
 
     public TrackScheduler(AudioPlayer player) {
         this.player = player;
-        this.queue = new LinkedList<>();
-    }
-    public void queue(AudioTrack track) {
-        if (track == null) return;
-        if (!player.startTrack(track, true)) queue.offer(track);
     }
 
-    public void nextTrack() {
-        if(getRepeatStatus() == 1 && !queue.isEmpty()) {
-            AudioTrack track = player.getPlayingTrack() != null ? player.getPlayingTrack().makeClone() : lastTrack != null ? lastTrack.makeClone() : null;
-            if(track == null) WaterPlayer.log("There's nothing to add to the queue", Level.DEBUG);
-            else queue.add(track.makeClone());
+    public void reset(){
+        changeQueue(new Queue());
+    }
+    public void changeQueue(AbstractQueue queue){
+        if(queue == null) queue = new Queue();
+        if(player.getPlayingTrack() != null) player.stopTrack();
+        this.queue = queue;
+        player.startTrack(this.queue.getCurrentTrack(), false);
+    }
+    public void playlistQueueToDefault(){
+        if(queue instanceof PlaylistQueue) {
+            Queue queue1 = new Queue();
+            queue1.tracks = queue.tracks;
+            queue1.position = queue.position;
+            queue1.currentTrack = queue.currentTrack;
+            queue = queue1;
         }
-        player.startTrack(queue.poll(), false);
+    }
+    public void backTrack(){
+        queue.backTrack();
+        player.startTrack(queue.getCurrentTrack(), false);
         if(player.getPlayingTrack() != null) {
             WaterPlayer.log("----------");
             WaterPlayer.log("Starting Track: " + (MusicHelper.isAuthorNull() ? "" : (MusicHelper.getAuthor(player.getPlayingTrack()) + " - ")) + MusicHelper.getTitle(player.getPlayingTrack()));
@@ -51,8 +62,30 @@ public class TrackScheduler extends AudioEventAdapter {
                 else toast.setIcon(MUSIC);
                 toast.buildAndShow();
             }
-        }
+        } else reset();
     }
+    public void addTrack(AudioTrack track){
+        playlistQueueToDefault();
+        queue.addTrack(track);
+    }
+
+    public void nextTrack() {
+        queue.nextTrack();
+        player.startTrack(queue.getCurrentTrack(), false);
+        if(player.getPlayingTrack() != null) {
+            WaterPlayer.log("----------");
+            WaterPlayer.log("Starting Track: " + (MusicHelper.isAuthorNull() ? "" : (MusicHelper.getAuthor(player.getPlayingTrack()) + " - ")) + MusicHelper.getTitle(player.getPlayingTrack()));
+            WaterPlayer.log("Address: "+player.getPlayingTrack().getInfo().uri);
+            if (WaterPlayer.config.getBoolean("ENABLE_NOTICE", false) && WaterPlayer.config.getBoolean("ENABLE_NOTICE.START_TRACK", false)) {
+                ToastBuilder toast = WaterPlayer.getToast().setTitle(MusicHelper.isAuthorNull(player.getPlayingTrack()) ? Component.translatable("waterplayer.name") : Component.literal(MusicHelper.getAuthor(player.getPlayingTrack())))
+                        .setMessage(Component.literal(MusicHelper.getTitle(player.getPlayingTrack())));
+                if (MusicHelper.getAuthor(player.getPlayingTrack()).equals("YonKaGor")) toast.setIcon(getYonKaGorMoment(player.getPlayingTrack()));
+                else toast.setIcon(MUSIC);
+                toast.buildAndShow();
+            }
+        } else reset();
+    }
+
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
@@ -95,7 +128,7 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
     public void shuffle() {
-        Collections.shuffle((List<?>) queue);
+        queue.shuffle();
     }
 
     protected Item getYonKaGorMoment(AudioTrack track) {

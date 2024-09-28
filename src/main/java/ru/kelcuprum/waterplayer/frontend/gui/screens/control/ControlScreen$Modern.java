@@ -22,6 +22,8 @@ import ru.kelcuprum.alinlib.gui.components.buttons.Button;
 import ru.kelcuprum.alinlib.gui.components.editbox.EditBox;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.waterplayer.WaterPlayer;
+import ru.kelcuprum.waterplayer.backend.queue.AbstractQueue;
+import ru.kelcuprum.waterplayer.backend.queue.Queue;
 import ru.kelcuprum.waterplayer.frontend.gui.LyricsHelper;
 import ru.kelcuprum.waterplayer.frontend.gui.components.LyricsBox;
 import ru.kelcuprum.waterplayer.frontend.gui.components.TrackButton;
@@ -29,11 +31,14 @@ import ru.kelcuprum.waterplayer.frontend.gui.screens.TrackScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.config.PlaylistsScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.control.components.*;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.search.SearchScreen;
+import ru.kelcuprum.waterplayer.frontend.gui.style.AirStyle;
 import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
 import java.nio.file.Path;
 import java.time.Duration;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 import static ru.kelcuprum.alinlib.gui.Colors.BLACK_ALPHA;
 import static ru.kelcuprum.alinlib.gui.Icons.*;
@@ -147,7 +152,7 @@ public class ControlScreen$Modern extends Screen {
     public Button play;
     public Button skip;
     public Button repeat;
-
+    public AirStyle nothingStyle = new AirStyle();
     public Button trackIcon;
 
     public void initPlayerPanel() {
@@ -164,15 +169,9 @@ public class ControlScreen$Modern extends Screen {
 
         // - Center
         int x$Buttons = x + (size / 2) - ((25 * 5 - 5) / 2);
-        clear = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control.reset_queue"), (e) -> WaterPlayer.player.getTrackScheduler().queue.clear())
-                .setSprite(DONT)
-                .setSize(20, 20)
-                .setPosition(x$Buttons, y + 3)
-                .build());
-        x$Buttons += 25;
-        shuffle = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control.shuffle"), (e) -> {
-            if (!WaterPlayer.player.getTrackScheduler().queue.isEmpty())
-                WaterPlayer.player.getTrackScheduler().shuffle();
+//        x$Buttons += 25;
+        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control.shuffle"), (e) -> {
+            WaterPlayer.player.getTrackScheduler().shuffle();
             for (AbstractWidget widget : queue.widgets) removeWidget(widget);
             queue.resetWidgets();
             addQueue();
@@ -182,6 +181,15 @@ public class ControlScreen$Modern extends Screen {
                 .setPosition(x$Buttons, y + 3)
                 .build());
         x$Buttons += 25;
+
+
+        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control.back"), (e) -> WaterPlayer.player.getTrackScheduler().backTrack())
+                .setSprite(BACK)
+                .setSize(20, 20)
+                .setPosition(x$Buttons, y + 3)
+                .build());
+        x$Buttons += 25;
+
         play = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control." + (WaterPlayer.player.getAudioPlayer().isPaused() ? "play" : "pause")), (e) -> {
             WaterPlayer.player.changePaused();
             e.builder.setTitle(Component.translatable("waterplayer.control." + (WaterPlayer.player.isPaused() ? "play" : "pause")));
@@ -193,7 +201,7 @@ public class ControlScreen$Modern extends Screen {
                 .build());
         x$Buttons += 25;
         skip = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control.skip"), (e) -> {
-            if (WaterPlayer.player.getTrackScheduler().queue.isEmpty() && WaterPlayer.player.getAudioPlayer().getPlayingTrack() == null)
+            if (WaterPlayer.player.getTrackScheduler().queue.getQueue().isEmpty() && WaterPlayer.player.getAudioPlayer().getPlayingTrack() == null)
                 return;
             WaterPlayer.player.getTrackScheduler().nextTrack();
         })
@@ -210,18 +218,25 @@ public class ControlScreen$Modern extends Screen {
                 .setSize(20, 20)
                 .setPosition(x$Buttons, y + 3)
                 .build());
+        x$Buttons += 25;
 
         int timelineSize = Math.min(size / 3, 230);//190;
         addRenderableWidget(new TimelineComponent(x + (size / 2) - (timelineSize / 2), y + 30, timelineSize, 3, timelineSize >= 190));
 
         // - Left
-
+        int clearPos = x + size - 12 - 70 - 26 - AlinLib.MINECRAFT.font.width("100%");
+        if(clearPos > x$Buttons) clear = (Button) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control.reset_queue"), (e) -> WaterPlayer.player.getTrackScheduler().reset())
+                .setSprite(DONT)
+                .setStyle(nothingStyle)
+                .setSize(16, 16)
+                .setPosition(clearPos, y + 12)
+                .build());
         addRenderableWidget(new VolumeComponent(x + size - 12 - 70, y + 18, 70, 4));
     }
 
     // - You're just like pop music
     ConfigureScrolWidget queue;
-    int lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.size();
+    int lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.getQueue().size();
 
     public void initQueue() {
         addRenderableWidget(new ButtonBuilder(Component.literal("x"), (s) -> onClose()).setPosition(width - 25, 5).setSize(20, 20).build());
@@ -240,15 +255,15 @@ public class ControlScreen$Modern extends Screen {
         addQueue();
     }
 
-    public Queue<AudioTrack> queueTracks = WaterPlayer.player.getTrackScheduler().queue;
+    public AbstractQueue queueTracks = WaterPlayer.player.getTrackScheduler().queue;
 
     public void addQueue() {
         int queueWidth = width - 15 - controlPanelWidth;
         List<AbstractWidget> widgets = new ArrayList<>();
         int y = queue.getY();
         try {
-            if (!queueTracks.isEmpty()) {
-                for (AudioTrack track : queueTracks) {
+            if (!queueTracks.getQueue().isEmpty()) {
+                for (AudioTrack track : queueTracks.getQueue()) {
                     TrackButton tbutton = new TrackButton(10 + controlPanelWidth, y, queueWidth, track, this, !WaterPlayer.config.getBoolean("SCREEN.QUEUE_COVER_SHOW", true));
                     widgets.add(tbutton);
                     y += tbutton.getHeight() + 5;
@@ -318,7 +333,9 @@ public class ControlScreen$Modern extends Screen {
     public void renderQueueTitle(GuiGraphics guiGraphics) {
         guiGraphics.fill(10 + controlPanelWidth, 5, width - 30, 25, BLACK_ALPHA);
         int titleWidth = width - 40 - controlPanelWidth;
-        guiGraphics.drawCenteredString(AlinLib.MINECRAFT.font, Component.translatable(queueTracks.isEmpty() ? "waterplayer.command.queue.blank" : "waterplayer.command.queue"), 10 + controlPanelWidth + (titleWidth / 2), 11, -1);
+        Component component = Component.literal(queueTracks.getName());
+        if(AlinLib.MINECRAFT.font.width(component) > titleWidth) renderScrollingString(guiGraphics, AlinLib.MINECRAFT.font, component, 10 + controlPanelWidth, width-30, 11, -1);
+        else guiGraphics.drawCenteredString(AlinLib.MINECRAFT.font, component, 10 + controlPanelWidth + (titleWidth / 2), 11, -1);
     }
 
     protected void renderScrollingString(GuiGraphics guiGraphics, Font font, Component message, int x, int maxX, int y, int color) {
@@ -445,19 +462,22 @@ public class ControlScreen$Modern extends Screen {
                 } else this.lyricsBox.visible = false;
             } else this.lyricsBox.visible = false;
         } else this.lyricsBox.visible = false;
-        if (lastCountQueue != WaterPlayer.player.getTrackScheduler().queue.size()) {
-            this.lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.size();
+        if (queueTracks != WaterPlayer.player.getTrackScheduler().queue) queueTracks = WaterPlayer.player.getTrackScheduler().queue;
+        if (lastCountQueue != WaterPlayer.player.getTrackScheduler().queue.getQueue().size()) {
+            this.lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.getQueue().size();
             this.lastTrack = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
             for (AbstractWidget widget : queue.widgets) removeWidget(widget);
             queue.resetWidgets();
             addQueue();
         } else if (lastTrack != WaterPlayer.player.getAudioPlayer().getPlayingTrack()) {
             this.lastTrack = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
-            this.lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.size();
+            this.lastCountQueue = WaterPlayer.player.getTrackScheduler().queue.getQueue().size();
             for (AbstractWidget widget : queue.widgets) removeWidget(widget);
             queue.resetWidgets();
             addQueue();
         }
+//        load.setActive(WaterPlayer.player.getTrackScheduler().queue.addTrackAvailable());
+//        editBox.active = (WaterPlayer.player.getTrackScheduler().queue.addTrackAvailable());
         super.tick();
     }
 

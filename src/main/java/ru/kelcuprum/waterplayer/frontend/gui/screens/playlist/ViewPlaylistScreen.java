@@ -30,6 +30,7 @@ import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
 import ru.kelcuprum.waterplayer.backend.exception.WebPlaylistException;
 import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 import ru.kelcuprum.waterplayer.backend.playlist.WebPlaylist;
+import ru.kelcuprum.waterplayer.backend.queue.PlaylistQueue;
 import ru.kelcuprum.waterplayer.frontend.gui.TextureHelper;
 import ru.kelcuprum.waterplayer.frontend.gui.components.TrackButton;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.config.PlaylistsScreen;
@@ -134,7 +135,10 @@ public class ViewPlaylistScreen extends Screen {
         y += 25;
 
         addRenderableWidget(new ButtonBuilder(CommonComponents.GUI_BACK, (e) -> onClose()).setPosition(x, y).setSize(size - 25, 20).build());
-        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.playlist.play"), (s) -> WaterPlayer.player.loadMusic(webPlaylist == null ? String.format("playlist:%s", playlist.fileName) : String.format("wplayer:%s", webPlaylist.url), false))
+        addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.playlist.play"), (s) -> {
+//            WaterPlayer.player.loadMusic(webPlaylist == null ? String.format("playlist:%s", playlist.fileName) : String.format("wplayer:%s", webPlaylist.url), false);
+            WaterPlayer.player.getTrackScheduler().changeQueue(new PlaylistQueue(this.playlist));
+        })
                 .setSprite(PLAY).setPosition(x + size - 20, y).setSize(20, 20).build());
     }
 

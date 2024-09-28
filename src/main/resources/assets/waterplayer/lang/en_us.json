@@ -50,6 +50,7 @@
   "waterplayer.key.volume.down": "Volume Down",
   "waterplayer.key.control": "Control Screen",
   "waterplayer.key.skip": "Skip Track",
+  "waterplayer.key.back": "Previous Track",
   "waterplayer.key.reset": "Reset Queue",
   "waterplayer.key.shuffle": "Shuffle Queue",
   "waterplayer.key.repeating": "Toggle Repeat",
@@ -62,6 +63,7 @@
   "waterplayer.message.reset": "Queue has been reset",
   "waterplayer.message.shuffle": "Queue shuffled",
   "waterplayer.message.skip": "Track skipped",
+  "waterplayer.message.back": "Track returned",
 
   "waterplayer.control.search": "Search...",
   "waterplayer.control.pause": "Pause",
@@ -69,6 +71,8 @@
   "waterplayer.control.repeat": "Repeat",
   "waterplayer.control.shuffle": "Shuffle",
   "waterplayer.control.skip": "Skip",
+  "waterplayer.control.back": "Back",
+  "waterplayer.control.playing_playlist": "Playlist: %s",
   "waterplayer.control.reset_queue": "Reset Queue",
 
   "waterplayer.control.speed": "Speed",
@@ -251,6 +255,7 @@
   "waterplayer.editor.upload_text": "To load text, drag and drop the text file",
   "waterplayer.editor.error": "Oops... Error :(",
   "waterplayer.editor.dont_open": "Couldn't open the file",
+  "waterplayer.editor.file_not_exist": "File not exist",
 
 
   "waterplayer.web.what_data_is_sent": "What kind of data is Kel getting?",

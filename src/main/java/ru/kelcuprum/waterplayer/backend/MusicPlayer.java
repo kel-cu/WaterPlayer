@@ -75,7 +75,7 @@ public class MusicPlayer {
         trackScheduler = new TrackScheduler(audioPlayer);
         musicManager = new MusicManager(audioPlayer, trackScheduler);
         audioPlayer.setVolume(WaterPlayer.config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue());
-        if(WaterPlayer.config.getBoolean("EXPERIMENT.FILTERS", false)) {
+        if (WaterPlayer.config.getBoolean("EXPERIMENT.FILTERS", false)) {
             audioPlayer.setFilterFactory(((track, format, output) -> {
                 final TimescalePcmAudioFilter filter = new TimescalePcmAudioFilter(output, format.channelCount, format.sampleRate);
                 filter.setSpeed(speed);
@@ -88,14 +88,16 @@ public class MusicPlayer {
             @Override
             public AudioFrame provide() {
                 AudioFrame frame = super.provide();
-                if (frame != null && !frame.isTerminator()) TrackScheduler.trackPosition += (long) (frame.getFormat().frameDuration() * TrackScheduler.trackSpeed);
+                if (frame != null && !frame.isTerminator())
+                    TrackScheduler.trackPosition += (long) (frame.getFormat().frameDuration() * TrackScheduler.trackSpeed);
                 return frame;
             }
 
             @Override
             public AudioFrame provide(long timeout, TimeUnit unit) throws TimeoutException, InterruptedException {
                 AudioFrame frame = super.provide(timeout, unit);
-                if (frame != null && !frame.isTerminator()) TrackScheduler.trackPosition += (long) (frame.getFormat().frameDuration() * TrackScheduler.trackSpeed);
+                if (frame != null && !frame.isTerminator())
+                    TrackScheduler.trackPosition += (long) (frame.getFormat().frameDuration() * TrackScheduler.trackSpeed);
                 return frame;
             }
         });
@@ -109,8 +111,9 @@ public class MusicPlayer {
 
         registerSources();
     }
-    public void updateFilter(){
-        if(!WaterPlayer.config.getBoolean("EXPERIMENT.FILTERS", false)) return;
+
+    public void updateFilter() {
+        if (!WaterPlayer.config.getBoolean("EXPERIMENT.FILTERS", false)) return;
         audioPlayer.setFilterFactory((track, format, output) -> {
             final TimescalePcmAudioFilter filter = new TimescalePcmAudioFilter(output, format.channelCount, format.sampleRate);
             filter.setSpeed(speed);
@@ -193,8 +196,9 @@ public class MusicPlayer {
         audioPlayerManager.registerSourceManager(localAudioSourceManager);
         audioPlayerManager.registerSourceManager(wps);
     }
-    public void setPosition(long position){
-        if(getAudioPlayer().getPlayingTrack() == null) return;
+
+    public void setPosition(long position) {
+        if (getAudioPlayer().getPlayingTrack() == null) return;
         TrackScheduler.trackPosition = position;
         getAudioPlayer().getPlayingTrack().setPosition(position);
     }
@@ -218,14 +222,14 @@ public class MusicPlayer {
         audioPlayerManager.loadItemOrdered(musicManager, url, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
-                musicManager.scheduler.queue(track);
+                musicManager.scheduler.addTrack(track);
                 WaterPlayer.log("Adding Track: " + track.getInfo().title);
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
                 List<AudioTrack> tracks = playlist.getTracks();
-                tracks.forEach(musicManager.scheduler::queue);
+                tracks.forEach(musicManager.scheduler::addTrack);
                 WaterPlayer.log("Adding Playlist: " + playlist.getName() + ". Tracks Count: " + playlist.getTracks().size());
             }
 
@@ -236,22 +240,26 @@ public class MusicPlayer {
 
             @Override
             public void loadFailed(FriendlyException ex) {
-                WaterPlayer.log("ERROR: "+(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage()), Level.DEBUG);
+                WaterPlayer.log("ERROR: " + (ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage()), Level.DEBUG);
             }
         });
+
     }
 
     //
     public AudioDataFormat getAudioDataFormat() {
         return audioDataFormat;
     }
-    public boolean isPaused(){
+
+    public boolean isPaused() {
         return audioPlayer.isPaused();
     }
-    public boolean changePaused(){
+
+    public boolean changePaused() {
         return changePaused(!isPaused());
     }
-    public boolean changePaused(boolean pause){
+
+    public boolean changePaused(boolean pause) {
         audioPlayer.setPaused(pause);
         return isPaused();
     }
@@ -259,6 +267,7 @@ public class MusicPlayer {
     public AudioPlayer getAudioPlayer() {
         return audioPlayer;
     }
+
     public AudioPlayerManager getAudioPlayerManager() {
         return audioPlayerManager;
     }
@@ -270,6 +279,7 @@ public class MusicPlayer {
     public TrackScheduler getTrackScheduler() {
         return trackScheduler;
     }
+
     public AudioOutput getAudioOutput() {
         return audioOutput;
     }
