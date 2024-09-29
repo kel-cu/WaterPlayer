@@ -120,7 +120,7 @@
   "waterplayer.config.control.lyrics.type.line": "Highlight",
   "waterplayer.config.control.lyrics.type.cute": "Cut",
   "waterplayer.config.control.lyrics.type.none": "Not active",
-  "waterplayer.config.control.modern": "Modern Style",
+  "waterplayer.config.control.modern_buttons": "Modern Buttons Style",
 
   "waterplayer.config.notice": "Notice",
   "waterplayer.config.enable_notice": "Track Control Notices",
@@ -176,6 +176,7 @@
 
   "waterplayer.api": "WaterPlayer API",
   "waterplayer.api.enable": "Use API",
+  "waterplayer.api.replace_artwork": "Replace artworks with WaterPlayer API Artworks",
   "waterplayer.api.url": "API URL",
   "waterplayer.api.update_configs": "Update API Configs",
   "waterplayer.api.config_updated": "Configurations updated",
@@ -260,5 +261,12 @@
 
   "waterplayer.web.what_data_is_sent": "What kind of data is Kel getting?",
 
-  "modmenu.descriptionTranslation.waterplayer": "Internet music player built into the client."
+  "modmenu.descriptionTranslation.waterplayer": "Internet music player built into the client.",
+
+  "resourcePack.waterplayer.walter": "WalterPlayer",
+  "resourcePack.waterplayer.walter.description": "April-fool version",
+  "resourcePack.waterplayer.legacy": "Legacy WaterPlayer",
+  "resourcePack.waterplayer.legacy.description": "Legacy textures",
+  "resourcePack.waterplayer.default": "WaterPlayer",
+  "resourcePack.waterplayer.default.description": "WaterPlayer textures"
 }

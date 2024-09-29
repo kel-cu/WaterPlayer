@@ -10,12 +10,10 @@ import com.jagrosh.discordipc.entities.RichPresence;
 import com.jagrosh.discordipc.entities.User;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import org.apache.logging.log4j.Level;
-import ru.kelcuprum.alinlib.WebAPI;
 import ru.kelcuprum.waterplayer.WaterPlayer;
+import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
 import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -124,24 +122,8 @@ public class DiscordIntegration {
             RichPresence.Builder builder = new RichPresence.Builder().setActivityType(ActivityType.Listening);
             String icon = MusicHelper.isFile() ? "file" : (track.getInfo().artworkUrl == null || track.getInfo().artworkUrl.isBlank()) ? "no_icon" : track.getInfo().artworkUrl;
             if (!MusicHelper.isAuthorNull(track) && !MusicHelper.isTitleNull(track) && MusicHelper.isFile(track)) {
-                String author = MusicHelper.getAuthor(track);
-                if(author.split(",").length > 1) author = author.split(",")[0];
-                else if(author.split(";").length > 1) author = author.split(";")[0];
-                else if(author.split("/").length > 1) author = author.split("/")[0];
-                try{
-                    JsonObject authorInfo;
-                    String url = String.format("https://wplayer.ru/v2/info?author=%1$s&album=%2$s", uriEncode(author), uriEncode(MusicHelper.getTitle(track)));
-                    if(urls.containsKey(url)) authorInfo = urls.get(url);
-                    else {
-                        authorInfo = WebAPI.getJsonObject(url);
-                        urls.put(url, authorInfo);
-                    }
-                    if(authorInfo.has("error")) throw new RuntimeException(authorInfo.getAsJsonObject("error").get("message").getAsString());
-                    else if(authorInfo.getAsJsonObject("track").has("artwork"))
-                        icon = authorInfo.getAsJsonObject("track").get("artwork").getAsString();
-                } catch (Exception ex){
-                    WaterPlayer.log(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage(), Level.DEBUG);
-                }
+                String apiIcon = WaterPlayerAPI.getArtwork(track);
+                if(!apiIcon.isBlank()) icon = apiIcon;
             }
             builder.setLargeImage(icon, WaterPlayer.config.getBoolean("DISCORD.SERVICE", true) ? MusicHelper.getServiceName(MusicHelper.getService(track)).getString() : "")
                     .setDetails(MusicHelper.getTitle())
@@ -151,24 +133,8 @@ public class DiscordIntegration {
             if (WaterPlayer.player.getAudioPlayer().isPaused()) builder.setSmallImage("paused");
             else {
                 if (!MusicHelper.isAuthorNull(track) && WaterPlayer.config.getBoolean("DISCORD.AUTHOR_AVATAR", true)) {
-                    String author = MusicHelper.getAuthor(track);
-                    if(author.split(",").length > 1) author = author.split(",")[0];
-                    else if(author.split(";").length > 1) author = author.split(";")[0];
-                    else if(author.split("/").length > 1) author = author.split("/")[0];
-                    try{
-                        JsonObject authorInfo;
-                        String url = String.format("https://wplayer.ru/v2/info?author=%1$s", uriEncode(author));
-                        if(urls.containsKey(url)) {
-                            authorInfo = WebAPI.getJsonObject(url);
-                            urls.put(url, authorInfo);
-                        }
-                        else authorInfo = WebAPI.getJsonObject(url);
-                        if(authorInfo.has("error")) throw new RuntimeException(authorInfo.getAsJsonObject("error").get("message").getAsString());
-                        else if(authorInfo.getAsJsonObject("author").has("artwork"))
-                            builder.setSmallImage(authorInfo.getAsJsonObject("author").get("artwork").getAsString(), MusicHelper.getAuthor(track));
-                    } catch (Exception ex){
-                        WaterPlayer.log(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage(), Level.DEBUG);
-                    }
+                    String apiIcon = WaterPlayerAPI.getAuthorAvatar(track);
+                    if(!apiIcon.isBlank()) builder.setSmallImage(apiIcon, MusicHelper.getAuthor(track));
                 }
                 if(WaterPlayer.config.getBoolean("DISCORD.TIME", true)){
                     builder.setStartTimestamp(parseSeconds(start));
@@ -209,7 +175,7 @@ public class DiscordIntegration {
     }
 
     protected void getYonKaGorMoment(AudioTrack track, RichPresence.Builder builder) {
-        if (!MusicHelper.getAuthor(track).equals("YonKaGor")) return;
+        if (!MusicHelper.getAuthor(track).equals("YonKaGor") || !WaterPlayer.config.getBoolean("DISCORD.YONKACATS", true)) return;
         switch (MusicHelper.getTitle(track)) {
             case "Top 10 Things to Do Before You Die", "Top 10 Things To Do Before You Die",
                  "[TW] Top 10 Things To Do Before You Die (Censored)" ->
@@ -219,8 +185,5 @@ public class DiscordIntegration {
             case "Circus Hop", "Circus Hop [TW]" ->
                     builder.setLargeImage("https://wf.kelcu.ru/mods/waterplayer/icons/clownfish.png", MusicHelper.getServiceName(MusicHelper.getService(track)).getString());
         }
-    }
-    protected String uriEncode(String uri){
-        return URLEncoder.encode(uri, StandardCharsets.UTF_8);
     }
 }

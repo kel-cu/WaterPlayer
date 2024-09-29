@@ -50,6 +50,7 @@ public class TextureHelper {
     public static HashMap<String, Boolean> urls$Base64 = new HashMap<>();
     public static HashMap<String, DynamicTexture> urlsTextures$Base64 = new HashMap<>();
 
+    // Internet
     public static ResourceLocation getTexture(String url, String id) {
         id = formatUrls(id.toLowerCase());
         if (resourceLocationMap.containsKey(id)) return resourceLocationMap.get(id);
@@ -109,7 +110,7 @@ public class TextureHelper {
         }
     }
 
-
+    // File
     public static ResourceLocation getTexture$File(File file, String id) {
         id = formatUrls(id.toLowerCase());
         if (resourceLocationMap$file.containsKey(file)) {
@@ -123,21 +124,7 @@ public class TextureHelper {
             return FILE_ICON;
         }
     }
-    public static void removeTexture$File(File file){
-        String id = formatUrls("local_"+file.getAbsolutePath());
-        if(urlsTextures$file.containsKey(file))
-            urlsTextures$file.remove(file);
-        if(resourceLocationMap$file.containsKey(file))
-            resourceLocationMap$file.remove(file);
-        if(urls$file.containsKey(file))
-            urls$file.remove(file);
-        File fileIcon = getTextureFile(id);
-        if(fileIcon.exists()) fileIcon.delete();
-        JsonObject data = new JsonObject();
-        data.addProperty("url", file.toPath().toString());
-        data.addProperty("id", id);
-        if (map.contains(data)) map.remove(data);
-    }
+
     @Async.Execute
     public static void registerTexture$File(File file, String id, TextureManager textureManager, ResourceLocation textureId) {
         WaterPlayer.log(String.format("REGISTER: %s", file.toPath()), Level.DEBUG);
@@ -196,17 +183,23 @@ public class TextureHelper {
         }
     }
 
-    public static void remove$Base64(String id, String base) {
-        if (base != null) urlsTextures$Base64.remove(base);
-        urls$Base64.remove(id);
-        resourceLocationMap$Base64.remove(id);
-        File file = getTextureFile(id);
-        if (file.exists()) file.delete();
+    public static void removeTexture$File(File file) {
+        String id = formatUrls("local_" + file.getAbsolutePath());
+        if (urlsTextures$file.containsKey(file))
+            urlsTextures$file.remove(file);
+        if (resourceLocationMap$file.containsKey(file))
+            resourceLocationMap$file.remove(file);
+        if (urls$file.containsKey(file))
+            urls$file.remove(file);
+        File fileIcon = getTextureFile(id);
+        if (fileIcon.exists()) fileIcon.delete();
         JsonObject data = new JsonObject();
-        data.addProperty("url", "base64");
+        data.addProperty("url", file.toPath().toString());
         data.addProperty("id", id);
-        map.remove(data);
+        if (map.contains(data)) map.remove(data);
     }
+
+    // Playlist
 
     public static ResourceLocation getTexture$Base64(String base, String id) {
         id = formatUrls(id.toLowerCase());
@@ -314,14 +307,26 @@ public class TextureHelper {
         }
     }
 
+    public static void remove$Base64(String id, String base) {
+        if (base != null) urlsTextures$Base64.remove(base);
+        urls$Base64.remove(id);
+        resourceLocationMap$Base64.remove(id);
+        File file = getTextureFile(id);
+        if (file.exists()) file.delete();
+        JsonObject data = new JsonObject();
+        data.addProperty("url", "base64");
+        data.addProperty("id", id);
+        map.remove(data);
+    }
+
 
     public static File getTextureFile(String url) {
-        return new File(WaterPlayer.getPath()+"/textures/" + url + ".png");
+        return new File(WaterPlayer.getPath() + "/textures/" + url + ".png");
     }
 
     public static void saveMap() {
         try {
-            Path path = new File(WaterPlayer.getPath()+"/textures/map.json").toPath();
+            Path path = new File(WaterPlayer.getPath() + "/textures/map.json").toPath();
             Files.createDirectories(path.getParent());
             Files.writeString(path, map.toString());
         } catch (IOException e) {
@@ -338,17 +343,18 @@ public class TextureHelper {
                 ResourceLocation l = GuiUtils.getResourceLocation("waterplayer", data.get("id").getAsString());
                 if (new File(data.get("url").getAsString()).exists())
                     registerTexture$File(new File(data.get("url").getAsString()), data.get("id").getAsString(), textureManager, l);
-                else if (data.get("url").getAsString().startsWith("base64")) registerTexture$Base64(data.get("id").getAsString(), textureManager, l);
+                else if (data.get("url").getAsString().startsWith("base64"))
+                    registerTexture$Base64(data.get("id").getAsString(), textureManager, l);
                 else registerTexture(data.get("url").getAsString(), data.get("id").getAsString(), textureManager, l);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             WaterPlayer.log("MAP ERROR!", Level.ERROR);
             e.printStackTrace();
         }
     }
 
     public static void loadMap() {
-        File mapFile = new File(WaterPlayer.getPath()+"/textures/map.json");
+        File mapFile = new File(WaterPlayer.getPath() + "/textures/map.json");
         if (mapFile.exists() && mapFile.isFile()) {
             try {
                 map = GsonHelper.parseArray(Files.readString(mapFile.toPath()));
@@ -376,25 +382,27 @@ public class TextureHelper {
         // Return the buffered image
         return bimage;
     }
+
     // -=-=-=-=-=-=-=-=-=- //
-    public static void removePlaylistsIconCache(){
-        File directory = new File(WaterPlayer.getPath()+"/textures");
+    public static void removePlaylistsIconCache() {
+        File directory = new File(WaterPlayer.getPath() + "/textures");
         resourceLocationMap$Base64.clear();
         urls$Base64.clear();
         urlsTextures$Base64.clear();
         List<JsonElement> removed = new ArrayList<>();
-        for(JsonElement element : map){
+        for (JsonElement element : map) {
             JsonObject jsonObject = element.getAsJsonObject();
-            if(jsonObject.get("url").getAsString().equals("base64")) removed.add(element);
+            if (jsonObject.get("url").getAsString().equals("base64")) removed.add(element);
         }
-        for(JsonElement element : removed) map.remove(element);
-        for(File file : directory.listFiles()){
-            if(file.getName().startsWith("playlist") || file.getName().startsWith("webplaylist")) file.delete();
+        for (JsonElement element : removed) map.remove(element);
+        for (File file : directory.listFiles()) {
+            if (file.getName().startsWith("playlist") || file.getName().startsWith("webplaylist")) file.delete();
         }
         saveMap();
     }
-    public static void removeTracksCache(){
-        File directory = new File(WaterPlayer.getPath()+"/textures");
+
+    public static void removeTracksCache() {
+        File directory = new File(WaterPlayer.getPath() + "/textures");
         resourceLocationMap.clear();
         urls.clear();
         urlsTextures.clear();
@@ -402,13 +410,14 @@ public class TextureHelper {
         urls$file.clear();
         urlsTextures$file.clear();
         List<JsonElement> removed = new ArrayList<>();
-        for(JsonElement element : map){
+        for (JsonElement element : map) {
             JsonObject jsonObject = element.getAsJsonObject();
-            if(!jsonObject.get("url").getAsString().equals("base64")) removed.add(element);
+            if (!jsonObject.get("url").getAsString().equals("base64")) removed.add(element);
         }
-        for(JsonElement element : removed) map.remove(element);
-        for(File file : directory.listFiles()){
-            if((!file.getName().startsWith("playlist") && !file.getName().startsWith("webplaylist")) && !file.getName().equals("map.json")) file.delete();
+        for (JsonElement element : removed) map.remove(element);
+        for (File file : directory.listFiles()) {
+            if ((!file.getName().startsWith("playlist") && !file.getName().startsWith("webplaylist")) && !file.getName().equals("map.json"))
+                file.delete();
         }
         saveMap();
     }

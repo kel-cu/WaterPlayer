@@ -2,10 +2,12 @@ package ru.kelcuprum.waterplayer.backend;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.minecraft.network.chat.Component;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Async;
 import ru.kelcuprum.alinlib.AlinLib;
+import ru.kelcuprum.alinlib.WebAPI;
 import ru.kelcuprum.alinlib.config.Config;
 import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
@@ -13,10 +15,14 @@ import ru.kelcuprum.waterplayer.backend.exception.AuthException;
 import ru.kelcuprum.waterplayer.backend.exception.WebPlaylistException;
 import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 import ru.kelcuprum.waterplayer.backend.playlist.WebPlaylist;
+import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpRequest;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static ru.kelcuprum.alinlib.WebAPI.getJsonObject;
@@ -142,5 +148,63 @@ public class WaterPlayerAPI {
             WaterPlayer.log((e.getMessage() == null ? e.getClass().getName() : e.getMessage()), Level.ERROR);
             return results;
         }
+    }
+
+
+
+    public static HashMap<String, JsonObject> urlsArtworks = new HashMap<>();
+
+    public static String getAuthorAvatar(AudioTrack track){
+        String author = MusicHelper.getAuthor(track);
+        if(author.split(",").length > 1) author = author.split(",")[0];
+        else if(author.split(";").length > 1) author = author.split(";")[0];
+        else if(author.split("/").length > 1) author = author.split("/")[0];
+        return getAuthorAvatar(author);
+    }
+    public static String getAuthorAvatar(String author){
+        try{
+            JsonObject authorInfo;
+            String url = String.format("https://wplayer.ru/v2/info?author=%1$s", uriEncode(author));
+            if(urlsArtworks.containsKey(url)) {
+                authorInfo = WebAPI.getJsonObject(url);
+                urlsArtworks.put(url, authorInfo);
+            }
+            else authorInfo = WebAPI.getJsonObject(url);
+            if(authorInfo.has("error")) throw new RuntimeException(authorInfo.getAsJsonObject("error").get("message").getAsString());
+            else if(authorInfo.getAsJsonObject("author").has("artwork"))
+                return authorInfo.getAsJsonObject("author").get("artwork").getAsString();
+            else return "";
+        } catch (Exception ex){
+            WaterPlayer.log(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage(), Level.DEBUG);
+            return "";
+        }
+    }
+    public static String getArtwork(AudioTrack track){
+        String author = MusicHelper.getAuthor(track);
+        if(author.split(",").length > 1) author = author.split(",")[0];
+        else if(author.split(";").length > 1) author = author.split(";")[0];
+        else if(author.split("/").length > 1) author = author.split("/")[0];
+        return getArtwork(author, MusicHelper.getTitle(track));
+    }
+    public static String getArtwork(String author, String album){
+        try{
+            JsonObject authorInfo;
+            String url = String.format("https://wplayer.ru/v2/info?author=%1$s&album=%2$s", uriEncode(author), uriEncode(album));
+            if(urlsArtworks.containsKey(url)) authorInfo = urlsArtworks.get(url);
+            else {
+                authorInfo = WebAPI.getJsonObject(url);
+                urlsArtworks.put(url, authorInfo);
+            }
+            if(authorInfo.has("error")) throw new RuntimeException(authorInfo.getAsJsonObject("error").get("message").getAsString());
+            else if(authorInfo.getAsJsonObject("track").has("artwork"))
+                return authorInfo.getAsJsonObject("track").get("artwork").getAsString();
+            else return "";
+        } catch (Exception ex){
+            WaterPlayer.log(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage(), Level.DEBUG);
+            return "";
+        }
+    }
+    protected static String uriEncode(String uri){
+        return URLEncoder.encode(uri, StandardCharsets.UTF_8);
     }
 }

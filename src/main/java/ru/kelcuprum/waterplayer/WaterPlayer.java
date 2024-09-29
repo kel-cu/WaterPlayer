@@ -1,6 +1,9 @@
 package ru.kelcuprum.waterplayer;
 
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.Util;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -36,10 +39,9 @@ import ru.kelcuprum.waterplayer.backend.MusicPlayer;
 import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
 import ru.kelcuprum.waterplayer.frontend.gui.TextureHelper;
 import ru.kelcuprum.waterplayer.frontend.gui.overlays.SubtitlesHandler;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen$Modern;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.editor.TrackEditorScreen;
 import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
-import ru.kelcuprum.waterplayer.frontend.gui.screens.control.ControlScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.overlays.OverlayHandler;
 import ru.kelcuprum.waterplayer.frontend.rpc.DiscordIntegration;
 
@@ -70,6 +72,14 @@ public class WaterPlayer implements ClientModInitializer {
         player = new MusicPlayer();
         discordIntegration = new DiscordIntegration();
         registerBinds();
+        FabricLoader.getInstance().getModContainer("waterplayer").ifPresent(container -> {
+            ResourceManagerHelper.registerBuiltinResourcePack(GuiUtils.getResourceLocation("waterplayer","legacy"), container, Component.translatable("resourcePack.waterplayer.legacy"), ResourcePackActivationType.NORMAL);
+            //#if WALTER == 1
+            //$$ ResourceManagerHelper.registerBuiltinResourcePack(GuiUtils.getResourceLocation("waterplayer","default"), container, Component.translatable("resourcePack.waterplayer.default"), ResourcePackActivationType.NORMAL);
+            //#else
+            if(AlinLib.isAprilFool()) ResourceManagerHelper.registerBuiltinResourcePack(GuiUtils.getResourceLocation("waterplayer","walter"), container, Component.translatable("resourcePack.waterplayer.walter"), ResourcePackActivationType.NORMAL);
+            //#endif
+        });
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
             player.startAudioOutput();
             //#if WALTER == 1
@@ -119,7 +129,7 @@ public class WaterPlayer implements ClientModInitializer {
 
         ScreenEvents.KEY_PRESS.register((Screen screen, int code, int scan, int modifiers, CallbackInfoReturnable<Boolean> var5) -> {
             if (!WaterPlayer.config.getBoolean("ENABLE_KEYBINDS", false)) return;
-            if (screen instanceof TitleScreen || screen instanceof PauseScreen || screen instanceof ControlScreen || screen instanceof ControlScreen$Modern) {
+            if (screen instanceof TitleScreen || screen instanceof PauseScreen || screen instanceof ControlScreen) {
                 for (KeyBind bind : keyBinds) {
                     if ((bind.key().matches(code, scan) || bind.key().matchesMouse(code)) && bind.onExecute().run()) {
                         var5.setReturnValue(true);
@@ -224,7 +234,7 @@ public class WaterPlayer implements ClientModInitializer {
                 "waterplayer.name"
         ));
         keyBinds.add(new KeyBind(key1, () -> {
-            if (!(AlinLib.MINECRAFT.screen instanceof ControlScreen || AlinLib.MINECRAFT.screen instanceof ControlScreen$Modern)) {
+            if (!(AlinLib.MINECRAFT.screen instanceof ControlScreen)) {
                 AlinLib.MINECRAFT.setScreen(getControlScreen(AlinLib.MINECRAFT.screen));
                 return true;
             } else return false;
@@ -234,9 +244,6 @@ public class WaterPlayer implements ClientModInitializer {
             if (AlinLib.MINECRAFT.screen instanceof ControlScreen) {
                 if (AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
                 ((ControlScreen) AlinLib.MINECRAFT.screen).play.onPress();
-            } else if (AlinLib.MINECRAFT.screen instanceof ControlScreen$Modern) {
-                if (AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
-                ((ControlScreen$Modern) AlinLib.MINECRAFT.screen).play.onPress();
             } else {
                 player.changePaused();
             }
@@ -279,9 +286,6 @@ public class WaterPlayer implements ClientModInitializer {
                 if (AlinLib.MINECRAFT.screen instanceof ControlScreen) {
                     if (AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
                     ((ControlScreen) AlinLib.MINECRAFT.screen).shuffle.onPress();
-                } else if (AlinLib.MINECRAFT.screen instanceof ControlScreen$Modern) {
-                    if (AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
-                    ((ControlScreen$Modern) AlinLib.MINECRAFT.screen).shuffle.onPress();
                 } else {
                     player.getTrackScheduler().shuffle();
                 }
@@ -296,9 +300,6 @@ public class WaterPlayer implements ClientModInitializer {
             if (AlinLib.MINECRAFT.screen instanceof ControlScreen) {
                 if (AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
                 ((ControlScreen) AlinLib.MINECRAFT.screen).repeat.onPress();
-            } else if (AlinLib.MINECRAFT.screen instanceof ControlScreen$Modern) {
-                if (AlinLib.MINECRAFT.screen.getFocused() instanceof EditBox) return false;
-                ((ControlScreen$Modern) AlinLib.MINECRAFT.screen).repeat.onPress();
             } else {
                 player.getTrackScheduler().changeRepeatStatus();
             }
@@ -309,7 +310,7 @@ public class WaterPlayer implements ClientModInitializer {
             return true;
         }));
         keyBinds.add(new KeyBind(key7, () -> {
-            if (player.getAudioPlayer().getPlayingTrack() == null || AlinLib.MINECRAFT.screen instanceof ControlScreen || AlinLib.MINECRAFT.screen instanceof ControlScreen$Modern)
+            if (player.getAudioPlayer().getPlayingTrack() == null || AlinLib.MINECRAFT.screen instanceof ControlScreen)
                 return false;
             int current = config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue() + config.getNumber("SELECT_MUSIC_VOLUME", 1).intValue();
             if (current >= 100) current = 100;
@@ -319,7 +320,7 @@ public class WaterPlayer implements ClientModInitializer {
             return true;
         }));
         keyBinds.add(new KeyBind(key8, () -> {
-            if (player.getAudioPlayer().getPlayingTrack() == null || AlinLib.MINECRAFT.screen instanceof ControlScreen || AlinLib.MINECRAFT.screen instanceof ControlScreen$Modern)
+            if (player.getAudioPlayer().getPlayingTrack() == null || AlinLib.MINECRAFT.screen instanceof ControlScreen)
                 return false;
             int current = config.getNumber("CURRENT_MUSIC_VOLUME", 3).intValue() - config.getNumber("SELECT_MUSIC_VOLUME", 1).intValue();
             if (current <= 0) current = 0;
@@ -333,7 +334,7 @@ public class WaterPlayer implements ClientModInitializer {
     //
 
     public static Screen getControlScreen(Screen parent){
-        return WaterPlayer.config.getBoolean("CONTROL.MODERN", true) ? new ControlScreen$Modern(parent) : new ControlScreen(parent);
+        return new ControlScreen(parent);
     }
 
     // Logger

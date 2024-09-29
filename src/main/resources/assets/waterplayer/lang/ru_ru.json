@@ -121,7 +121,7 @@
   "waterplayer.config.control.lyrics.type.line": "Выделение",
   "waterplayer.config.control.lyrics.type.cute": "Сокращение",
   "waterplayer.config.control.lyrics.type.none": "Без активности",
-  "waterplayer.config.control.modern": "Современный стиль",
+  "waterplayer.config.control.modern_buttons": "Современный стиль кнопок",
 
   "waterplayer.config.notice": "Уведомления",
   "waterplayer.config.enable_notice": "Уведомления контроля трека",
@@ -181,6 +181,7 @@
 
   "waterplayer.api": "WaterPlayer API",
   "waterplayer.api.enable": "Использовать API",
+  "waterplayer.api.replace_artwork": "Заменить обложки на обложки WaterPlayer API",
   "waterplayer.api.url": "Ссылка на API",
   "waterplayer.api.update_configs": "Обновить конфиги API",
   "waterplayer.api.config_updated": "Конфиги обновлены",
@@ -254,5 +255,12 @@
 
   "waterplayer.web.what_data_is_sent": "Какие данные получает Кел?",
 
-  "modmenu.descriptionTranslation.waterplayer": "Встроенный в клиент музыкальный интернет-плеер."
+  "modmenu.descriptionTranslation.waterplayer": "Встроенный в клиент музыкальный интернет-плеер.",
+
+  "resourcePack.waterplayer.walter": "ВолтерПлеер",
+  "resourcePack.waterplayer.walter.description": "Перво-апрельская версия",
+  "resourcePack.waterplayer.legacy": "Старый WaterPlayer",
+  "resourcePack.waterplayer.legacy.description": "Старые текстуры",
+  "resourcePack.waterplayer.default": "WaterPlayer",
+  "resourcePack.waterplayer.default.description": "Текстуры WaterPlayer"
 }

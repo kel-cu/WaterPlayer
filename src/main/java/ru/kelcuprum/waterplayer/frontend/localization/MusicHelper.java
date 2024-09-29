@@ -3,8 +3,11 @@ package ru.kelcuprum.waterplayer.frontend.localization;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import ru.kelcuprum.alinlib.AlinLib;
+import ru.kelcuprum.alinlib.gui.GuiUtils;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.TrackScheduler;
+import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
 import ru.kelcuprum.waterplayer.frontend.gui.TextureHelper;
 
 import java.io.File;
@@ -76,9 +79,33 @@ public class MusicHelper {
     public static ResourceLocation getThumbnail(){
         return trackIsNull() ? NO_ICON : getThumbnail(WaterPlayer.player.getAudioPlayer().getPlayingTrack());
     }
+
+
+    private static final HashMap<AudioTrack, String> apiResponse = new HashMap<>();
+    private static final HashMap<AudioTrack, Boolean> apiURLS = new HashMap<>();
+    private static String getApiIcon(AudioTrack info){
+        if (apiResponse.containsKey(info)) return apiResponse.get(info);
+        else {
+            if (!apiURLS.getOrDefault(info, false)) {
+                apiURLS.put(info, true);
+                new Thread(() -> {
+                    String icon = WaterPlayerAPI.getArtwork(info);
+                    apiResponse.put(info, icon);
+                }).start();
+            }
+            return "notloaded";
+        }
+    }
     public static ResourceLocation getThumbnail(AudioTrack info){
+        if(trackIsNull(info)) return NO_ICON;
         if(MusicHelper.isFile(info) && !TextureHelper.urlsTextures.containsKey(info.getInfo().uri)) return TextureHelper.getTexture$File(new File(info.getInfo().uri), (info.getSourceManager().getSourceName() + "_" + info.getInfo().identifier));
-        return trackIsNull(info) ? NO_ICON : TextureHelper.getTexture(info.getInfo().artworkUrl == null ? info.getInfo().uri : info.getInfo().artworkUrl, (info.getSourceManager().getSourceName() + "_" + info.getInfo().identifier));// : MusicHelper.isFile(info) ? FILE_ICON : NO_ICON;
+        String icon = info.getInfo().artworkUrl == null ? info.getInfo().uri : info.getInfo().artworkUrl;
+        if(WaterPlayer.config.getBoolean("API.REPLACE_ARTWORK", false) && !isAuthorNull(info) && !isTitleNull(info)){
+            String apiIcon = getApiIcon(info);
+            if(apiIcon.startsWith("notloaded")) return NO_ICON;
+            else return TextureHelper.getTexture(apiIcon.isBlank() ? icon : apiIcon, ((apiIcon.isBlank() ? "" : "wpapi-artwork_")+info.getSourceManager().getSourceName() + "_" + info.getInfo().identifier));
+        }
+        else return TextureHelper.getTexture(icon, (info.getSourceManager().getSourceName() + "_" + info.getInfo().identifier));
     }
 
     public static boolean isFile(){

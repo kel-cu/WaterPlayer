@@ -51,7 +51,7 @@ public class MainConfigsScreen {
                                 Component.translatable("waterplayer.config.control.lyrics.type.cute").getString(),
                                 Component.translatable("waterplayer.config.control.lyrics.type.none").getString()
                         }).setConfig(WaterPlayer.config, "CONTROL.LYRICS.TYPE").setValue(0).build())
-                        .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.control.modern"), true).setConfig(WaterPlayer.config, "CONTROL.MODERN").build())
+                        .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.control.modern_buttons"), true).setConfig(WaterPlayer.config, "CONTROL.MODERN_BUTTONS").build())
                 )
                 .addWidget(new CategoryBox(Component.translatable("waterplayer.config.notice"))
                         .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.enable_notice"), false).setConfig(WaterPlayer.config, "ENABLE_NOTICE").build())
