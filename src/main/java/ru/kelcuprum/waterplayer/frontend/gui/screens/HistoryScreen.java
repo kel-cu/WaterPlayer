@@ -63,11 +63,12 @@ public class HistoryScreen extends Screen {
     private ConfigureScrolWidget scroller;
     public List<AudioTrack> getTracks(){
         List<AudioTrack> tracks = new ArrayList<>();
+        String rv = requestValue.toLowerCase();
         for(AudioTrack track : WaterPlayer.history.getTracks()){
             if(requestValue.isBlank() ||
-                    (track.getInfo().uri.contains(requestValue) || track.getInfo().title.contains(requestValue) || track.getInfo().author.contains(requestValue)
-                            || MusicHelper.getServiceName(MusicHelper.getService(track)).getString().contains(requestValue))
-                    || track.getSourceManager().getSourceName().contains(requestValue)) tracks.add(track);
+                    (track.getInfo().uri.toLowerCase().contains(rv) || track.getInfo().title.toLowerCase().contains(rv) || track.getInfo().author.toLowerCase().contains(rv)
+                            || MusicHelper.getServiceName(MusicHelper.getService(track)).getString().toLowerCase().contains(rv))
+                    || track.getSourceManager().getSourceName().toLowerCase().contains(rv)) tracks.add(track);
         }
         return tracks;
     }
