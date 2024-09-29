@@ -181,6 +181,9 @@
   "waterplayer.api.update_configs": "Update API Configs",
   "waterplayer.api.config_updated": "Configurations updated",
 
+  "waterplayer.history": "History",
+  "waterplayer.control.history": "History",
+
 
   "waterplayer.secret.title.apple_music": "Apple Music",
   "waterplayer.config.apple_music_media_api_token": "Media API Token",
@@ -188,6 +191,7 @@
 
   "waterplayer.additional": "Additional",
   "waterplayer.config.speaker": "Output",
+  "waterplayer.config.history": "Save History",
   "waterplayer.config.discord": "Discord Integration",
   "waterplayer.config.discord.enable": "Enable",
   "waterplayer.config.discord.service": "Show Service",

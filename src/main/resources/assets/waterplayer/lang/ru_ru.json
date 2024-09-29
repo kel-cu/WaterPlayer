@@ -186,8 +186,12 @@
   "waterplayer.api.update_configs": "Обновить конфиги API",
   "waterplayer.api.config_updated": "Конфиги обновлены",
 
+  "waterplayer.history": "История",
+  "waterplayer.control.history": "История",
+
   "waterplayer.additional": "Дополнительно",
   "waterplayer.config.speaker": "Вывод звука",
+  "waterplayer.config.history": "Сохранять историю",
   "waterplayer.config.discord": "Интеграция Discord",
   "waterplayer.config.discord.enable": "Включить",
   "waterplayer.config.discord.service": "Показывать сервис",

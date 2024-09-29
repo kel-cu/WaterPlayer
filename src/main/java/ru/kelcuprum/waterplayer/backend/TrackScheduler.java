@@ -100,6 +100,10 @@ public class TrackScheduler extends AudioEventAdapter {
     public static double trackSpeed = 0;
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
+        if(WaterPlayer.config.getBoolean("HISTORY", false)){
+            WaterPlayer.history.cache.put(track.getInfo().uri, track);
+            WaterPlayer.history.addHistory(track);
+        }
         trackPosition = track.getPosition();
         trackSpeed = WaterPlayer.player.speed;
     }

@@ -34,6 +34,7 @@ import ru.kelcuprum.alinlib.config.Config;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.GuiUtils;
 import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
+import ru.kelcuprum.waterplayer.backend.History;
 import ru.kelcuprum.waterplayer.backend.KeyBind;
 import ru.kelcuprum.waterplayer.backend.MusicPlayer;
 import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
@@ -58,6 +59,7 @@ public class WaterPlayer implements ClientModInitializer {
     public static MusicPlayer player;
     public static Localization localization = new Localization("waterplayer", WaterPlayer.getPath()+"/lang");
     public static DiscordIntegration discordIntegration;
+    public static History history;
 
     public static String getPath(){
         String path = pathConfig.getBoolean("USE_GLOBAL", false) ? pathConfig.getString("PATH", "{HOME}/WaterPlayer") : "config/WaterPlayer";
@@ -70,6 +72,7 @@ public class WaterPlayer implements ClientModInitializer {
         log("Hello, world! UwU");
         WaterPlayerAPI.loadConfig();
         player = new MusicPlayer();
+        history = new History();
         discordIntegration = new DiscordIntegration();
         registerBinds();
         FabricLoader.getInstance().getModContainer("waterplayer").ifPresent(container -> {
@@ -369,6 +372,7 @@ public class WaterPlayer implements ClientModInitializer {
         ResourceLocation SKIP = GuiUtils.getResourceLocation("waterplayer", "textures/player/skip.png");
         ResourceLocation BACK = GuiUtils.getResourceLocation("waterplayer", "textures/player/back.png");
         ResourceLocation SHUFFLE = GuiUtils.getResourceLocation("waterplayer", "textures/player/shuffle.png");
+        ResourceLocation HISTORY = GuiUtils.getResourceLocation("waterplayer", "textures/player/history.png");
 
         ResourceLocation VOLUME_MAX = GuiUtils.getResourceLocation("waterplayer", "textures/player/volume_max.png");
         ResourceLocation VOLUME_OK = GuiUtils.getResourceLocation("waterplayer", "textures/player/volume_ok.png");

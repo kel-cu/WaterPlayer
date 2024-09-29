@@ -27,6 +27,7 @@ import ru.kelcuprum.waterplayer.backend.queue.AbstractQueue;
 import ru.kelcuprum.waterplayer.frontend.gui.LyricsHelper;
 import ru.kelcuprum.waterplayer.frontend.gui.components.LyricsBox;
 import ru.kelcuprum.waterplayer.frontend.gui.components.TrackButton;
+import ru.kelcuprum.waterplayer.frontend.gui.screens.HistoryScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.TrackScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.config.PlaylistsScreen;
 import ru.kelcuprum.waterplayer.frontend.gui.screens.control.components.*;
@@ -93,10 +94,16 @@ public class ControlScreen extends Screen {
                 .setSize(cWidth - 22, 20).setPosition(x + 22, y)
                 .build());
         y += 22;
+        boolean history = WaterPlayer.config.getBoolean("HISTORY", false);
+        if(history) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.control.history"), (e) -> AlinLib.MINECRAFT.setScreen(new HistoryScreen(this)))
+                .setSprite(HISTORY)
+                .setSize(20, 20)
+                .setPosition(x, y)
+                .build());
         addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.playlists"), (s) -> AlinLib.MINECRAFT.setScreen(PlaylistsScreen.build(this)))
-                .setCentered(false)
-                .setIcon(LIST)
-                .setSize(cWidth, 20).setPosition(x, y)
+                .setCentered(history ? true : false)
+                .setIcon(history ? null : LIST)
+                .setSize(cWidth-(history ? 22 : 0), 20).setPosition(x+(history ? 22 : 0), y)
                 .build());
         y += 22;
         if (WaterPlayer.config.getBoolean("EXPERIMENT.FILTERS", false)) {

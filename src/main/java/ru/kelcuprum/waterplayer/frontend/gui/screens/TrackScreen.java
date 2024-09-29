@@ -72,9 +72,8 @@ public class TrackScreen extends Screen {
         componentSize = Math.min(310, pageSize - 10);
         x = (pageSize - componentSize) / 2;
         if (showLyrics || showPlaylist) x += lyricsSize;
-        if (showPlaylist) {
-            initPlaylist();
-        } else if (showLyrics) {
+        if (showPlaylist) initPlaylist();
+        else if (showLyrics) {
             addRenderableWidget(new TextBox(5, 5, lyricsSize - 10, 20, Localization.getText("waterplayer.track.lyrics.title"), true));
             lyricsBox = addRenderableWidget(new LyricsBox(10, 35, lyricsSize - 20, height - (lyricsEnable ? 95 : 70), Component.empty())).setLyrics(Component.literal(lyricsEnable ? lyrics.getText() != null ? lyrics.getText().replace("\r", "") : "404: Not found" : "404: Not found"));
             if(lyricsEnable) addRenderableWidget(new ButtonBuilder(Component.translatable("waterplayer.track.lyrics.copy"), (onPress) -> {
