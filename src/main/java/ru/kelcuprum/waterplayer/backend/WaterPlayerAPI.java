@@ -164,12 +164,12 @@ public class WaterPlayerAPI {
     public static String getAuthorAvatar(String author){
         try{
             JsonObject authorInfo;
-            String url = String.format("https://wplayer.ru/v2/info?author=%1$s", uriEncode(author));
-            if(urlsArtworks.containsKey(url)) {
+            String url = getURL(String.format("/info?author=%1$s", uriEncode(author)));
+            if(urlsArtworks.containsKey(url)) authorInfo = urlsArtworks.get(url);
+            else {
                 authorInfo = WebAPI.getJsonObject(url);
                 urlsArtworks.put(url, authorInfo);
             }
-            else authorInfo = WebAPI.getJsonObject(url);
             if(authorInfo.has("error")) throw new RuntimeException(authorInfo.getAsJsonObject("error").get("message").getAsString());
             else if(authorInfo.getAsJsonObject("author").has("artwork"))
                 return authorInfo.getAsJsonObject("author").get("artwork").getAsString();
@@ -189,7 +189,7 @@ public class WaterPlayerAPI {
     public static String getArtwork(String author, String album){
         try{
             JsonObject authorInfo;
-            String url = String.format("https://wplayer.ru/v2/info?author=%1$s&album=%2$s", uriEncode(author), uriEncode(album));
+            String url = getURL(String.format("/info?author=%1$s&album=%2$s", uriEncode(author), uriEncode(album)));
             if(urlsArtworks.containsKey(url)) authorInfo = urlsArtworks.get(url);
             else {
                 authorInfo = WebAPI.getJsonObject(url);
