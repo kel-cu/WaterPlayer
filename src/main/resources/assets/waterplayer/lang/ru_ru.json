@@ -104,6 +104,7 @@
 
   "waterplayer.config.overlay": "Оверлей",
   "waterplayer.config.enable_overlay": "Внутриигровой оверлей",
+  "waterplayer.config.enable_overlay.hide_in_debug": "Скрыть оверлей в Меню Отладки",
   "waterplayer.config.overlay.position": "Позиция внутриигрового оверлея",
   "waterplayer.config.overlay.enable_caver": "Миниатюры треков в оверлее",
   "waterplayer.config.overlay.position.top_left": "Сверху слева",
@@ -195,6 +196,7 @@
   "waterplayer.config.discord": "Интеграция Discord",
   "waterplayer.config.discord.enable": "Включить",
   "waterplayer.config.discord.service": "Показывать сервис",
+  "waterplayer.config.discord.album": "Показывать альбом",
   "waterplayer.config.discord.author_avatar": "Показывать аватарку автора",
   "waterplayer.config.discord.time": "Показывать время",
   "waterplayer.config.discord.button": "Включить кнопки",

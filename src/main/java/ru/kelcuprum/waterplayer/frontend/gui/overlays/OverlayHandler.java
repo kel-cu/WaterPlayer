@@ -51,8 +51,8 @@ public class OverlayHandler implements GuiRenderEvents, ClientTickEvents.StartTi
                 int pos1 = WaterPlayer.config.getNumber("OVERLAY.POSITION", 0).intValue();
                 int maxWidth = Math.max(AlinLib.MINECRAFT.font.width(state), (bottom ? (pos == 0 || pos == 1) : (pos1 == 0 || pos1 == 1)) ? AlinLib.MINECRAFT.getWindow().getGuiScaledWidth() / 2 : ((AlinLib.MINECRAFT.getWindow().getGuiScaledWidth() - 280) / 2) - (WaterPlayer.player.getAudioPlayer().getPlayingTrack().getInfo().artworkUrl != null || MusicHelper.isFile() ? (AlinLib.MINECRAFT.font.lineHeight + 3) * 3 : 0));
                 //-=-=-=-
-                if (!MusicHelper.isAuthorNull()) texts.addAll(AlinLib.MINECRAFT.font.split(author, maxWidth));
                 texts.addAll(AlinLib.MINECRAFT.font.split(title, maxWidth));
+                if (!MusicHelper.isAuthorNull()) texts.addAll(AlinLib.MINECRAFT.font.split(author, maxWidth));
                 texts.addAll(AlinLib.MINECRAFT.font.split(state, maxWidth));
             }
         } catch (Exception ex) {
@@ -61,13 +61,14 @@ public class OverlayHandler implements GuiRenderEvents, ClientTickEvents.StartTi
     }
 
     public void render(GuiGraphics guiGraphics, int pos) {
-        if (AlinLib.MINECRAFT.options.hideGui ||
+        if ((AlinLib.MINECRAFT.options.hideGui ||
 
                 //#if MC >= 12002
                 AlinLib.MINECRAFT.gui.getDebugOverlay().showDebugScreen()
             //#elseif MC < 12002
             //$$ AlinLib.MINECRAFT.options.renderDebug
             //#endif
+        ) && WaterPlayer.config.getBoolean("ENABLE_OVERLAY.HIDE_IN_DEBUG", true)
         ) return;
         if (WaterPlayer.player.getAudioPlayer().getPlayingTrack() == null) return;
         try {

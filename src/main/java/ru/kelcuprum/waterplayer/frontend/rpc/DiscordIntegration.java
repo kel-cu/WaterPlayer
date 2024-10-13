@@ -125,7 +125,7 @@ public class DiscordIntegration {
                 String apiIcon = WaterPlayerAPI.getArtwork(track);
                 if(!apiIcon.isBlank()) icon = apiIcon;
             }
-            builder.setLargeImage(icon, WaterPlayer.config.getBoolean("DISCORD.SERVICE", true) ? MusicHelper.getServiceName(MusicHelper.getService(track)).getString() : "")
+            builder.setLargeImage(icon, getLargeImageText(track))
                     .setDetails(MusicHelper.getTitle())
                     .setState(MusicHelper.getAuthor());
             getYonKaGorMoment(track, builder);
@@ -173,17 +173,26 @@ public class DiscordIntegration {
             }
         }
     }
-
+    protected String getLargeImageText(AudioTrack track){
+        JsonObject trackInfo = WaterPlayerAPI.getTrackInfo(track, false);
+        String album = "";
+        if(trackInfo.has("track") && WaterPlayer.config.getBoolean("DISCORD.ALBUM", true)){
+            JsonObject info = trackInfo.getAsJsonObject("track");
+            album = info.has("album") ? info.get("album").getAsString() : "";
+            if(album.equalsIgnoreCase(info.get("title").getAsString())) album = "";
+        }
+        return WaterPlayer.config.getBoolean("DISCORD.SERVICE", false) ? MusicHelper.getServiceName(MusicHelper.getService(track)).getString() : album;
+    }
     protected void getYonKaGorMoment(AudioTrack track, RichPresence.Builder builder) {
         if (!MusicHelper.getAuthor(track).equals("YonKaGor") || !WaterPlayer.config.getBoolean("DISCORD.YONKACATS", true)) return;
         switch (MusicHelper.getTitle(track)) {
             case "Top 10 Things to Do Before You Die", "Top 10 Things To Do Before You Die",
                  "[TW] Top 10 Things To Do Before You Die (Censored)" ->
-                    builder.setLargeImage("https://wf.kelcu.ru/mods/waterplayer/icons/seadrive.gif", "HowTo");
+                    builder.setLargeImage("https://wf.kelcu.ru/mods/waterplayer/icons/seadrive.gif", "HowTo: be happy 🔍");
             case "You're Just Like Pop Music" ->
-                    builder.setLargeImage("https://wf.kelcu.ru/mods/waterplayer/icons/tetra.gif", MusicHelper.getServiceName(MusicHelper.getService(track)).getString());
+                    builder.setLargeImage("https://wf.kelcu.ru/mods/waterplayer/icons/tetra.gif", getLargeImageText(track));
             case "Circus Hop", "Circus Hop [TW]" ->
-                    builder.setLargeImage("https://wf.kelcu.ru/mods/waterplayer/icons/clownfish.png", MusicHelper.getServiceName(MusicHelper.getService(track)).getString());
+                    builder.setLargeImage("https://wf.kelcu.ru/mods/waterplayer/icons/clownfish.png", getLargeImageText(track));
         }
     }
 }

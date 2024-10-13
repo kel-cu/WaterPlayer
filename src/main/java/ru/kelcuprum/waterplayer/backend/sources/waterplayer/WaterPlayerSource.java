@@ -73,7 +73,7 @@ public class WaterPlayerSource implements AudioSourceManager, AudioLyricsManager
             String url = String.format(WaterPlayerAPI.config.getString("PLAYLIST_URL", WaterPlayerAPI.getURL("/playlist/%s")), id);
             try {
                 return new WaterPlayerPlaylist(WaterPlayerAPI.getPlaylist(url, false));
-            } catch (WebPlaylistException ex) {
+            } catch (Exception ex) {
                 WaterPlayer.log("ERROR: "+(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage()), Level.DEBUG);
             }
         }

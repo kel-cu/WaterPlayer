@@ -69,7 +69,7 @@ public class WaterPlayer implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        log("Hello, world! UwU");
+        log("Здравствуйте, товарищ!");
         WaterPlayerAPI.loadConfig();
         player = new MusicPlayer();
         history = new History();

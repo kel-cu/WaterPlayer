@@ -64,7 +64,8 @@ public class AdditionalScreen {
         builder.addWidget(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.history"), false).setConfig(WaterPlayer.config, "HISTORY"));
         builder.addWidget(new CategoryBox(Component.translatable("waterplayer.config.discord"))
                 .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.discord.enable"), false).setConfig(WaterPlayer.config, "DISCORD"))
-                .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.discord.service"), true).setConfig(WaterPlayer.config, "DISCORD.SERVICE"))
+                .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.discord.service"), false).setConfig(WaterPlayer.config, "DISCORD.SERVICE"))
+                .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.discord.album"), true).setConfig(WaterPlayer.config, "DISCORD.ALBUM"))
                 .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.discord.author_avatar"), true).setConfig(WaterPlayer.config, "DISCORD.AUTHOR_AVATAR"))
                 .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.discord.time"), true).setConfig(WaterPlayer.config, "DISCORD.TIME"))
                 .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.discord.button"), true).setConfig(WaterPlayer.config, "DISCORD.BUTTON"))

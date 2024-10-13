@@ -37,6 +37,7 @@ public class MainConfigsScreen {
                 .addWidget(new TextBox(Component.translatable("waterplayer.config"), true))
                 .addWidget(new CategoryBox(Component.translatable("waterplayer.config.overlay"))
                         .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.enable_overlay"), true).setConfig(WaterPlayer.config, "ENABLE_OVERLAY").build())
+                        .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.enable_overlay.hide_in_debug"), true).setConfig(WaterPlayer.config, "ENABLE_OVERLAY.HIDE_IN_DEBUG").build())
                         .addValue(new SelectorBuilder(Component.translatable("waterplayer.config.overlay.position")).setList(type).setConfig(WaterPlayer.config, "OVERLAY.POSITION").setValue(0).build())
                         .addValue(new ButtonBooleanBuilder(Component.translatable("waterplayer.config.overlay.enable_caver"), true).setConfig(WaterPlayer.config, "OVERLAY.ENABLE_CAVER").build())
                 )
@@ -74,9 +75,4 @@ public class MainConfigsScreen {
                 )
                 .build();
     }
-    //if FORGE && MC >= 12002
-    //$$ public static Screen build(net.minecraft.client.Minecraft minecraft, Screen screen) {
-    //$$     return build(screen);
-    //$$ }
-    //endif
 }

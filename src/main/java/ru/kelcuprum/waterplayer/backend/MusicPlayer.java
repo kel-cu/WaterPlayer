@@ -128,7 +128,7 @@ public class MusicPlayer {
         lyricsManager.registerLyricsManager(wps);
 
         if (config.getBoolean("ENABLE_YOUTUBE", true)) {
-            final YoutubeAudioSourceManager youtube = new YoutubeAudioSourceManager(true, new MusicWithThumbnail(), new WebWithThumbnail(), new TvHtml5EmbeddedWithThumbnail());
+            final YoutubeAudioSourceManager youtube = new YoutubeAudioSourceManager(true, new MusicWithThumbnail(), new AndroidMusicWithThumbnail(), new TvHtml5EmbeddedWithThumbnail());
             youtube.setPlaylistPageCount(100);
             audioPlayerManager.registerSourceManager(youtube);
             AudioSearchManager ytSearch = new YoutubeSearchManager(() -> audioPlayerManager, "US");

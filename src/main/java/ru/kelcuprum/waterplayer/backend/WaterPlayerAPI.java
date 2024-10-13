@@ -17,6 +17,7 @@ import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 import ru.kelcuprum.waterplayer.backend.playlist.WebPlaylist;
 import ru.kelcuprum.waterplayer.frontend.localization.MusicHelper;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpRequest;
@@ -65,7 +66,7 @@ public class WaterPlayerAPI {
             if(json.has("error")){
                 if (json.getAsJsonObject("error").get("code").getAsNumber().intValue() != 401) {
                     String msg = json.getAsJsonObject("error").has("message") ? json.getAsJsonObject("error").get("message").getAsString() : json.getAsJsonObject("error").get("codename").getAsString();
-                    WaterPlayer.getToast().setMessage(Component.literal(msg)).setType(ToastBuilder.Type.ERROR).setIcon(DONT).buildAndShow();
+                    WaterPlayer.getToast().setTitle(Component.literal("WaterPlayer API")).setMessage(Component.literal(msg)).setType(ToastBuilder.Type.ERROR).setIcon(DONT).buildAndShow();
                 }
                 return false;
             }
@@ -85,11 +86,12 @@ public class WaterPlayerAPI {
             config = new Config(object);
         } catch (Exception e){
             WaterPlayer.log(e.getMessage() == null ? e.getClass().getName() : e.getMessage(), Level.ERROR);
-            WaterPlayer.getToast().setMessage(Component.literal(e.getMessage() == null ? e.getClass().getName() : e.getMessage())).setType(ToastBuilder.Type.ERROR).setIcon(DONT).buildAndShow();
+            if(e instanceof AuthException) WaterPlayer.getToast().setMessage(Component.literal(e.getMessage() == null ? e.getClass().getName() : e.getMessage())).setType(ToastBuilder.Type.ERROR).setIcon(DONT).buildAndShow();
+            else WaterPlayer.getToast().setMessage(Component.literal("Failed connect to API")).setType(ToastBuilder.Type.ERROR).setIcon(DONT).buildAndShow();
         }
     }
 
-    public static Playlist getPlaylist(String url, boolean save) throws WebPlaylistException {
+    public static Playlist getPlaylist(String url, boolean save) throws WebPlaylistException, IOException, InterruptedException {
         try {
             JsonObject data = getJsonObject(url);
             if(data.has("error")){
@@ -100,7 +102,8 @@ public class WaterPlayerAPI {
             return playlist.playlist;
         } catch (Exception e){
             WaterPlayer.log(e.getMessage() == null ? e.getClass().getName() : e.getMessage(), Level.ERROR);
-            throw new WebPlaylistException("External error: "+(e.getMessage() == null ? e.getClass().getName() : e.getMessage()));
+            if(e instanceof WebPlaylistException) throw new WebPlaylistException("External error: "+(e.getMessage() == null ? e.getClass().getName() : e.getMessage()));
+            else throw e;
         }
     }
 
@@ -153,23 +156,43 @@ public class WaterPlayerAPI {
 
 
     public static HashMap<String, JsonObject> urlsArtworks = new HashMap<>();
-
-    public static String getAuthorAvatar(AudioTrack track){
+    public static JsonObject getTrackInfo(AudioTrack track, boolean onlyAuthor){
         String author = MusicHelper.getAuthor(track);
         if(author.split(",").length > 1) author = author.split(",")[0];
         else if(author.split(";").length > 1) author = author.split(";")[0];
         else if(author.split("/").length > 1) author = author.split("/")[0];
-        return getAuthorAvatar(author);
-    }
-    public static String getAuthorAvatar(String author){
         try{
             JsonObject authorInfo;
-            String url = getURL(String.format("/info?author=%1$s", uriEncode(author)));
+            String url = getURL(onlyAuthor ? String.format("/info?author=%1$s", uriEncode(author)) : String.format("/info?author=%1$s&album=%2$s", uriEncode(author), uriEncode(MusicHelper.getTitle(track))));
             if(urlsArtworks.containsKey(url)) authorInfo = urlsArtworks.get(url);
             else {
                 authorInfo = WebAPI.getJsonObject(url);
                 urlsArtworks.put(url, authorInfo);
             }
+            if(!onlyAuthor){
+                String aUrl = String.format("/info?author=%1$s", uriEncode(author));
+                if(!urlsArtworks.containsKey(aUrl)){
+                    JsonObject authorObject = new JsonObject();
+                    authorObject.add("author", authorInfo.get("author"));
+                    urlsArtworks.put(aUrl, authorObject);
+                }
+            }
+            return authorInfo;
+        } catch (Exception ex){
+            WaterPlayer.log(ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage(), Level.DEBUG);
+            JsonObject rep = new JsonObject();
+            JsonObject error = new JsonObject();
+            error.addProperty("code", 500);
+            error.addProperty("codename", "Internal Server Error");
+            error.addProperty("message", ex.getMessage() == null ? ex.getClass().getName() : ex.getMessage());
+            rep.add("error", error);
+            return rep;
+        }
+    }
+    public static String getAuthorAvatar(AudioTrack track){
+        String author = MusicHelper.getAuthor(track);
+        try{
+            JsonObject authorInfo = getTrackInfo(track, true);
             if(authorInfo.has("error")) throw new RuntimeException(authorInfo.getAsJsonObject("error").get("message").getAsString());
             else if(authorInfo.getAsJsonObject("author").has("artwork"))
                 return authorInfo.getAsJsonObject("author").get("artwork").getAsString();
@@ -180,21 +203,8 @@ public class WaterPlayerAPI {
         }
     }
     public static String getArtwork(AudioTrack track){
-        String author = MusicHelper.getAuthor(track);
-        if(author.split(",").length > 1) author = author.split(",")[0];
-        else if(author.split(";").length > 1) author = author.split(";")[0];
-        else if(author.split("/").length > 1) author = author.split("/")[0];
-        return getArtwork(author, MusicHelper.getTitle(track));
-    }
-    public static String getArtwork(String author, String album){
         try{
-            JsonObject authorInfo;
-            String url = getURL(String.format("/info?author=%1$s&album=%2$s", uriEncode(author), uriEncode(album)));
-            if(urlsArtworks.containsKey(url)) authorInfo = urlsArtworks.get(url);
-            else {
-                authorInfo = WebAPI.getJsonObject(url);
-                urlsArtworks.put(url, authorInfo);
-            }
+            JsonObject authorInfo = getTrackInfo(track, false);
             if(authorInfo.has("error")) throw new RuntimeException(authorInfo.getAsJsonObject("error").get("message").getAsString());
             else if(authorInfo.getAsJsonObject("track").has("artwork"))
                 return authorInfo.getAsJsonObject("track").get("artwork").getAsString();

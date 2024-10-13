@@ -47,7 +47,7 @@ public class SubtitlesHandler implements GuiRenderEvents {
     }
 
     protected boolean isTrackEnable() {
-        return WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null;
+        return WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null && !WaterPlayer.player.isPaused();
     }
 
     @Override

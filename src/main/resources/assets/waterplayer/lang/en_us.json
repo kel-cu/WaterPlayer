@@ -103,6 +103,7 @@
 
   "waterplayer.config.overlay": "Overlay",
   "waterplayer.config.enable_overlay": "In-game Overlay",
+  "waterplayer.config.enable_overlay.hide_in_debug": "Hide Overlay in Debug Menu",
   "waterplayer.config.overlay.position": "In-game Overlay Position",
   "waterplayer.config.overlay.enable_caver": "Track Thumbnails in the Overlay",
   "waterplayer.config.overlay.position.top_left": "Top Left",
@@ -194,6 +195,7 @@
   "waterplayer.config.history": "Save History",
   "waterplayer.config.discord": "Discord Integration",
   "waterplayer.config.discord.enable": "Enable",
+  "waterplayer.config.discord.album": "Show Album",
   "waterplayer.config.discord.service": "Show Service",
   "waterplayer.config.discord.author_avatar": "Show Author Avatar",
   "waterplayer.config.discord.time": "Show Time",

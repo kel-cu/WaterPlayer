@@ -4,13 +4,13 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import org.apache.logging.log4j.Level;
-import ru.kelcuprum.alinlib.AlinLib;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
 import ru.kelcuprum.alinlib.gui.components.builder.editbox.EditBoxBuilder;
 import ru.kelcuprum.alinlib.gui.components.text.TextBox;
 import ru.kelcuprum.alinlib.gui.toast.ToastBuilder;
 import ru.kelcuprum.waterplayer.WaterPlayer;
 import ru.kelcuprum.waterplayer.backend.WaterPlayerAPI;
+import ru.kelcuprum.waterplayer.backend.exception.WebPlaylistException;
 import ru.kelcuprum.waterplayer.backend.playlist.Playlist;
 
 import java.io.IOException;
@@ -48,7 +48,8 @@ public class CreatePlaylistScreen extends Screen {
                     fileName = WaterPlayerAPI.getPlaylist(fileName, true).fileName;
                 } catch (Exception e){
                     WaterPlayer.log(e.getMessage() == null ? e.getClass().getName() : e.getMessage(), Level.ERROR);
-                    WaterPlayer.getToast().setMessage(Component.literal(e.getMessage() == null ? e.getClass().getName() : e.getMessage())).setType(ToastBuilder.Type.ERROR).buildAndShow();
+                    if(e instanceof WebPlaylistException) WaterPlayer.getToast().setMessage(Component.literal(e.getMessage() == null ? e.getClass().getName() : e.getMessage())).setType(ToastBuilder.Type.ERROR).buildAndShow();
+                    else WaterPlayer.getToast().setMessage(Component.literal("It's not WaterPlayer Playlist")).setType(ToastBuilder.Type.ERROR).buildAndShow();
                     return;
                 }
             }

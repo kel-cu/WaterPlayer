@@ -65,7 +65,6 @@ public class PlaylistsScreen {
                     try {
                         Playlist playlistObject = new Playlist(playlist.toPath());
                         assetsSize++;
-                        // new ButtonBuilder(Component.translatable("waterplayer.playlists.value", playlistObject.title, playlistObject.author), Component.literal(playlistObject.fileName), (s) -> AlinLib.MINECRAFT.setScreen(new ViewPlaylistScreen(PlaylistsScreen.build(parent), playlistObject))).build()
                         builder.addWidget(new PlaylistButton(140, -50, DEFAULT_WIDTH(), playlistObject, AlinLib.MINECRAFT.screen));
                     } catch (Exception e){
                         WaterPlayer.log(e.getLocalizedMessage(), Level.ERROR);
