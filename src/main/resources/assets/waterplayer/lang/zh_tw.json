@@ -37,12 +37,12 @@
   "waterplayer.playlist.edit_button": "編輯播放清單",
   "waterplayer.playlist.is_empty": "<--- 嘿！您的播放清單是空的！快去新增曲目吧！",
 
-  "waterplayer.playlist.create.illegal_characters": "含有非法字元！",
+  "waterplayer.playlist.create.illegal_characters": "含有無效字元！",
 
-  "waterplayer.playlist.upload": "發佈播放清單",
+  "waterplayer.playlist.upload": "發布播放清單",
   "waterplayer.playlist.upload.unavailable": "伺服器無法使用",
   "waterplayer.playlist.copy_link": "複製連結",
-  "waterplayer.playlist.uploaded": "播放清單連結已複製到剪貼簿",
+  "waterplayer.playlist.uploaded": "已將播放清單連結複製到剪貼簿",
   "waterplayer.playlist.link_copied": "連結已複製",
 
   "waterplayer.key.pause": "切換暫停",
@@ -79,7 +79,7 @@
   "waterplayer.control.pitch": "音調",
 
   "waterplayer.control": "控制",
-  "waterplayer.control.modern.notice": "哇，新設計！如果您不喜歡新設計，您可以隨時在模組設定中更改參數，或按下 Shift + P",
+  "waterplayer.control.modern.notice": "哇，新設計！如果您不喜歡新設計，您可以隨時在模組設定中變更參數，或按下 Shift + P",
   "waterplayer.load.current_track": "目前曲目：",
   "waterplayer.load.load": "載入",
   "waterplayer.load.volume": "音量",
