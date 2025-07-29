@@ -8,6 +8,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
+//#if MC >= 12106
+import net.minecraft.client.renderer.RenderPipelines;
+//#endif
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -330,8 +333,10 @@ public class ControlScreen extends Screen {
 
         if (isTrackEnable()) {
             guiGraphics.blit(
-                    //#if MC >= 12102
-                    RenderType::guiTextured,
+                    //#if MC >= 12106
+                    RenderPipelines.GUI_TEXTURED,
+                    //#elseif MC >= 12102
+                    //$$ RenderType::guiTextured,
                     //#endif
                     MusicHelper.getThumbnail(), x + 3, y + 3, 0f, 0f, 34, 34, 34, 34);
             int size = width - 10;

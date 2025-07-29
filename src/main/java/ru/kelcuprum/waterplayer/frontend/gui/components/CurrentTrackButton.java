@@ -4,6 +4,9 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+//#if MC >= 12106
+import net.minecraft.client.renderer.RenderPipelines;
+//#endif
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -85,8 +88,10 @@ public class CurrentTrackButton extends Button {
             } else {
                 ResourceLocation icon = MusicHelper.getThumbnail(track);
                 guiGraphics.blit(
-                        //#if MC >= 12102
-                        RenderType::guiTextured,
+                        //#if MC >= 12106
+                        RenderPipelines.GUI_TEXTURED,
+                        //#elseif MC >= 12102
+                        //$$ RenderType::guiTextured,
                         //#endif
                         icon, getX() + 2, getY() + 2, 0.0F, 0.0F, 36, 36, 36, 36);
                 renderString(guiGraphics, builder.toString(), getX() + 45, getY() + 8);

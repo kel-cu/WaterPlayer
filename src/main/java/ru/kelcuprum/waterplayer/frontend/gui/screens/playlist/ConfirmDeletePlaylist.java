@@ -3,6 +3,9 @@ package ru.kelcuprum.waterplayer.frontend.gui.screens.playlist;
 import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+//#if MC >= 12106
+import net.minecraft.client.renderer.RenderPipelines;
+//#endif
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -55,7 +58,11 @@ public class ConfirmDeletePlaylist extends Screen {
 
         //#if MC >= 12100
         renderBlurredBackground(
-                //#if MC == 12101
+                //#if MC >= 12106
+                guiGraphics
+                //#elseif MC >= 12102
+                //$$
+                //#elseif MC == 12101
                 //$$f
                 //#endif
         );
@@ -76,15 +83,26 @@ public class ConfirmDeletePlaylist extends Screen {
         int y = 60;
 
         guiGraphics.blit(
-                //#if MC >= 12102
-                RenderType::guiTextured,
+                //#if MC >= 12106
+                RenderPipelines.GUI_TEXTURED,
+                //#elseif MC >= 12102
+                //$$ RenderType::guiTextured,
                 //#endif
                 RECYCLE_BIN, (width/2)-25, y, 0,0, 50,50, 50, 50);
         y+=50;
-        guiGraphics.pose().pushPose();
-        guiGraphics.pose().scale(2.0F, 2.0F, 2.0F);
+        //#if MC >= 12106
+        guiGraphics.pose().pushMatrix();
+        guiGraphics.pose().scale(2.0F, 2.0F);
+        //#elseif MC >= 12102
+        //$$ guiGraphics.pose().pushPose();
+        //$$ guiGraphics.pose().scale(2.0F, 2.0F, 2.0F);
+        //#endif
         guiGraphics.drawCenteredString(this.font, this.title, this.width / 2 / 2, y/2, 16777215);
-        guiGraphics.pose().popPose();
+        //#if MC >= 12106
+        guiGraphics.pose().popMatrix();
+        //#elseif MC >= 12102
+        //$$ guiGraphics.pose().popPose();
+        //#endif
         y+=25;
         guiGraphics.drawCenteredString(this.font, Component.translatable("waterplayer.playlist.web.delete.description"), this.width / 2, y, 16777215);
         y+=(this.font.lineHeight+3);

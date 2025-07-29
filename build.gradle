@@ -1,5 +1,6 @@
 plugins {
     id 'maven-publish'
+    id "com.modrinth.minotaur" version "2.+"
     id "io.github.goooler.shadow" version "8.1.7" apply false
     id "fabric-loom" version "1.10-SNAPSHOT" apply false
     id "io.github.p03w.machete" version "2.+" apply false
@@ -16,9 +17,11 @@ preprocess {
     def mc1211_fabric = createNode('1.21.1-fabric', 1_21_01, '')
     def mc1212_fabric = createNode('1.21.2-fabric', 1_21_02, '')
     def mc1215_fabric = createNode('1.21.5-fabric', 1_21_05, '')
-    mc1211_fabric.link(mc1215_fabric, null)
-    mc1212_fabric.link(mc1215_fabric, null)
-    mc1215_fabric.link(mc1215_fabric, null)
+    def mc1216_fabric = createNode('1.21.6-fabric', 1_21_06, '')
+    mc1211_fabric.link(mc1216_fabric, null)
+    mc1212_fabric.link(mc1216_fabric, null)
+    mc1215_fabric.link(mc1216_fabric, null)
+    mc1216_fabric.link(mc1216_fabric, null)
 }
 
 publishing {
@@ -56,5 +59,11 @@ tasks.register('buildAndGather') {
                 duplicatesStrategy DuplicatesStrategy.INCLUDE
             }
         }
+    }
+}
+
+tasks.register('modrinthAll') {
+    subprojects {
+        dependsOn project.tasks.named('modrinth').get()
     }
 }

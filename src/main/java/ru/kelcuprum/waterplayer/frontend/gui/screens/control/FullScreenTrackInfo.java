@@ -5,6 +5,9 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
+//#if MC >= 12106
+import net.minecraft.client.renderer.RenderPipelines;
+//#endif
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
@@ -61,8 +64,10 @@ public class FullScreenTrackInfo extends Screen {
             List<FormattedCharSequence> texts = getTextInfo(lyrics);
             int iconY = height/2 - iconSize/2 - ((font.lineHeight+4)*texts.size()) / 2;
             guiGraphics.blit(
-                    //#if MC >= 12102
-                    RenderType::guiTextured,
+                    //#if MC >= 12106
+                    RenderPipelines.GUI_TEXTURED,
+                    //#elseif MC >= 12102
+                    //$$ RenderType::guiTextured,
                     //#endif
                     icon, iconX, iconY, 0.0F, 0.0F, iconSize, iconSize, iconSize, iconSize);
             int y = iconY+iconSize+8;

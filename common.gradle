@@ -1,4 +1,5 @@
 apply plugin: 'maven-publish'
+apply plugin: 'maven-publish'
 apply plugin: 'fabric-loom'
 apply plugin: 'com.replaymod.preprocess'
 apply plugin: 'me.fallenbreath.yamlang'
@@ -75,7 +76,6 @@ dependencies {
     }
     // Music
     implementation("meteordevelopment:starscript:0.3.4")
-//    shade (implementation("net.hycrafthd.lavaplayer:lavaplayer:${project.lavaplayer}"))
     shade (implementation("dev.arbjerg:lavaplayer:${project.lavaplayer}"))
     shade (implementation("dev.lavalink.youtube:v2:${project.youtube_source}"))
     shade (implementation("dev.arbjerg:lavadsp:0.7.8"))
@@ -83,23 +83,19 @@ dependencies {
     shade (implementation("com.github.topi314.lavasrc:lavasrc-protocol:${project.lavasrc_protocol}"))
     shade (implementation("com.github.topi314.lavalyrics:lavalyrics:${project.lavalyrics}"))
     shade (implementation("ru.kelcuprum:jaudiotagger:3.0.2-SNAPSHOT.1"))
-//    shade (implementation('com.github.selemba1000:JavaMediaTransportControls:0.0.3'))
     // Discord
     shade (implementation("io.github.CDAGaming:DiscordIPC:0.10.0"))
     // API
     shade (implementation("ru.kelcuprum:java-express:0.2.4-dev.5"){
         exclude(module: "gson")
     })
-    // smtc
-//    shade ()
-//    implementation("io.github.selemba1000:JavaMediaTranportControls:0.0.3")
 
     // Minecraft
     if (mod_brand == 'fabric') {
         modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
         modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
         modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
-        modImplementation "ru.kelcuprum:AlinLib-fabric:${rootProject.alinlib}+mc${project.minecraft_version}"
+        modImplementation "ru.kelcuprum:AlinLib-fabric:${rootProject.alinlib}+mc${project.alinlib_minecraft_version}"
     }
 
     subprojects.each {
@@ -161,6 +157,29 @@ processResources {
             } else {
                 exclude name
             }
+        }
+    }
+}
+
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN") // Remember to have the MODRINTH_TOKEN environment variable set or else this will fail - just make sure it stays private!
+    versionName = project.modrinth_title != null ? project.modrinth_title + " " + rootProject.mod_version : rootProject.mod_version
+    projectId = "waterplayer" // This can be the project ID or the slug. Either will work!
+    // You don't need to set this manually. Will fail if Modrinth has this version already
+    changelog = file("../../changelog.md").text
+    versionNumber = rootProject.mod_version
+    versionType = rootProject.version_type // This is the default -- can also be `beta` or `alpha`
+    uploadFile = remapJar // With Loom, this MUST be set to `remapJar` instead of `jar`!
+    project.modrinth_versions.split(", ").each {
+        gameVersions.add it
+    }
+    if(mod_brand == "fabric") loaders = ["fabric", "quilt"]
+    else loaders = [mod_brand]
+    dependencies {
+        required.project "alinlib"
+        if(mod_brand == "fabric"){
+            required.project "fabric-api"
+            optional.project "modmenu"
         }
     }
 }

@@ -6,6 +6,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
+//#if MC >= 12106
+import net.minecraft.client.renderer.RenderPipelines;
+//#endif
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
@@ -125,8 +128,10 @@ public class OverlayHandler implements GuiRenderEvents, ClientTickEvents.StartTi
                 if (caverEnable) {
                     AudioTrack track = WaterPlayer.player.getAudioPlayer().getPlayingTrack();
                     guiGraphics.blit(
-                            //#if MC >= 12102
-                            RenderType::guiTextured,
+                            //#if MC >= 12106
+                            RenderPipelines.GUI_TEXTURED,
+                            //#elseif MC >= 12102
+                            //$$ RenderType::guiTextured,
                             //#endif
                             MusicHelper.getThumbnail(track), left ? 6 : guiGraphics.guiWidth() - 14 - mx, (top ? 6 : guiGraphics.guiHeight() - 5 + i1), 0.0F, 0.0F, j + 3, j + 3, j + 3, j + 3);
                 }

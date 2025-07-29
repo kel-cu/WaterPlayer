@@ -3,6 +3,9 @@ package ru.kelcuprum.waterplayer.frontend.gui.components;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+//#if MC >= 12106
+import net.minecraft.client.renderer.RenderPipelines;
+//#endif
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -56,8 +59,10 @@ public class PlaylistButton extends Button {
                 }
             } else {
                 guiGraphics.blit(
-                        //#if MC >= 12102
-                        RenderType::guiTextured,
+                        //#if MC >= 12106
+                        RenderPipelines.GUI_TEXTURED,
+                        //#elseif MC >= 12102
+                        //$$ RenderType::guiTextured,
                         //#endif
                         getIcon(), getX() + 2, getY() + 2, 0.0F, 0.0F, 36, 36, 36, 36);
                 renderString(guiGraphics, builder.toString(), getX() + 45, getY() + 8);

@@ -46,6 +46,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Function;
 
 public class MusicPlayer {
 
@@ -157,7 +158,7 @@ public class MusicPlayer {
             lyricsManager.registerLyricsManager(new LyricsWithoutException(deezerAudioSourceManager));
         }
         if (!config.getString("APPLE_MUSIC_MEDIA_API_TOKEN", "").isBlank() && !config.getString("APPLE_MUSIC_COUNTRY_CODE", "us").isBlank()) {
-            AppleMusicSourceManager appleMusicSourceManager = new AppleMusicSourceManager(null, config.getString("APPLE_MUSIC_MEDIA_API_TOKEN", ""), config.getString("APPLE_MUSIC_COUNTRY_CODE", "us"), audioPlayerManager);
+            AppleMusicSourceManager appleMusicSourceManager = new AppleMusicSourceManager((String[]) null, config.getString("APPLE_MUSIC_MEDIA_API_TOKEN", ""), config.getString("APPLE_MUSIC_COUNTRY_CODE", "us"), (Function<Void, AudioPlayerManager>) audioPlayerManager);
             audioPlayerManager.registerSourceManager(appleMusicSourceManager);
         }
         if (!config.getString("SPOTIFY_CLIENT_ID", "").isBlank() && !config.getString("SPOTIFY_CLIENT_SECRET", "").isBlank() && !config.getString("SPOTIFY_COUNTRY_CODE", "US").isBlank()) {

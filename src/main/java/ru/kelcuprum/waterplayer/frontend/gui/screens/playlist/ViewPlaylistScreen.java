@@ -8,6 +8,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
+//#if MC >= 12106
+import net.minecraft.client.renderer.RenderPipelines;
+//#endif
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -290,8 +293,10 @@ public class ViewPlaylistScreen extends Screen {
         if(isClownfishMoment()){
             int clownfishSize = Math.min(height-96, width-230);
             guiGraphics.blit(
-                    //#if MC >= 12102
-                    RenderType::guiTextured,
+                    //#if MC >= 12106
+                    RenderPipelines.GUI_TEXTURED,
+                    //#elseif MC >= 12102
+                    //$$ RenderType::guiTextured,
                     //#endif
                     CLOWNFISH, 220, height-clownfishSize, 0.0f, 0.0f, clownfishSize, clownfishSize, clownfishSize, clownfishSize
             );

@@ -6,6 +6,9 @@ import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
+//#if MC >= 12106
+import net.minecraft.client.renderer.RenderPipelines;
+//#endif
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -194,8 +197,10 @@ public class TrackScreen extends Screen {
         //#endif
         super.render(guiGraphics, i, j, f);
         guiGraphics.blit(
-                //#if MC >= 12102
-                RenderType::guiTextured,
+                //#if MC >= 12106
+                RenderPipelines.GUI_TEXTURED,
+                //#elseif MC >= 12102
+                //$$ RenderType::guiTextured,
                 //#endif
                 MusicHelper.getThumbnail(track), x, height / 2 - 15 - iconSize, 0.0F, 0.0F, iconSize, iconSize, iconSize, iconSize);
     }

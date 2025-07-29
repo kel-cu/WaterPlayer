@@ -3,6 +3,9 @@ package ru.kelcuprum.waterplayer.frontend.gui.screens.control.components;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
+//#if MC >= 12106
+import net.minecraft.client.renderer.RenderPipelines;
+//#endif
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import ru.kelcuprum.alinlib.AlinLib;
@@ -43,16 +46,29 @@ public class TimelineComponent extends AbstractSliderButton {
                 if(showTime && !track.getInfo().isStream) {
                     float scale = 0.7f;
                     int color = 0xA9FFFFFF;
-                    guiGraphics.pose().pushPose();
-                    guiGraphics.pose().scale(scale, scale, scale);
+                    //#if MC >= 12106
+                    guiGraphics.pose().pushMatrix();
+                    guiGraphics.pose().scale(scale, scale);
+                    //#else
+                    //$$ guiGraphics.pose().pushPose();
+                    //$$ guiGraphics.pose().scale(scale, scale, scale);
+                    //#endif
                     int y = (int) ((getY() - 2)  / scale) - AlinLib.MINECRAFT.font.lineHeight;
                     guiGraphics.drawString(AlinLib.MINECRAFT.font, WaterPlayer.getTimestamp(MusicHelper.getPosition(track)), (int) (getX()/scale), y, color);
                     String dur = WaterPlayer.getTimestamp(track.getDuration());
                     guiGraphics.drawString(AlinLib.MINECRAFT.font, dur, (int) ((getX() + getWidth())/scale) - AlinLib.MINECRAFT.font.width(dur), y, color);
-                    guiGraphics.pose().popPose();
+                    //#if MC >= 12106
+                    guiGraphics.pose().popMatrix();
+                    //#else
+                    //$$ guiGraphics.pose().popPose();
+                    //#endif
                 } else if(!showTime){
                     String time = track.getInfo().isStream ? WaterPlayer.localization.getLocalization("format.live") : getTimestamp(MusicHelper.getPosition(track)) + " / " + getTimestamp(MusicHelper.getDuration(track));
-                    guiGraphics.renderTooltip(AlinLib.MINECRAFT.font, Component.literal(time), i, j);
+                    //#if MC >= 12106
+                    guiGraphics.setTooltipForNextFrame(Component.literal(time), i, j);
+                    //#else
+                    //$$ guiGraphics.renderTooltip(AlinLib.MINECRAFT.font, Component.literal(time), i, j);
+                    //#endif
                 }
             }
         }
