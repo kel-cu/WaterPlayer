@@ -1,9 +1,9 @@
 apply plugin: 'maven-publish'
-apply plugin: 'maven-publish'
 apply plugin: 'fabric-loom'
 apply plugin: 'com.replaymod.preprocess'
 apply plugin: 'me.fallenbreath.yamlang'
 apply plugin: 'io.github.goooler.shadow'
+apply plugin: 'com.modrinth.minotaur'
 
 def mod_brand = "fabric"
 archivesBaseName = (project.archives_base_name == null ? rootProject.archives_base_name : project.archives_base_name) + "-" + mod_brand

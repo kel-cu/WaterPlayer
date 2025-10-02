@@ -173,7 +173,7 @@ public class ControlScreen extends Screen {
         // - Left
         trackIcon = addRenderableWidget(new TrackIconButton(new ButtonBuilder(Component.empty(), (s) -> {
             AlinLib.MINECRAFT.setScreen(new FullScreenTrackInfo(this));
-        }).setSize(34, 34).setPosition(x + 3, y + 3)));
+        }).setSize(32, 32).setPosition(x + 4, y + 4)));
 
         trackIcon.visible = trackIcon.active = WaterPlayer.player.getAudioPlayer().getPlayingTrack() != null;
         boolean isModern = WaterPlayer.config.getBoolean("CONTROL.MODERN_BUTTONS", true);
@@ -338,7 +338,7 @@ public class ControlScreen extends Screen {
                     //#elseif MC >= 12102
                     //$$ RenderType::guiTextured,
                     //#endif
-                    MusicHelper.getThumbnail(), x + 3, y + 3, 0f, 0f, 34, 34, 34, 34);
+                    MusicHelper.getThumbnail(), x + 4, y + 4, 0f, 0f, 32, 32, 32, 32);
             int size = width - 10;
             int x$Buttons = x + (size / 2) - ((25 * 5 - 5) / 2) - 6;
             int x$Timeline = x + (size / 2) - (Math.min(size / 3, 230) / 2) - 6;

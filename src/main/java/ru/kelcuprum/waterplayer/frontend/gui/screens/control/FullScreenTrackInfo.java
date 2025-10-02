@@ -32,6 +32,7 @@ import java.util.List;
 
 import static ru.kelcuprum.alinlib.gui.Colors.BLACK_ALPHA;
 import static ru.kelcuprum.alinlib.gui.Colors.FORGOT;
+import static ru.kelcuprum.waterplayer.frontend.gui.overlays.OverlayHandler.checkColor;
 
 public class FullScreenTrackInfo extends Screen {
 
@@ -72,7 +73,7 @@ public class FullScreenTrackInfo extends Screen {
                     icon, iconX, iconY, 0.0F, 0.0F, iconSize, iconSize, iconSize, iconSize);
             int y = iconY+iconSize+8;
             for(FormattedCharSequence formattedCharSequence : texts){
-                guiGraphics.drawCenteredString(font, formattedCharSequence, x+(panelSizes/2), y, -1);
+                guiGraphics.drawString(font, formattedCharSequence, x+(panelSizes/2)-(font.width(formattedCharSequence) / 2), y, (isLightColor(OverlayHandler.getCommonColor(track, FORGOT)) ? 0xFF000000 : -1), false);
                 y+=font.lineHeight+4;
             }
             yTimeline = y+font.lineHeight+4;
@@ -206,7 +207,17 @@ public class FullScreenTrackInfo extends Screen {
             guiGraphics.fill(0, 0, width, height, OverlayHandler.getCommonColor(track, FORGOT));
             if(lyrics != null) guiGraphics.fill(width/2, 0, width, height, 0x25000000);
         }
-        guiGraphics.fill(0, 0, width, height, BLACK_ALPHA);
+//        guiGraphics.fill(0, 0, width, height, BLACK_ALPHA);
+    }
+
+    public boolean isLightColor(int rgb){
+        int red = (rgb >> 16) & 0xff;
+        int green = (rgb >> 8) & 0xff;
+        int blue = (rgb) & 0xff;
+        boolean rL = checkColor(red, 200, 256);
+        boolean gL = checkColor(green, 200, 256);
+        boolean bL = checkColor(blue, 200, 256);
+        return rL || bL || gL;
     }
 
     @Override

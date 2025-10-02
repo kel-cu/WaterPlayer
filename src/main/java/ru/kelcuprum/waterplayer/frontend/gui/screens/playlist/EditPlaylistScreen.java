@@ -165,7 +165,7 @@ public class EditPlaylistScreen extends Screen {
                     .setSecret(false)
                     .setValue(url)
                     .setPosition(x, -20)
-                    .setSize(width - 230, 20)
+                    .setSize(width - 225, 20)
                     .build());
             i++;
         }

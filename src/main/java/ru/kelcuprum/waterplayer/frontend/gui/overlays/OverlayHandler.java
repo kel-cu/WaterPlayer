@@ -2,6 +2,7 @@ package ru.kelcuprum.waterplayer.frontend.gui.overlays;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -102,19 +103,19 @@ public class OverlayHandler implements GuiRenderEvents, ClientTickEvents.StartTi
                 int i1 = top ? (my + 5) : -(my + 5);
                 guiGraphics.fill(
                         left ? 5 : guiGraphics.guiWidth() - 5, (top ? 5 : guiGraphics.guiHeight() - 6 + i1),
-                        (left ? 5 : guiGraphics.guiWidth() - 5) + i, (top ? 5 + i1 : guiGraphics.guiHeight() - 9),
+                        (left ? 5 : guiGraphics.guiWidth() - 5) + i, (top ? 5 + i1 : guiGraphics.guiHeight() - 9) + 5,
                         0x7f000000
                 );
                 int state = getBarColor();
                 guiGraphics.fill(
-                        left ? 5 : guiGraphics.guiWidth() - 5, (top ? 5 + i1 : guiGraphics.guiHeight() - 6) + 1,
-                        (left ? 5 : guiGraphics.guiWidth() - 5) + i, (top ? 5 + i1 : guiGraphics.guiHeight() - 11) + 3,
+                        left ? 8 : guiGraphics.guiWidth() - 7, (top ? 3 + i1 : guiGraphics.guiHeight() - 11) + 3,
+                        (left ? 2 : guiGraphics.guiWidth() - 3) + i, (top ? 3 + i1 : guiGraphics.guiHeight() - 11) + 5,
                         0x7f000000
                 );
 
                 guiGraphics.fill(
-                        left ? 5 : guiGraphics.guiWidth() - 15 - mx, (top ? 5 + i1 : guiGraphics.guiHeight() - 6) + 1,
-                        (int) ((left ? 5 : guiGraphics.guiWidth() - 15 - mx) + (left ? i * v : (i * -1) * v)), (top ? 5 + i1 : guiGraphics.guiHeight() - 11) + 3,
+                        left ? 8 : guiGraphics.guiWidth() - 13 - mx, (top ? 3 + i1 : guiGraphics.guiHeight() - 11) + 3,
+                        (int) ((left ? 8 : guiGraphics.guiWidth() - 13 - mx) + (left ? (i-6) * v : ((i+4) * -1) * v)), (top ? 3 + i1 : guiGraphics.guiHeight() - 11) + 5,
                         state
                 );
 
@@ -133,7 +134,7 @@ public class OverlayHandler implements GuiRenderEvents, ClientTickEvents.StartTi
                             //#elseif MC >= 12102
                             //$$ RenderType::guiTextured,
                             //#endif
-                            MusicHelper.getThumbnail(track), left ? 6 : guiGraphics.guiWidth() - 14 - mx, (top ? 6 : guiGraphics.guiHeight() - 5 + i1), 0.0F, 0.0F, j + 3, j + 3, j + 3, j + 3);
+                            MusicHelper.getThumbnail(track), left ? 8 : guiGraphics.guiWidth() - 12 - mx, (top ? 8 : guiGraphics.guiHeight() - 3 + i1), 0.0F, 0.0F, j - 1, j - 1, j - 1, j - 1);
                 }
             }
         } catch (Exception ex) {
@@ -184,13 +185,13 @@ public class OverlayHandler implements GuiRenderEvents, ClientTickEvents.StartTi
         if (image == null) return defaultColor;
         int height = image.getHeight();
         int width = image.getWidth();
-        HashMap<Integer, Integer> m = new HashMap();
+        HashMap<Integer, Integer> m = new HashMap<>();
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 int rgb = image.getRGB(j, i);
                 int[] rgbArr = getRGBArr(rgb);
                 // Filter out grays....
-                if (!notCorrect(rgbArr)) {
+                if (!notCorrect(rgb)) {
                     Integer counter = m.get(rgb);
                     if (counter == null)
                         counter = 0;
@@ -223,16 +224,27 @@ public class OverlayHandler implements GuiRenderEvents, ClientTickEvents.StartTi
 
     }
 
-    public static boolean notCorrect(int[] rgbArr) {
-        int rgDiff = rgbArr[0] - rgbArr[1];
-        int rbDiff = rgbArr[0] - rgbArr[2];
-        // Filter out black, white and grays...... (tolerance within 10 pixels)
-        int tolerance = 10;
-        if (rgDiff > tolerance || rgDiff < -tolerance)
-            if (rbDiff > tolerance || rbDiff < -tolerance)
-                return false;
-        double darkness = ((double) (rgbArr[0] + rgbArr[1] + rgbArr[2]) / 3);
-        return true;
-    }
+    public static boolean notCorrect(int rgb) {
+        int red = (rgb >> 16) & 0xff;
+        int green = (rgb >> 8) & 0xff;
+        int blue = (rgb) & 0xff;
+        if(red == green && green == blue){
+            return !(checkColor(red, 100, 190));
+        } else {
+            return !(checkColor(red, 100, 245) || checkColor(green, 100, 245) || checkColor(blue, 100, 245));
+        }
 
+//        int rgDiff = rgbArr[0] - rgbArr[1];
+//        int rbDiff = rgbArr[0] - rgbArr[2];
+//        // Filter out black, white and grays...... (tolerance within 10 pixels)
+//        int tolerance = 10;
+//        if (rgDiff > tolerance || rgDiff < -tolerance)
+//            if (rbDiff > tolerance || rbDiff < -tolerance)
+//                return false;
+//        double darkness = ((double) (rgbArr[0] + rgbArr[1] + rgbArr[2]) / 3);
+//        return true;
+    }
+    public static boolean checkColor(int color, int min, int max){
+        return min < color && color < max;
+    }
 }

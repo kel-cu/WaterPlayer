@@ -1,3 +1,2 @@
-- Port for 1.21.6-8
-- Updated libs
-- и все :/
+- Updated style
+- Updated youtube-source

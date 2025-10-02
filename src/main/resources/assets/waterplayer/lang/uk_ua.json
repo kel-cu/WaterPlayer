@@ -19,7 +19,7 @@
 
   "waterplayer.playlist.add_files": "Are you sure you want to add these files?",
   "waterplayer.playlist.create": "Створити/завантажити плейлист",
-  "waterplayer.playlist.create.filename": "Назва/URL плейлиста:",
+  "waterplayer.playlist.create.filename": "Назва/URL плейлиста WaterPlayer:",
   "waterplayer.playlist.reload": "Перезавантажити",
   "waterplayer.playlist.play": "Відтворити плейлист",
   "waterplayer.playlist.description": "Відтворюється плейлист: %s",

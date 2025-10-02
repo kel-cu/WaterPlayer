@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 import ru.kelcuprum.alinlib.config.Localization;
 import ru.kelcuprum.alinlib.gui.Colors;
+import ru.kelcuprum.alinlib.gui.GuiUtils;
 import ru.kelcuprum.alinlib.gui.components.ConfigureScrolWidget;
 import ru.kelcuprum.alinlib.gui.components.builder.button.ButtonBuilder;
 import ru.kelcuprum.alinlib.gui.components.builder.editbox.EditBoxBuilder;
@@ -49,8 +50,8 @@ public class SearchScreen extends Screen {
         //$$ public void renderBackground(GuiGraphics guiGraphics) {
         //$$         super.renderBackground(guiGraphics);
         //#endif
-        guiGraphics.fill(5, 5, 215, 25, Colors.BLACK_ALPHA);
-        guiGraphics.fill(5, 30, 215, 135, Colors.BLACK_ALPHA);
+        GuiUtils.getSelected().renderTitleBackground(guiGraphics,5, 5, 215, 25);
+        GuiUtils.getSelected().renderBackground(guiGraphics,5, 30, 215, 135);
     }
 
     @Override

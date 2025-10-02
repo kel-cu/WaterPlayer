@@ -54,7 +54,7 @@ public class TrackButton extends Button {
                         //#elseif MC >= 12102
                         //$$ RenderType::guiTextured,
                         //#endif
-                        icon, getX() + 2, getY() + 2, 0.0F, 0.0F, 36, 36, 36, 36);
+                        icon, getX() + 4, getY() + 4, 0.0F, 0.0F, 32, 32, 32, 32);
                 renderString(guiGraphics, builder.toString(), getX() + 45, getY() + 8);
                 renderString(guiGraphics, time+" | "+ MusicHelper.getServiceName(MusicHelper.getService(track)).getString(), getX() + 45, getY() + height - 8 - AlinLib.MINECRAFT.font.lineHeight);
             }
