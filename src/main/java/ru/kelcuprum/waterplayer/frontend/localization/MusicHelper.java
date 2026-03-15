@@ -42,8 +42,8 @@ public class MusicHelper {
     //
     public static String getTitle(AudioTrack info){
         if(trackIsNull(info)) return "";
-        String[] fileArgs = info.getInfo().uri.split("/");
-        if(fileArgs.length == 1) fileArgs = info.getInfo().uri.split("\\\\");
+        String[] fileArgs = info.getInfo().uri == null ? new String[]{"without title"}:  info.getInfo().uri.split("/");
+        if(fileArgs.length == 1) fileArgs =  info.getInfo().uri == null ? new String[]{"without title"} : info.getInfo().uri.split("\\\\");
         String file = fileArgs[fileArgs.length-1];
         return isTitleNull(info) ? file : info.getInfo().title;
     }
@@ -69,10 +69,12 @@ public class MusicHelper {
         if(trackIsNull(info)) return false;
         if(noFiles.containsKey(info.getInfo().uri)) return noFiles.getOrDefault(info.getInfo().uri, false);
         else {
-            File track = new File(info.getInfo().uri);
-            boolean state = track.exists() && track.isFile();
-            noFiles.put(info.getInfo().uri, state);
-            return state;
+            if(info.getInfo().uri != null) {
+                File track = new File(info.getInfo().uri);
+                boolean state = track.exists() && track.isFile();
+                noFiles.put(info.getInfo().uri, state);
+                return state;
+            } else return false;
         }
     }
 

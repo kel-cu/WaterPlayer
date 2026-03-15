@@ -75,7 +75,6 @@ public class WaterPlayer implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         log("Здравствуйте, товарищ!");
-        WaterPlayerAPI.loadConfig();
         player = new MusicPlayer();
         discordIntegration = new DiscordIntegration();
         WebAPI.run();
@@ -85,6 +84,7 @@ public class WaterPlayer implements ClientModInitializer {
             ResourceManagerHelper.registerBuiltinResourcePack(GuiUtils.getResourceLocation("waterplayer","walter"), container, Component.translatable("resourcePack.waterplayer.walter"), ResourcePackActivationType.NORMAL);
         });
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
+            WaterPlayerAPI.loadConfig();
             player.startAudioOutput();
             OverlayHandler hud = new OverlayHandler();
             SubtitlesHandler sub = new SubtitlesHandler();

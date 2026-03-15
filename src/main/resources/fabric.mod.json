@@ -12,7 +12,7 @@
     "sources": "https://github.com/simply-kel/WaterPlayer",
     "email": "me@kelcuprum.ru"
   },
-  "license": "PolyForm Strict License 1.0.0",
+  "license": "GPL v3",
   "icon": "assets/waterplayer/logo.png",
   "accessWidener": "waterplayer.accesswidener",
   "environment": "client",

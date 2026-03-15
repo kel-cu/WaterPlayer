@@ -126,7 +126,7 @@ public class MusicPlayer {
         lyricsManager.registerLyricsManager(wps);
 
         if (config.getBoolean("ENABLE_YOUTUBE", true)) {
-            youtube = new YoutubeAudioSourceManager(true, new MusicWithThumbnail(), new WebEmbeddedWithThumbnail(), new WebWithThumbnail());
+            youtube = new YoutubeAudioSourceManager();
             youtube.setPlaylistPageCount(100);
             String refreshToken = config.getString("YOUTUBE_REFRESH_TOKEN", "");
             if(!refreshToken.isBlank()) youtube.useOauth2(refreshToken, true);
